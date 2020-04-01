@@ -1,4 +1,4 @@
-<img src="https://www.kindpng.com/picc/m/370-3705839_cluedo-logo-hd-png-download.png">
+<p align="center"><img src="https://www.kindpng.com/picc/m/370-3705839_cluedo-logo-hd-png-download.png" height="150"></p>
 <h2 align="center">Kurzfassung</h2>
 <p align="center">Entwickeln eines Cluedo Clones für Mobilgeräte im Rahmen des Gruppenprojekts für SE II
 
