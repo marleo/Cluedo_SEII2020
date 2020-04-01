@@ -13,6 +13,7 @@ sich über die Dauer des Spiels Umstände festzuhalten, was die Aufklärung des 
 ermöglichen sollte. Der Spieler, der als erstes die richtige Anklage erhebt und Mordwaffe,
 Tatort sowie Täter richtig bestimmt, hat gewonnen. Wenn alle Teilnehmer eine falsche
 Anklage erhoben haben, endet das Spiel aber ohne Gewinner.</p>
+<p align="center"><a href="http://www.cip.ifi.lmu.de/~bschorers/cluedo/files/cluedo_anleitung.pdf">Spielregeln (PDF)</a>
 
 <h2 align="center">Konzepte / TODO</h2>
 <p align="center"><a href="https://trello.com/b/lhu92lui/cluedo">Trello-Board</a></p>
