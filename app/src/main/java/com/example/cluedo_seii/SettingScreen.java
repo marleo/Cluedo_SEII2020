@@ -2,12 +2,10 @@ package com.example.cluedo_seii;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.app.ActionBar;
-import android.drm.DrmStore;
 import android.os.Bundle;
 import android.widget.CompoundButton;
 import android.widget.Switch;
-import android.widget.ToggleButton;
+
 
 public class SettingScreen extends AppCompatActivity {
 
