@@ -1,3 +1,8 @@
 <resources>
-    <string name="app_name">Cluedo_SEII</string>
+    <string name="app_name">Cluedo</string>
+    <string name="mainScreenTitle">Cluedo</string>
+    <string name="mainScreenPlayButton">Start Game</string>
+    <string name="mainScreenOptionsButton">Options</string>
+    <string name="mainScreenExitButton">Exit Game</string>
+    <string name="optionsScreenCheatToggle">Schummelfunktion</string>
 </resources>
