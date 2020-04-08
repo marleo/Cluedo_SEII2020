@@ -4,9 +4,9 @@ public class Karten {
 
     private Karte oberstVonGatow = new Karte(1, "Oberst von Gatov", Kartentyp.Person);
     private Karte profBloom = new Karte(2, "Prof. Bloom", Kartentyp.Person);
-    private Karte reverendGrün = new Karte(3, "Reverend Grün", Kartentyp.Person);
+    private Karte reverendGruen = new Karte(3, "Reverend Gruen", Kartentyp.Person);
     private Karte baroninVonPorz = new Karte(4, "Baronin von Porz", Kartentyp.Person);
-    private Karte fräuleinGloria = new Karte(5, "Fräulein Gloria", Kartentyp.Person);
+    private Karte fraeuleinGloria = new Karte(5, "Fraeulein Gloria", Kartentyp.Person);
     private Karte frauWeiss = new Karte(6, "Frau Weiss", Kartentyp.Person);
 
     private Karte dolch = new Karte(7, "Dolch", Kartentyp.Waffe);
@@ -19,7 +19,7 @@ public class Karten {
     private Karte halle = new Karte(13, "Halle", Kartentyp.Raum);
     private Karte salon = new Karte(14, "Salon", Kartentyp.Raum);
     private Karte speisezimmer = new Karte(15, "Speisezimmer", Kartentyp.Raum);
-    private Karte küche = new Karte(16, "Küche", Kartentyp.Raum);
+    private Karte kueche = new Karte(16, "Küche", Kartentyp.Raum);
     private Karte musikzimmer = new Karte(17, "Musikzimmer", Kartentyp.Raum);
     private Karte winterzimmer = new Karte(18, "Winterzimmer", Kartentyp.Raum);
     private Karte biliardzimmer = new Karte(19, "Biliardzimmer", Kartentyp.Raum);
@@ -28,11 +28,11 @@ public class Karten {
 
     private Karte[]kartenStapelStandard = {
 
-            oberstVonGatow, profBloom, reverendGrün, baroninVonPorz, fräuleinGloria, frauWeiss,
+            oberstVonGatow, profBloom, reverendGruen, baroninVonPorz, fraeuleinGloria, frauWeiss,
 
             dolch, leuchter, pistole, seil, heizungsrohr, rohrzange,
 
-            halle, salon, speisezimmer, küche, musikzimmer, winterzimmer, biliardzimmer, bibliothek, arbeitszimmer};
+            halle, salon, speisezimmer, kueche, musikzimmer, winterzimmer, biliardzimmer, bibliothek, arbeitszimmer};
 
     public Karte[] getKartenStapelStandard() {
         return kartenStapelStandard;
