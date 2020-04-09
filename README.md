@@ -1,3 +1,8 @@
+[![Build Status](https://travis-ci.com/marleo/Cluedo_SEII2020.svg?branch=master)](https://travis-ci.com/marleo/Cluedo_SEII2020)
+[![Bugs](https://sonarcloud.io/api/project_badges/measure?project=Cluedo_SEII2020&metric=bugs)](https://sonarcloud.io/dashboard?id=Cluedo_SEII2020)
+[![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=Cluedo_SEII2020&metric=code_smells)](https://sonarcloud.io/dashboard?id=Cluedo_SEII2020)
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=Cluedo_SEII2020&metric=coverage)](https://sonarcloud.io/dashboard?id=Cluedo_SEII2020)
+
 <p align="center"><img src="https://www.kindpng.com/picc/m/370-3705839_cluedo-logo-hd-png-download.png" height="150"></p>
 <h2 align="center">Kurzfassung</h2>
 <p align="center">Entwickeln eines Cluedo Clones für Mobilgeräte im Rahmen des Gruppenprojekts für SE II
