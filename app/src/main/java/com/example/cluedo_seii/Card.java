@@ -1,12 +1,12 @@
 package com.example.cluedo_seii;
 
-public class Karte {
+public class Card {
 
     private int id;
     private String bezeichnung;
-    private Kartentyp typ;
+    private CardType typ;
 
-    public Karte(int id, String bezeichnung, Kartentyp typ) {
+    public Card(int id, String bezeichnung, CardType typ) {
 
 
         this.id = id;
@@ -22,7 +22,7 @@ public class Karte {
         return bezeichnung;
     }
 
-    public Kartentyp getTyp() {
+    public CardType getTyp() {
         return typ;
     }
 
