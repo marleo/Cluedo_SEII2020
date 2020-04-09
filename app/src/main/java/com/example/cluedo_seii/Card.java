@@ -3,27 +3,27 @@ package com.example.cluedo_seii;
 public class Card {
 
     private int id;
-    private String bezeichnung;
-    private CardType typ;
+    private String designation;
+    private CardType type;
 
-    public Card(int id, String bezeichnung, CardType typ) {
+    public Card(int id, String designation, CardType type) {
 
 
         this.id = id;
-        this.bezeichnung = bezeichnung;
-        this.typ = typ;
+        this.designation = designation;
+        this.type = type;
     }
 
     public int getId() {
         return id;
     }
 
-    public String getBezeichnung() {
-        return bezeichnung;
+    public String getDesignation() {
+        return designation;
     }
 
-    public CardType getTyp() {
-        return typ;
+    public CardType getType() {
+        return type;
     }
 
 }
