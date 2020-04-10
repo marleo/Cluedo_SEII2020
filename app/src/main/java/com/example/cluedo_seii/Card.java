@@ -1,5 +1,7 @@
 package com.example.cluedo_seii;
 
+
+
 public class Card {
 
     private int id;
@@ -25,5 +27,7 @@ public class Card {
     public CardType getType() {
         return type;
     }
+
+
 
 }
