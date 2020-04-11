@@ -9,10 +9,10 @@ public class Game {
     private Board board;
     private Cards cards;
     private InvestigationFile investigationFile;
-    private Player[]players;
+    private LinkedList<Player>players;
     private Boolean gameOver;
 
-    public Game(Board board, Cards cards, Player[]players){
+    public Game(Board board, Cards cards, LinkedList<Player>players){
 
         this.board = board;
         this.cards = cards;
@@ -38,7 +38,22 @@ public class Game {
 
         Collections.shuffle(cardStack);
 
+        int i = 0;
+
+        while(i<cardStack.size())
+        {
+         for(int j = 0; j<players.size(); j++){
+
+             Player temp = players.get(j);
+
+             if(i==cardStack.size())
+             {break;}
+
+             temp.addCard(cardStack.get(i));
+             i++;
+         }
+
+        }
 
     }
-
 }
