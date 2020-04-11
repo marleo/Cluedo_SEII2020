@@ -4,6 +4,8 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.Random;
 
+
+
 public class Game {
 
     private Board board;
@@ -11,6 +13,7 @@ public class Game {
     private InvestigationFile investigationFile;
     private LinkedList<Player>players;
     private Boolean gameOver;
+    private Random random;
 
     public Game(Board board, Cards cards, LinkedList<Player>players){
 
@@ -18,13 +21,14 @@ public class Game {
         this.cards = cards;
         this.players = players;
         investigationFile = new InvestigationFile();
+        random = new Random();
         gameOver = false;
+
     }
 
     public void distributeCards(){
 
-        LinkedList<Card> cardStack =  cards.getCards();
-        Random random = new Random();
+        LinkedList<Card> cardStack =  cards.getGameCardsStandard();
         int randomPersonId = random.nextInt(6);
         int randomWeaponId = random.nextInt(6) + 6;
         int randomRoomId = random.nextInt(9) + 12;
