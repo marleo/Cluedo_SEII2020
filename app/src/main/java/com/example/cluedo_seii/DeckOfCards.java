@@ -3,7 +3,7 @@ package com.example.cluedo_seii;
 import java.util.LinkedList;
 
 
-public class Cards {
+public class DeckOfCards {
 
     private Card oberstVonGatow = new Card(0, "Oberst von Gatov", CardType.PERSON);
     private Card profBloom = new Card(1, "Prof. Bloom", CardType.PERSON);

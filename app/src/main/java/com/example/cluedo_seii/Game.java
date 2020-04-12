@@ -9,16 +9,16 @@ import java.util.Random;
 public class Game {
 
     private Board board;
-    private Cards cards;
+    private DeckOfCards deckOfCards;
     private InvestigationFile investigationFile;
     private LinkedList<Player>players;
     private Boolean gameOver;
     private Random random;
 
-    public Game(Board board, Cards cards, LinkedList<Player>players){
+    public Game(Board board, DeckOfCards deckOfCards, LinkedList<Player>players){
 
         this.board = board;
-        this.cards = cards;
+        this.deckOfCards = deckOfCards;
         this.players = players;
         investigationFile = new InvestigationFile();
         random = new Random();
@@ -28,7 +28,7 @@ public class Game {
 
     public void distributeCards(){
 
-        LinkedList<Card> cardStack =  cards.getGameCardsStandard();
+        LinkedList<Card> cardStack =  deckOfCards.getGameCardsStandard();
         int randomPersonId = random.nextInt(6);
         int randomWeaponId = random.nextInt(6) + 6;
         int randomRoomId = random.nextInt(9) + 12;
