@@ -6,6 +6,8 @@ import android.os.Bundle;
 import android.widget.CompoundButton;
 import android.widget.Switch;
 
+import com.example.cluedo_seii.R;
+
 
 public class SettingScreen extends AppCompatActivity {
 

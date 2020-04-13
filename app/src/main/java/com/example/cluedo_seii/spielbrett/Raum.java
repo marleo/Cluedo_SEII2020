@@ -1,4 +1,6 @@
-package com.example.cluedo_seii;
+package com.example.cluedo_seii.spielbrett;
+
+import com.example.cluedo_seii.spielbrett.SpielbrettElement;
 
 public class Raum extends SpielbrettElement {
 

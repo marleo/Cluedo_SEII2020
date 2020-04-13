@@ -1,4 +1,4 @@
-package com.example.cluedo_seii;
+package com.example.cluedo_seii.spielbrett;
 
 public class SpielbrettElement {
     private int xKoordinate;

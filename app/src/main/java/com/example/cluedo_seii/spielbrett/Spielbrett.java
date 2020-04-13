@@ -1,4 +1,4 @@
-package com.example.cluedo_seii;
+package com.example.cluedo_seii.spielbrett;
 
 import java.util.ArrayList;
 import java.util.List;
