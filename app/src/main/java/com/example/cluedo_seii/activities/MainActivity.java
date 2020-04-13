@@ -1,4 +1,4 @@
-package com.example.cluedo_seii;
+package com.example.cluedo_seii.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+
+import com.example.cluedo_seii.R;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -19,6 +21,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v){
                 // TODO : Switch to Game Scene after button press
+                startActivity(new Intent(MainActivity.this, SpielbrettScreen.class));
             }
         });
 

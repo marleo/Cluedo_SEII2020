@@ -1,4 +1,4 @@
-package com.example.cluedo_seii;
+package com.example.cluedo_seii.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
