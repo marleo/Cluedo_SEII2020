@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Cluedo_Sensorik</string>
+    <string name="PleaseShake">Please Shake Your Device!!!</string>
+    <string name="ShakeEventDetected">Shake Action detected!!</string>
+</resources>
