@@ -12,7 +12,6 @@ import android.os.IBinder;
 import android.widget.Toast;
 
 
-
 public class ShakeService extends Service implements SensorEventListener{
     private float accel; //acceleration ignoring gravity
     private float accelGravCurr; //acceleration including gravity, current
@@ -49,10 +48,5 @@ public class ShakeService extends Service implements SensorEventListener{
         float delta = accelGravCurr - accelGravLast;
         accel = accel * 0.9f + delta; // perform low-cut filter
 
-        if (accel > 11) {
-
-            Toast.makeText(getApplicationContext(),"Service detects the Shake Action!!",Toast.LENGTH_LONG).show();
-
-        }
     }
 }

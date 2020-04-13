@@ -49,5 +49,6 @@ public class MainActivity extends AppCompatActivity {
     public void onPause() {
         sensorManager.unregisterListener(shakeDetector);
         super.onPause();
+        textView.setText(R.string.NoShakeAction);
     }
 }
