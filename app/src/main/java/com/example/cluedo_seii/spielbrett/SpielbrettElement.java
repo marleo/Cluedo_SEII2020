@@ -1,16 +1,25 @@
 package com.example.cluedo_seii.spielbrett;
 
+import android.widget.ImageButton;
+import android.widget.LinearLayout;
+import com.example.cluedo_seii.activities.SpielbrettScreen;
+
 public class SpielbrettElement {
     private int xKoordinate;
     private int yKoordinate;
-    private int breite;
-    private int laenge;
+    private ImageButton spielBrettElement;
 
-    public SpielbrettElement(int xKoordinate, int yKoordinate, int breite, int laenge) {
+    public SpielbrettElement(SpielbrettScreen spielbrettScreen,
+                             int xKoordinate, int yKoordinate,
+                             LinearLayout.LayoutParams layoutParams, int drawableImage) {
         this.xKoordinate = xKoordinate;
         this.yKoordinate = yKoordinate;
-        this.breite = breite;
-        this.laenge = laenge;
+
+        spielBrettElement = new ImageButton(spielbrettScreen);
+        spielBrettElement.setLayoutParams(layoutParams);
+        spielBrettElement.setImageResource(drawableImage);
+        spielBrettElement.setTag(yKoordinate + 1 + (xKoordinate * 4));
+        spielBrettElement.setId(yKoordinate + 1 + (xKoordinate* 4));
     }
 
     public int getxKoordinate() {
@@ -29,19 +38,11 @@ public class SpielbrettElement {
         this.yKoordinate = yKoordinate;
     }
 
-    public int getBreite() {
-        return breite;
+    public ImageButton getSpielBrettElement() {
+        return spielBrettElement;
     }
 
-    public void setBreite(int breite) {
-        this.breite = breite;
-    }
-
-    public int getLänge() {
-        return laenge;
-    }
-
-    public void setLänge(int laenge) {
-        this.laenge = laenge;
+    public void setSpielBrettElement(ImageButton spielBrettElement) {
+        this.spielBrettElement = spielBrettElement;
     }
 }

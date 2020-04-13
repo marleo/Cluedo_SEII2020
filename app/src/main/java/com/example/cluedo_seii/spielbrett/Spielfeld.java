@@ -1,9 +1,12 @@
 package com.example.cluedo_seii.spielbrett;
 
-import com.example.cluedo_seii.spielbrett.SpielbrettElement;
+import android.widget.LinearLayout;
+
+import com.example.cluedo_seii.R;
+import com.example.cluedo_seii.activities.SpielbrettScreen;
 
 public class Spielfeld extends SpielbrettElement {
-    public Spielfeld(int xKoordinate, int yKoordinate, int breite, int länge) {
-        super(xKoordinate, yKoordinate, breite, länge);
+    public Spielfeld(SpielbrettScreen spielbrettScreen, int xKoordinate, int yKoordinate, LinearLayout.LayoutParams layoutParams) {
+        super(spielbrettScreen, xKoordinate, yKoordinate, layoutParams, R.drawable.spielfeld_element);
     }
 }
