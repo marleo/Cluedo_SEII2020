@@ -51,7 +51,7 @@ public class Spielbrett {
                     listeSpielbrettElemente.add(spielbrettElement);
                 }
 
-                // TODO: Definiere welche Felder an welcher Position eingespeichert werden sollen
+                // welche Felder an welcher Position eingespeichert werden sollen
                 // Beispiel: if(x == 1 && y == 2) { listeSpielbrettElemente.add(new Raum(x,y,32,32)); }
                 // else => Spielfeld
             }
