@@ -1,10 +1,12 @@
-package com.example.cluedo_seii;
+package com.example.cluedo_seii.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 import android.widget.CompoundButton;
 import android.widget.Switch;
+
+import com.example.cluedo_seii.R;
 
 
 public class SettingScreen extends AppCompatActivity {
