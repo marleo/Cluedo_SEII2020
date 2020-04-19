@@ -1,4 +1,4 @@
-package com.example.networktest.network.dto;
+package com.example.cluedo_seii.Network.dto;
 
 import androidx.annotation.NonNull;
 

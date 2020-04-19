@@ -1,4 +1,4 @@
-package com.example.networktest.network.kryonet;
+package com.example.cluedo_seii.Network.kryonet;
 
 public interface KryoNetComponent {
     /**

@@ -1,6 +1,6 @@
-package com.example.networktest.network;
+package com.example.cluedo_seii.Network;
 
-import com.example.networktest.network.dto.BaseMessage;
+import com.example.cluedo_seii.Network.dto.BaseMessage;
 
 import java.io.IOException;
 

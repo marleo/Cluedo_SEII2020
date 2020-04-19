@@ -1,4 +1,4 @@
-package com.example.networktest.network.kryonet;
+package com.example.cluedo_seii.Network.kryonet;
 
 import android.os.AsyncTask;
 import android.util.Log;
@@ -6,9 +6,9 @@ import android.util.Log;
 import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
-import com.example.networktest.network.Callback;
-import com.example.networktest.network.NetworkClient;
-import com.example.networktest.network.dto.BaseMessage;
+import com.example.cluedo_seii.Network.Callback;
+import com.example.cluedo_seii.Network.NetworkClient;
+import com.example.cluedo_seii.Network.dto.BaseMessage;
 
 import java.io.IOException;
 import java.net.InetAddress;

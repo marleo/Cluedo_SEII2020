@@ -1,18 +1,20 @@
-package com.example.networktest;
-
-import androidx.appcompat.app.AppCompatActivity;
+package com.example.cluedo_seii.activities;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
-import com.example.networktest.network.kryonet.NetworkClientKryo;
-import com.example.networktest.network.kryonet.NetworkServerKryo;
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.cluedo_seii.Network.connectionType;
+import com.example.cluedo_seii.Network.kryonet.NetworkClientKryo;
+import com.example.cluedo_seii.Network.kryonet.NetworkServerKryo;
+
+import com.example.cluedo_seii.R;
 
 import java.io.IOException;
 
-public class MainActivity extends AppCompatActivity {
+public class NetworkScreen extends AppCompatActivity {
     private connectionType conType;
     private NetworkServerKryo server;
     private NetworkClientKryo client;
@@ -20,7 +22,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_network);
     }
 
     public void selectHost(View view) {

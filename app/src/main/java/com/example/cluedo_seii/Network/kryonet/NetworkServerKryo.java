@@ -1,11 +1,11 @@
-package com.example.networktest.network.kryonet;
+package com.example.cluedo_seii.Network.kryonet;
 
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
-import com.example.networktest.network.Callback;
-import com.example.networktest.network.NetworkServer;
-import com.example.networktest.network.dto.BaseMessage;
+import com.example.cluedo_seii.Network.Callback;
+import com.example.cluedo_seii.Network.NetworkServer;
+import com.example.cluedo_seii.Network.dto.BaseMessage;
 
 import java.io.IOException;
 

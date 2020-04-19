@@ -1,4 +1,4 @@
-package com.example.networktest;
+package com.example.cluedo_seii.Network;
 
 public enum connectionType {
     HOST,CLIENT
