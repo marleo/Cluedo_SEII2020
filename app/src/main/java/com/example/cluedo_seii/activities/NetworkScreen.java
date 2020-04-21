@@ -1,6 +1,9 @@
 package com.example.cluedo_seii.activities;
 
+import android.net.wifi.WifiManager;
 import android.os.Bundle;
+import android.text.format.Formatter;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
@@ -38,7 +41,11 @@ public class NetworkScreen extends AppCompatActivity {
             e.printStackTrace();
         }
 
+        WifiManager wm = (WifiManager) getApplicationContext().getSystemService(WIFI_SERVICE);
+        String ip = Formatter.formatIpAddress(wm.getConnectionInfo().getIpAddress());
 
+        TextView serverResponse = findViewById(R.id.serverResponse);
+        serverResponse.setText(ip);
     }
 
     public void selectClient(View view) {
@@ -62,9 +69,7 @@ public class NetworkScreen extends AppCompatActivity {
 
             //client.connect("localhost");
 
-            String[] hosts = new String[1];
-            hosts[0] = "10.0.2.2";
-            client.execute(hosts);
+            client.connect("192.168.178.47");
 
         } catch (Exception e) {
             e.printStackTrace();

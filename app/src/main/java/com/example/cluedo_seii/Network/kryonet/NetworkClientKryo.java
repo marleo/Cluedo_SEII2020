@@ -17,7 +17,7 @@ import java.util.List;
 
 import static android.content.ContentValues.TAG;
 
-public class NetworkClientKryo extends AsyncTask<String, Void, Void> implements NetworkClient, KryoNetComponent {
+public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
     private Client client;
     private Callback<BaseMessage> callback;
 
@@ -26,20 +26,23 @@ public class NetworkClientKryo extends AsyncTask<String, Void, Void> implements 
     }
 
     @Override
-    protected Void doInBackground(String... strings) {
-        try {
-            connect(strings[0]);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        return null;
-    }
-
-
-    @Override
-    public void connect(String host) throws IOException {
+    public void connect(final String host) throws IOException {
         client.start();
+
+
+
+        new Thread("Connection") {
+            @Override
+            public void run() {
+                try {
+                    client.connect(5000,host,NetworkConstants.TCP_PORT,NetworkConstants.UDP_PORT);
+                } catch (IOException e) {
+                    Log.e(TAG, "run: ", e);
+                }
+            }
+        }.start();
+
+
         client.connect(5000,host,NetworkConstants.TCP_PORT,NetworkConstants.UDP_PORT);
 
         client.addListener(new Listener() {
