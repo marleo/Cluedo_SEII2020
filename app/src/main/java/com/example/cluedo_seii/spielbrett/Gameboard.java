@@ -1,54 +1,52 @@
 package com.example.cluedo_seii.spielbrett;
 
-import android.widget.ImageButton;
 import android.widget.LinearLayout;
 
-import com.example.cluedo_seii.R;
-import com.example.cluedo_seii.activities.SpielbrettScreen;
+import com.example.cluedo_seii.activities.GameboardScreen;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class Spielbrett {
+public class Gameboard {
 
-    private List<SpielbrettElement> listeSpielbrettElemente;
+    private List<GameboardElement> listeGameboardElemente;
     private int laenge;
     private int breite;
     private LinearLayout layout;
 
-    public Spielbrett(SpielbrettScreen spielbrettScreen, int laenge, int breite) {
+    public Gameboard(GameboardScreen gameboardScreen, int laenge, int breite) {
         this.laenge = laenge;
         this.breite = breite;
 
-        listeSpielbrettElemente = new ArrayList<>();
-        init(spielbrettScreen);
+        listeGameboardElemente = new ArrayList<>();
+        init(gameboardScreen);
     }
 
-    private void init(SpielbrettScreen spielbrettScreen) {
-        layout = new LinearLayout(spielbrettScreen);
+    private void init(GameboardScreen gameboardScreen) {
+        layout = new LinearLayout(gameboardScreen);
         layout.setOrientation(LinearLayout.VERTICAL);
         for (int x = 0; x < breite; x++) {
-            LinearLayout row = new LinearLayout(spielbrettScreen);
+            LinearLayout row = new LinearLayout(gameboardScreen);
             row.setLayoutParams(new LinearLayout.LayoutParams
                     (LinearLayout.LayoutParams.WRAP_CONTENT,
                             LinearLayout.LayoutParams.WRAP_CONTENT));
             for (int y = 0; y < laenge; y++) {
                 if(x == 1 && y == 1) {
-                    SpielbrettElement spielbrettElement = new Startpunkt(spielbrettScreen, x, y, new LinearLayout.LayoutParams
+                    GameboardElement gameboardElement = new Startingpoint(gameboardScreen, x, y, new LinearLayout.LayoutParams
                             (LinearLayout.LayoutParams.WRAP_CONTENT,
                                     LinearLayout.LayoutParams.MATCH_PARENT));
-                    spielbrettElement.getSpielBrettElement().setTag(y + 1 + (x * 4));
-                    spielbrettElement.getSpielBrettElement().setId(y + 1 + (x * 4));
-                    row.addView(spielbrettElement.getSpielBrettElement());
-                    listeSpielbrettElemente.add(spielbrettElement);
+                    gameboardElement.getGameBoardElement().setTag(y + 1 + (x * 4));
+                    gameboardElement.getGameBoardElement().setId(y + 1 + (x * 4));
+                    row.addView(gameboardElement.getGameBoardElement());
+                    listeGameboardElemente.add(gameboardElement);
                 } else {
-                    SpielbrettElement spielbrettElement = new Spielfeld(spielbrettScreen, x, y, new LinearLayout.LayoutParams
+                    GameboardElement gameboardElement = new GameField(gameboardScreen, x, y, new LinearLayout.LayoutParams
                         (LinearLayout.LayoutParams.WRAP_CONTENT,
                                 LinearLayout.LayoutParams.MATCH_PARENT));
-                    spielbrettElement.getSpielBrettElement().setTag(y + 1 + (x * 4));
-                    spielbrettElement.getSpielBrettElement().setId(y + 1 + (x * 4));
-                    row.addView(spielbrettElement.getSpielBrettElement());
-                    listeSpielbrettElemente.add(spielbrettElement);
+                    gameboardElement.getGameBoardElement().setTag(y + 1 + (x * 4));
+                    gameboardElement.getGameBoardElement().setId(y + 1 + (x * 4));
+                    row.addView(gameboardElement.getGameBoardElement());
+                    listeGameboardElemente.add(gameboardElement);
                 }
 
                 // welche Felder an welcher Position eingespeichert werden sollen
@@ -67,12 +65,12 @@ public class Spielbrett {
          */
     }
 
-    public List<SpielbrettElement> getListeSpielbrettElemente() {
-        return listeSpielbrettElemente;
+    public List<GameboardElement> getListeGameboardElemente() {
+        return listeGameboardElemente;
     }
 
-    public void setListeSpielbrettElemente(List<SpielbrettElement> listeSpielbrettElemente) {
-        this.listeSpielbrettElemente = listeSpielbrettElemente;
+    public void setListeGameboardElemente(List<GameboardElement> listeGameboardElemente) {
+        this.listeGameboardElemente = listeGameboardElemente;
     }
 
     public LinearLayout getLayout() {

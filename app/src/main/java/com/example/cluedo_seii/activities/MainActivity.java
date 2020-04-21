@@ -21,7 +21,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v){
                 // TODO : Switch to Game Scene after button press
-                startActivity(new Intent(MainActivity.this, SpielbrettScreen.class));
+                startActivity(new Intent(MainActivity.this, GameboardScreen.class));
             }
         });
 

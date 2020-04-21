@@ -7,16 +7,16 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.cluedo_seii.R;
 
-import com.example.cluedo_seii.spielbrett.Spielbrett;
+import com.example.cluedo_seii.spielbrett.Gameboard;
 
-public class SpielbrettScreen extends AppCompatActivity {
+public class GameboardScreen extends AppCompatActivity {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_spielbrett_screen);
 
-        Spielbrett spielbrett = new Spielbrett(this,7,12);
-        setContentView(spielbrett.getLayout());
+        Gameboard gameboard = new Gameboard(this,7,12);
+        setContentView(gameboard.getLayout());
     }
 }
