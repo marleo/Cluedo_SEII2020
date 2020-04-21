@@ -4,7 +4,7 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import com.example.cluedo_seii.activities.GameboardScreen;
 
-public class GameboardElement {
+public abstract class GameboardElement {
     private int xKoordinate;
     private int yKoordinate;
     private ImageButton gameBoardElement;
@@ -18,6 +18,8 @@ public class GameboardElement {
         gameBoardElement = new ImageButton(gameboardScreen);
         gameBoardElement.setLayoutParams(layoutParams);
         gameBoardElement.setImageResource(drawableImage);
+        gameBoardElement.setBackgroundResource(0);
+        gameBoardElement.setPadding(0,0,0,0);
         gameBoardElement.setTag(yKoordinate + 1 + (xKoordinate * 4));
         gameBoardElement.setId(yKoordinate + 1 + (xKoordinate* 4));
     }

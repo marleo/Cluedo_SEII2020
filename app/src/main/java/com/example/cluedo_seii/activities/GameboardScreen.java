@@ -16,7 +16,35 @@ public class GameboardScreen extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_spielbrett_screen);
 
-        Gameboard gameboard = new Gameboard(this,7,12);
+        /*
+            0 = GameField
+            1 = NoneWalkableElement
+            2 = StartingPoint
+            3 = Room
+         */
+
+        String gameBoard =
+                "1120000000211" +
+                "1300000000031" +
+                "0000000000000" +
+                "0000000000000" +
+                "0000000000000" +
+                "0000000000000" +
+                "1300000000031" +
+                "1100000000011" +
+                "1300000000031" +
+                "0000000000000" +
+                "2000000000002" +
+                "1300000000031" +
+                "1100000000011" +
+                "0000000000000" +
+                "0000000000000" +
+                "0000000000000" +
+                "0000000000000" +
+                "1300000000031" +
+                "1120000000211";
+
+        Gameboard gameboard = new Gameboard(this,13,19, gameBoard);
         setContentView(gameboard.getLayout());
     }
 }
