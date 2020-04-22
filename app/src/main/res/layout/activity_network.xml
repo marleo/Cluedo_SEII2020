@@ -37,27 +37,27 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="99dp"
-        android:layout_marginTop="45dp"
+        android:layout_marginTop="71dp"
         android:layout_marginEnd="99dp"
-        android:layout_marginBottom="20dp"
         android:ems="10"
         android:inputType="textPersonName"
-        app:layout_constraintBottom_toTopOf="@+id/sendMessageButton"
+        android:text="msg"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/typeText" />
+        app:layout_constraintTop_toBottomOf="@+id/connectButton" />
 
     <Button
         android:id="@+id/sendMessageButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="161dp"
-        android:layout_marginTop="14dp"
+        android:layout_marginTop="38dp"
         android:layout_marginEnd="162dp"
-        android:layout_marginBottom="25dp"
+        android:onClick="sendMessageFromHost"
         android:text="Send"
-        app:layout_constraintBottom_toTopOf="@+id/serverResponse"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editMessage" />
 
@@ -66,27 +66,50 @@
         android:layout_width="209dp"
         android:layout_height="51dp"
         android:layout_marginStart="103dp"
-        android:layout_marginTop="17dp"
         android:layout_marginEnd="99dp"
-        android:layout_marginBottom="314dp"
+        android:layout_marginBottom="38dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/sendMessageButton" />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
         android:id="@+id/typeText"
         android:layout_width="157dp"
         android:layout_height="41dp"
-        android:layout_marginTop="140dp"
-        android:layout_marginBottom="40dp"
+        android:layout_marginTop="53dp"
         android:textAlignment="center"
         android:textSize="24sp"
-        app:layout_constraintBottom_toTopOf="@+id/editMessage"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.503"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/ipAddressInput"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="97dp"
+        android:layout_marginTop="36dp"
+        android:layout_marginEnd="101dp"
+        android:ems="10"
+        android:text="ip"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/typeText" />
+
+    <Button
+        android:id="@+id/connectButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="161dp"
+        android:layout_marginTop="11dp"
+        android:layout_marginEnd="161dp"
+        android:onClick="connectToHost"
+        android:text="Connect"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.82" />
+        app:layout_constraintTop_toBottomOf="@+id/ipAddressInput" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
