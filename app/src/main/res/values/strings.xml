@@ -6,4 +6,7 @@
     <string name="mainScreenExitButton">Exit Game</string>
     <string name="optionsScreenCheatToggle">Schummelfunktion</string>
     <string name="mainScreenCheatInformation">Cheating Disabled</string>
+    <string name="PleaseShake">Shake your phone to roll the dices</string>
+    <string name="ShakeEventDetected">Shake Action detected!!</string>
+    <string name="NoShakeAction">No Shake action detected!</string>
 </resources>
