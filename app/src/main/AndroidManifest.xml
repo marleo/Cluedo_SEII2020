@@ -17,7 +17,7 @@
             android:label="@string/app_name">
         </activity>
         <activity
-            android:name=".activities.SpielbrettScreen"
+            android:name=".activities.GameboardScreen"
             android:label="Cluedo">
         </activity>
         <activity
