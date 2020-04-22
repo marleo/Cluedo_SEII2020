@@ -5,4 +5,5 @@
     <string name="mainScreenOptionsButton">Options</string>
     <string name="mainScreenExitButton">Exit Game</string>
     <string name="optionsScreenCheatToggle">Schummelfunktion</string>
+    <string name="mainScreenCheatInformation">Cheating Disabled</string>
 </resources>
