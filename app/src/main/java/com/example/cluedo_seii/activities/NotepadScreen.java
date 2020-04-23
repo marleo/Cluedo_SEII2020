@@ -25,12 +25,12 @@ public class NotepadScreen extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_notepad);
 
-        TextView textView1 = findViewById(R.id.notes);
+        final TextView textView1 = findViewById(R.id.notes);
         //TextView textView2 = findViewById(R.id.notepadMoreNotes);
         Button btn = findViewById(R.id.exclude_button);
-        EditText editText = findViewById(R.id.excludeOpp);
+        final EditText editText = findViewById(R.id.excludeOpp);
 
-        HashMap<String, String> notes = new HashMap<>();
+        final HashMap<String, String> notes = new HashMap<>();
 
 
         String[] cards = {"Oberst von Gatov", "Prof. Bloom", "Reverend Grün", "Baronin von Porz", "Fräulein Gloria", "Frau weiss",
@@ -38,7 +38,7 @@ public class NotepadScreen extends AppCompatActivity {
                 "Halle", "Salon", "Speisezimmer", "Küche", "Musikzimmer", "Winterzimmer", "Biliardzimmer", "Bibliothek", "Arbeitszimmer"};
 
 
-        Notepad notepad = new Notepad(cards, notes);
+        final Notepad notepad = new Notepad(cards, notes);
 
         Set keys = notes.keySet();
         for (Iterator i = keys.iterator(); i.hasNext(); ) {
@@ -48,6 +48,7 @@ public class NotepadScreen extends AppCompatActivity {
         }
 
         View.OnClickListener onButtonClickListener = new View.OnClickListener(){
+
             @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void onClick(View v){
