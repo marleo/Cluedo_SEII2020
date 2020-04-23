@@ -5,57 +5,47 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activities.NotepadScreen">
+    tools:context=".activities.MoreNotesScreen">
 
     <EditText
-        android:id="@+id/excludeOpp"
+        android:id="@+id/addMoreNotes"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginBottom="44dp"
         android:ems="10"
-        android:hint="@string/excludeOpp"
+        android:hint="@string/addMoreNotes"
         android:inputType="textPersonName"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        android:autofillHints="" />
 
     <TextView
-        android:id="@+id/notepadHeading"
+        android:id="@+id/moreNotesHeading"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="163dp"
+        android:layout_marginStart="174dp"
         android:layout_marginTop="44dp"
-        android:text="@string/notepadHeading"
+        android:text="@string/moreNotesHeading"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/notes"
+        android:id="@+id/moreNotes"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="49dp"
-        android:layout_marginTop="124dp"
+        android:layout_marginStart="33dp"
+        android:layout_marginTop="108dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/exclude_button"
+        android:id="@+id/addNotesButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="51dp"
-        android:layout_marginBottom="41dp"
-        android:text="@string/exclude_button"
+        android:layout_marginEnd="47dp"
+        android:layout_marginBottom="40dp"
+        android:text="@string/addNotesButton"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
-
-    <Button
-        android:id="@+id/moreNotesButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="32dp"
-        android:layout_marginBottom="112dp"
-        android:text="@string/moreNotesButton"
-        app:layout_constraintBottom_toTopOf="@+id/exclude_button"
-        app:layout_constraintEnd_toEndOf="parent" />
-
 </androidx.constraintlayout.widget.ConstraintLayout>

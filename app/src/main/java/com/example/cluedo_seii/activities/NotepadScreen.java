@@ -1,5 +1,6 @@
 package com.example.cluedo_seii.activities;
 
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
@@ -26,11 +27,17 @@ public class NotepadScreen extends AppCompatActivity {
         setContentView(R.layout.activity_notepad);
 
         final TextView textView1 = findViewById(R.id.notes);
-        //TextView textView2 = findViewById(R.id.notepadMoreNotes);
         Button btn = findViewById(R.id.exclude_button);
         final EditText editText = findViewById(R.id.excludeOpp);
-
         final HashMap<String, String> notes = new HashMap<>();
+
+        final Button moreNotesButton = findViewById(R.id.moreNotesButton);
+        moreNotesButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(NotepadScreen.this, MoreNotesScreen.class));
+            }
+        });
 
 
         String[] cards = {"Oberst von Gatov", "Prof. Bloom", "Reverend Grün", "Baronin von Porz", "Fräulein Gloria", "Frau weiss",

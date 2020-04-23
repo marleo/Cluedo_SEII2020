@@ -12,6 +12,10 @@
     <string name="notepadMoreNotes"></string>
     <string name="excludeOpp">Type in</string>
     <string name="exclude_button">Bestätigen</string>
+    <string name="moreNotesHeading">Notizen</string>
+    <string name="addMoreNotes">Type in</string>
+    <string name="addNotesButton">Bestätigen</string>
+    <string name="moreNotesButton">Notizen</string>
 
 
 
