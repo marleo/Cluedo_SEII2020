@@ -1,4 +1,4 @@
-package com.example.cluedo_sensorik;
+package com.example.cluedo_seii.sensorik;
 
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
@@ -21,7 +21,7 @@ public class ShakeDetector implements SensorEventListener {
 
     public interface OnShakeListener {
          void onShake(int count);
-         //to do: roll dices
+
     }
 
     @Override
@@ -44,12 +44,12 @@ public class ShakeDetector implements SensorEventListener {
 
             if (gForce > SHAKE_THRESHOLD_GRAVITY) {
                 final long now = System.currentTimeMillis();
-                if (shakeTimestamp + SHAKE_SLOP_TIME_MS > now) {//only detects shake event if it's more than 500ms after a previous shake event
+                if (shakeTimestamp + SHAKE_SLOP_TIME_MS > now) {//only detects shake event if it's a few seconds after a previous shake event
 
                     return;
                 }
 
-                if (shakeTimestamp + SHAKE_COUNT_RESET_TIME_MS < now) {//shake count is reset after 3 seconds
+                if (shakeTimestamp + SHAKE_COUNT_RESET_TIME_MS < now) {//shake count is reset after a few seconds
                     shakeCount = 0;
                 }
 

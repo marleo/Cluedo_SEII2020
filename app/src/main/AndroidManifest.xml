@@ -33,7 +33,8 @@
         <activity android:name=".activities.NetworkScreen" />
         <activity
             android:name=".activities.RollDiceScreen"
-            android:label="Roll Dices"/>
+            android:exported="true"
+            android:label="Roll Dices" />
     </application>
 
 </manifest>

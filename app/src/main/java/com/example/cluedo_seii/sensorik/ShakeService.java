@@ -1,4 +1,4 @@
-package com.example.cluedo_sensorik;
+package com.example.cluedo_seii.sensorik;
 
 import android.app.Service;
 import android.content.Context;
@@ -9,12 +9,11 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Handler;
 import android.os.IBinder;
-import android.widget.Toast;
 
 
 public class ShakeService extends Service implements SensorEventListener{
     private float accel; //acceleration ignoring gravity
-    private float accelGravCurr; //acceleration including gravity, current
+    private float accelGrav; //acceleration including gravity
 
 
     @Override
@@ -43,9 +42,9 @@ public class ShakeService extends Service implements SensorEventListener{
         float y = event.values[1];
         float z = event.values[2];
 
-        float accelGravLast = accelGravCurr; //assigning current acceleration to latest acceleration
-        accelGravCurr = (float) Math.sqrt(x * x + y * y + z * z);
-        float delta = accelGravCurr - accelGravLast;
+        float accelGravLast = accelGrav; //assigning current acceleration to latest acceleration
+        accelGrav = (float) Math.sqrt(x * x + y * y + z * z);
+        float delta = accelGrav - accelGravLast;
         accel = accel * 0.9f + delta; // perform low-cut filter
 
     }

@@ -1,4 +1,4 @@
-package com.example.cluedo_sensorik;
+package com.example.cluedo_seii.sensorik;
 
 import org.junit.Test;
 
