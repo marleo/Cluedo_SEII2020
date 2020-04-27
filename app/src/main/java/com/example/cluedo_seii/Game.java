@@ -1,5 +1,7 @@
 package com.example.cluedo_seii;
 
+import com.example.cluedo_seii.spielbrett.Gameboard;
+
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.Random;
@@ -8,16 +10,16 @@ import java.util.Random;
 
 public class Game {
 
-    private Board board;
+    private Gameboard gameboard;
     private DeckOfCards deckOfCards;
     private InvestigationFile investigationFile;
     private LinkedList<Player>players;
     private Boolean gameOver;
     private Random random;
 
-    public Game(Board board, DeckOfCards deckOfCards, LinkedList<Player>players){
+    public Game(Gameboard gameboard, DeckOfCards deckOfCards, LinkedList<Player>players){
 
-        this.board = board;
+        this.gameboard = gameboard;
         this.deckOfCards = deckOfCards;
         this.players = players;
         investigationFile = new InvestigationFile();
