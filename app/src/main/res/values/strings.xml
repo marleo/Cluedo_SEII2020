@@ -7,15 +7,12 @@
     <string name="optionsScreenCheatToggle">Schummelfunktion</string>
     <string name="mainScreenCheatInformation">Cheating Disabled</string>
     <string name="notepadHeading">Notizblock</string>
-    <string name="notes">Notes</string>
-    <string name="notepad_button">Notizblock</string>
-    <string name="notepadMoreNotes"></string>
+    <string name="notepadButton">Notizblock</string>
     <string name="excludeOpp">Type in</string>
     <string name="exclude_button">Bestätigen</string>
-    <string name="moreNotesHeading">Notizen</string>
     <string name="addMoreNotes">Type in</string>
     <string name="addNotesButton">Bestätigen</string>
-    <string name="moreNotesButton">Notizen</string>
+    <string name="addMoreNotesButton">Bestätigen</string>
 
 
 

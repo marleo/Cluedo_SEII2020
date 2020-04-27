@@ -7,20 +7,20 @@ import android.os.Build;
 import androidx.annotation.RequiresApi;
 
 import java.util.HashMap;
-
+import java.util.LinkedHashMap;
 
 
 public class Notepad  {
-    public HashMap<String, String> notes;
-    String[] cards;
-    public String moreNotes;
+    public LinkedHashMap<String, String> notes;
+    private String[] cards;
+    private String moreNotes;
 
 
 
 
 
 
-    public Notepad(String[] cards, HashMap<String,String> notes){
+    public Notepad(String[] cards, LinkedHashMap<String,String> notes){
         this.cards=cards;
         this.moreNotes=" ";
 
