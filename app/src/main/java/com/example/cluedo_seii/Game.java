@@ -1,6 +1,10 @@
 package com.example.cluedo_seii;
 
+import android.telephony.SmsManager;
+
+import com.example.cluedo_seii.spielbrett.GameFieldElement;
 import com.example.cluedo_seii.spielbrett.Gameboard;
+import com.example.cluedo_seii.spielbrett.RoomElement;
 
 import java.util.Collections;
 import java.util.LinkedList;
@@ -16,6 +20,7 @@ public class Game {
     private LinkedList<Player>players;
     private Boolean gameOver;
     private Random random;
+    private int round;
 
     public Game(Gameboard gameboard, DeckOfCards deckOfCards, LinkedList<Player>players){
 
@@ -25,6 +30,7 @@ public class Game {
         investigationFile = new InvestigationFile();
         random = new Random();
         gameOver = false;
+        round = 1;
 
     }
 
@@ -62,4 +68,39 @@ public class Game {
         }
 
     }
+
+    public void gameControl(){
+
+        while(gameOver == false) {
+
+            for (Player player : players) {
+
+
+                //1. Teil eines Zuges - Bewegungsentscheidung
+
+                if (player.getPosition() instanceof GameFieldElement) {
+
+                    //TODO würfeln
+
+                } else if (player.getPosition() instanceof RoomElement) {
+
+                    //TODO Entscheidung ob Geheimgang, falls vorhanden, oder würfeln
+
+                }
+
+                //2. Teil eines Zuges - Anklage oder Verdachtsentscheidung
+
+                if (player.getPosition() instanceof RoomElement) {
+
+                    //TODO Nachricht über Entscheidung nach Anklage oder Verdacht
+
+                }
+
+            }
+        }
+
+        //TODO GameEnd Nachricht mit Auskunft über Spielausgang
+
+    }
+
 }
