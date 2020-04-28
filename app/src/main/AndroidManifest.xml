@@ -30,6 +30,15 @@
             </intent-filter>
         </activity>
         <activity android:name=".activities.NetworkScreen" />
+        <activity
+            android:name=".activities.NotepadScreen"
+            android:label="Cluedo">
+        </activity>
+        <activity
+            android:name=".activities.MoreNotesScreen"
+            android:label="Cluedo">
+        </activity>
+
 
     </application>
 
