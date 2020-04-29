@@ -6,9 +6,23 @@
     <string name="mainScreenExitButton">Exit Game</string>
     <string name="optionsScreenCheatToggle">Schummelfunktion</string>
     <string name="mainScreenCheatInformation">Cheating Disabled</string>
+
     <string name="PleaseShake">Shake your phone to roll the dices</string>
     <string name="ShakeEventDetected">Dices rolled!</string>
     <string name="NoShakeAction">No Shake action detected!</string>
     <string name="dice1">leftDice</string>
     <string name="dice2">rightDice</string>
+
+    <string name="notepadHeading">Notizblock</string>
+    <string name="notepadButton">Notizblock</string>
+    <string name="excludeOpp">Type in</string>
+    <string name="exclude_button">Bestätigen</string>
+    <string name="addMoreNotes">Type in</string>
+    <string name="addNotesButton">Bestätigen</string>
+    <string name="addMoreNotesButton">Bestätigen</string>
+
+
+
+
+
 </resources>
