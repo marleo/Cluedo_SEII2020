@@ -5,6 +5,7 @@ import android.content.Context;
 import android.hardware.Sensor;
 import android.hardware.SensorManager;
 import android.os.Bundle;
+import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
@@ -28,6 +29,7 @@ public class RollDiceScreen extends Activity {
         setContentView(R.layout.activity_roll_dices_screen);
         imageViewLeftDice = findViewById(R.id.diceView1);
         imageViewRightDice = findViewById(R.id.diceView2);
+
 
         //shakeEvent
         textView = findViewById(R.id.tvShake);
@@ -56,16 +58,17 @@ public class RollDiceScreen extends Activity {
                     public void onAnimationEnd(Animation animation) {
                         int value1 = randomDiceValue();
                         int value2 = randomDiceValue();
-                        int res = getResources().getIdentifier("dice"+value1, "drawable","com.example.cluedo_seii");
-                        int res2 = getResources().getIdentifier("dice"+value2, "drawable","com.example.cluedo_seii");
+                        int sum = value1+value2;
+                        int res = getResources().getIdentifier("dice" + value1, "drawable", getPackageName());
+                        int res2 = getResources().getIdentifier("dice" + value2, "drawable", getPackageName());
 
-                        if(animation ==anim1){
+
                             imageViewLeftDice.setImageResource(res);
-                        }
-                        if (animation ==anim2){
                             imageViewRightDice.setImageResource(res2);
-                        }
-                        textView.setText("You rolled a "+ value1+" and a "+value2+"!");
+
+                        textView.setText("You rolled " + value1 + " + " + value2 + " = "+sum+"!");
+
+
                     }
 
                     @Override
@@ -78,7 +81,9 @@ public class RollDiceScreen extends Activity {
 
                 imageViewLeftDice.startAnimation(anim1);
                 imageViewRightDice.startAnimation(anim2);
+
             }
+
         });
 
 

@@ -16,7 +16,6 @@ public class ShakeDetector implements SensorEventListener {
 
     public void setOnShakeListener(OnShakeListener listener) {
         this.onShakeListener = listener;
-        //to do: when it's a players turn, enable ShakeListener to roll dices
     }
 
     public interface OnShakeListener {

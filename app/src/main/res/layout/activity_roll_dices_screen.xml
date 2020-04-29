@@ -28,12 +28,14 @@
         android:scaleX="1"
         android:scaleY="1"
         android:src="@drawable/dice2"
+        android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.233"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.197" />
+        app:layout_constraintVertical_bias="0.197"
+        />
 
     <ImageView
         android:id="@+id/diceView2"
@@ -43,12 +45,14 @@
         android:scaleX="1"
         android:scaleY="1"
         android:src="@drawable/dice5"
+        android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.769"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.197" />
+        app:layout_constraintVertical_bias="0.197"
+        />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 
