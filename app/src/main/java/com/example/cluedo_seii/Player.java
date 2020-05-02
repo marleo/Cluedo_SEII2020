@@ -13,6 +13,7 @@ public class Player {
     private String IP;
     private GameCharacter playerCharacter;
     private Notepad notepad;
+    private Boolean madeFalseAccusation;
 
     public Player(int id, GameboardElement position, String IP, GameCharacter playerCharacter, Notepad notepad){
         this.id = id;
@@ -21,6 +22,7 @@ public class Player {
         this.IP = IP;
         this.playerCharacter = playerCharacter;
         this.notepad = notepad;
+        madeFalseAccusation = false;
     }
 
     public GameboardElement getPosition() {
@@ -39,17 +41,15 @@ public class Player {
         return IP;
     }
 
+    public GameCharacter getPlayerCharacter() {
+        return playerCharacter;
+    }
+
+    public void setMadeFalseAccusation(Boolean madeFalseAccusation) {
+        this.madeFalseAccusation = madeFalseAccusation;
+    }
+
     public void addCard(Card card){
-
         playerCards.add(card);
-
-    }
-
-    public void suspect(){
-
-    }
-
-    public void accuse() {
-
     }
 }
