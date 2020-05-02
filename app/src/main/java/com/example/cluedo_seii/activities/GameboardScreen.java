@@ -29,6 +29,7 @@ public class GameboardScreen extends AppCompatActivity  {
     private LinkedList<Player> players;
     private DeckOfCards deckOfCards;
     private FragmentManager manager = getSupportFragmentManager();
+    private String mesaggeDialogTag = "MessageDialog";
 
 
 
@@ -104,20 +105,20 @@ public class GameboardScreen extends AppCompatActivity  {
         Bundle bundle = new Bundle();
         bundle.putSerializable("game", game);
         dialog.setArguments(bundle);
-        dialog.show(manager, "MessageDialog");
+        dialog.show(manager, mesaggeDialogTag);
     }
 
     private void throwDiceOrUseSecretPassage(){
 
         ThrowDiceOrUseSecretPassage dialog = new ThrowDiceOrUseSecretPassage();
-        dialog.show(manager, "MessageDialog");
+        dialog.show(manager, mesaggeDialogTag);
 
     }
 
     private void suspectOrAccuse(){
 
         SuspectOrAccuse dialog = new SuspectOrAccuse();
-        dialog.show(manager, "MessageDialog");
+        dialog.show(manager, mesaggeDialogTag);
 
     }
 

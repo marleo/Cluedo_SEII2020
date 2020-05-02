@@ -23,7 +23,7 @@ public class ThrowDice extends AppCompatDialogFragment {
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
         View view = LayoutInflater.from(getActivity()).inflate(R.layout.player_game_interaction_layout, null);
-        //assert getArguments() != null;
+
         game = (Game) getArguments().getSerializable("game");
 
 
