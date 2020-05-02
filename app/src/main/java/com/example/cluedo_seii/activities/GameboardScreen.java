@@ -30,6 +30,7 @@ public class GameboardScreen extends AppCompatActivity  {
     private DeckOfCards deckOfCards;
     private FragmentManager manager = getSupportFragmentManager();
     private String mesaggeDialogTag = "MessageDialog";
+    Bundle bundle = new Bundle();
 
 
 
@@ -102,7 +103,6 @@ public class GameboardScreen extends AppCompatActivity  {
     private void throwDice(){
 
         ThrowDice dialog = new ThrowDice();
-        Bundle bundle = new Bundle();
         bundle.putSerializable("game", game);
         dialog.setArguments(bundle);
         dialog.show(manager, mesaggeDialogTag);
@@ -111,6 +111,8 @@ public class GameboardScreen extends AppCompatActivity  {
     private void throwDiceOrUseSecretPassage(){
 
         ThrowDiceOrUseSecretPassage dialog = new ThrowDiceOrUseSecretPassage();
+        bundle.putSerializable("game", game);
+        dialog.setArguments(bundle);
         dialog.show(manager, mesaggeDialogTag);
 
     }
@@ -118,6 +120,8 @@ public class GameboardScreen extends AppCompatActivity  {
     private void suspectOrAccuse(){
 
         SuspectOrAccuse dialog = new SuspectOrAccuse();
+        bundle.putSerializable("game", game);
+        dialog.setArguments(bundle);
         dialog.show(manager, mesaggeDialogTag);
 
     }
