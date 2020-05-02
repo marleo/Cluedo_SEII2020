@@ -1,18 +1,37 @@
 package com.example.cluedo_seii.activities;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.Button;
+
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import androidx.fragment.app.FragmentManager;
+
+
+import com.example.cluedo_seii.DeckOfCards;
+import com.example.cluedo_seii.Game;
+import com.example.cluedo_seii.Player;
 import com.example.cluedo_seii.R;
 
+import com.example.cluedo_seii.activities.playerGameInteraction.SuspectOrAccuse;
+import com.example.cluedo_seii.activities.playerGameInteraction.ThrowDice;
+import com.example.cluedo_seii.activities.playerGameInteraction.ThrowDiceOrUseSecretPassage;
 import com.example.cluedo_seii.spielbrett.Gameboard;
 
-public class GameboardScreen extends AppCompatActivity {
+
+import java.util.LinkedList;
+
+public class GameboardScreen extends AppCompatActivity  {
+
+    private Gameboard gameboard;
+    private Game game;
+    private LinkedList<Player> players;
+    private DeckOfCards deckOfCards;
+    private FragmentManager manager = getSupportFragmentManager();
+
+
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -47,8 +66,11 @@ public class GameboardScreen extends AppCompatActivity {
                 "0000000000000" +
                 "0002000002000";
 
-        Gameboard gameboard = new Gameboard(this,13,19, gameBoard);
+        gameboard = new Gameboard(this,13,19, gameBoard);
         setContentView(gameboard.getLayout());
+
+
+        startGame();
 
         /*final Button notepad_Button = findViewById(R.id.notepadButton);
         notepad_Button.setOnClickListener(new View.OnClickListener() {
@@ -58,4 +80,49 @@ public class GameboardScreen extends AppCompatActivity {
             }
         });*/
     }
+
+    private void startGame(){
+
+        //TODO initialize Game according to GameLobby Settings
+
+        //Zu Demonstrationszwecken
+      /*  deckOfCards = new DeckOfCards();
+        players = new LinkedList<>();
+        Player player1 = new Player(1, null, null, null, null);
+        Player player2 = new Player(2, null, null, null, null);
+        players.add(player1);
+        players.add(player2);
+        game = new Game(gameboard, deckOfCards, players);
+        game.distributeCards();*/
+
+    }
+
+
+    private void throwDice(){
+
+        ThrowDice dialog = new ThrowDice();
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("game", game);
+        dialog.setArguments(bundle);
+        dialog.show(manager, "MessageDialog");
+    }
+
+    private void throwDiceOrUseSecretPassage(){
+
+        ThrowDiceOrUseSecretPassage dialog = new ThrowDiceOrUseSecretPassage();
+        dialog.show(manager, "MessageDialog");
+
+    }
+
+    private void suspectOrAccuse(){
+
+        SuspectOrAccuse dialog = new SuspectOrAccuse();
+        dialog.show(manager, "MessageDialog");
+
+    }
+
+
+
 }
+
+
