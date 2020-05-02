@@ -2,6 +2,8 @@ package com.example.cluedo_seii.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.widget.CompoundButton;
 import android.widget.Switch;
@@ -19,11 +21,28 @@ public class SettingScreen extends AppCompatActivity {
         setContentView(R.layout.activity_setting_screen);
 
         final Switch cheatToggle = findViewById(R.id.cheatToggle);
+
+        SharedPreferences preferences = getSharedPreferences("com.example.cluedo_seii", MODE_PRIVATE);
+        cheatToggle.setChecked(preferences.getBoolean("cheatEnabled", false));
+
         cheatToggle.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                cheatEnabled = isChecked;
+                if(isChecked){
+                    SharedPreferences.Editor editor = getSharedPreferences("com.example.cluedo_seii", MODE_PRIVATE).edit();
+                    editor.putBoolean("cheatEnabled", true);
+                    editor.putBoolean("configChanged", true);
+                    editor.apply();
+
+                } else {
+                    SharedPreferences.Editor editor = getSharedPreferences("com.example.cluedo_seii", MODE_PRIVATE).edit();
+                    editor.putBoolean("cheatEnabled", false);
+                    editor.putBoolean("configChanged", true);
+                    editor.apply();
+
+                }
             }
+
         });
     }
 

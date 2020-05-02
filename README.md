@@ -27,4 +27,9 @@ Anklage erhoben haben, endet das Spiel aber ohne Gewinner.</p>
 <p align="center"><a href="https://discord.gg/sCPqrU">Discord</a></p>
 
 <h2 align="center">Teilnehmer</h2>
-<p align="center">Mario Leopold, Theresa Marchetti, Michael Marolt, Marco Prinster, Elmedina Saldic, Florian Gregor Supanz</p>
+<p align="center">Elmedina Saldic: User Interface, Tester</p>
+<p align="center">Marco Prinster: Architekt, Developer</p>
+<p align="center">Florian Gregor Supanz: Dokumentation, User Interface</p>
+<p align="center">Michael Marolt: Developer, Dokumentation</p>
+<p align="center">Theresa Marchetti: Developer, Tester</p>
+<p align="center">Mario Leopold: Tester, Architekt</p>

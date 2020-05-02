@@ -3,9 +3,11 @@ package com.example.cluedo_seii.activities;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.example.cluedo_seii.R;
 
@@ -15,13 +17,17 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        SharedPreferences preferences = getSharedPreferences("com.example.cluedo_seii", MODE_PRIVATE); // Load in sharedPreference
 
+        // Button Handling (Redirecting to other Activities)
         final Button startGame = findViewById(R.id.mainScreenStartButton);
         startGame.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
+
                 // TODO : Switch to Game Scene after button press
                 startActivity(new Intent(MainActivity.this, GameboardScreen.class));
+
             }
         });
 
@@ -29,7 +35,6 @@ public class MainActivity extends AppCompatActivity {
         showOptions.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-                //TODO: Switch to Options Scene after button press
                 startActivity(new Intent(MainActivity.this, SettingScreen.class));
             }
         });
@@ -42,5 +47,30 @@ public class MainActivity extends AppCompatActivity {
                 System.exit(0);
             }
         });
+
+        // Handle Cheat-Toggle State in Options Activity
+        final TextView cheatText = (TextView) findViewById(R.id.mainScreenCheatInformation);
+        String cheatsOn = "Cheats Enabled";
+        String cheatsOff = "Cheats Disabled";
+
+        if(preferences.getBoolean("cheatEnabled", false)){ // Get Boolean Value of cheatEnabled (this is set in SettingScreen.java)
+            cheatText.setText(cheatsOn);
+        } else {
+            cheatText.setText(cheatsOff);
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        // Refresh Main Activity after Preferences have changed
+        super.onResume();
+        SharedPreferences preferences = getSharedPreferences("com.example.cluedo_seii", MODE_PRIVATE); // Get the preferences
+
+        if (preferences.getBoolean("configChanged", true)) {
+            SharedPreferences.Editor editor = getSharedPreferences("com.example.cluedo_seii", MODE_PRIVATE).edit();
+            editor.putBoolean("configChanged", false);
+            editor.apply();
+            this.recreate();
+        }
     }
 }
