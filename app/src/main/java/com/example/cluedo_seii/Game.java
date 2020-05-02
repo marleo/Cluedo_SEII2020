@@ -1,18 +1,18 @@
 package com.example.cluedo_seii;
 
-import android.telephony.SmsManager;
 
-import com.example.cluedo_seii.spielbrett.GameFieldElement;
+
+
 import com.example.cluedo_seii.spielbrett.Gameboard;
-import com.example.cluedo_seii.spielbrett.RoomElement;
 
+import java.io.Serializable;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.Random;
 
 
 
-public class Game {
+public class Game implements Serializable {
 
     private Gameboard gameboard;
     private DeckOfCards deckOfCards;
@@ -21,6 +21,10 @@ public class Game {
     private Boolean gameOver;
     private Random random;
     private int round;
+
+    private int playerIterator;
+
+    private Player currentPlayer;
 
     public Game(Gameboard gameboard, DeckOfCards deckOfCards, LinkedList<Player>players){
 
@@ -31,7 +35,12 @@ public class Game {
         random = new Random();
         gameOver = false;
         round = 1;
+        playerIterator = 0;
+        currentPlayer = players.get(playerIterator);
+    }
 
+    public Player getCurrentPlayer() {
+        return currentPlayer;
     }
 
     public void distributeCards(){
@@ -69,38 +78,19 @@ public class Game {
 
     }
 
-    public void gameControl(){
+    public void nextPlayer(){
 
-        while(gameOver == false) {
-
-            for (Player player : players) {
-
-
-                //1. Teil eines Zuges - Bewegungsentscheidung
-
-                if (player.getPosition() instanceof GameFieldElement) {
-
-                    //TODO würfeln
-
-                } else if (player.getPosition() instanceof RoomElement) {
-
-                    //TODO Entscheidung ob Geheimgang, falls vorhanden, oder würfeln
-
-                }
-
-                //2. Teil eines Zuges - Anklage oder Verdachtsentscheidung
-
-                if (player.getPosition() instanceof RoomElement) {
-
-                    //TODO Nachricht über Entscheidung nach Anklage oder Verdacht
-
-                }
-
-            }
+        if(playerIterator==players.size()-1)
+        {
+            playerIterator=0;
+            round++;
         }
 
-        //TODO GameEnd Nachricht mit Auskunft über Spielausgang
+        else {
+            playerIterator++;
+        }
+
+        currentPlayer = players.get(playerIterator);
 
     }
-
 }
