@@ -16,6 +16,8 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatDialogFragment;
 
 import com.example.cluedo_seii.R;
+import com.example.cluedo_seii.UserInput;
+import com.example.cluedo_seii.activities.GameboardScreen;
 
 public class ThrowDiceOrUseSecretPassage extends AppCompatDialogFragment {
 
@@ -25,22 +27,25 @@ public class ThrowDiceOrUseSecretPassage extends AppCompatDialogFragment {
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
         View view = LayoutInflater.from(getActivity()).inflate(R.layout.player_game_interaction_layout, null);
+        setCancelable(false);
+
         game = (Game) savedInstanceState.getSerializable("game");
+
 
         DialogInterface.OnClickListener listenerThrowDice = new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
 
-                //game.getCurrentPlayer().throwDice();
-
+                game.gameControl(UserInput.THROWDICE);
+                ((GameboardScreen)getActivity()).updateGame(game);
             }
         };
         DialogInterface.OnClickListener  listenerUseSecretPassage = new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
 
-                //game.getCurrentPlayer().useSecretPassage();
-
+                game.gameControl(UserInput.USESECRETPASSAGE);
+                ((GameboardScreen)getActivity()).updateGame(game);
         }
         };
 

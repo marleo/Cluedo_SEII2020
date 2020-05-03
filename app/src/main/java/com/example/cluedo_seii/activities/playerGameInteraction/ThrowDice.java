@@ -14,6 +14,8 @@ import androidx.appcompat.app.AppCompatDialogFragment;
 
 import com.example.cluedo_seii.Game;
 import com.example.cluedo_seii.R;
+import com.example.cluedo_seii.UserInput;
+import com.example.cluedo_seii.activities.GameboardScreen;
 
 public class ThrowDice extends AppCompatDialogFragment {
 
@@ -23,10 +25,9 @@ public class ThrowDice extends AppCompatDialogFragment {
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
         View view = LayoutInflater.from(getActivity()).inflate(R.layout.player_game_interaction_layout, null);
+        setCancelable(false);
 
         game = (Game) getArguments().getSerializable("game");
-
-
 
 
         DialogInterface.OnClickListener listenerThrowDice = new DialogInterface.OnClickListener() {
@@ -35,8 +36,11 @@ public class ThrowDice extends AppCompatDialogFragment {
 
                 int idCurrentPlayer;
 
-                //game.getCurrentPlayer().throwDice();
+                game.gameControl(UserInput.THROWDICE);
 
+                game.nextPlayer();
+
+                ((GameboardScreen)getActivity()).updateGame(game);
             }
         };
 

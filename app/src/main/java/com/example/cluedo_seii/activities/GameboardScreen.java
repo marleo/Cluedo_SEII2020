@@ -1,6 +1,7 @@
 package com.example.cluedo_seii.activities;
 
 import android.os.Bundle;
+import android.util.Log;
 
 
 import androidx.annotation.Nullable;
@@ -71,9 +72,6 @@ public class GameboardScreen extends AppCompatActivity  {
         gameboard = new Gameboard(this,13,19, gameBoard);
         setContentView(gameboard.getLayout());
 
-
-        startGame();
-
         /*final Button notepad_Button = findViewById(R.id.notepadButton);
         notepad_Button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -86,22 +84,24 @@ public class GameboardScreen extends AppCompatActivity  {
     private void startGame(){
 
         //TODO initialize Game according to GameLobby Settings
-
         //Zu Demonstrationszwecken
-      /*  deckOfCards = new DeckOfCards();
+
+        /*deckOfCards = new DeckOfCards();
         players = new LinkedList<>();
         Player player1 = new Player(1, null, null, null, null);
         Player player2 = new Player(2, null, null, null, null);
+        Player player3 = new Player(3, null, null, null, null);
         players.add(player1);
         players.add(player2);
+        players.add(player3);
         game = new Game(gameboard, deckOfCards, players);
-        game.distributeCards();*/
-
+        game.distributeCards();
+       //throwDice();
+       //showCards();
+       */
     }
 
-
     private void throwDice(){
-
         ThrowDice dialog = new ThrowDice();
         bundle.putSerializable("game", game);
         dialog.setArguments(bundle);
@@ -109,24 +109,22 @@ public class GameboardScreen extends AppCompatActivity  {
     }
 
     private void throwDiceOrUseSecretPassage(){
-
         ThrowDiceOrUseSecretPassage dialog = new ThrowDiceOrUseSecretPassage();
         bundle.putSerializable("game", game);
         dialog.setArguments(bundle);
         dialog.show(manager, mesaggeDialogTag);
-
     }
 
     private void suspectOrAccuse(){
-
         SuspectOrAccuse dialog = new SuspectOrAccuse();
         bundle.putSerializable("game", game);
         dialog.setArguments(bundle);
         dialog.show(manager, mesaggeDialogTag);
-
     }
 
-
+    public void updateGame(Game gameUpdate){
+        game = gameUpdate;
+    }
 
 }
 

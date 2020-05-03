@@ -78,6 +78,26 @@ public class Game implements Serializable {
 
     }
 
+    public void gameControl(UserInput userInput){
+
+        if(userInput==UserInput.THROWDICE){
+            //currentPlayer.ThrowDice();
+        }
+
+        if(userInput==UserInput.USESECRETPASSAGE){
+            //currentPllayerMove();
+        }
+
+        if(userInput==UserInput.SUSPECT){
+            //currentPlayer.suspect();
+        }
+
+        if(userInput==UserInput.ACCUSE){
+            //currentPlayer.accuse();
+        }
+    }
+
+
     public void nextPlayer(){
 
         if(playerIterator==players.size()-1)

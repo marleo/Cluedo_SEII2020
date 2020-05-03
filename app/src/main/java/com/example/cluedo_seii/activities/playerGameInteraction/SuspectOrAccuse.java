@@ -14,6 +14,8 @@ import androidx.appcompat.app.AppCompatDialogFragment;
 
 import com.example.cluedo_seii.Game;
 import com.example.cluedo_seii.R;
+import com.example.cluedo_seii.UserInput;
+import com.example.cluedo_seii.activities.GameboardScreen;
 
 public class SuspectOrAccuse extends AppCompatDialogFragment {
     Game game;
@@ -22,21 +24,25 @@ public class SuspectOrAccuse extends AppCompatDialogFragment {
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
         View view = LayoutInflater.from(getActivity()).inflate(R.layout.player_game_interaction_layout, null);
+        setCancelable(false);
+
         game = (Game) getArguments().getSerializable("game");
+
 
 
         DialogInterface.OnClickListener listenerSuspect = new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                game.getCurrentPlayer().suspect();
+                game.gameControl(UserInput.SUSPECT);
+                ((GameboardScreen)getActivity()).updateGame(game);
 
             }
         };
         DialogInterface.OnClickListener  listenerAccuse = new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-               game.getCurrentPlayer().accuse();
-
+               game.gameControl(UserInput.ACCUSE);
+                ((GameboardScreen)getActivity()).updateGame(game);
             }
         };
 
