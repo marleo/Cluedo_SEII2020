@@ -47,7 +47,6 @@ public class Game implements Serializable {
         return currentPlayer;
     }
 
-
     public void distributeCards(){
 
         LinkedList<Card> cardStack =  deckOfCards.getGameCardsStandard();
@@ -98,4 +97,37 @@ public class Game implements Serializable {
         currentPlayer = players.get(playerIterator);
 
     }
+
+    public LinkedList<Card> suspectSomeone(String suspectedCulprit, String suspectedWeapon, String suspectedLocation){
+
+        LinkedList<Card>wrongSuspicions = new LinkedList<>();
+
+        for(Player player: players){
+
+            if(suspectedCulprit == player.getPlayerCharacter().getName()){
+
+                for(Card card: player.getPlayerCards())
+                {
+                    if(card.getDesignation() == suspectedCulprit){
+                        wrongSuspicions.add(card);
+                    }
+
+                    if(card.getDesignation() == suspectedWeapon){
+                        wrongSuspicions.add(card);
+
+                    }
+
+                    if (card.getDesignation() == suspectedLocation) {
+                        wrongSuspicions.add(card);
+                    }
+                    }
+
+                }
+
+            }
+
+        return wrongSuspicions;
+
+        }
+
 }

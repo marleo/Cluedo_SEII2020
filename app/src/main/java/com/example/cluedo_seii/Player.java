@@ -53,4 +53,37 @@ public class Player implements  Serializable  {
     public void addCard(Card card){
         playerCards.add(card);
     }
+
+
+    public LinkedList<Card> suspect(String suspectedCulprit, String suspectedWeapon, String suspectedLocation, LinkedList<Player> players){
+
+        LinkedList<Card>wrongSuspicions = new LinkedList<>();
+
+        for(Player player: players){
+
+            if(suspectedCulprit == player.getPlayerCharacter().getName()){
+
+                for(Card card: player.getPlayerCards())
+                {
+                    if(card.getDesignation() == suspectedCulprit){
+                        wrongSuspicions.add(card);
+                    }
+
+                    if(card.getDesignation() == suspectedWeapon){
+                        wrongSuspicions.add(card);
+
+                    }
+
+                    if (card.getDesignation() == suspectedLocation) {
+                        wrongSuspicions.add(card);
+                    }
+                }
+
+            }
+
+        }
+
+        return wrongSuspicions;
+    }
+
 }
