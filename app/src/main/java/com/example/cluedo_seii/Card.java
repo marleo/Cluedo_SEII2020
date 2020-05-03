@@ -9,8 +9,6 @@ public class Card {
     private CardType type;
 
     public Card(int id, String designation, CardType type) {
-
-
         this.id = id;
         this.designation = designation;
         this.type = type;
