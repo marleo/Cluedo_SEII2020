@@ -1,4 +1,5 @@
 package com.example.cluedo_seii;
 
-public class Board {
+public class GameCharacter {
+    
 }
