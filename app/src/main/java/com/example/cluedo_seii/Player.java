@@ -11,15 +11,15 @@ public class Player {
     private LinkedList<Card> playerCards;
     private GameboardElement position;
     private String IP;
-    private GameCharacter character;
+    private GameCharacter playerCharacter;
     private Notepad notepad;
 
-    public Player(int id, GameboardElement position, String IP, Character Gamecharacter, Notepad notepad){
+    public Player(int id, GameboardElement position, String IP, GameCharacter playerCharacter, Notepad notepad){
         this.id = id;
         playerCards = new LinkedList<>();
         this.position = position;
         this.IP = IP;
-        this.character = new GameCharacter();
+        this.playerCharacter = playerCharacter;
         this.notepad = notepad;
     }
 
