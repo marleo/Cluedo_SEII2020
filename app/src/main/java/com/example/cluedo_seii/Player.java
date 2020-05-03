@@ -6,7 +6,7 @@ import com.example.cluedo_seii.spielbrett.GameboardElement;
 import java.io.Serializable;
 import java.util.LinkedList;
 
-public class Player implements Serializable {
+public class Player {
 
     private int id;
     private LinkedList<Card> playerCards;
@@ -85,5 +85,23 @@ public class Player implements Serializable {
 
         return wrongSuspicions;
     }
+
+
+
+    public boolean accuseSomeone(String accusedPerson, String accusedWeapon, String accusedLocation, InvestigationFile investigationFile){
+
+        if(investigationFile.getCulprit().getDesignation().equals(accusedPerson)
+                && investigationFile.getWeapon().getDesignation().equals(accusedWeapon)
+                && investigationFile.getRoom().getDesignation().equals(accusedLocation))
+        {
+            return true;
+        }
+
+        else{
+           madeFalseAccusation = true;
+           return  false;
+        }
+    }
+
 
 }
