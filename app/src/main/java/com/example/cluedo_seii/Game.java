@@ -87,10 +87,12 @@ public class Game implements Serializable {
 
         if(userInput==UserInput.THROWDICE){
             //currentPlayer.ThrowDice();
+
         }
 
         if(userInput==UserInput.USESECRETPASSAGE){
             //currentPllayerMove();
+
         }
 
         if(userInput==UserInput.SUSPECT){

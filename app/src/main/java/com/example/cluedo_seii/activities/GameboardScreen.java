@@ -1,10 +1,15 @@
 package com.example.cluedo_seii.activities;
 
-import android.app.Activity;
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+
+import android.text.Layout;
 import android.util.Log;
-import android.widget.ArrayAdapter;
+import android.view.MotionEvent;
+import android.view.View;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 
 
 import androidx.annotation.Nullable;
@@ -13,7 +18,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 
 
-import com.example.cluedo_seii.Card;
 import com.example.cluedo_seii.DeckOfCards;
 import com.example.cluedo_seii.Game;
 import com.example.cluedo_seii.Player;
@@ -25,11 +29,10 @@ import com.example.cluedo_seii.activities.playerGameInteraction.ThrowDiceOrUseSe
 import com.example.cluedo_seii.spielbrett.Gameboard;
 
 
-import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.LinkedList;
 
 public class GameboardScreen extends AppCompatActivity  {
+
 
     private Gameboard gameboard;
     private Game game;
@@ -37,11 +40,11 @@ public class GameboardScreen extends AppCompatActivity  {
     private DeckOfCards deckOfCards;
     private FragmentManager manager;
     private String mesaggeDialogTag;
-    Bundle bundle;
+    LinearLayout layout;
+    private Bundle bundle;
+    float x1, x2, y1, y2;
 
-
-
-
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,28 +59,27 @@ public class GameboardScreen extends AppCompatActivity  {
 
         String gameBoard =
                 "0002000002000" +
-                "0000000000000" +
-                "0000000000000" +
-                "0333300033330" +
-                "0333300033330" +
-                "0333300033330" +
-                "0000000000000" +
-                "0200000000020" +
-                "0000000000000" +
-                "0333300033330" +
-                "0333300033330" +
-                "0333300033330" +
-                "0000000000000" +
-                "0000000000000" +
-                "0333300033330" +
-                "0333300033330" +
-                "0333300033330" +
-                "0000000000000" +
-                "0002000002000";
+                        "0000000000000" +
+                        "0000000000000" +
+                        "0333300033330" +
+                        "0333300033330" +
+                        "0333300033330" +
+                        "0000000000000" +
+                        "0200000000020" +
+                        "0000000000000" +
+                        "0333300033330" +
+                        "0333300033330" +
+                        "0333300033330" +
+                        "0000000000000" +
+                        "0000000000000" +
+                        "0333300033330" +
+                        "0333300033330" +
+                        "0333300033330" +
+                        "0000000000000" +
+                        "0002000002000";
 
-        gameboard = new Gameboard(this,13,19, gameBoard);
+        gameboard = new Gameboard(this, 13, 19, gameBoard);
         setContentView(gameboard.getLayout());
-
 
         startGame();
 
@@ -91,12 +93,7 @@ public class GameboardScreen extends AppCompatActivity  {
     }
 
     public void startGame(){
-
-
         //TODO initialize Game according to GameLobby Settings
-
-
-
         deckOfCards =  new DeckOfCards();
         players = new LinkedList<>();
         Player player1 = new Player(1, null, "10.0.2.16", null, null);
@@ -107,14 +104,7 @@ public class GameboardScreen extends AppCompatActivity  {
         players.add(player3);
         game = new Game(gameboard, deckOfCards, players);
         game.distributeCards();
-
-        showCards();
-
-        //throwDice();
-
-
     }
-
 
     public void throwDice(){
 
@@ -122,14 +112,6 @@ public class GameboardScreen extends AppCompatActivity  {
         bundle.putSerializable("game", game);
         dialog.setArguments(bundle);
         dialog.show(manager, mesaggeDialogTag);
-        bundle = null;
-        bundle = dialog.getArguments();
-        game = (Game) bundle.getSerializable("game");
-
-
-        Log.i("currentPlayerActivity",""+ game.getCurrentPlayer().getId());
-
-
     }
 
     public void throwDiceOrUseSecretPassage(){
@@ -142,13 +124,13 @@ public class GameboardScreen extends AppCompatActivity  {
     }
 
     public void suspectOrAccuse(){
-
         SuspectOrAccuse dialog = new SuspectOrAccuse();
         bundle.putSerializable("game", game);
         dialog.setArguments(bundle);
         dialog.show(manager, mesaggeDialogTag);
-
     }
+
+
 
     public void showCards(){
         Intent intent = new Intent(this, ShowCards.class);
@@ -156,6 +138,35 @@ public class GameboardScreen extends AppCompatActivity  {
         startActivity(intent);
     }
 
+    public void updateGame(Game gameUpdate){
+        game = gameUpdate;
+    }
+
+    public boolean dispatchTouchEvent (MotionEvent touchEvent){
+        switch(touchEvent.getAction()){
+            case MotionEvent.ACTION_DOWN:
+                x1 = touchEvent.getX();
+                y1 = touchEvent.getY();
+
+                break;
+
+            case MotionEvent.ACTION_UP:
+                x2 = touchEvent.getX();
+                y2 = touchEvent.getY();
+
+                if(x1 < x2){
+                    startActivity(new Intent(GameboardScreen.this, NotepadScreen.class));
+                }else if(x1 > x2){
+                    showCards();
+                }
+                break;
+        }
+        return false;
+    }
+
 }
+
+
+
 
 
