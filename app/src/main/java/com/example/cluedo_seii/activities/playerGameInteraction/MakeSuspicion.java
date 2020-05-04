@@ -1,6 +1,8 @@
 package com.example.cluedo_seii.activities.playerGameInteraction;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -8,8 +10,12 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
+
+import com.example.cluedo_seii.Game;
 import com.example.cluedo_seii.R;
 
+import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 public class MakeSuspicion extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
@@ -27,6 +33,12 @@ public class MakeSuspicion extends AppCompatActivity implements AdapterView.OnIt
     private String[]possibleWeapons;
     private String[] possibleRooms;
     private Button suspectButton;
+    private Intent intent;
+    private Game game;
+    private LinkedList<String> suspectedPlayerHand;
+
+    public MakeSuspicion() {
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,12 +67,27 @@ public class MakeSuspicion extends AppCompatActivity implements AdapterView.OnIt
         possibleWeapons = getResources().getStringArray(R.array.weapons);
         possibleRooms = getResources().getStringArray(R.array.rooms);
 
+        intent = getIntent();
+        game = (Game)intent.getSerializableExtra("game");
+
         suspectButton = findViewById(R.id.makeSuspicionButton);
         suspectButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-              Log.i("shit", "supershit");
+
+            suspectedPlayerHand = game.getCurrentPlayer().suspect(selectedCulprit, selectedWeapon, selectedRoom, game.getPlayers());
+
+            for(int i = 0; i< suspectedPlayerHand.size(); i++)
+            {
+             Log.i("on other Player Hand", "" + suspectedPlayerHand.get(i));
+            }
+
+
             }
         });
+
+
+
+
     }
 
 

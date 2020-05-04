@@ -6,7 +6,7 @@ import com.example.cluedo_seii.spielbrett.GameboardElement;
 import java.io.Serializable;
 import java.util.LinkedList;
 
-public class Player implements  Serializable  {
+public class Player implements Serializable {
 
     private int id;
     private LinkedList<Card> playerCards;
@@ -55,9 +55,9 @@ public class Player implements  Serializable  {
     }
 
 
-    public LinkedList<Card> suspect(String suspectedCulprit, String suspectedWeapon, String suspectedLocation, LinkedList<Player> players){
+    public LinkedList<String> suspect(String suspectedCulprit, String suspectedWeapon, String suspectedLocation, LinkedList<Player> players){
 
-        LinkedList<Card>wrongSuspicions = new LinkedList<>();
+        LinkedList<String>wrongSuspicions = new LinkedList<>();
 
         for(Player player: players){
 
@@ -66,16 +66,16 @@ public class Player implements  Serializable  {
                 for(Card card: player.getPlayerCards())
                 {
                     if(card.getDesignation() == suspectedCulprit){
-                        wrongSuspicions.add(card);
+                        wrongSuspicions.add(card.getDesignation());
                     }
 
                     if(card.getDesignation() == suspectedWeapon){
-                        wrongSuspicions.add(card);
+                        wrongSuspicions.add(card.getDesignation());
 
                     }
 
                     if (card.getDesignation() == suspectedLocation) {
-                        wrongSuspicions.add(card);
+                        wrongSuspicions.add(card.getDesignation());
                     }
                 }
 

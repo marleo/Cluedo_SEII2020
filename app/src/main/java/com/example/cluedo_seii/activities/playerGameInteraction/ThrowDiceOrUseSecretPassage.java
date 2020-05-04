@@ -36,7 +36,7 @@ public class ThrowDiceOrUseSecretPassage extends AppCompatDialogFragment {
             @Override
             public void onClick(DialogInterface dialog, int which) {
 
-                game.gameControl(UserInput.THROWDICE);
+                //game.gameControl(UserInput.THROWDICE);
                 ((GameboardScreen)getActivity()).updateGame(game);
             }
         };
@@ -44,7 +44,7 @@ public class ThrowDiceOrUseSecretPassage extends AppCompatDialogFragment {
             @Override
             public void onClick(DialogInterface dialog, int which) {
 
-                game.gameControl(UserInput.USESECRETPASSAGE);
+                //game.gameControl(UserInput.USESECRETPASSAGE);
                 ((GameboardScreen)getActivity()).updateGame(game);
         }
         };
