@@ -16,11 +16,11 @@ public class Game implements Serializable {
 
     private transient Gameboard gameboard;
     private transient DeckOfCards deckOfCards;
-    private transient InvestigationFile investigationFile;
-    private transient LinkedList<Player>players;
-    private transient Boolean gameOver;
+    private InvestigationFile investigationFile;
+    private LinkedList<Player>players;
+    private Boolean gameOver;
     private transient Random random;
-    private transient int round;
+    private int round;
 
     private int playerIterator;
 
@@ -39,14 +39,14 @@ public class Game implements Serializable {
         currentPlayer = players.get(playerIterator);
     }
 
+    public LinkedList<Player> getPlayers() {
+        return players;
+    }
 
     public Player getCurrentPlayer() {
         return currentPlayer;
     }
 
-    public LinkedList<Player> getPlayers() {
-        return players;
-    }
 
     public void distributeCards(){
 
@@ -68,16 +68,16 @@ public class Game implements Serializable {
 
         while(i<cardStack.size())
         {
-         for(int j = 0; j<players.size(); j++){
+            for(int j = 0; j<players.size(); j++){
 
-             Player temp = players.get(j);
+                Player temp = players.get(j);
 
-             if(i==cardStack.size())
-             {break;}
+                if(i==cardStack.size())
+                {break;}
 
-             temp.addCard(cardStack.get(i));
-             i++;
-         }
+                temp.addCard(cardStack.get(i));
+                i++;
+            }
 
         }
 
@@ -98,37 +98,5 @@ public class Game implements Serializable {
         currentPlayer = players.get(playerIterator);
 
     }
-
-    public LinkedList<Card> suspectSomeone(String suspectedCulprit, String suspectedWeapon, String suspectedLocation){
-
-        LinkedList<Card>wrongSuspicions = new LinkedList<>();
-
-        for(Player player: players){
-
-            if(suspectedCulprit == player.getPlayerCharacter().getName()){
-
-                for(Card card: player.getPlayerCards())
-                {
-                    if(card.getDesignation() == suspectedCulprit){
-                        wrongSuspicions.add(card);
-                    }
-
-                    if(card.getDesignation() == suspectedWeapon){
-                        wrongSuspicions.add(card);
-
-                    }
-
-                    if (card.getDesignation() == suspectedLocation) {
-                        wrongSuspicions.add(card);
-                    }
-                    }
-
-                }
-
-            }
-
-        return wrongSuspicions;
-
-        }
 
 }

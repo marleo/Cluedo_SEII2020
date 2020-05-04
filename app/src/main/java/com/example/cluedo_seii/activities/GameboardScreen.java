@@ -91,7 +91,7 @@ public class GameboardScreen extends AppCompatActivity  {
         //TODO initialize Game according to GameLobby Settings
 
         //Zu Demonstrationszwecken
-       deckOfCards = new DeckOfCards();
+        deckOfCards = new DeckOfCards();
         players = new LinkedList<>();
         GameCharacter playerCharacter = new GameCharacter("Prof. Bloom", null);
         Player player1 = new Player(1, null, null, null, null);
@@ -101,7 +101,7 @@ public class GameboardScreen extends AppCompatActivity  {
         game = new Game(gameboard, deckOfCards, players);
         game.distributeCards();
 
-        showCards();
+
       // makeSuspicion();
 
     }
@@ -145,7 +145,7 @@ public class GameboardScreen extends AppCompatActivity  {
     }
     private void makeSuspicion(){
         Intent intent = new Intent(this, MakeSuspicion.class);
-         intent.putExtra("game", game);
+        intent.putExtra("game", game);
         startActivity(intent);
     }
 
