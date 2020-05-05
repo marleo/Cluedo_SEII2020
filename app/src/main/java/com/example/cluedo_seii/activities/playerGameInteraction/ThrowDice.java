@@ -42,9 +42,9 @@ public class ThrowDice extends AppCompatDialogFragment {
         };
 
         return new AlertDialog.Builder(getActivity())
-                .setTitle("What do You Wanna Do")
+                .setTitle("Was willst du tun?")
                 .setView(view)
-                .setPositiveButton("Throw Dice", listenerThrowDice)
+                .setPositiveButton("Würfeln", listenerThrowDice)
                 .create();
 
     }

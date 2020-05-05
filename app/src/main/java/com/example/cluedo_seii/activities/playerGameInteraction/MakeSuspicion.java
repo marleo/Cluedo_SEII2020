@@ -2,6 +2,7 @@ package com.example.cluedo_seii.activities.playerGameInteraction;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -10,6 +11,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.example.cluedo_seii.Game;
 import com.example.cluedo_seii.R;
@@ -36,9 +38,8 @@ public class MakeSuspicion extends AppCompatActivity implements AdapterView.OnIt
     private Intent intent;
     private Game game;
     private LinkedList<String> suspectedPlayerHand;
-
-    public MakeSuspicion() {
-    }
+    private Toast toast;
+    private String text;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,26 +69,41 @@ public class MakeSuspicion extends AppCompatActivity implements AdapterView.OnIt
         possibleRooms = getResources().getStringArray(R.array.rooms);
 
         intent = getIntent();
+
         game = (Game)intent.getSerializableExtra("game");
 
-        suspectButton = findViewById(R.id.makeSuspicionButton);
-        suspectButton.setOnClickListener(new View.OnClickListener() {
+
+       suspectButton = findViewById(R.id.makeSuspicionButton);
+       suspectButton.setOnClickListener(new View.OnClickListener() {
+
             public void onClick(View v) {
 
-            suspectedPlayerHand = game.getCurrentPlayer().suspect(selectedCulprit, selectedWeapon, selectedRoom, game.getPlayers());
+           game.getCurrentPlayer().suspect(selectedCulprit, selectedWeapon, selectedRoom, game.getPlayers());
 
-            for(int i = 0; i< suspectedPlayerHand.size(); i++)
-            {
-             Log.i("on other Player Hand", "" + suspectedPlayerHand.get(i));
-            }
+           suspectedPlayerHand = game.getCurrentPlayer().suspect(selectedCulprit, selectedWeapon, selectedRoom, game.getPlayers());
 
+           if(suspectedPlayerHand.size()==0) {
+               text = "Hier gibt es nichts zum sehen";
+               toast = Toast.makeText(getApplicationContext(), text, Toast.LENGTH_SHORT);
+               toast.show();
 
+               finish();
+           }
+
+           else {
+               text = "Der verdächtigte Spieler hat folgende Karten auf der Hand:" + '\n';
+               for (int i = 0; i < suspectedPlayerHand.size(); i++) {
+                   text += suspectedPlayerHand.get(i) + '\n';
+               }
+
+               toast = Toast.makeText(getApplicationContext(), text , Toast.LENGTH_SHORT);
+               toast.show();
+
+               finish();
+
+           }
             }
         });
-
-
-
-
     }
 
 
@@ -112,7 +128,7 @@ public class MakeSuspicion extends AppCompatActivity implements AdapterView.OnIt
         {
             if(parent.getItemAtPosition(position).equals(possibleRooms[i]))
             {
-
+                selectedRoom = (String)parent.getItemAtPosition(position);
 
             }
         }
@@ -122,7 +138,5 @@ public class MakeSuspicion extends AppCompatActivity implements AdapterView.OnIt
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
     }
-
-
 
 }

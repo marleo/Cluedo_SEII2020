@@ -19,4 +19,6 @@ public class GameCharacter implements Serializable {
     public String getName() {
         return name;
     }
+
+    public GameboardElement getStartingPoint() { return startingPoint; }
 }

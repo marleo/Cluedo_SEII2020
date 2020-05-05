@@ -5,25 +5,20 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.MotionEvent;
 
-
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-
 import androidx.fragment.app.FragmentManager;
-
 
 import com.example.cluedo_seii.DeckOfCards;
 import com.example.cluedo_seii.Game;
 import com.example.cluedo_seii.GameCharacter;
 import com.example.cluedo_seii.Player;
 import com.example.cluedo_seii.R;
-
 import com.example.cluedo_seii.activities.playerGameInteraction.MakeSuspicion;
 import com.example.cluedo_seii.activities.playerGameInteraction.SuspectOrAccuse;
 import com.example.cluedo_seii.activities.playerGameInteraction.ThrowDice;
 import com.example.cluedo_seii.activities.playerGameInteraction.ThrowDiceOrUseSecretPassage;
 import com.example.cluedo_seii.spielbrett.Gameboard;
-
 
 import java.util.LinkedList;
 
@@ -34,10 +29,12 @@ public class GameboardScreen extends AppCompatActivity  {
     private Game game;
     private LinkedList<Player> players;
     private DeckOfCards deckOfCards;
-    private FragmentManager manager = getSupportFragmentManager();
-    private String mesaggeDialogTag = "MessageDialog";
-    private Bundle bundle = new Bundle();
+    private FragmentManager manager;
+    private String mesaggeDialogTag;
+    private Bundle bundle;
+    private Intent intent;
 
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -74,6 +71,11 @@ public class GameboardScreen extends AppCompatActivity  {
         gameboard = new Gameboard(this,13,19, gameBoard);
         setContentView(gameboard.getLayout());
 
+        bundle = new Bundle();
+        mesaggeDialogTag = "MessageDialog";
+        manager = getSupportFragmentManager();
+
+
 
         startGame();
 
@@ -93,39 +95,44 @@ public class GameboardScreen extends AppCompatActivity  {
         //Zu Demonstrationszwecken
         deckOfCards = new DeckOfCards();
         players = new LinkedList<>();
-        GameCharacter playerCharacter = new GameCharacter("Prof. Bloom", null);
-        Player player1 = new Player(1, null, null, null, null);
-        Player player2 = new Player(2, null, null, playerCharacter , null);
+        GameCharacter gameCharacter = new GameCharacter("Prof. Bloom", null);
+        GameCharacter gameCharacterAlt = new GameCharacter("Fräulein Weiss", null);
+        Player player1 = new Player(1, "10.0.2.16", gameCharacterAlt, null);
+        Player player2 = new Player(2,  "null", gameCharacter, null);
+        Player player3 = new Player(3, "null", gameCharacterAlt, null);
         players.add(player1);
         players.add(player2);
+        players.add(player3);
         game = new Game(gameboard, deckOfCards, players);
         game.distributeCards();
 
+        suspectOrAccuse();
 
-      // makeSuspicion();
+       // makeSuspicion();
 
     }
 
+    public void makeSuspicion(){
+        intent = new Intent(this, MakeSuspicion.class);
+        intent.putExtra("game", game);
+        startActivity(intent);
+    }
 
-    private void throwDice(){
-
+    public void throwDice(){
         ThrowDice dialog = new ThrowDice();
         bundle.putSerializable("game", game);
         dialog.setArguments(bundle);
         dialog.show(manager, mesaggeDialogTag);
     }
 
-    private void throwDiceOrUseSecretPassage(){
-
+    public void throwDiceOrUseSecretPassage(){
         ThrowDiceOrUseSecretPassage dialog = new ThrowDiceOrUseSecretPassage();
         bundle.putSerializable("game", game);
         dialog.setArguments(bundle);
         dialog.show(manager, mesaggeDialogTag);
-
     }
 
-    private void suspectOrAccuse(){
-
+    public void suspectOrAccuse(){
         SuspectOrAccuse dialog = new SuspectOrAccuse();
         bundle.putSerializable("game", game);
         dialog.setArguments(bundle);
@@ -133,9 +140,8 @@ public class GameboardScreen extends AppCompatActivity  {
     }
 
 
-
     public void showCards(){
-        Intent intent = new Intent(this, ShowCards.class);
+        intent = new Intent(this, ShowCards.class);
         intent.putExtra("game", game);
         startActivity(intent);
     }
@@ -143,12 +149,6 @@ public class GameboardScreen extends AppCompatActivity  {
     public void updateGame(Game gameUpdate){
         game = gameUpdate;
     }
-    private void makeSuspicion(){
-        Intent intent = new Intent(this, MakeSuspicion.class);
-        intent.putExtra("game", game);
-        startActivity(intent);
-    }
-
 
     public boolean dispatchTouchEvent (MotionEvent touchEvent){
         switch(touchEvent.getAction()){
@@ -171,6 +171,8 @@ public class GameboardScreen extends AppCompatActivity  {
         }
         return false;
     }
+
+
 
 }
 

@@ -16,10 +16,10 @@ public class Player implements Serializable {
     private Notepad notepad;
     private Boolean madeFalseAccusation;
 
-    public Player(int id, GameboardElement position, String IP, GameCharacter playerCharacter, Notepad notepad){
+    public Player(int id , String IP, GameCharacter playerCharacter, Notepad notepad){
         this.id = id;
         playerCards = new LinkedList<>();
-        this.position = position;
+        this.position = playerCharacter.getStartingPoint();
         this.IP = IP;
         this.playerCharacter = playerCharacter;
         this.notepad = notepad;
@@ -61,20 +61,20 @@ public class Player implements Serializable {
 
         for(Player player: players){
 
-            if(suspectedCulprit == player.getPlayerCharacter().getName()){
+            if(suspectedCulprit.equals(player.getPlayerCharacter().getName())){
 
                 for(Card card: player.getPlayerCards())
                 {
-                    if(card.getDesignation() == suspectedCulprit){
+                    if(card.getDesignation().equals(suspectedCulprit)){
                         wrongSuspicions.add(card.getDesignation());
                     }
 
-                    if(card.getDesignation() == suspectedWeapon){
+                    if(card.getDesignation().equals(suspectedWeapon)){
                         wrongSuspicions.add(card.getDesignation());
 
                     }
 
-                    if (card.getDesignation() == suspectedLocation) {
+                    if (card.getDesignation().equals(suspectedLocation)) {
                         wrongSuspicions.add(card.getDesignation());
                     }
                 }
