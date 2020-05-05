@@ -2,10 +2,9 @@ package com.example.cluedo_seii.activities.playerGameInteraction;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
+
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -16,9 +15,8 @@ import android.widget.Toast;
 import com.example.cluedo_seii.Game;
 import com.example.cluedo_seii.R;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
-import java.util.List;
+
 
 public class MakeSuspicion extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
@@ -76,9 +74,7 @@ public class MakeSuspicion extends AppCompatActivity implements AdapterView.OnIt
        suspectButton = findViewById(R.id.makeSuspicionButton);
        suspectButton.setOnClickListener(new View.OnClickListener() {
 
-            public void onClick(View v) {
-
-           game.getCurrentPlayer().suspect(selectedCulprit, selectedWeapon, selectedRoom, game.getPlayers());
+          public void onClick(View v) {
 
            suspectedPlayerHand = game.getCurrentPlayer().suspect(selectedCulprit, selectedWeapon, selectedRoom, game.getPlayers());
 

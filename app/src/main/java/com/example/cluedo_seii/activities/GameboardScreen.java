@@ -14,6 +14,7 @@ import com.example.cluedo_seii.Game;
 import com.example.cluedo_seii.GameCharacter;
 import com.example.cluedo_seii.Player;
 import com.example.cluedo_seii.R;
+import com.example.cluedo_seii.activities.playerGameInteraction.AccuseSomeone;
 import com.example.cluedo_seii.activities.playerGameInteraction.MakeSuspicion;
 import com.example.cluedo_seii.activities.playerGameInteraction.SuspectOrAccuse;
 import com.example.cluedo_seii.activities.playerGameInteraction.ThrowDice;
@@ -93,7 +94,7 @@ public class GameboardScreen extends AppCompatActivity  {
         //TODO initialize Game according to GameLobby Settings
 
         //Zu Demonstrationszwecken
-        /*deckOfCards = new DeckOfCards();
+        deckOfCards = new DeckOfCards();
         players = new LinkedList<>();
         GameCharacter gameCharacter = new GameCharacter("Prof. Bloom", null);
         GameCharacter gameCharacterAlt = new GameCharacter("Fräulein Weiss", null);
@@ -104,14 +105,20 @@ public class GameboardScreen extends AppCompatActivity  {
         players.add(player2);
         players.add(player3);
         game = new Game(gameboard, deckOfCards, players);
-        game.distributeCards();*/
-        //suspectOrAccuse();
+        game.distributeCards();
+        suspectOrAccuse();
        // makeSuspicion();
 
     }
 
     public void makeSuspicion(){
         intent = new Intent(this, MakeSuspicion.class);
+        intent.putExtra("game", game);
+        startActivity(intent);
+    }
+
+    public void accuseSomeone(){
+        intent = new Intent(this, AccuseSomeone.class);
         intent.putExtra("game", game);
         startActivity(intent);
     }
@@ -136,7 +143,6 @@ public class GameboardScreen extends AppCompatActivity  {
         dialog.setArguments(bundle);
         dialog.show(manager, mesaggeDialogTag);
     }
-
 
     public void showCards(){
         intent = new Intent(this, ShowCards.class);

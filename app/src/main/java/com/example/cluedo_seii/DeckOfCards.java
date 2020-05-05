@@ -8,9 +8,9 @@ public class DeckOfCards  {
 
     private Card oberstVonGatow = new Card(0, "Oberst von Gatov", CardType.PERSON);
     private Card profBloom = new Card(1, "Prof. Bloom", CardType.PERSON);
-    private Card reverendGruen = new Card(2, "Reverend Gruen", CardType.PERSON);
+    private Card reverendGruen = new Card(2, "Reverend Grünn", CardType.PERSON);
     private Card baroninVonPorz = new Card(3, "Baronin von Porz", CardType.PERSON);
-    private Card fraeuleinGloria = new Card(4, "Fraeulein Gloria", CardType.PERSON);
+    private Card fraeuleinGloria = new Card(4, "Fräulein Gloria", CardType.PERSON);
     private Card frauWeiss = new Card(5, "Frau Weiss", CardType.PERSON);
 
     private Card dolch = new Card(6, "Dolch", CardType.WEAPON);
@@ -23,7 +23,7 @@ public class DeckOfCards  {
     private Card halle = new Card(12, "Halle", CardType.ROOM);
     private Card salon = new Card(13, "Salon", CardType.ROOM);
     private Card speisezimmer = new Card(14, "Speisezimmer", CardType.ROOM);
-    private Card kueche = new Card(15, "Kueche", CardType.ROOM);
+    private Card kueche = new Card(15, "Küche", CardType.ROOM);
     private Card musikzimmer = new Card(16, "Musikzimmer", CardType.ROOM);
     private Card winterzimmer = new Card(17, "Winterzimmer", CardType.ROOM);
     private Card biliardzimmer = new Card(18, "Biliardzimmer", CardType.ROOM);

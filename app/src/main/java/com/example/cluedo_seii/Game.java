@@ -14,12 +14,12 @@ import java.util.Random;
 
 public class Game implements Serializable {
 
-    private Gameboard gameboard;
-    private DeckOfCards deckOfCards;
+    private transient  Gameboard gameboard;
+    private transient  DeckOfCards deckOfCards;
     private InvestigationFile investigationFile;
     private LinkedList<Player>players;
     private Boolean gameOver;
-    private Random random;
+    private transient  Random random;
     private int round;
 
     private int playerIterator;
@@ -37,6 +37,14 @@ public class Game implements Serializable {
         round = 1;
         playerIterator = 0;
         currentPlayer = players.get(playerIterator);
+    }
+
+    public InvestigationFile getInvestigationFile() {
+        return investigationFile;
+    }
+
+    public void setGameOver(Boolean gameOver) {
+        this.gameOver = gameOver;
     }
 
     public LinkedList<Player> getPlayers() {

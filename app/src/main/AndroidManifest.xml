@@ -12,8 +12,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activities.ShowCards"></activity>
-        <activity android:name=".activities.playerGameInteraction.MakeSuspicion"></activity>
+
         <activity
             android:name=".activities.SettingScreen"
             android:label="@string/app_name">
@@ -40,6 +39,16 @@
             android:name=".activities.MoreNotesScreen"
             android:label="Cluedo">
         </activity>
+
+        <activity android:name=".activities.ShowCards"></activity>
+
+        <activity android:name=".activities.playerGameInteraction.MakeSuspicion"></activity>
+
+        <activity
+            android:name=".activities.playerGameInteraction.AccuseSomeone"
+            android:label="Cluedo">
+        </activity>
+
 
 
     </application>
