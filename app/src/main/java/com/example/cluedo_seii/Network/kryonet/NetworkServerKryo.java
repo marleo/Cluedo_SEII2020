@@ -1,5 +1,7 @@
 package com.example.cluedo_seii.Network.kryonet;
 
+import android.util.Log;
+
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
@@ -8,6 +10,8 @@ import com.example.cluedo_seii.Network.NetworkServer;
 import com.example.cluedo_seii.Network.dto.BaseMessage;
 
 import java.io.IOException;
+
+import static android.content.ContentValues.TAG;
 
 public class NetworkServerKryo implements KryoNetComponent, NetworkServer {
     private Server server;
@@ -38,8 +42,19 @@ public class NetworkServerKryo implements KryoNetComponent, NetworkServer {
     @Override
     public void broadcastMessage(BaseMessage message) {
         for (Connection connection: server.getConnections()) {
-            connection.sendTCP(message);
+            sendMessageToClient(message, connection);
         }
+    }
+
+    private void sendMessageToClient(final BaseMessage message, final Connection connection) {
+        Log.d(TAG, "sendMessageToClient: ");
+
+        new Thread("send") {
+            @Override
+            public void run() {
+                connection.sendTCP(message);
+            }
+        }.start();
     }
 
     @Override

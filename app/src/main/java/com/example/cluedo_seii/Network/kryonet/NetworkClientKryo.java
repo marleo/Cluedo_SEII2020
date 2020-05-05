@@ -18,11 +18,22 @@ import java.util.List;
 import static android.content.ContentValues.TAG;
 
 public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
+    //INSTANCE
+    private static NetworkClientKryo INSTANCE = null;
+
     private Client client;
     private Callback<BaseMessage> callback;
 
-    public NetworkClientKryo() {
+    private NetworkClientKryo() {
         client = new Client();
+    }
+
+    public static NetworkClientKryo getInstance() {
+        if (INSTANCE == null) {
+            INSTANCE = new NetworkClientKryo();
+        }
+
+        return INSTANCE;
     }
 
     @Override
@@ -42,14 +53,13 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
             }
         }.start();
 
-
-        client.connect(5000,host,NetworkConstants.TCP_PORT,NetworkConstants.UDP_PORT);
-
         client.addListener(new Listener() {
             @Override
             public void received(Connection connection, Object object) {
-                if (callback != null && object instanceof BaseMessage)
-                    callback.callback((BaseMessage) object);
+                if (callback != null && object instanceof BaseMessage) {
+                    Log.i(TAG, "received: " + object.toString());
+                    callback.callback((BaseMessage) object );
+                }
             }
         });
     }
@@ -60,8 +70,14 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
     }
 
     @Override
-    public void sendMessage(BaseMessage message) {
-        client.sendTCP(message);
+    public void sendMessage(final BaseMessage message) {
+        new Thread("send") {
+            @Override
+            public void run() {
+                client.sendTCP(message);
+            }
+        }.start();
+
     }
 
     @Override
