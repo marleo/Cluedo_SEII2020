@@ -29,16 +29,13 @@ public class ThrowDice extends AppCompatDialogFragment {
 
         game = (Game) getArguments().getSerializable("game");
 
-
         DialogInterface.OnClickListener listenerThrowDice = new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
 
-                int idCurrentPlayer;
 
                 game.gameControl(UserInput.THROWDICE);
 
-                game.nextPlayer();
 
                 ((GameboardScreen)getActivity()).updateGame(game);
             }
