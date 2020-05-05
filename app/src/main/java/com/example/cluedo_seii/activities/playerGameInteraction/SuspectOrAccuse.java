@@ -41,15 +41,15 @@ public class SuspectOrAccuse extends AppCompatDialogFragment {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                //game.gameControl(UserInput.ACCUSE);
-                ((GameboardScreen)getActivity()).updateGame(game);
+                ((GameboardScreen)getActivity()).accuseSomeone();
             }
         };
 
         return new AlertDialog.Builder(getActivity())
                 .setTitle("What do You Wanna Do")
                 .setView(view)
-                .setPositiveButton("Suspect", listenerSuspect)
-                .setNegativeButton("Accuse", listenerAccuse)
+                .setPositiveButton("Verdächtigen", listenerSuspect)
+                .setNegativeButton("Anklagen", listenerAccuse)
                 .create();
     }
 

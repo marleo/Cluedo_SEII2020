@@ -6,7 +6,7 @@ import com.example.cluedo_seii.spielbrett.GameboardElement;
 import java.io.Serializable;
 import java.util.LinkedList;
 
-public class Player {
+public class Player implements  Serializable {
 
     private int id;
     private LinkedList<Card> playerCards;
