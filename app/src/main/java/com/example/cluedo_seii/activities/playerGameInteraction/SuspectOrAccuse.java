@@ -26,6 +26,7 @@ public class SuspectOrAccuse extends AppCompatDialogFragment {
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
         View view = LayoutInflater.from(getActivity()).inflate(R.layout.player_game_interaction_layout, null);
         game = (Game) getArguments().getSerializable("game");
+        setCancelable(false);
 
 
         DialogInterface.OnClickListener listenerSuspect = new DialogInterface.OnClickListener() {
