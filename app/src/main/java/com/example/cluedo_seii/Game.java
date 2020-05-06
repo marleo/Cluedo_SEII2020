@@ -1,30 +1,52 @@
 package com.example.cluedo_seii;
 
+
+
+
+import com.example.cluedo_seii.spielbrett.Gameboard;
+
+import java.io.Serializable;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.Random;
 
 
 
-public class Game {
+public class Game implements Serializable {
 
-    private Board board;
-    private DeckOfCards deckOfCards;
+    private transient Gameboard gameboard;
+    private transient DeckOfCards deckOfCards;
     private InvestigationFile investigationFile;
     private LinkedList<Player>players;
     private Boolean gameOver;
-    private Random random;
+    private transient Random random;
+    private int round;
 
-    public Game(Board board, DeckOfCards deckOfCards, LinkedList<Player>players){
+    private int playerIterator;
 
-        this.board = board;
+    private Player currentPlayer;
+
+    public Game(Gameboard gameboard, DeckOfCards deckOfCards, LinkedList<Player>players){
+
+        this.gameboard = gameboard;
         this.deckOfCards = deckOfCards;
         this.players = players;
         investigationFile = new InvestigationFile();
         random = new Random();
         gameOver = false;
-
+        round = 1;
+        playerIterator = 0;
+        currentPlayer = players.get(playerIterator);
     }
+
+    public LinkedList<Player> getPlayers() {
+        return players;
+    }
+
+    public Player getCurrentPlayer() {
+        return currentPlayer;
+    }
+
 
     public void distributeCards(){
 
@@ -46,18 +68,35 @@ public class Game {
 
         while(i<cardStack.size())
         {
-         for(int j = 0; j<players.size(); j++){
+            for(int j = 0; j<players.size(); j++){
 
-             Player temp = players.get(j);
+                Player temp = players.get(j);
 
-             if(i==cardStack.size())
-             {break;}
+                if(i==cardStack.size())
+                {break;}
 
-             temp.addCard(cardStack.get(i));
-             i++;
-         }
+                temp.addCard(cardStack.get(i));
+                i++;
+            }
 
         }
 
     }
+
+    public void nextPlayer(){
+
+        if(playerIterator==players.size()-1)
+        {
+            playerIterator=0;
+            round++;
+        }
+
+        else {
+            playerIterator++;
+        }
+
+        currentPlayer = players.get(playerIterator);
+
+    }
+
 }

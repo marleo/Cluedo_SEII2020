@@ -3,6 +3,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    tools:context=".activities.SpielbrettScreen"
+    tools:context=".activities.GameboardScreen"
     android:orientation="vertical">
 </LinearLayout>
