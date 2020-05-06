@@ -13,13 +13,13 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activities.ShowCards"></activity>
+        <activity android:name=".activities.ShowCards" />
         <activity
             android:name=".activities.SettingScreen"
-            android:label="@string/app_name"></activity>
+            android:label="@string/app_name" />
         <activity
             android:name=".activities.GameboardScreen"
-            android:label="Cluedo"></activity>
+            android:label="Cluedo" />
         <activity
             android:name=".activities.MainActivity"
             android:label="@string/app_name">
@@ -33,28 +33,21 @@
         <activity android:name=".activities.NetworkScreen" />
         <activity
             android:name=".activities.NotepadScreen"
-            android:label="Cluedo"></activity>
-        <activity
-            android:name=".activities.MoreNotesScreen"
+            android:label="Cluedo" />
 
-            android:label="Cluedo">
-        </activity>
-
-
-
-        <activity android:name=".activities.NetworkScreen" />
         <activity
             android:name=".activities.RollDiceScreen"
             android:exported="true"
             android:label="Roll Dices" />
 
-<<<<<<< HEAD
-        <activity android:name=".activities.CheatingScreen"
-            android:exported="true"/>
-=======
-            android:label="Cluedo"></activity>
 
->>>>>>> 2781b70e62c55d99897bffa948c41d006f187896
+
+        <activity
+            android:name=".activities.CheatingScreen"
+            android:exported="true"
+            android:label="Cluedo" />
+
+
     </application>
 
 </manifest>
