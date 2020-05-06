@@ -6,7 +6,7 @@ import com.example.cluedo_seii.spielbrett.GameboardElement;
 import java.io.Serializable;
 import java.util.LinkedList;
 
-public class Player implements  Serializable  {
+public class Player implements Serializable {
 
     private int id;
     private LinkedList<Card> playerCards;
@@ -16,10 +16,10 @@ public class Player implements  Serializable  {
     private Notepad notepad;
     private Boolean madeFalseAccusation;
 
-    public Player(int id, GameboardElement position, String IP, GameCharacter playerCharacter, Notepad notepad){
+    public Player(int id , String IP, GameCharacter playerCharacter, Notepad notepad){
         this.id = id;
         playerCards = new LinkedList<>();
-        this.position = position;
+        this.position = playerCharacter.getStartingPoint();
         this.IP = IP;
         this.playerCharacter = playerCharacter;
         this.notepad = notepad;
@@ -53,4 +53,37 @@ public class Player implements  Serializable  {
     public void addCard(Card card){
         playerCards.add(card);
     }
+
+
+    public LinkedList<String> suspect(String suspectedCulprit, String suspectedWeapon, String suspectedLocation, LinkedList<Player> players){
+
+        LinkedList<String>wrongSuspicions = new LinkedList<>();
+
+        for(Player player: players){
+
+            if(suspectedCulprit.equals(player.getPlayerCharacter().getName())){
+
+                for(Card card: player.getPlayerCards())
+                {
+                    if(card.getDesignation().equals(suspectedCulprit)){
+                        wrongSuspicions.add(card.getDesignation());
+                    }
+
+                    if(card.getDesignation().equals(suspectedWeapon)){
+                        wrongSuspicions.add(card.getDesignation());
+
+                    }
+
+                    if (card.getDesignation().equals(suspectedLocation)) {
+                        wrongSuspicions.add(card.getDesignation());
+                    }
+                }
+
+            }
+
+        }
+
+        return wrongSuspicions;
+    }
+
 }

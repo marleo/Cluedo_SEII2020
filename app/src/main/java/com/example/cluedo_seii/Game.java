@@ -68,42 +68,20 @@ public class Game implements Serializable {
 
         while(i<cardStack.size())
         {
-         for(int j = 0; j<players.size(); j++){
+            for(int j = 0; j<players.size(); j++){
 
-             Player temp = players.get(j);
+                Player temp = players.get(j);
 
-             if(i==cardStack.size())
-             {break;}
+                if(i==cardStack.size())
+                {break;}
 
-             temp.addCard(cardStack.get(i));
-             i++;
-         }
+                temp.addCard(cardStack.get(i));
+                i++;
+            }
 
         }
 
     }
-
-    public void gameControl(UserInput userInput){
-
-        if(userInput==UserInput.THROWDICE){
-            //currentPlayer.ThrowDice();
-
-        }
-
-        if(userInput==UserInput.USESECRETPASSAGE){
-            //currentPllayerMove();
-
-        }
-
-        if(userInput==UserInput.SUSPECT){
-            //currentPlayer.suspect();
-        }
-
-        if(userInput==UserInput.ACCUSE){
-            //currentPlayer.accuse();
-        }
-    }
-
 
     public void nextPlayer(){
 
@@ -121,51 +99,4 @@ public class Game implements Serializable {
 
     }
 
-    public LinkedList<Card> suspectSomeone(String suspectedCulprit, String suspectedWeapon, String suspectedLocation){
-
-        LinkedList<Card>wrongSuspicions = new LinkedList<>();
-
-        for(Player player: players){
-
-            if(suspectedCulprit.equals(player.getPlayerCharacter().getName())){
-
-                for(Card card: player.getPlayerCards())
-                {
-                    if(card.getDesignation().equals(suspectedCulprit)){
-                        wrongSuspicions.add(card);
-                    }
-
-                    if(card.getDesignation().equals(suspectedWeapon)){
-                        wrongSuspicions.add(card);
-
-                    }
-
-                    if (card.getDesignation().equals(suspectedLocation)) {
-                        wrongSuspicions.add(card);
-                    }
-                    }
-
-                }
-
-            }
-
-        return wrongSuspicions;
-
-        }
-
-    public void accuseSomeone(String accusedPerson, String accusedWeapon, String accusedLocation){
-
-        if(investigationFile.getCulprit().getDesignation().equals(accusedPerson)
-           && investigationFile.getWeapon().getDesignation().equals(accusedWeapon)
-           && investigationFile.getRoom().getDesignation().equals(accusedLocation))
-        {
-            gameOver = true;
-        }
-
-        else{
-            currentPlayer.setMadeFalseAccusation(true);
-        }
-
-    }
-    
 }

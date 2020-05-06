@@ -1,3 +1,4 @@
+
 <resources>
     <string name="app_name">Cluedo</string>
     <string name="mainScreenTitle">Cluedo</string>
@@ -23,6 +24,36 @@
     <string name="lightTV">TextView</string>
     <string name="NoLightSensor">no light sensor detected</string>
     <string name="light">light</string>
+
+    <string-array name="culprits">
+        <item>Oberst von Gatov</item>
+        <item>Prof. Bloom</item>
+        <item>Reverend Grün</item>
+        <item>Baronin von Porz</item>
+        <item>Fräulein Gloria</item>
+        <item>Frau Weiss</item>
+    </string-array>
+
+    <string-array name="weapons">
+        <item>Dolch</item>
+        <item>Leuchter</item>
+        <item>Pistole</item>
+        <item>Seil</item>
+        <item>Heizungsrohr</item>
+        <item>Rohrzange</item>
+    </string-array>
+
+    <string-array name="rooms">
+        <item>Halle</item>
+        <item>Salon</item>
+        <item>Speisezimmer</item>
+        <item>Küche</item>
+        <item>Musikzimmer</item>
+        <item>Winterzimmer</item>
+        <item>Biliardzimmer</item>
+        <item>Bibliothek</item>
+        <item>Arbeitszimmer</item>
+    </string-array>
 
 
 </resources>
