@@ -107,6 +107,7 @@ public class Game implements Serializable {
 
     }
 
-
-    
+    public int getRound() {
+        return round;
+    }
 }

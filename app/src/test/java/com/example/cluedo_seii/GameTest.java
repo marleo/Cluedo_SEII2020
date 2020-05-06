@@ -1,5 +1,7 @@
 package com.example.cluedo_seii;
 
+import android.util.Log;
+
 import com.example.cluedo_seii.spielbrett.Gameboard;
 import com.example.cluedo_seii.spielbrett.StartingpointElement;
 
@@ -58,6 +60,8 @@ public class GameTest {
         player5 = new Player(5, "10.0.0.12", fraeuleinGloria);
         player6 = new Player(6, "10.0.0.13", frauWeiss);
 
+        players = new LinkedList<>();
+
         players.add(player1);
         players.add(player2);
         players.add(player3);
@@ -98,7 +102,7 @@ public class GameTest {
     }
 
     @Test
-    public void testDistributeCards() {
+    public void testDistributeCardsNoDuplicates() {
 
         boolean sameCardFoundTwice = false;
 
@@ -127,7 +131,8 @@ public class GameTest {
 
         for(int i = 0; i<testDistributeCardsHelp.size(); i++){
 
-            for(int j = 1; j<testDistributeCardsHelp.size(); j++) {
+
+            for(int j = i+1; j<testDistributeCardsHelp.size(); j++) {
 
                 if (testDistributeCardsHelp.get(i).getDesignation().equals(testDistributeCardsHelp.get(j).getDesignation())){
 
@@ -135,10 +140,34 @@ public class GameTest {
 
                 }
             }
+
+            if (testDistributeCardsHelp.get(i).equals(game.getInvestigationFile().getCulprit()) ||
+                    testDistributeCardsHelp.get(i).equals(game.getInvestigationFile().getWeapon()) ||
+                    testDistributeCardsHelp.get(i).equals(game.getInvestigationFile().getRoom())) {
+
+                sameCardFoundTwice = true;
+            }
+
         }
-
-
-
+        assertEquals(sameCardFoundTwice, false);
     }
-    
+
+    @Test
+    public void testPlayerIncrementor() {
+        assertEquals(game.getCurrentPlayer(), player1);
+        game.nextPlayer();
+        assertEquals(game.getCurrentPlayer(), player2);
+    }
+
+    @Test
+    public void testRoundIncrementor() {
+        game.nextPlayer();
+        game.nextPlayer();
+        game.nextPlayer();
+        game.nextPlayer();
+        game.nextPlayer();
+        game.nextPlayer();
+        assertEquals(game.getCurrentPlayer(),player1);
+        assertEquals(game.getRound(), 2);
+    }
 }

@@ -8,6 +8,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.util.LinkedList;
+import java.util.Random;
 
 import static org.junit.Assert.*;
 
@@ -39,10 +40,21 @@ public class PlayerTest {
     private StartingpointElement gameboardStart;
 
     private LinkedList<Player>players;
+    private LinkedList<Card>gameCards;
+
+    private Random random;
+
+    private int randomPersonId;
+    private int randomWeaponId;
+    private int randomRoomId;
+
+    private LinkedList<String>suspectedPlayerHand;
+
+    private InvestigationFile investigationFile;
 
 
     @Before
-    public void initialize(){
+    public void initialize() {
         oberstVonGatov = new GameCharacter("Oberst von Gatov", oberstVonGatovStart);
         profBloom = new GameCharacter("Prof. Bloom", profBloomStart);
         reverendGruen = new GameCharacter("Reverend Gruen", reverendGruenStart);
@@ -57,6 +69,8 @@ public class PlayerTest {
         player5 = new Player(5, "10.0.0.12", fraeuleinGloria);
         player6 = new Player(6, "10.0.0.13", frauWeiss);
 
+        players = new LinkedList<>();
+
         players.add(player1);
         players.add(player2);
         players.add(player3);
@@ -65,6 +79,11 @@ public class PlayerTest {
         players.add(player6);
 
         deckOfCards = new DeckOfCards();
+        gameCards = deckOfCards.getGameCardsStandard();
+
+        investigationFile = new InvestigationFile();
+
+        suspectedPlayerHand=new LinkedList<>();
 
     }
 
@@ -93,10 +112,56 @@ public class PlayerTest {
     }
 
     @Test
-    public void testSuspect() {}
+    public void testSuspectGuess3CardsRight() {
+
+        player1.addCard(gameCards.get(0));
+        player1.addCard(gameCards.get(9));
+        player1.addCard(gameCards.get(16));
+
+        suspectedPlayerHand = player2.suspect("Oberst von Gatov", "Seil", "Musikzimmer", players);
+
+        assertEquals(suspectedPlayerHand.size(), 3);
+
+    }
 
     @Test
-    public void testAccuse(){}
-    
+    public void testSuspect2CardsRight(){
+
+        player1.addCard(gameCards.get(0));
+        player1.addCard(gameCards.get(9));
+        player1.addCard(gameCards.get(16));
+
+        suspectedPlayerHand = player2.suspect("Oberst von Gatov", gameCards.get(8).getDesignation(), gameCards.get(16).getDesignation(),players);
+
+        assertEquals(suspectedPlayerHand.size(), 2);
+
+    }
+
+    @Test
+    public void testSuspect1CardRight(){
+
+        player1.addCard(gameCards.get(0));
+        player1.addCard(gameCards.get(9));
+        player1.addCard(gameCards.get(16));
+
+        suspectedPlayerHand = player2.suspect("Oberst von Gatov", gameCards.get(8).getDesignation(), gameCards.get(19).getDesignation(),players);
+
+        assertEquals(suspectedPlayerHand.size(), 1);
+
+
+    }
+
+    @Test
+    public void testSuspectNoCardRight(){
+
+        player1.addCard(gameCards.get(1));
+        player1.addCard(gameCards.get(9));
+        player1.addCard(gameCards.get(16));
+
+        suspectedPlayerHand = player2.suspect("Oberst von Gatov", gameCards.get(8).getDesignation(), gameCards.get(19).getDesignation(),players);
+
+        assertEquals(suspectedPlayerHand.size(), 0);
+
+    }
 
 }
