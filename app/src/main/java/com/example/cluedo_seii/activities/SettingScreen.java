@@ -54,6 +54,14 @@ public class SettingScreen extends AppCompatActivity {
                 startActivity(new Intent(SettingScreen.this, NetworkScreen.class));
             }
         });
+
+        final Button start_game_network = findViewById(R.id.start_game_network);
+        start_game_network.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                startActivity(new Intent(SettingScreen.this, startGameScreen.class));
+            }
+        });
     }
 
     public static Boolean getCheatEnabled() {
