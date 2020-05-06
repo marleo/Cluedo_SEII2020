@@ -11,7 +11,7 @@ import java.util.LinkedList;
 
 import static org.junit.Assert.*;
 
-public class PlayerTest {
+public class GameTest {
 
     private Player player1;
     private Player player2;
@@ -40,6 +40,7 @@ public class PlayerTest {
 
     private LinkedList<Player>players;
 
+    private Game game;
 
     @Before
     public void initialize(){
@@ -66,6 +67,8 @@ public class PlayerTest {
 
         deckOfCards = new DeckOfCards();
 
+        game = new Game(gameboard, players);
+
     }
 
     @After
@@ -88,15 +91,54 @@ public class PlayerTest {
 
         deckOfCards = null;
 
+        game = null;
+
         players = null;
 
     }
 
     @Test
-    public void testSuspect() {}
+    public void testDistributeCards() {
 
-    @Test
-    public void testAccuse(){}
+        boolean sameCardFoundTwice = false;
+
+        game.distributeCards();
+
+        LinkedList<Card>testDistributeCardsHelp = new LinkedList<>();
+
+        for(Card card: player1.getPlayerCards()){
+            testDistributeCardsHelp.add(card);
+        }
+        for(Card card: player2.getPlayerCards()){
+            testDistributeCardsHelp.add(card);
+        }
+        for(Card card: player3.getPlayerCards()){
+            testDistributeCardsHelp.add(card);
+        }
+        for(Card card: player4.getPlayerCards()){
+            testDistributeCardsHelp.add(card);
+        }
+        for(Card card: player5.getPlayerCards()){
+            testDistributeCardsHelp.add(card);
+        }
+        for(Card card: player6.getPlayerCards()){
+            testDistributeCardsHelp.add(card);
+        }
+
+        for(int i = 0; i<testDistributeCardsHelp.size(); i++){
+
+            for(int j = 1; j<testDistributeCardsHelp.size(); j++) {
+
+                if (testDistributeCardsHelp.get(i).getDesignation().equals(testDistributeCardsHelp.get(j).getDesignation())){
+
+                 sameCardFoundTwice = true;
+
+                }
+            }
+        }
+
+
+
+    }
     
-
 }

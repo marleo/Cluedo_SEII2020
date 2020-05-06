@@ -13,16 +13,14 @@ public class Player implements  Serializable {
     private GameboardElement position;
     private String IP;
     private GameCharacter playerCharacter;
-    private Notepad notepad;
     private Boolean madeFalseAccusation;
 
-    public Player(int id , String IP, GameCharacter playerCharacter, Notepad notepad){
+    public Player(int id , String IP, GameCharacter playerCharacter){
         this.id = id;
         playerCards = new LinkedList<>();
         this.position = playerCharacter.getStartingPoint();
         this.IP = IP;
         this.playerCharacter = playerCharacter;
-        this.notepad = notepad;
         madeFalseAccusation = false;
     }
 

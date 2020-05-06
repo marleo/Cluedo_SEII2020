@@ -98,13 +98,13 @@ public class GameboardScreen extends AppCompatActivity  {
         players = new LinkedList<>();
         GameCharacter gameCharacter = new GameCharacter("Prof. Bloom", null);
         GameCharacter gameCharacterAlt = new GameCharacter("Fräulein Weiss", null);
-        Player player1 = new Player(1, "10.0.2.16", gameCharacterAlt, null);
-        Player player2 = new Player(2,  "null", gameCharacter, null);
-        Player player3 = new Player(3, "null", gameCharacterAlt, null);
+        Player player1 = new Player(1, "10.0.2.16", gameCharacterAlt);
+        Player player2 = new Player(2,  "null", gameCharacter);
+        Player player3 = new Player(3, "null", gameCharacterAlt);
         players.add(player1);
         players.add(player2);
         players.add(player3);
-        game = new Game(gameboard, deckOfCards, players);
+        game = new Game(gameboard, players);
         game.distributeCards();
         suspectOrAccuse();
        // makeSuspicion();

@@ -26,10 +26,10 @@ public class Game implements Serializable {
 
     private Player currentPlayer;
 
-    public Game(Gameboard gameboard, DeckOfCards deckOfCards, LinkedList<Player>players){
+    public Game(Gameboard gameboard, LinkedList<Player>players){
 
         this.gameboard = gameboard;
-        this.deckOfCards = deckOfCards;
+        this.deckOfCards = new DeckOfCards();
         this.players = players;
         investigationFile = new InvestigationFile();
         random = new Random();
