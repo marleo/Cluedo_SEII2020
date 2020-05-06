@@ -1,5 +1,7 @@
 package com.example.cluedo_seii.activities;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.text.format.Formatter;
@@ -7,9 +9,6 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import androidx.appcompat.app.AppCompatActivity;
-
-import com.example.cluedo_seii.Network.Callback;
 import com.example.cluedo_seii.Network.connectionType;
 import com.example.cluedo_seii.Network.dto.FirstConnectDTO;
 import com.example.cluedo_seii.Network.dto.QuitGameDTO;
@@ -17,12 +16,11 @@ import com.example.cluedo_seii.Network.dto.RequestDTO;
 import com.example.cluedo_seii.Network.dto.TextMessage;
 import com.example.cluedo_seii.Network.kryonet.NetworkClientKryo;
 import com.example.cluedo_seii.Network.kryonet.NetworkServerKryo;
-
 import com.example.cluedo_seii.R;
 
 import java.io.IOException;
 
-public class NetworkScreen extends AppCompatActivity {
+public class startGameScreen extends AppCompatActivity {
     private connectionType conType;
     private NetworkServerKryo server;
     private NetworkClientKryo client;
@@ -30,15 +28,11 @@ public class NetworkScreen extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_network);
-
+        setContentView(R.layout.activity_start_game_screen);
     }
 
     public void selectHost(View view) {
         this.conType = connectionType.HOST;
-
-        TextView txtType = findViewById(R.id.typeText);
-        txtType.setText("HOST");
 
         server = NetworkServerKryo.getInstance();
         server.registerClass(RequestDTO.class);
@@ -54,38 +48,13 @@ public class NetworkScreen extends AppCompatActivity {
         WifiManager wm = (WifiManager) getApplicationContext().getSystemService(WIFI_SERVICE);
         String ip = Formatter.formatIpAddress(wm.getConnectionInfo().getIpAddress());
 
-        TextView serverResponse = findViewById(R.id.serverResponse);
+        TextView serverResponse = findViewById(R.id.ipAddress);
         serverResponse.setText(ip);
-
-        server.registerCallback(new Callback<RequestDTO>() {
-            @Override
-            public void callback(RequestDTO argument) {
-                TextView serverResponseT = findViewById(R.id.serverResponse);
-                serverResponseT.setText(argument.toString());
-            }
-        });
-    }
-
-    public void sendMessage(View view) {
-        if (conType.equals(connectionType.HOST)) {
-            EditText msgInput = findViewById(R.id.editMessage);
-            String message = msgInput.getText().toString();
-
-            server.broadcastMessage(new TextMessage(message));
-        } else if (conType.equals(connectionType.CLIENT)) {
-            EditText msgInput = findViewById(R.id.editMessage);
-            String message = msgInput.getText().toString();
-
-            client.sendMessage(new TextMessage(message));
-        }
     }
 
     public void selectClient(View view) {
         try {
             this.conType = connectionType.CLIENT;
-
-            TextView txtType = findViewById(R.id.typeText);
-            txtType.setText("CLIENT");
 
             client = NetworkClientKryo.getInstance();
 
@@ -95,25 +64,9 @@ public class NetworkScreen extends AppCompatActivity {
             client.registerClass(QuitGameDTO.class);
             client.registerClass(FirstConnectDTO.class);
 
-            client.registerCallback(new Callback<RequestDTO>() {
-                @Override
-                public void callback(RequestDTO argument) {
-                    System.out.println("Received:" + argument.toString());
-                    updateServerResponseMessage(argument.toString());
-                }
-            });
-
             //client.connect("localhost");
 
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void connectToHost(View view) {
-        if (conType.equals(connectionType.CLIENT)) {
-            EditText ipInput = findViewById(R.id.ipAddressInput);
+            EditText ipInput = findViewById(R.id.ipAddress);
             String ip = ipInput.getText().toString();
 
             if (ip.equals("ip")) {
@@ -128,19 +81,9 @@ public class NetworkScreen extends AppCompatActivity {
             } catch (Exception e) {
                 e.printStackTrace();
             }
+
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-
-
     }
-
-    private void updateServerResponseMessage(final String message) {
-        runOnUiThread(new Runnable() {
-            public void run() {
-                TextView serverResponse = findViewById(R.id.serverResponse);
-                serverResponse.setText(message);
-            }
-        });
-
-    }
-
 }

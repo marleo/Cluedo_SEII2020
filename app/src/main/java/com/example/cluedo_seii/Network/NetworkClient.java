@@ -1,6 +1,5 @@
 package com.example.cluedo_seii.Network;
 
-import com.example.cluedo_seii.Network.dto.BaseMessage;
 import com.example.cluedo_seii.Network.dto.RequestDTO;
 
 import java.io.IOException;

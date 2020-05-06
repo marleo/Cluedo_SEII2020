@@ -8,7 +8,6 @@ import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
 import com.example.cluedo_seii.Network.Callback;
 import com.example.cluedo_seii.Network.NetworkServer;
-import com.example.cluedo_seii.Network.dto.BaseMessage;
 import com.example.cluedo_seii.Network.dto.QuitGameDTO;
 import com.example.cluedo_seii.Network.dto.RequestDTO;
 
@@ -61,7 +60,7 @@ public class NetworkServerKryo implements KryoNetComponent, NetworkServer {
     }
 
     private void sendMessageToClient(final RequestDTO message, final Connection connection) {
-        Log.d(TAG, "sendMessageToClient: ");
+        Log.d(TAG, "sendMessageToClient: " + message.toString());
 
         new Thread("send") {
             @Override

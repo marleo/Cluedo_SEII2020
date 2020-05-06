@@ -8,7 +8,6 @@ import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.example.cluedo_seii.Network.Callback;
 import com.example.cluedo_seii.Network.NetworkClient;
-import com.example.cluedo_seii.Network.dto.BaseMessage;
 import com.example.cluedo_seii.Network.dto.RequestDTO;
 
 import java.io.IOException;
@@ -102,5 +101,10 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
 
         client.stop();
         //return hostsOut;
+    }
+
+    private void quitGameHandler() {
+        client.close();
+        client.stop();
     }
 }
