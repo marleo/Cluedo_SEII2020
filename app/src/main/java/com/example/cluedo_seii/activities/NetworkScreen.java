@@ -13,6 +13,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.cluedo_seii.Network.Callback;
 import com.example.cluedo_seii.Network.connectionType;
 import com.example.cluedo_seii.Network.dto.BaseMessage;
+import com.example.cluedo_seii.Network.dto.FirstConnectDTO;
+import com.example.cluedo_seii.Network.dto.QuitGameDTO;
+import com.example.cluedo_seii.Network.dto.RequestDTO;
 import com.example.cluedo_seii.Network.dto.TextMessage;
 import com.example.cluedo_seii.Network.kryonet.NetworkClientKryo;
 import com.example.cluedo_seii.Network.kryonet.NetworkServerKryo;
@@ -39,9 +42,11 @@ public class NetworkScreen extends AppCompatActivity {
         TextView txtType = findViewById(R.id.typeText);
         txtType.setText("HOST");
 
-        server = new NetworkServerKryo();
-        server.registerClass(BaseMessage.class);
+        server = NetworkServerKryo.getInstance();
         server.registerClass(TextMessage.class);
+        server.registerClass(RequestDTO.class);
+        server.registerClass(QuitGameDTO.class);
+        server.registerClass(FirstConnectDTO.class);
         try {
             server.start();
         } catch (IOException e) {
@@ -54,9 +59,9 @@ public class NetworkScreen extends AppCompatActivity {
         TextView serverResponse = findViewById(R.id.serverResponse);
         serverResponse.setText(ip);
 
-        server.registerCallback(new Callback<BaseMessage>() {
+        server.registerCallback(new Callback<RequestDTO>() {
             @Override
-            public void callback(BaseMessage argument) {
+            public void callback(RequestDTO argument) {
                 TextView serverResponseT = findViewById(R.id.serverResponse);
                 serverResponseT.setText(argument.toString());
             }
@@ -86,14 +91,15 @@ public class NetworkScreen extends AppCompatActivity {
 
             client = NetworkClientKryo.getInstance();
 
-            client.registerClass(BaseMessage.class);
             client.registerClass(TextMessage.class);
+            server.registerClass(RequestDTO.class);
+            server.registerClass(QuitGameDTO.class);
+            server.registerClass(FirstConnectDTO.class);
 
-            client.registerCallback(new Callback<BaseMessage>() {
+            client.registerCallback(new Callback<RequestDTO>() {
                 @Override
-                public void callback(BaseMessage argument) {
-                    TextView serverResponse = findViewById(R.id.serverResponse);
-                    serverResponse.setText(argument.toString());
+                public void callback(RequestDTO argument) {
+                    updateServerResponseMessage(argument.toString());
                 }
             });
 
@@ -110,8 +116,12 @@ public class NetworkScreen extends AppCompatActivity {
             EditText ipInput = findViewById(R.id.ipAddressInput);
             String ip = ipInput.getText().toString();
 
-            //TODO delete hardcoded ip
-            ip = "192.168.178.47";
+            if (ip.equals("ip")) {
+                //TODO delete hardcoded ip
+                ip = "192.168.178.47";
+            }
+
+
 
             try {
                 client.connect(ip);
@@ -120,6 +130,16 @@ public class NetworkScreen extends AppCompatActivity {
             }
         }
 
+
+    }
+
+    private void updateServerResponseMessage(final String message) {
+        runOnUiThread(new Runnable() {
+            public void run() {
+                TextView serverResponse = findViewById(R.id.serverResponse);
+                serverResponse.setText(message);
+            }
+        });
 
     }
 

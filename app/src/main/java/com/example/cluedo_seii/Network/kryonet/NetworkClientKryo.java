@@ -9,6 +9,7 @@ import com.esotericsoftware.kryonet.Listener;
 import com.example.cluedo_seii.Network.Callback;
 import com.example.cluedo_seii.Network.NetworkClient;
 import com.example.cluedo_seii.Network.dto.BaseMessage;
+import com.example.cluedo_seii.Network.dto.RequestDTO;
 
 import java.io.IOException;
 import java.net.InetAddress;
@@ -22,7 +23,7 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
     private static NetworkClientKryo INSTANCE = null;
 
     private Client client;
-    private Callback<BaseMessage> callback;
+    private Callback<RequestDTO> callback;
 
     private NetworkClientKryo() {
         client = new Client();
@@ -56,21 +57,21 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
         client.addListener(new Listener() {
             @Override
             public void received(Connection connection, Object object) {
-                if (callback != null && object instanceof BaseMessage) {
+                if (callback != null && object instanceof RequestDTO) {
                     Log.i(TAG, "received: " + object.toString());
-                    callback.callback((BaseMessage) object );
+                    callback.callback((RequestDTO) object );
                 }
             }
         });
     }
 
     @Override
-    public void registerCallback(Callback<BaseMessage> callback) {
+    public void registerCallback(Callback<RequestDTO> callback) {
         this.callback = callback;
     }
 
     @Override
-    public void sendMessage(final BaseMessage message) {
+    public void sendMessage(final RequestDTO message) {
         new Thread("send") {
             @Override
             public void run() {
@@ -85,6 +86,7 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
         client.getKryo().register(c);
     }
 
+    //TODO delete
     public void getNetworks() {
         client.start();
         List<InetAddress> hosts = client.discoverHosts(NetworkConstants.UDP_PORT,10000);
