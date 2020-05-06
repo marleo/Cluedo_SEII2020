@@ -1,8 +1,9 @@
 package com.example.cluedo_seii;
 
 
+import java.io.Serializable;
 
-public class Card {
+public class Card implements Serializable {
 
     private int id;
     private String designation;

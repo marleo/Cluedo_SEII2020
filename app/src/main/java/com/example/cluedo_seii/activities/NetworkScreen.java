@@ -10,7 +10,9 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.cluedo_seii.Network.Callback;
 import com.example.cluedo_seii.Network.connectionType;
+import com.example.cluedo_seii.Network.dto.BaseMessage;
 import com.example.cluedo_seii.Network.dto.TextMessage;
 import com.example.cluedo_seii.Network.kryonet.NetworkClientKryo;
 import com.example.cluedo_seii.Network.kryonet.NetworkServerKryo;
@@ -28,6 +30,7 @@ public class NetworkScreen extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_network);
+
     }
 
     public void selectHost(View view) {
@@ -37,6 +40,7 @@ public class NetworkScreen extends AppCompatActivity {
         txtType.setText("HOST");
 
         server = new NetworkServerKryo();
+        server.registerClass(BaseMessage.class);
         server.registerClass(TextMessage.class);
         try {
             server.start();
@@ -49,14 +53,27 @@ public class NetworkScreen extends AppCompatActivity {
 
         TextView serverResponse = findViewById(R.id.serverResponse);
         serverResponse.setText(ip);
+
+        server.registerCallback(new Callback<BaseMessage>() {
+            @Override
+            public void callback(BaseMessage argument) {
+                TextView serverResponseT = findViewById(R.id.serverResponse);
+                serverResponseT.setText(argument.toString());
+            }
+        });
     }
 
-    public void sendMessageFromHost(View view) {
+    public void sendMessage(View view) {
         if (conType.equals(connectionType.HOST)) {
             EditText msgInput = findViewById(R.id.editMessage);
             String message = msgInput.getText().toString();
 
             server.broadcastMessage(new TextMessage(message));
+        } else if (conType.equals(connectionType.CLIENT)) {
+            EditText msgInput = findViewById(R.id.editMessage);
+            String message = msgInput.getText().toString();
+
+            client.sendMessage(new TextMessage(message));
         }
     }
 
@@ -67,17 +84,18 @@ public class NetworkScreen extends AppCompatActivity {
             TextView txtType = findViewById(R.id.typeText);
             txtType.setText("CLIENT");
 
-            client = new NetworkClientKryo();
+            client = NetworkClientKryo.getInstance();
 
-            /*
-            TextView txtResp = findViewById(R.id.serverResponse);
-            txtResp.setText(client.getNetworks().toString() + " " + client.getNetworks().size());
-             */
+            client.registerClass(BaseMessage.class);
+            client.registerClass(TextMessage.class);
 
-            /*
-            NetworkFinder nf = new NetworkFinder();
-            nf.start();
-            */
+            client.registerCallback(new Callback<BaseMessage>() {
+                @Override
+                public void callback(BaseMessage argument) {
+                    TextView serverResponse = findViewById(R.id.serverResponse);
+                    serverResponse.setText(argument.toString());
+                }
+            });
 
             //client.connect("localhost");
 
@@ -91,6 +109,9 @@ public class NetworkScreen extends AppCompatActivity {
         if (conType.equals(connectionType.CLIENT)) {
             EditText ipInput = findViewById(R.id.ipAddressInput);
             String ip = ipInput.getText().toString();
+
+            //TODO delete hardcoded ip
+            ip = "192.168.178.47";
 
             try {
                 client.connect(ip);

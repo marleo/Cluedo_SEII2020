@@ -1,6 +1,8 @@
 package com.example.cluedo_seii;
 
-public class InvestigationFile {
+import java.io.Serializable;
+
+public class InvestigationFile implements Serializable {
 
     private Card culprit;
     private Card weapon;
