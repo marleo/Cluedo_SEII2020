@@ -36,7 +36,7 @@ public class ThrowDiceOrUseSecretPassage extends AppCompatDialogFragment {
             @Override
             public void onClick(DialogInterface dialog, int which) {
 
-                game.gameControl(UserInput.THROWDICE);
+                //game.gameControl(UserInput.THROWDICE);
                 ((GameboardScreen)getActivity()).updateGame(game);
             }
         };
@@ -44,16 +44,16 @@ public class ThrowDiceOrUseSecretPassage extends AppCompatDialogFragment {
             @Override
             public void onClick(DialogInterface dialog, int which) {
 
-                game.gameControl(UserInput.USESECRETPASSAGE);
+                //game.gameControl(UserInput.USESECRETPASSAGE);
                 ((GameboardScreen)getActivity()).updateGame(game);
         }
         };
 
         return new AlertDialog.Builder(getActivity())
-                .setTitle("What do You Wanna Do")
+                .setTitle("Was willst du tun?")
                 .setView(view)
-                .setPositiveButton("Throw Dice", listenerThrowDice)
-                .setNegativeButton("Use Secret Passage", listenerUseSecretPassage)
+                .setPositiveButton("Würfeln", listenerThrowDice)
+                .setNegativeButton("Geheimgang verwenden", listenerUseSecretPassage)
                 .create();
     }
 

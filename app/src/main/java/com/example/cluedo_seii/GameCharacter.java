@@ -2,7 +2,9 @@ package com.example.cluedo_seii;
 
 import com.example.cluedo_seii.spielbrett.GameboardElement;
 
-public class GameCharacter {
+import java.io.Serializable;
+
+public class GameCharacter implements Serializable {
 
     private String name;
     private GameboardElement startingPoint;
@@ -17,4 +19,6 @@ public class GameCharacter {
     public String getName() {
         return name;
     }
+
+    public GameboardElement getStartingPoint() { return startingPoint; }
 }

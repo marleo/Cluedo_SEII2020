@@ -3,46 +3,36 @@ package com.example.cluedo_seii.activities;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
-
-import android.text.Layout;
-import android.util.Log;
 import android.view.MotionEvent;
-import android.view.View;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
-
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-
 import androidx.fragment.app.FragmentManager;
-
 
 import com.example.cluedo_seii.DeckOfCards;
 import com.example.cluedo_seii.Game;
+import com.example.cluedo_seii.GameCharacter;
 import com.example.cluedo_seii.Player;
 import com.example.cluedo_seii.R;
-
+import com.example.cluedo_seii.activities.playerGameInteraction.MakeSuspicion;
 import com.example.cluedo_seii.activities.playerGameInteraction.SuspectOrAccuse;
 import com.example.cluedo_seii.activities.playerGameInteraction.ThrowDice;
 import com.example.cluedo_seii.activities.playerGameInteraction.ThrowDiceOrUseSecretPassage;
 import com.example.cluedo_seii.spielbrett.Gameboard;
 
-
 import java.util.LinkedList;
 
 public class GameboardScreen extends AppCompatActivity  {
 
-
+    private float x1, x2, y1, y2;
     private Gameboard gameboard;
     private Game game;
     private LinkedList<Player> players;
     private DeckOfCards deckOfCards;
     private FragmentManager manager;
     private String mesaggeDialogTag;
-    LinearLayout layout;
     private Bundle bundle;
-    float x1, x2, y1, y2;
+    private Intent intent;
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
@@ -59,27 +49,33 @@ public class GameboardScreen extends AppCompatActivity  {
 
         String gameBoard =
                 "0002000002000" +
-                        "0000000000000" +
-                        "0000000000000" +
-                        "0333300033330" +
-                        "0333300033330" +
-                        "0333300033330" +
-                        "0000000000000" +
-                        "0200000000020" +
-                        "0000000000000" +
-                        "0333300033330" +
-                        "0333300033330" +
-                        "0333300033330" +
-                        "0000000000000" +
-                        "0000000000000" +
-                        "0333300033330" +
-                        "0333300033330" +
-                        "0333300033330" +
-                        "0000000000000" +
-                        "0002000002000";
+                "0000000000000" +
+                "0000000000000" +
+                "0333300033330" +
+                "0333300033330" +
+                "0333300033330" +
+                "0000000000000" +
+                "0200000000020" +
+                "0000000000000" +
+                "0333300033330" +
+                "0333300033330" +
+                "0333300033330" +
+                "0000000000000" +
+                "0000000000000" +
+                "0333300033330" +
+                "0333300033330" +
+                "0333300033330" +
+                "0000000000000" +
+                "0002000002000";
 
-        gameboard = new Gameboard(this, 13, 19, gameBoard);
+        gameboard = new Gameboard(this,13,19, gameBoard);
         setContentView(gameboard.getLayout());
+
+        bundle = new Bundle();
+        mesaggeDialogTag = "MessageDialog";
+        manager = getSupportFragmentManager();
+
+
 
         startGame();
 
@@ -92,22 +88,35 @@ public class GameboardScreen extends AppCompatActivity  {
         });*/
     }
 
-    public void startGame(){
+    private void startGame(){
+
         //TODO initialize Game according to GameLobby Settings
-        deckOfCards =  new DeckOfCards();
+
+        //Zu Demonstrationszwecken
+        /*deckOfCards = new DeckOfCards();
         players = new LinkedList<>();
-        Player player1 = new Player(1, null, "10.0.2.16", null, null);
-        Player player2 = new Player(2, null, "null", null, null);
-        Player player3 = new Player(3, null, "null", null, null);
+        GameCharacter gameCharacter = new GameCharacter("Prof. Bloom", null);
+        GameCharacter gameCharacterAlt = new GameCharacter("Fräulein Weiss", null);
+        Player player1 = new Player(1, "10.0.2.16", gameCharacterAlt, null);
+        Player player2 = new Player(2,  "null", gameCharacter, null);
+        Player player3 = new Player(3, "null", gameCharacterAlt, null);
         players.add(player1);
         players.add(player2);
         players.add(player3);
         game = new Game(gameboard, deckOfCards, players);
-        game.distributeCards();
+        game.distributeCards();*/
+        //suspectOrAccuse();
+       // makeSuspicion();
+
+    }
+
+    public void makeSuspicion(){
+        intent = new Intent(this, MakeSuspicion.class);
+        intent.putExtra("game", game);
+        startActivity(intent);
     }
 
     public void throwDice(){
-
         ThrowDice dialog = new ThrowDice();
         bundle.putSerializable("game", game);
         dialog.setArguments(bundle);
@@ -115,12 +124,10 @@ public class GameboardScreen extends AppCompatActivity  {
     }
 
     public void throwDiceOrUseSecretPassage(){
-
         ThrowDiceOrUseSecretPassage dialog = new ThrowDiceOrUseSecretPassage();
         bundle.putSerializable("game", game);
         dialog.setArguments(bundle);
         dialog.show(manager, mesaggeDialogTag);
-
     }
 
     public void suspectOrAccuse(){
@@ -131,9 +138,8 @@ public class GameboardScreen extends AppCompatActivity  {
     }
 
 
-
     public void showCards(){
-        Intent intent = new Intent(this, ShowCards.class);
+        intent = new Intent(this, ShowCards.class);
         intent.putExtra("game", game);
         startActivity(intent);
     }
@@ -163,6 +169,8 @@ public class GameboardScreen extends AppCompatActivity  {
         }
         return false;
     }
+
+
 
 }
 

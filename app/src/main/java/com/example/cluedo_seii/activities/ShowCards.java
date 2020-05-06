@@ -47,7 +47,7 @@ public class ShowCards extends AppCompatActivity {
 
        String deviceIP = Formatter.formatIpAddress(wifiManager.getConnectionInfo().getIpAddress());
 
-     for(Player player: game.getPlayers()){
+       for(Player player: game.getPlayers()){
 
             if(player.getIP().equals(deviceIP)){
 
