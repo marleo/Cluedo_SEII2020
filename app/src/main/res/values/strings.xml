@@ -20,9 +20,9 @@
     <string name="addMoreNotes">Type in</string>
     <string name="addNotesButton">Bestätigen</string>
     <string name="addMoreNotesButton">Bestätigen</string>
-
-
-
+    <string name="lightTV">TextView</string>
+    <string name="NoLightSensor">no light sensor detected</string>
+    <string name="light">light</string>
 
 
 </resources>

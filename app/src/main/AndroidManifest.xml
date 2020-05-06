@@ -47,6 +47,9 @@
             android:name=".activities.RollDiceScreen"
             android:exported="true"
             android:label="Roll Dices" />
+
+        <activity android:name=".activities.CheatingScreen"
+            android:exported="true"/>
     </application>
 
 </manifest>
