@@ -2,7 +2,7 @@ package com.example.cluedo_seii.Network.dto;
 
 import androidx.annotation.NonNull;
 
-public class TextMessage extends BaseMessage {
+public class TextMessage extends RequestDTO {
     public String text;
 
     public TextMessage() {

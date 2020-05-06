@@ -14,12 +14,12 @@ import java.util.Random;
 
 public class Game implements Serializable {
 
-    private Gameboard gameboard;
-    private DeckOfCards deckOfCards;
+    private transient Gameboard gameboard;
+    private transient DeckOfCards deckOfCards;
     private InvestigationFile investigationFile;
     private LinkedList<Player>players;
     private Boolean gameOver;
-    private Random random;
+    private transient Random random;
     private int round;
 
     private int playerIterator;
@@ -39,9 +39,14 @@ public class Game implements Serializable {
         currentPlayer = players.get(playerIterator);
     }
 
+    public LinkedList<Player> getPlayers() {
+        return players;
+    }
+
     public Player getCurrentPlayer() {
         return currentPlayer;
     }
+
 
     public void distributeCards(){
 
@@ -63,40 +68,20 @@ public class Game implements Serializable {
 
         while(i<cardStack.size())
         {
-         for(int j = 0; j<players.size(); j++){
+            for(int j = 0; j<players.size(); j++){
 
-             Player temp = players.get(j);
+                Player temp = players.get(j);
 
-             if(i==cardStack.size())
-             {break;}
+                if(i==cardStack.size())
+                {break;}
 
-             temp.addCard(cardStack.get(i));
-             i++;
-         }
+                temp.addCard(cardStack.get(i));
+                i++;
+            }
 
         }
 
     }
-
-    public void gameControl(UserInput userInput){
-
-        if(userInput==UserInput.THROWDICE){
-            //currentPlayer.ThrowDice();
-        }
-
-        if(userInput==UserInput.USESECRETPASSAGE){
-            //currentPllayerMove();
-        }
-
-        if(userInput==UserInput.SUSPECT){
-            //currentPlayer.suspect();
-        }
-
-        if(userInput==UserInput.ACCUSE){
-            //currentPlayer.accuse();
-        }
-    }
-
 
     public void nextPlayer(){
 
@@ -113,4 +98,5 @@ public class Game implements Serializable {
         currentPlayer = players.get(playerIterator);
 
     }
+
 }
