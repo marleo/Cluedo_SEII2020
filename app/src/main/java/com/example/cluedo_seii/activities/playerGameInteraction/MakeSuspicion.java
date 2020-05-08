@@ -13,6 +13,7 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.example.cluedo_seii.Game;
+import com.example.cluedo_seii.Player;
 import com.example.cluedo_seii.R;
 
 import java.util.LinkedList;
@@ -78,11 +79,20 @@ public class MakeSuspicion extends AppCompatActivity implements AdapterView.OnIt
 
            suspectedPlayerHand = game.getCurrentPlayer().suspect(selectedCulprit, selectedWeapon, selectedRoom, game.getPlayers());
 
+           for(Player player: game.getPlayers()){
+               if(player.getPlayerCharacter().getName()==selectedCulprit){
+                   player.setPosition(game.getCurrentPlayer().getPosition());
+               }
+           }
+
+
            if(suspectedPlayerHand.size()==0) {
                text = "Hier gibt es nichts zum sehen";
                toast = Toast.makeText(getApplicationContext(), text, Toast.LENGTH_SHORT);
                toast.show();
-
+               intent = new Intent();
+               intent.putExtra("game", game);
+               setResult(1,intent);
                finish();
            }
 
@@ -94,7 +104,9 @@ public class MakeSuspicion extends AppCompatActivity implements AdapterView.OnIt
 
                toast = Toast.makeText(getApplicationContext(), text , Toast.LENGTH_SHORT);
                toast.show();
-
+               intent = new Intent();
+               intent.putExtra("game", game);
+               setResult(1,intent);
                finish();
 
            }

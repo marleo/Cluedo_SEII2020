@@ -54,7 +54,6 @@ public class Player implements  Serializable {
         playerCards.add(card);
     }
 
-
     public LinkedList<String> suspect(String suspectedCulprit, String suspectedWeapon, String suspectedLocation, LinkedList<Player> players){
 
         LinkedList<String>wrongSuspicions = new LinkedList<>();
@@ -86,9 +85,7 @@ public class Player implements  Serializable {
         return wrongSuspicions;
     }
 
-
-
-    public boolean accuseSomeone(String accusedPerson, String accusedWeapon, String accusedLocation, InvestigationFile investigationFile){
+    public boolean accuse(String accusedPerson, String accusedWeapon, String accusedLocation, InvestigationFile investigationFile){
 
         if(investigationFile.getCulprit().getDesignation().equals(accusedPerson)
                 && investigationFile.getWeapon().getDesignation().equals(accusedWeapon)
@@ -103,5 +100,7 @@ public class Player implements  Serializable {
         }
     }
 
-
+    public void setPosition(GameboardElement position) {
+        this.position = position;
+    }
 }

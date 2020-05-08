@@ -108,20 +108,36 @@ public class GameboardScreen extends AppCompatActivity  {
         game.distributeCards();
         suspectOrAccuse();
        // makeSuspicion();
-
     }
 
     public void makeSuspicion(){
         intent = new Intent(this, MakeSuspicion.class);
         intent.putExtra("game", game);
-        startActivity(intent);
+        startActivityForResult(intent, 2);
+    }
+
+    // Call Back method  to get the Message form other Activity
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data)
+    {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if(requestCode==2)
+        {
+            game = (Game)data.getSerializableExtra("game");
+        }
     }
 
     public void accuseSomeone(){
         intent = new Intent(this, AccuseSomeone.class);
         intent.putExtra("game", game);
-        startActivity(intent);
+        startActivityForResult(intent, 2);// Activity is started with requestCode 2
+        //startActivity(intent);
     }
+
+
+
+
 
     public void throwDice(){
         ThrowDice dialog = new ThrowDice();
