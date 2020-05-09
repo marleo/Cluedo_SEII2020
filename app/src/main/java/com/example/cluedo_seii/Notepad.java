@@ -2,6 +2,7 @@ package com.example.cluedo_seii;
 
 
 import android.os.Build;
+import android.widget.TextView;
 
 
 import androidx.annotation.RequiresApi;
@@ -17,26 +18,10 @@ public class Notepad  {
 
 
 
-
-
-
-    public Notepad(String[] cards, LinkedHashMap<String,String> notes){
+    public Notepad(String[] cards){
         this.cards=cards;
         this.moreNotes=" ";
-
-        for (String c : cards) {
-                notes.put(c, " ");
-            }
         }
-
-
-
-        @RequiresApi(api = Build.VERSION_CODES.N)
-        public void excludeOpportunity (String bezeichnung, HashMap<String,String> notes){
-           if (notes.containsKey(bezeichnung)){
-                    notes.replace(bezeichnung," ", "X");
-                }
-            }
 
 
 

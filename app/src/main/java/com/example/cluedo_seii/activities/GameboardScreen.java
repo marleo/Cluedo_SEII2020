@@ -79,13 +79,6 @@ public class GameboardScreen extends AppCompatActivity  {
 
         startGame();
 
-        /*final Button notepad_Button = findViewById(R.id.notepadButton);
-        notepad_Button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(GameboardScreen.this, NotepadScreen.class));
-            }
-        });*/
     }
 
     private void startGame(){
