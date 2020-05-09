@@ -8,7 +8,7 @@ import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.example.cluedo_seii.Network.Callback;
 import com.example.cluedo_seii.Network.NetworkClient;
-import com.example.cluedo_seii.Network.dto.BaseMessage;
+import com.example.cluedo_seii.Network.dto.RequestDTO;
 
 import java.io.IOException;
 import java.net.InetAddress;
@@ -18,11 +18,22 @@ import java.util.List;
 import static android.content.ContentValues.TAG;
 
 public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
-    private Client client;
-    private Callback<BaseMessage> callback;
+    //INSTANCE
+    private static NetworkClientKryo INSTANCE = null;
 
-    public NetworkClientKryo() {
+    private Client client;
+    private Callback<RequestDTO> callback;
+
+    private NetworkClientKryo() {
         client = new Client();
+    }
+
+    public static NetworkClientKryo getInstance() {
+        if (INSTANCE == null) {
+            INSTANCE = new NetworkClientKryo();
+        }
+
+        return INSTANCE;
     }
 
     @Override
@@ -42,26 +53,31 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
             }
         }.start();
 
-
-        client.connect(5000,host,NetworkConstants.TCP_PORT,NetworkConstants.UDP_PORT);
-
         client.addListener(new Listener() {
             @Override
             public void received(Connection connection, Object object) {
-                if (callback != null && object instanceof BaseMessage)
-                    callback.callback((BaseMessage) object);
+                if (callback != null && object instanceof RequestDTO) {
+                    Log.i(TAG, "received: " + object.toString());
+                    callback.callback((RequestDTO) object );
+                }
             }
         });
     }
 
     @Override
-    public void registerCallback(Callback<BaseMessage> callback) {
+    public void registerCallback(Callback<RequestDTO> callback) {
         this.callback = callback;
     }
 
     @Override
-    public void sendMessage(BaseMessage message) {
-        client.sendTCP(message);
+    public void sendMessage(final RequestDTO message) {
+        new Thread("send") {
+            @Override
+            public void run() {
+                client.sendTCP(message);
+            }
+        }.start();
+
     }
 
     @Override
@@ -69,6 +85,7 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
         client.getKryo().register(c);
     }
 
+    //TODO delete
     public void getNetworks() {
         client.start();
         List<InetAddress> hosts = client.discoverHosts(NetworkConstants.UDP_PORT,10000);
@@ -84,5 +101,10 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
 
         client.stop();
         //return hostsOut;
+    }
+
+    private void quitGameHandler() {
+        client.close();
+        client.stop();
     }
 }
