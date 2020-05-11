@@ -31,4 +31,5 @@ public class InvestigationFile implements Serializable {
     public void setRoom(Card room) {
         this.room = room;
     }
+
 }
