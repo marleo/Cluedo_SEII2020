@@ -62,6 +62,15 @@ public class SettingScreen extends AppCompatActivity {
                 startActivity(new Intent(SettingScreen.this, startGameScreen.class));
             }
         });
+
+        final Button helpButton = findViewById(R.id.helpButton);
+        helpButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                startActivity(new Intent(SettingScreen.this, helpSettings.class));
+            }
+        });
+
     }
 
     public static Boolean getCheatEnabled() {

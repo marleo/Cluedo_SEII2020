@@ -1,4 +1,3 @@
-
 <resources>
     <string name="app_name">Cluedo</string>
     <string name="mainScreenTitle">Cluedo</string>
@@ -14,6 +13,8 @@
     <string name="addMoreNotes">Type in</string>
     <string name="addNotesButton">Bestätigen</string>
     <string name="addMoreNotesButton">Bestätigen</string>
+    <string name="gameRules">Spielregeln</string>
+    <string name="gesturerules">Steuerung</string>
 
     <string-array name="culprits">
         <item>Oberst von Gatov</item>
@@ -44,5 +45,13 @@
         <item>Bibliothek</item>
         <item>Arbeitszimmer</item>
     </string-array>
+
+    <string name="fragmentControlTab">
+        Here we will display the controls:\nControls
+    </string>
+    <string name="fragmentGameplayTab">
+        Hier werden die Spielregeln und der generelle Spielablauf angezeigt.
+    </string>
+    <string name="helpButton">Hilfe</string>
 
 </resources>
