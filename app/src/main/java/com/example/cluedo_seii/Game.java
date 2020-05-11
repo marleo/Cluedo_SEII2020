@@ -63,12 +63,26 @@ public class Game implements Serializable {
         int randomWeaponId = random.nextInt(6) + 6;
         int randomRoomId = random.nextInt(9) + 12;
 
-        investigationFile.setCulprit(cardStack.get(randomPersonId));
-        cardStack.remove(randomPersonId);
-        investigationFile.setWeapon(cardStack.get(randomWeaponId));
-        cardStack.remove(randomWeaponId);
-        investigationFile.setRoom(cardStack.get(randomRoomId));
-        cardStack.remove(randomRoomId);
+        for(Card card:cardStack){
+            if(card.getId()==randomPersonId){
+                cardStack.remove(card);
+                break;
+            }
+        }
+
+        for(Card card:cardStack){
+            if(card.getId()==randomWeaponId) {
+                cardStack.remove(card);
+                break;
+            }
+        }
+
+        for(Card card:cardStack){
+            if(card.getId()==randomRoomId){
+                cardStack.remove(card);
+                break;
+            }
+        }
 
         Collections.shuffle(cardStack);
 

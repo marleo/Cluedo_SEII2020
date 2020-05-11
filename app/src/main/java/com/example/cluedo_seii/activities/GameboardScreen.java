@@ -106,7 +106,8 @@ public class GameboardScreen extends AppCompatActivity  {
         players.add(player3);
         game = new Game(gameboard, deckOfCards, players);
         game.distributeCards();
-        suspectOrAccuse();
+
+       //suspectOrAccuse();
        // makeSuspicion();
     }
 
