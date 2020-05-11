@@ -24,6 +24,11 @@
     <string name="lightTV">TextView</string>
     <string name="NoLightSensor">no light sensor detected</string>
     <string name="light">light</string>
+    <string name="selectPlayer">Choose your Character</string>
+    <string name="Player1">Character1</string>
+    <string name="Player2">Character2</string>
+    <string name="Player3">Character3</string>
+    <string name="playerSelected">Start</string>
 
     <string-array name="culprits">
         <item>Oberst von Gatov</item>

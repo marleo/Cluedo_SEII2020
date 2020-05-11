@@ -59,12 +59,10 @@
             android:exported="true"
             android:label="Cluedo" />
 
-            android:label="Cluedo">
-        </activity>
         <activity
-            android:name=".activities.MoreNotesScreen"
-            android:label="Cluedo">
-        </activity>
+            android:name=".activities.PlayerSelectionScreen"
+            android:exported="true"/>
+
 
     </application>
 
