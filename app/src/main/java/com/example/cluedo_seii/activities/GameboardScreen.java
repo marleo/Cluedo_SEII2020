@@ -93,7 +93,7 @@ public class GameboardScreen extends AppCompatActivity  {
         //TODO initialize Game according to GameLobby Settings
 
         //Zu Demonstrationszwecken
-        /*deckOfCards = new DeckOfCards();
+        deckOfCards = new DeckOfCards();
         players = new LinkedList<>();
         GameCharacter gameCharacter = new GameCharacter("Prof. Bloom", null);
         GameCharacter gameCharacterAlt = new GameCharacter("Fräulein Weiss", null);
@@ -104,7 +104,7 @@ public class GameboardScreen extends AppCompatActivity  {
         players.add(player2);
         players.add(player3);
         game = new Game(gameboard, deckOfCards, players);
-        game.distributeCards();*/
+        game.distributeCards();
         //suspectOrAccuse();
        // makeSuspicion();
 
