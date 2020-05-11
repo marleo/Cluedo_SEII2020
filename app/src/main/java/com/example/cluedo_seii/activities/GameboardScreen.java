@@ -14,6 +14,7 @@ import com.example.cluedo_seii.Game;
 import com.example.cluedo_seii.GameCharacter;
 import com.example.cluedo_seii.Player;
 import com.example.cluedo_seii.R;
+import com.example.cluedo_seii.activities.playerGameInteraction.AccuseSomeone;
 import com.example.cluedo_seii.activities.playerGameInteraction.MakeSuspicion;
 import com.example.cluedo_seii.activities.playerGameInteraction.SuspectOrAccuse;
 import com.example.cluedo_seii.activities.playerGameInteraction.ThrowDice;
@@ -105,16 +106,39 @@ public class GameboardScreen extends AppCompatActivity  {
         players.add(player3);
         game = new Game(gameboard, deckOfCards, players);
         game.distributeCards();
-        //suspectOrAccuse();
-       // makeSuspicion();
 
+       //suspectOrAccuse();
+       // makeSuspicion();
     }
 
     public void makeSuspicion(){
         intent = new Intent(this, MakeSuspicion.class);
         intent.putExtra("game", game);
-        startActivity(intent);
+        startActivityForResult(intent, 2);
     }
+
+    // Call Back method  to get the Message form other Activity
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data)
+    {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if(requestCode==2)
+        {
+            game = (Game)data.getSerializableExtra("game");
+        }
+    }
+
+    public void accuseSomeone(){
+        intent = new Intent(this, AccuseSomeone.class);
+        intent.putExtra("game", game);
+        startActivityForResult(intent, 2);// Activity is started with requestCode 2
+        //startActivity(intent);
+    }
+
+
+
+
 
     public void throwDice(){
         ThrowDice dialog = new ThrowDice();
@@ -136,7 +160,6 @@ public class GameboardScreen extends AppCompatActivity  {
         dialog.setArguments(bundle);
         dialog.show(manager, mesaggeDialogTag);
     }
-
 
     public void showCards(){
         intent = new Intent(this, ShowCards.class);
