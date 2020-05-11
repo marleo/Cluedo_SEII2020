@@ -1,20 +1,22 @@
 package com.example.cluedo_seii;
 
-import android.util.Log;
-
 import com.example.cluedo_seii.spielbrett.Gameboard;
 import com.example.cluedo_seii.spielbrett.StartingpointElement;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
 
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.LinkedList;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
-public class GameTest {
-
+@RunWith(Parameterized.class)
+public class GamDistributeCardsInvestigationFile {
     private Player player1;
     private Player player2;
     private Player player3;
@@ -42,10 +44,10 @@ public class GameTest {
 
     private LinkedList<Player>players;
 
-    private Game game;
+    private static Game game;
 
     @Before
-    public void initialize(){
+    public void intialize(){
         oberstVonGatov = new GameCharacter("Oberst von Gatov", oberstVonGatovStart);
         profBloom = new GameCharacter("Prof. Bloom", profBloomStart);
         reverendGruen = new GameCharacter("Reverend Gruen", reverendGruenStart);
@@ -72,7 +74,6 @@ public class GameTest {
         deckOfCards = new DeckOfCards();
 
         game = new Game(gameboard, players);
-
     }
 
     @After
@@ -101,59 +102,20 @@ public class GameTest {
 
     }
 
-    @Test
-    public void testDistributeCardsNoDuplicates() {
 
-        boolean sameCardFoundTwice = false;
+    @Parameterized.Parameters
+    public static Collection<Object[]> data() {
+        return Arrays.asList(new Object[][] {
+                {game},{game},{game},{game} });}
 
-        game.distributeCards();
+    private int input, expected;
 
-        LinkedList<Card>testDistributeCardsHelp = new LinkedList<>();
-
-        for(Card card: player1.getPlayerCards()){
-            testDistributeCardsHelp.add(card);
-        }
-        for(Card card: player2.getPlayerCards()){
-            testDistributeCardsHelp.add(card);
-        }
-        for(Card card: player3.getPlayerCards()){
-            testDistributeCardsHelp.add(card);
-        }
-        for(Card card: player4.getPlayerCards()){
-            testDistributeCardsHelp.add(card);
-        }
-        for(Card card: player5.getPlayerCards()){
-            testDistributeCardsHelp.add(card);
-        }
-        for(Card card: player6.getPlayerCards()){
-            testDistributeCardsHelp.add(card);
-        }
-
-        for(int i = 0; i<testDistributeCardsHelp.size(); i++){
-
-
-            for(int j = i+1; j<testDistributeCardsHelp.size(); j++) {
-
-                if (testDistributeCardsHelp.get(i).getDesignation().equals(testDistributeCardsHelp.get(j).getDesignation())){
-
-                 sameCardFoundTwice = true;
-
-                }
-            }
-
-            if (testDistributeCardsHelp.get(i).equals(game.getInvestigationFile().getCulprit()) ||
-                    testDistributeCardsHelp.get(i).equals(game.getInvestigationFile().getWeapon()) ||
-                    testDistributeCardsHelp.get(i).equals(game.getInvestigationFile().getRoom())) {
-
-                sameCardFoundTwice = true;
-            }
-
-        }
-        assertEquals(sameCardFoundTwice, false);
+    public GamDistributeCardsInvestigationFile(Game game) {
+        this.game = game;
     }
 
     @Test
-    public void testDistributeCardsInvestigationFile(){
+    public void test() {
 
         boolean rightCards = true;
 
@@ -166,31 +128,8 @@ public class GameTest {
             rightCards = false;
 
         }
-
         assertEquals(rightCards, true);
-
     }
-
-    @Test
-    public void testPlayerIncrementor() {
-        assertEquals(game.getCurrentPlayer(), player1);
-        game.nextPlayer();
-        assertEquals(game.getCurrentPlayer(), player2);
-    }
-
-    @Test
-    public void testRoundIncrementor() {
-        game.nextPlayer();
-        game.nextPlayer();
-        game.nextPlayer();
-        game.nextPlayer();
-        game.nextPlayer();
-        game.nextPlayer();
-        assertEquals(game.getCurrentPlayer(),player1);
-        assertEquals(game.getRound(), 2);
-    }
-
-
 
 
 }

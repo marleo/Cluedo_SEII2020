@@ -164,4 +164,50 @@ public class PlayerTest {
 
     }
 
+    @Test
+    public void accuseRight(){
+
+        investigationFile.setCulprit(gameCards.get(1));
+        investigationFile.setWeapon(gameCards.get(9));
+        investigationFile.setRoom(gameCards.get(16));
+
+        assertEquals(player1.accuseSomeone(gameCards.get(1).getDesignation(), gameCards.get(9).getDesignation(), gameCards.get(16).getDesignation(), investigationFile), true);
+        assertEquals(player1.getMadeFalseAccusation(), false);
+}
+
+    @Test
+    public void accuseWrongCase1(){
+
+        investigationFile.setCulprit(gameCards.get(1));
+        investigationFile.setWeapon(gameCards.get(9));
+        investigationFile.setRoom(gameCards.get(16));
+
+        assertEquals(player1.accuseSomeone(gameCards.get(1).getDesignation(), gameCards.get(9).getDesignation(), gameCards.get(17).getDesignation(), investigationFile), false);
+        assertEquals(player1.getMadeFalseAccusation(), true);
+
+
+    }
+
+    @Test
+    public void accuseWrongCase2(){
+
+        investigationFile.setCulprit(gameCards.get(1));
+        investigationFile.setWeapon(gameCards.get(9));
+        investigationFile.setRoom(gameCards.get(16));
+
+        assertEquals(player1.accuseSomeone(gameCards.get(1).getDesignation(), gameCards.get(7).getDesignation(), gameCards.get(17).getDesignation(), investigationFile), false);
+        assertEquals(player1.getMadeFalseAccusation(), true);
+    }
+
+    @Test
+    public void accuseWrongCase3(){
+
+        investigationFile.setCulprit(gameCards.get(1));
+        investigationFile.setWeapon(gameCards.get(9));
+        investigationFile.setRoom(gameCards.get(16));
+
+        assertEquals(player1.accuseSomeone(gameCards.get(4).getDesignation(), gameCards.get(10).getDesignation(), gameCards.get(18).getDesignation(), investigationFile), false);
+        assertEquals(player1.getMadeFalseAccusation(), true);
+    }
+
 }
