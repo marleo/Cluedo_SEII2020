@@ -60,33 +60,55 @@ public class Game implements Serializable {
 
         LinkedList<Card> cardStack =  deckOfCards.getGameCardsStandard();
         int randomPersonId = random.nextInt(6);
-        int randomWeaponId = random.nextInt(6) + 6;
-        int randomRoomId = random.nextInt(9) + 12;
+        int randomWeaponId = 6 + random.nextInt(6);
+        int randomRoomId = 12 + random.nextInt(9);
 
         investigationFile.setCulprit(cardStack.get(randomPersonId));
-        cardStack.remove(randomPersonId);
         investigationFile.setWeapon(cardStack.get(randomWeaponId));
-        cardStack.remove(randomWeaponId);
         investigationFile.setRoom(cardStack.get(randomRoomId));
-        cardStack.remove(randomRoomId);
+
+        for(Card card:cardStack){
+
+            if(card.getId()==randomPersonId){
+                cardStack.remove(card);
+                break;
+            }
+
+        }
+
+        for(Card card:cardStack){
+
+            if(card.getId()==randomWeaponId){
+                cardStack.remove(card);
+                break;
+            }
+
+        }
+
+        for(Card card:cardStack){
+            if(card.getId()==randomRoomId){
+                cardStack.remove(card);
+                break;
+            }
+
+        }
 
         Collections.shuffle(cardStack);
+
 
         int i = 0;
 
         while(i<cardStack.size())
         {
          for(int j = 0; j<players.size(); j++){
-
-             Player temp = players.get(j);
-
-             if(i==cardStack.size())
-             {break;}
-
-             temp.addCard(cardStack.get(i));
+             if(i==cardStack.size()) {
+                 break;}
+             else if(cardStack.get(i)!=null){
+                 Player temp = players.get(j);
+                 temp.addCard(cardStack.get(i));
+                  }
              i++;
          }
-
         }
 
     }

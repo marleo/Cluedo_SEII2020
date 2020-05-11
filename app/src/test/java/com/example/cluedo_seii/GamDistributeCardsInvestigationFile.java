@@ -106,7 +106,7 @@ public class GamDistributeCardsInvestigationFile {
     @Parameterized.Parameters
     public static Collection<Object[]> data() {
         return Arrays.asList(new Object[][] {
-                {game},{game},{game},{game} });}
+                {game},{game},{game},{game}, {game}, {game}, {game}, {game}, {game}, {game}});}
 
     private int input, expected;
 

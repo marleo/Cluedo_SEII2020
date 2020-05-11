@@ -149,26 +149,45 @@ public class GameTest {
             }
 
         }
+
         assertEquals(sameCardFoundTwice, false);
+
+
     }
 
     @Test
-    public void testDistributeCardsInvestigationFile(){
+    public void testDistributeCardsRightAmount() {
 
-        boolean rightCards = true;
+        boolean sameCardFoundTwice = false;
 
         game.distributeCards();
 
-        if(game.getInvestigationFile().getCulprit().getType()!=CardType.PERSON||
-                game.getInvestigationFile().getWeapon().getType()!=CardType.WEAPON||
-                game.getInvestigationFile().getRoom().getType()!=CardType.ROOM){
+        LinkedList<Card>testDistributeCardsHelp = new LinkedList<>();
 
-            rightCards = false;
-
+        for(Card card: player1.getPlayerCards()){
+            testDistributeCardsHelp.add(card);
+        }
+        for(Card card: player2.getPlayerCards()){
+            testDistributeCardsHelp.add(card);
+        }
+        for(Card card: player3.getPlayerCards()){
+            testDistributeCardsHelp.add(card);
+        }
+        for(Card card: player4.getPlayerCards()){
+            testDistributeCardsHelp.add(card);
+        }
+        for(Card card: player5.getPlayerCards()){
+            testDistributeCardsHelp.add(card);
+        }
+        for(Card card: player6.getPlayerCards()){
+            testDistributeCardsHelp.add(card);
         }
 
-        assertEquals(rightCards, true);
+        testDistributeCardsHelp.add(game.getInvestigationFile().getCulprit());
+        testDistributeCardsHelp.add(game.getInvestigationFile().getWeapon());
+        testDistributeCardsHelp.add(game.getInvestigationFile().getRoom());
 
+        assertEquals(testDistributeCardsHelp.size(), 21);
     }
 
     @Test
