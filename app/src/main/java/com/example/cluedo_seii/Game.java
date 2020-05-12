@@ -34,16 +34,18 @@ public class Game implements Serializable {
         gameState = GameState.START;
     }
 
+    //Getter und Setter
+
     public InvestigationFile getInvestigationFile() {
         return investigationFile;
     }
 
-    public void setGameOver(Boolean gameOver) {
-        this.gameOver = gameOver;
-    }
-
     public LinkedList<Player> getPlayers() {
         return players;
+    }
+
+    public Boolean getGameOver() {
+        return gameOver;
     }
 
     public GameState getGameState() {
@@ -53,6 +55,16 @@ public class Game implements Serializable {
     public Player getCurrentPlayer() {
         return currentPlayer;
     }
+
+    public int getRound() {
+        return round;
+    }
+
+    public void setGameOver(Boolean gameOver) {
+        this.gameOver = gameOver;
+    }
+
+    //Methode  zum ändern des Spielstatus und Implementierung von ChangeListener
 
     public void changeGameState(GameState gameState){
         this.gameState = gameState;
@@ -71,10 +83,14 @@ public class Game implements Serializable {
         void onChange();
     }
 
-    //Methode zur Kartenverteilung an Spieler und in Ermittlungsakte
+    //Methode zur Kartenverteilung
+
     public void distributeCards(){
 
         LinkedList<Card> cardStack =  deckOfCards.getGameCardsStandard();
+
+        //Verteilen zufälliger Karten in die Ermittlungsakte
+
         int randomPersonId = random.nextInt(6);
         int randomWeaponId = 6 + random.nextInt(6);
         int randomRoomId = 12 + random.nextInt(9);
@@ -84,21 +100,17 @@ public class Game implements Serializable {
         investigationFile.setRoom(cardStack.get(randomRoomId));
 
         for(Card card:cardStack){
-
             if(card.getId()==randomPersonId){
                 cardStack.remove(card);
                 break;
             }
-
         }
 
         for(Card card:cardStack){
-
             if(card.getId()==randomWeaponId){
                 cardStack.remove(card);
                 break;
             }
-
         }
 
         for(Card card:cardStack){
@@ -106,12 +118,13 @@ public class Game implements Serializable {
                 cardStack.remove(card);
                 break;
             }
-
         }
 
         Collections.shuffle(cardStack);
 
         int i = 0;
+
+        //Verteilen der restlichen Karten an die Spieler
 
         while(i<cardStack.size())
         {
@@ -125,27 +138,19 @@ public class Game implements Serializable {
              i++;
          }
         }
-
     }
 
-    //Methode ändert Attribut CurrentPlayer
-    public void nextPlayer(){
+    //Methode für Spielerwechsel und Rundenzähler
 
+    public void nextPlayer(){
         if(playerIterator==players.size()-1)
         {
             playerIterator=0;
             round++;
         }
-
         else {
             playerIterator++;
         }
-
         currentPlayer = players.get(playerIterator);
-
-    }
-
-    public int getRound() {
-        return round;
     }
 }

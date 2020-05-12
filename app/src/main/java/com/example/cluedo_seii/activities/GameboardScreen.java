@@ -12,6 +12,7 @@ import androidx.fragment.app.FragmentManager;
 import com.example.cluedo_seii.DeckOfCards;
 import com.example.cluedo_seii.Game;
 import com.example.cluedo_seii.GameCharacter;
+import com.example.cluedo_seii.GameState;
 import com.example.cluedo_seii.Player;
 import com.example.cluedo_seii.R;
 import com.example.cluedo_seii.activities.playerGameInteraction.AccuseSomeone;
@@ -20,6 +21,7 @@ import com.example.cluedo_seii.activities.playerGameInteraction.SuspectOrAccuse;
 import com.example.cluedo_seii.activities.playerGameInteraction.ThrowDice;
 import com.example.cluedo_seii.activities.playerGameInteraction.ThrowDiceOrUseSecretPassage;
 import com.example.cluedo_seii.spielbrett.Gameboard;
+import com.example.cluedo_seii.spielbrett.RoomElement;
 
 import java.util.LinkedList;
 
@@ -92,7 +94,6 @@ public class GameboardScreen extends AppCompatActivity  {
     private void startGame() {
 
         //TODO initialize Game according to GameLobby Settings
-
         //Instanz eines Game-objektes Zu Demonstrationszwecken
         deckOfCards = new DeckOfCards();
         players = new LinkedList<>();
@@ -106,6 +107,7 @@ public class GameboardScreen extends AppCompatActivity  {
         players.add(player3);
         game = new Game(gameboard, players);
 
+        //Ausführung erfolgt wenn Methode changeGameState der Instanz game aufgerufen wird
         game.setListener(new Game.ChangeListener() {
             @Override
 
@@ -113,13 +115,47 @@ public class GameboardScreen extends AppCompatActivity  {
 
             public void onChange() {
 
-                
+                if(game.getGameState().equals(GameState.PLAYERTURNBEGIN)){
+                    if(game.getCurrentPlayer().getPosition()instanceof RoomElement) {
+                        throwDiceOrUseSecretPassage();
+                    } else {
+                        throwDice();
+                    }
+                }
 
+                else if(game.getGameState().equals(GameState.PLAVERMOVEMENT)){
 
+                }
 
+                else if(game.getGameState().equals(GameState.PLAYERACCUSATION)){
+                    if(game.getCurrentPlayer().getPosition()instanceof RoomElement){
+                        suspectOrAccuse();
+                    } else{
+                        game.changeGameState(GameState.PLAYERTURNEND);
+                    }
+                }
+
+                else if(game.getGameState().equals(GameState.PLAYERTURNEND)){
+                    int wrongAccusers = 0;
+                    for(Player player: game.getPlayers()){
+                        if(player.getMadeFalseAccusation()==true){
+                            wrongAccusers++;
+                        }
+                    }
+                    if(wrongAccusers==game.getPlayers().size()){
+                        game.setGameOver(true);
+                        game.changeGameState(GameState.END);
+                    }
+                    else if(game.getGameOver()==true){
+                        game.changeGameState(GameState.END);
+                    }
+                }
+
+                else if(game.getGameState().equals(GameState.END)){
+                    finish();
+                }
             }
         });
-
         }
 
 
@@ -171,7 +207,6 @@ public class GameboardScreen extends AppCompatActivity  {
     protected void onActivityResult(int requestCode, int resultCode, Intent data)
     {
         super.onActivityResult(requestCode, resultCode, data);
-
         if(requestCode==2)
         {
             game = (Game)data.getSerializableExtra("game");
