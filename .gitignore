@@ -12,8 +12,7 @@
 /captures
 .externalNativeBuild
 .cxx
-<<<<<<< HEAD
+
 .idea
 .idea/misc.xml
-=======
->>>>>>> ed76db76a07912051c3fd63329bf06b5e358c205
+
