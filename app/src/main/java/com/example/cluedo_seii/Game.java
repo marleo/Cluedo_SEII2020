@@ -17,6 +17,7 @@ public class Game implements Serializable {
     private int round;
     private int playerIterator;
     private Player currentPlayer;
+    private GameState gameState;
 
     public Game(Gameboard gameboard, LinkedList<Player>players){
 
@@ -29,6 +30,7 @@ public class Game implements Serializable {
         round = 1;
         playerIterator = 0;
         currentPlayer = players.get(playerIterator);
+        gameState = GameState.START;
     }
 
     public InvestigationFile getInvestigationFile() {
@@ -45,6 +47,10 @@ public class Game implements Serializable {
 
     public Player getCurrentPlayer() {
         return currentPlayer;
+    }
+
+    public void changeGameState(GameState gameState){
+        this.gameState = gameState;
     }
 
     //Methode zur Kartenverteilung an Spieler und in Ermittlungsakte
