@@ -93,53 +93,25 @@ public class GameboardScreen extends AppCompatActivity  {
 
         //TODO initialize Game according to GameLobby Settings
 
-        //Zu Demonstrationszwecken
+        //Instanz eines Game-objektes Zu Demonstrationszwecken
         deckOfCards = new DeckOfCards();
         players = new LinkedList<>();
         GameCharacter gameCharacter = new GameCharacter("Prof. Bloom", null);
         GameCharacter gameCharacterAlt = new GameCharacter("Fräulein Weiss", null);
-        Player player1 = new Player(1, "10.0.2.16", gameCharacterAlt, null);
-        Player player2 = new Player(2,  "null", gameCharacter, null);
-        Player player3 = new Player(3, "null", gameCharacterAlt, null);
+        Player player1 = new Player(1, "10.0.2.16", gameCharacterAlt);
+        Player player2 = new Player(2,  "null", gameCharacter);
+        Player player3 = new Player(3, "null", gameCharacterAlt);
         players.add(player1);
         players.add(player2);
         players.add(player3);
-        game = new Game(gameboard, deckOfCards, players);
+        game = new Game(gameboard, players);
         game.distributeCards();
+        suspectOrAccuse();
 
-       //suspectOrAccuse();
-       // makeSuspicion();
-    }
-
-    public void makeSuspicion(){
-        intent = new Intent(this, MakeSuspicion.class);
-        intent.putExtra("game", game);
-        startActivityForResult(intent, 2);
-    }
-
-    // Call Back method  to get the Message form other Activity
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data)
-    {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if(requestCode==2)
-        {
-            game = (Game)data.getSerializableExtra("game");
-        }
-    }
-
-    public void accuseSomeone(){
-        intent = new Intent(this, AccuseSomeone.class);
-        intent.putExtra("game", game);
-        startActivityForResult(intent, 2);// Activity is started with requestCode 2
-        //startActivity(intent);
     }
 
 
-
-
-
+    //Aufruf von DialogOptionen
     public void throwDice(){
         ThrowDice dialog = new ThrowDice();
         bundle.putSerializable("game", game);
@@ -161,16 +133,45 @@ public class GameboardScreen extends AppCompatActivity  {
         dialog.show(manager, mesaggeDialogTag);
     }
 
+    //UI Aufruf von Verdächtigung und Anklage
+    public void makeSuspicion(){
+        intent = new Intent(this, MakeSuspicion.class);
+        intent.putExtra("game", game);
+        startActivityForResult(intent, 2);
+    }
+
+    public void accuseSomeone(){
+        intent = new Intent(this, AccuseSomeone.class);
+        intent.putExtra("game", game);
+        startActivityForResult(intent, 2);
+    }
+
+    //Zeigt Karten auf Spielerhand
     public void showCards(){
         intent = new Intent(this, ShowCards.class);
         intent.putExtra("game", game);
         startActivity(intent);
     }
 
+
+    //CallBack um Resultat aus Methode zu erhalten
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data)
+    {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if(requestCode==2)
+        {
+            game = (Game)data.getSerializableExtra("game");
+        }
+    }
+
     public void updateGame(Game gameUpdate){
         game = gameUpdate;
     }
 
+
+    //EventListener für Swipe-Event
     public boolean dispatchTouchEvent (MotionEvent touchEvent){
         switch(touchEvent.getAction()){
             case MotionEvent.ACTION_DOWN:
