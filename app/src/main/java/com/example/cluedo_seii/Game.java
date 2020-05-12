@@ -14,12 +14,12 @@ import java.util.Random;
 
 public class Game implements Serializable {
 
-    private transient Gameboard gameboard;
-    private transient DeckOfCards deckOfCards;
+    private transient  Gameboard gameboard;
+    private transient  DeckOfCards deckOfCards;
     private InvestigationFile investigationFile;
     private LinkedList<Player>players;
     private Boolean gameOver;
-    private transient Random random;
+    private transient  Random random;
     private int round;
 
     private int playerIterator;
@@ -39,6 +39,14 @@ public class Game implements Serializable {
         currentPlayer = players.get(playerIterator);
     }
 
+    public InvestigationFile getInvestigationFile() {
+        return investigationFile;
+    }
+
+    public void setGameOver(Boolean gameOver) {
+        this.gameOver = gameOver;
+    }
+
     public LinkedList<Player> getPlayers() {
         return players;
     }
@@ -55,12 +63,26 @@ public class Game implements Serializable {
         int randomWeaponId = random.nextInt(6) + 6;
         int randomRoomId = random.nextInt(9) + 12;
 
-        investigationFile.setCulprit(cardStack.get(randomPersonId));
-        cardStack.remove(randomPersonId);
-        investigationFile.setWeapon(cardStack.get(randomWeaponId));
-        cardStack.remove(randomWeaponId);
-        investigationFile.setRoom(cardStack.get(randomRoomId));
-        cardStack.remove(randomRoomId);
+        for(Card card:cardStack){
+            if(card.getId()==randomPersonId){
+                cardStack.remove(card);
+                break;
+            }
+        }
+
+        for(Card card:cardStack){
+            if(card.getId()==randomWeaponId) {
+                cardStack.remove(card);
+                break;
+            }
+        }
+
+        for(Card card:cardStack){
+            if(card.getId()==randomRoomId){
+                cardStack.remove(card);
+                break;
+            }
+        }
 
         Collections.shuffle(cardStack);
 
@@ -68,16 +90,16 @@ public class Game implements Serializable {
 
         while(i<cardStack.size())
         {
-            for(int j = 0; j<players.size(); j++){
+         for(int j = 0; j<players.size(); j++){
 
-                Player temp = players.get(j);
+             Player temp = players.get(j);
 
-                if(i==cardStack.size())
-                {break;}
+             if(i==cardStack.size())
+             {break;}
 
-                temp.addCard(cardStack.get(i));
-                i++;
-            }
+             temp.addCard(cardStack.get(i));
+             i++;
+         }
 
         }
 
@@ -99,4 +121,6 @@ public class Game implements Serializable {
 
     }
 
+
+    
 }
