@@ -1,29 +1,21 @@
 package com.example.cluedo_seii;
 
-
-
-
 import com.example.cluedo_seii.spielbrett.Gameboard;
-
 import java.io.Serializable;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.Random;
 
-
-
 public class Game implements Serializable {
 
-    private transient  Gameboard gameboard;
-    private transient  DeckOfCards deckOfCards;
+    private transient Gameboard gameboard;
+    private transient DeckOfCards deckOfCards;
     private InvestigationFile investigationFile;
     private LinkedList<Player>players;
     private Boolean gameOver;
-    private transient  Random random;
+    private transient Random random;
     private int round;
-
     private int playerIterator;
-
     private Player currentPlayer;
 
     public Game(Gameboard gameboard, LinkedList<Player>players){
@@ -55,7 +47,7 @@ public class Game implements Serializable {
         return currentPlayer;
     }
 
-
+    //Methode zur Kartenverteilung an Spieler und in Ermittlungsakte
     public void distributeCards(){
 
         LinkedList<Card> cardStack =  deckOfCards.getGameCardsStandard();
@@ -95,7 +87,6 @@ public class Game implements Serializable {
 
         Collections.shuffle(cardStack);
 
-
         int i = 0;
 
         while(i<cardStack.size())
@@ -113,6 +104,7 @@ public class Game implements Serializable {
 
     }
 
+    //Methode ändert Attribut CurrentPlayer
     public void nextPlayer(){
 
         if(playerIterator==players.size()-1)

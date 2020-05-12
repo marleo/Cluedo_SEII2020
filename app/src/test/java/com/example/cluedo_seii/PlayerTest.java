@@ -111,59 +111,7 @@ public class PlayerTest {
 
     }
 
-    @Test
-    public void testSuspectGuess3CardsRight() {
-
-        player1.addCard(gameCards.get(0));
-        player1.addCard(gameCards.get(9));
-        player1.addCard(gameCards.get(16));
-
-        suspectedPlayerHand = player2.suspect("Oberst von Gatov", "Seil", "Musikzimmer", players);
-
-        assertEquals(suspectedPlayerHand.size(), 3);
-
-    }
-
-    @Test
-    public void testSuspect2CardsRight(){
-
-        player1.addCard(gameCards.get(0));
-        player1.addCard(gameCards.get(9));
-        player1.addCard(gameCards.get(16));
-
-        suspectedPlayerHand = player2.suspect("Oberst von Gatov", gameCards.get(8).getDesignation(), gameCards.get(16).getDesignation(),players);
-
-        assertEquals(suspectedPlayerHand.size(), 2);
-
-    }
-
-    @Test
-    public void testSuspect1CardRight(){
-
-        player1.addCard(gameCards.get(0));
-        player1.addCard(gameCards.get(9));
-        player1.addCard(gameCards.get(16));
-
-        suspectedPlayerHand = player2.suspect("Oberst von Gatov", gameCards.get(8).getDesignation(), gameCards.get(19).getDesignation(),players);
-
-        assertEquals(suspectedPlayerHand.size(), 1);
-
-
-    }
-
-    @Test
-    public void testSuspectNoCardRight(){
-
-        player1.addCard(gameCards.get(1));
-        player1.addCard(gameCards.get(9));
-        player1.addCard(gameCards.get(16));
-
-        suspectedPlayerHand = player2.suspect("Oberst von Gatov", gameCards.get(8).getDesignation(), gameCards.get(19).getDesignation(),players);
-
-        assertEquals(suspectedPlayerHand.size(), 0);
-
-    }
-
+    //Tests für Methode accuse der Klasse Player
     @Test
     public void accuseRight(){
 
@@ -171,9 +119,9 @@ public class PlayerTest {
         investigationFile.setWeapon(gameCards.get(9));
         investigationFile.setRoom(gameCards.get(16));
 
-        assertEquals(player1.accuseSomeone(gameCards.get(1).getDesignation(), gameCards.get(9).getDesignation(), gameCards.get(16).getDesignation(), investigationFile), true);
+        assertEquals(player1.accuse(gameCards.get(1).getDesignation(), gameCards.get(9).getDesignation(), gameCards.get(16).getDesignation(), investigationFile), true);
         assertEquals(player1.getMadeFalseAccusation(), false);
-}
+    }
 
     @Test
     public void accuseWrongCase1(){
@@ -182,7 +130,7 @@ public class PlayerTest {
         investigationFile.setWeapon(gameCards.get(9));
         investigationFile.setRoom(gameCards.get(16));
 
-        assertEquals(player1.accuseSomeone(gameCards.get(1).getDesignation(), gameCards.get(9).getDesignation(), gameCards.get(17).getDesignation(), investigationFile), false);
+        assertEquals(player1.accuse(gameCards.get(1).getDesignation(), gameCards.get(9).getDesignation(), gameCards.get(17).getDesignation(), investigationFile), false);
         assertEquals(player1.getMadeFalseAccusation(), true);
 
 
@@ -195,7 +143,7 @@ public class PlayerTest {
         investigationFile.setWeapon(gameCards.get(9));
         investigationFile.setRoom(gameCards.get(16));
 
-        assertEquals(player1.accuseSomeone(gameCards.get(1).getDesignation(), gameCards.get(7).getDesignation(), gameCards.get(17).getDesignation(), investigationFile), false);
+        assertEquals(player1.accuse(gameCards.get(1).getDesignation(), gameCards.get(7).getDesignation(), gameCards.get(17).getDesignation(), investigationFile), false);
         assertEquals(player1.getMadeFalseAccusation(), true);
     }
 
@@ -206,7 +154,7 @@ public class PlayerTest {
         investigationFile.setWeapon(gameCards.get(9));
         investigationFile.setRoom(gameCards.get(16));
 
-        assertEquals(player1.accuseSomeone(gameCards.get(4).getDesignation(), gameCards.get(10).getDesignation(), gameCards.get(18).getDesignation(), investigationFile), false);
+        assertEquals(player1.accuse(gameCards.get(4).getDesignation(), gameCards.get(10).getDesignation(), gameCards.get(18).getDesignation(), investigationFile), false);
         assertEquals(player1.getMadeFalseAccusation(), true);
     }
 

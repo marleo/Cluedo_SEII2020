@@ -28,26 +28,24 @@ public class SuspectOrAccuse extends AppCompatDialogFragment {
         game = (Game) getArguments().getSerializable("game");
         setCancelable(false);
 
-
         DialogInterface.OnClickListener listenerSuspect = new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-               // game.gameControl(UserInput.SUSPECT);
+
                 ((GameboardScreen)getActivity()).makeSuspicion();
-               // ((GameboardScreen)getActivity()).updateGame(game);
+
 
             }
         };
         DialogInterface.OnClickListener  listenerAccuse = new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-               //game.gameControl(UserInput.ACCUSE);
                 ((GameboardScreen)getActivity()).accuseSomeone();
             }
         };
 
         return new AlertDialog.Builder(getActivity())
-                .setTitle("What do You Wanna Do")
+                .setTitle("Was willst du tun?")
                 .setView(view)
                 .setPositiveButton("Verdächtigen", listenerSuspect)
                 .setNegativeButton("Anklagen", listenerAccuse)

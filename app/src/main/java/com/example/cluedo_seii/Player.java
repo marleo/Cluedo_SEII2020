@@ -6,7 +6,7 @@ import com.example.cluedo_seii.spielbrett.GameboardElement;
 import java.io.Serializable;
 import java.util.LinkedList;
 
-public class Player implements  Serializable {
+public class Player implements Serializable {
 
     private int id;
     private LinkedList<Card> playerCards;
@@ -57,6 +57,7 @@ public class Player implements  Serializable {
     }
 
 
+    //Verdächtigungsfunktion
     public LinkedList<String> suspect(String suspectedCulprit, String suspectedWeapon, String suspectedLocation, LinkedList<Player> players){
 
         LinkedList<String>wrongSuspicions = new LinkedList<>();
@@ -88,9 +89,12 @@ public class Player implements  Serializable {
         return wrongSuspicions;
     }
 
+    public void setPosition(GameboardElement position) {
+        this.position = position;
+    }
 
-
-    public boolean accuseSomeone(String accusedPerson, String accusedWeapon, String accusedLocation, InvestigationFile investigationFile){
+    //Anklagefunktion
+    public boolean accuse(String accusedPerson, String accusedWeapon, String accusedLocation, InvestigationFile investigationFile){
 
         if(investigationFile.getCulprit().getDesignation().equals(accusedPerson)
                 && investigationFile.getWeapon().getDesignation().equals(accusedWeapon)

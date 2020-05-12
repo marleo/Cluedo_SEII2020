@@ -49,25 +49,25 @@ public class GameboardScreen extends AppCompatActivity  {
          */
 
         String gameBoard =
-                "0002000002000" +
+                "1112011102111" +
+                "1110011100111" +
+                "1130011100111" +
+                "0000003300111" +
+                "1110000003111" +
+                "1113000000000" +
+                "1113000000002" +
+                "1110000000002" +
                 "0000000000000" +
+                "1111300031111" +
+                "1111100001111" +
+                "1111300031111" +
                 "0000000000000" +
-                "0333300033330" +
-                "0333300033330" +
-                "0333300033330" +
+                "1111100031111" +
+                "1111100031111" +
+                "1111300011111" +
                 "0000000000000" +
-                "0200000000020" +
-                "0000000000000" +
-                "0333300033330" +
-                "0333300033330" +
-                "0333300033330" +
-                "0000000000000" +
-                "0000000000000" +
-                "0333300033330" +
-                "0333300033330" +
-                "0333300033330" +
-                "0000000000000" +
-                "0002000002000";
+                "0000031100000" +
+                "0020111102000";
 
         gameboard = new Gameboard(this,13,19, gameBoard);
         setContentView(gameboard.getLayout());
@@ -93,7 +93,7 @@ public class GameboardScreen extends AppCompatActivity  {
 
         //TODO initialize Game according to GameLobby Settings
 
-        //Zu Demonstrationszwecken
+        //Instanz eines Game-objektes Zu Demonstrationszwecken
         deckOfCards = new DeckOfCards();
         players = new LinkedList<>();
         GameCharacter gameCharacter = new GameCharacter("Prof. Bloom", null);
@@ -107,22 +107,11 @@ public class GameboardScreen extends AppCompatActivity  {
         game = new Game(gameboard, players);
         game.distributeCards();
         suspectOrAccuse();
-       // makeSuspicion();
 
     }
 
-    public void makeSuspicion(){
-        intent = new Intent(this, MakeSuspicion.class);
-        intent.putExtra("game", game);
-        startActivity(intent);
-    }
 
-    public void accuseSomeone(){
-        intent = new Intent(this, AccuseSomeone.class);
-        intent.putExtra("game", game);
-        startActivity(intent);
-    }
-
+    //Aufruf von DialogOptionen
     public void throwDice(){
         ThrowDice dialog = new ThrowDice();
         bundle.putSerializable("game", game);
@@ -144,16 +133,45 @@ public class GameboardScreen extends AppCompatActivity  {
         dialog.show(manager, mesaggeDialogTag);
     }
 
+    //UI Aufruf von Verdächtigung und Anklage
+    public void makeSuspicion(){
+        intent = new Intent(this, MakeSuspicion.class);
+        intent.putExtra("game", game);
+        startActivityForResult(intent, 2);
+    }
+
+    public void accuseSomeone(){
+        intent = new Intent(this, AccuseSomeone.class);
+        intent.putExtra("game", game);
+        startActivityForResult(intent, 2);
+    }
+
+    //Zeigt Karten auf Spielerhand
     public void showCards(){
         intent = new Intent(this, ShowCards.class);
         intent.putExtra("game", game);
         startActivity(intent);
     }
 
+
+    //CallBack um Resultat aus Methode zu erhalten
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data)
+    {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if(requestCode==2)
+        {
+            game = (Game)data.getSerializableExtra("game");
+        }
+    }
+
     public void updateGame(Game gameUpdate){
         game = gameUpdate;
     }
 
+
+    //EventListener für Swipe-Event
     public boolean dispatchTouchEvent (MotionEvent touchEvent){
         switch(touchEvent.getAction()){
             case MotionEvent.ACTION_DOWN:

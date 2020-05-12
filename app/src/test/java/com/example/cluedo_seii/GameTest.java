@@ -101,6 +101,8 @@ public class GameTest {
 
     }
 
+    //Test für Methode DistributeCards der Klasse Game
+    //Suche nach Duplikaten
     @Test
     public void testDistributeCardsNoDuplicates() {
 
@@ -155,6 +157,7 @@ public class GameTest {
 
     }
 
+    //Test nach Verteilung aller Karten
     @Test
     public void testDistributeCardsRightAmount() {
 
@@ -189,6 +192,8 @@ public class GameTest {
 
         assertEquals(testDistributeCardsHelp.size(), 21);
     }
+
+    //Tests für Methode PlayerIncrementor der Klasse Game
 
     @Test
     public void testPlayerIncrementor() {

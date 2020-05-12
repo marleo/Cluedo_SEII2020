@@ -114,6 +114,7 @@ public class GamDistributeCardsInvestigationFile {
         this.game = game;
     }
 
+    //Tests für Verteilung der Richtigen Kartentypen in die Ermittlungsakte nach aufruf der Methode distributeCards der Klasse Game
     @Test
     public void test() {
 

@@ -17,9 +17,6 @@ import android.widget.Toast;
 
 import com.example.cluedo_seii.Game;
 
-
-import java.util.LinkedList;
-
 public class AccuseSomeone extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
     private Spinner spinnerCulprit;
@@ -76,24 +73,26 @@ public class AccuseSomeone extends AppCompatActivity implements AdapterView.OnIt
 
             public void onClick(View v) {
 
-                if(game.getInvestigationFile().getCulprit().getDesignation() == selectedCulprit
-                        && game.getInvestigationFile().getWeapon().getDesignation() == selectedWeapon
-                        && game.getInvestigationFile().getRoom().getDesignation() == selectedRoom) {
+                if(game.getCurrentPlayer().accuse(selectedCulprit, selectedWeapon, selectedRoom, game.getInvestigationFile()) == true) {
                     game.setGameOver(true);
                     text = "Gratuliere, du hast das Spiel gewonnen";
                     toast = Toast.makeText(getApplicationContext(), text, Toast.LENGTH_SHORT);
                     toast.show();
-
+                    String message="hello ";
+                    intent = new Intent();
+                    intent.putExtra("game", game);
+                    setResult(1,intent);
                     finish();
                 }
 
                 else {
                     text = "Du hast eine falsche Anklage erhoben und kannst das Spiel nicht mehr gewinnen";
-                    game.getCurrentPlayer().setMadeFalseAccusation(true);
                     toast = Toast.makeText(getApplicationContext(), text , Toast.LENGTH_SHORT);
                     toast.show();
+                    intent = new Intent();
+                    intent.putExtra("game", game);
+                    setResult(0,intent);
                     finish();
-
                 }
             }
         });
