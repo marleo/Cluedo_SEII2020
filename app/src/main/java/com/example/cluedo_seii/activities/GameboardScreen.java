@@ -21,17 +21,20 @@ public class GameboardScreen extends AppCompatActivity {
             1 = NoneWalkableElement
             2 = StartingPoint
             3 = Room
+            4 = StartingPointPlayer
+            5 = GamefieldPlayer
+            6 = RoomPlayer
          */
 
         String gameBoard =
-                "1112011102111" +
+                "1114011104111" +
                 "1110011100111" +
                 "1130011100111" +
                 "0000003300111" +
                 "1110000003111" +
                 "1113000000000" +
-                "1113000000002" +
-                "1110000000002" +
+                "1116000000002" +
+                "1110000500002" +
                 "0000000000000" +
                 "1111300031111" +
                 "1111100001111" +
@@ -40,8 +43,8 @@ public class GameboardScreen extends AppCompatActivity {
                 "1111100031111" +
                 "1111100031111" +
                 "1111300011111" +
-                "0000000000000" +
-                "0000031100000" +
+                "0005000000000" +
+                "0000061100000" +
                 "0020111102000";
 
         Gameboard gameboard = new Gameboard(this,13,19, gameBoard);
