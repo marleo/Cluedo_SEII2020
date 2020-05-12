@@ -18,6 +18,7 @@ public class Game implements Serializable {
     private int playerIterator;
     private Player currentPlayer;
     private GameState gameState;
+    private ChangeListener changeListener;
 
     public Game(Gameboard gameboard, LinkedList<Player>players){
 
@@ -45,12 +46,29 @@ public class Game implements Serializable {
         return players;
     }
 
+    public GameState getGameState() {
+        return gameState;
+    }
+
     public Player getCurrentPlayer() {
         return currentPlayer;
     }
 
     public void changeGameState(GameState gameState){
         this.gameState = gameState;
+        if(changeListener != null) changeListener.onChange();
+    }
+
+    public ChangeListener getListener() {
+        return changeListener;
+    }
+
+    public void setListener(ChangeListener changeListener) {
+        this.changeListener = changeListener;
+    }
+
+    public interface ChangeListener {
+        void onChange();
     }
 
     //Methode zur Kartenverteilung an Spieler und in Ermittlungsakte

@@ -89,7 +89,7 @@ public class GameboardScreen extends AppCompatActivity  {
         });*/
     }
 
-    private void startGame(){
+    private void startGame() {
 
         //TODO initialize Game according to GameLobby Settings
 
@@ -99,16 +99,29 @@ public class GameboardScreen extends AppCompatActivity  {
         GameCharacter gameCharacter = new GameCharacter("Prof. Bloom", null);
         GameCharacter gameCharacterAlt = new GameCharacter("Fräulein Weiss", null);
         Player player1 = new Player(1, "10.0.2.16", gameCharacterAlt);
-        Player player2 = new Player(2,  "null", gameCharacter);
+        Player player2 = new Player(2, "null", gameCharacter);
         Player player3 = new Player(3, "null", gameCharacterAlt);
         players.add(player1);
         players.add(player2);
         players.add(player3);
         game = new Game(gameboard, players);
-        game.distributeCards();
-        suspectOrAccuse();
 
-    }
+        game.setListener(new Game.ChangeListener() {
+            @Override
+
+            //Wird ausgeführt wenn Methode aufgerufen wird
+
+            public void onChange() {
+
+                
+
+
+
+            }
+        });
+
+        }
+
 
 
     //Aufruf von DialogOptionen
@@ -153,7 +166,6 @@ public class GameboardScreen extends AppCompatActivity  {
         startActivity(intent);
     }
 
-
     //CallBack um Resultat aus Methode zu erhalten
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data)
@@ -169,7 +181,6 @@ public class GameboardScreen extends AppCompatActivity  {
     public void updateGame(Game gameUpdate){
         game = gameUpdate;
     }
-
 
     //EventListener für Swipe-Event
     public boolean dispatchTouchEvent (MotionEvent touchEvent){
