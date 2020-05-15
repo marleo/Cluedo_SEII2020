@@ -68,10 +68,6 @@
             android:label="Cluedo"> </activity>
 
 
-
-            android:label="Cluedo">
-        </activity>
-
         <activity
             android:name=".activities.playerGameInteraction.AccuseSomeone"
             android:label="Cluedo">
