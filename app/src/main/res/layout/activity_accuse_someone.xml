@@ -9,7 +9,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Wer,Womit,Wo?"
+        android:text="@string/wer_womit_wo"
         />
 
     <LinearLayout
@@ -54,7 +54,7 @@
         android:id="@+id/makeAccusationButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="anklagen"/>
+        android:text="@string/anklagen"/>
 
 </LinearLayout>
 

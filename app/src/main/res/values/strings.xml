@@ -35,6 +35,10 @@
     <string name="send">Send</string>
     <string name="ip">ip</string>
     <string name="connect">Connect</string>
+    <string name="wer_womit_wo">Wer,Womit,Wo?</string>
+    <string name="start_game">Start Game</string>
+    <string name="network">network</string>
+    <string name="anklagen">anklagen</string>
 
     <string-array name="culprits">
         <item>Oberst von Gatov</item>

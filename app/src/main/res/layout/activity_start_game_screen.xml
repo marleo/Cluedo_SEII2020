@@ -13,9 +13,10 @@
         android:layout_marginStart="51dp"
         android:layout_marginTop="44dp"
         android:onClick="selectHost"
-        android:text="Host"
+        android:text="@string/host"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginLeft="51dp" />
 
     <Button
         android:id="@+id/button2"
@@ -24,9 +25,10 @@
         android:layout_marginTop="44dp"
         android:layout_marginEnd="30dp"
         android:onClick="selectClient"
-        android:text="Client"
+        android:text="@string/client"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginRight="30dp" />
 
     <EditText
         android:id="@+id/ipAddress"
@@ -37,8 +39,12 @@
         android:layout_marginEnd="102dp"
         android:ems="10"
         android:inputType="textPersonName"
-        android:text="ip"
+        android:text="@string/ip"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button" />
+        app:layout_constraintTop_toBottomOf="@+id/button"
+        android:layout_marginLeft="96dp"
+        android:layout_marginRight="102dp"
+        android:autofillHints=""
+        tools:ignore="LabelFor" />
 </androidx.constraintlayout.widget.ConstraintLayout>
