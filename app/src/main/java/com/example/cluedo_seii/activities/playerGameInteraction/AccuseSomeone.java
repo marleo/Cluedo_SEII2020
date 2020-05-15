@@ -16,11 +16,6 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.example.cluedo_seii.Game;
-import com.example.cluedo_seii.activities.GameboardScreen;
-import com.example.cluedo_seii.activities.MainActivity;
-
-
-import java.util.LinkedList;
 
 public class AccuseSomeone extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
