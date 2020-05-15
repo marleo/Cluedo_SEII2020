@@ -16,7 +16,7 @@
         android:layout_marginTop="52dp"
         android:layout_marginEnd="96dp"
         android:onClick="selectHost"
-        android:text="Host"
+        android:text="@string/host"
         app:layout_constraintEnd_toStartOf="@+id/clientButton"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -30,10 +30,11 @@
         android:layout_marginEnd="67dp"
         android:layout_marginLeft="96dp"
         android:onClick="selectClient"
-        android:text="Client"
+        android:text="@string/client"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/hostButton"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginRight="67dp" />
 
     <EditText
         android:id="@+id/editMessage"
@@ -44,11 +45,13 @@
         android:layout_marginEnd="99dp"
         android:ems="10"
         android:inputType="textPersonName"
-        android:text="msg"
+        android:text="@string/msg"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/connectButton" />
+        app:layout_constraintTop_toBottomOf="@+id/connectButton"
+        android:autofillHints=""
+        tools:ignore="LabelFor" />
 
     <Button
         android:id="@+id/sendMessageButton"
@@ -58,11 +61,13 @@
         android:layout_marginTop="38dp"
         android:layout_marginEnd="162dp"
         android:onClick="sendMessage"
-        android:text="Send"
+        android:text="@string/send"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editMessage" />
+        app:layout_constraintTop_toBottomOf="@+id/editMessage"
+        android:layout_marginLeft="161dp"
+        android:layout_marginRight="162dp" />
 
     <TextView
         android:id="@+id/serverResponse"
@@ -74,7 +79,9 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginLeft="103dp"
+        android:layout_marginRight="99dp" />
 
     <TextView
         android:id="@+id/typeText"
@@ -86,7 +93,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.503"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:gravity="center_horizontal" />
 
     <EditText
         android:id="@+id/ipAddressInput"
@@ -96,11 +104,15 @@
         android:layout_marginTop="36dp"
         android:layout_marginEnd="101dp"
         android:ems="10"
-        android:text="ip"
+        android:text="@string/ip"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/typeText" />
+        app:layout_constraintTop_toBottomOf="@+id/typeText"
+        android:layout_marginLeft="97dp"
+        android:layout_marginRight="101dp"
+        android:autofillHints=""
+        tools:ignore="LabelFor,TextFields" />
 
     <Button
         android:id="@+id/connectButton"
@@ -110,7 +122,7 @@
         android:layout_marginTop="11dp"
         android:layout_marginEnd="161dp"
         android:onClick="connectToHost"
-        android:text="Connect"
+        android:text="@string/connect"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/ipAddressInput" />

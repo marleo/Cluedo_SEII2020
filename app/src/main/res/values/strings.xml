@@ -29,6 +29,12 @@
     <string name="Player2">Character2</string>
     <string name="Player3">Character3</string>
     <string name="playerSelected">Start</string>
+    <string name="host">Host</string>
+    <string name="client">Client</string>
+    <string name="msg">msg</string>
+    <string name="send">Send</string>
+    <string name="ip">ip</string>
+    <string name="connect">Connect</string>
 
     <string-array name="culprits">
         <item>Oberst von Gatov</item>
