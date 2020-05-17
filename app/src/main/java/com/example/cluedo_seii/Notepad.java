@@ -1,13 +1,6 @@
 package com.example.cluedo_seii;
 
 
-import android.os.Build;
-import android.widget.TextView;
-
-
-import androidx.annotation.RequiresApi;
-
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 
 
