@@ -26,6 +26,9 @@ Anklage erhoben haben, endet das Spiel aber ohne Gewinner.</p>
 <h2 align="center">Kommunikation</h2>
 <p align="center"><a href="https://discord.gg/sCPqrU">Discord</a></p>
 
+<h2 align="center">Server</h2>
+<p align="center"><a href="https://github.com/michi0311/Cluedo_Server">Server-Repository</a></p>
+
 <h2 align="center">Teilnehmer</h2>
 <p align="center">Elmedina Saldic: User Interface, Tester</p>
 <p align="center">Marco Prinster: Architekt, Developer</p>
