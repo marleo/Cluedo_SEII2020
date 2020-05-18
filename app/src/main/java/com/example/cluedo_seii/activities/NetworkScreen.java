@@ -60,8 +60,8 @@ public class NetworkScreen extends AppCompatActivity {
         server.registerCallback(new Callback<RequestDTO>() {
             @Override
             public void callback(RequestDTO argument) {
-                TextView serverResponseT = findViewById(R.id.serverResponse);
-                serverResponseT.setText(argument.toString());
+                System.out.println("Received:" + argument.toString());
+                updateServerResponseMessage(argument.toString());
             }
         });
     }
