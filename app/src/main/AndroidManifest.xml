@@ -24,6 +24,7 @@
         <activity
             android:name=".activities.GameboardScreen"
             android:label="Cluedo">
+        </activity>
         <activity android:name=".activities.ShowCards"></activity>
         <activity android:name=".activities.playerGameInteraction.MakeSuspicion"></activity>
         <activity
@@ -46,7 +47,6 @@
         <activity
             android:name=".activities.NotepadScreen"
             android:label="Cluedo">
-        </activity>
         </activity>
         <activity
             android:name=".activities.playerGameInteraction.AccuseSomeone"
