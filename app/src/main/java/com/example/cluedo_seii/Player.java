@@ -15,6 +15,7 @@ public class Player implements Serializable {
     private GameCharacter playerCharacter;
     private Notepad notepad;
     private Boolean madeFalseAccusation;
+    private Boolean cheated;
 
     public Player(int id , String IP, GameCharacter playerCharacter, Notepad notepad){
         this.id = id;
@@ -24,6 +25,7 @@ public class Player implements Serializable {
         this.playerCharacter = playerCharacter;
         this.notepad = notepad;
         madeFalseAccusation = false;
+        cheated = false;
     }
 
     public GameboardElement getPosition() {
@@ -48,6 +50,10 @@ public class Player implements Serializable {
 
     public void setMadeFalseAccusation(Boolean madeFalseAccusation) {
         this.madeFalseAccusation = madeFalseAccusation;
+    }
+
+    public void setCheated(){
+        cheated=true;
     }
 
     public void addCard(Card card){

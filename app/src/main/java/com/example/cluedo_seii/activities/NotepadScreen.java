@@ -7,11 +7,17 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.cluedo_seii.Card;
+import com.example.cluedo_seii.DeckOfCards;
+import com.example.cluedo_seii.InvestigationFile;
 import com.example.cluedo_seii.Notepad;
+import com.example.cluedo_seii.Player;
 import com.example.cluedo_seii.R;
 import java.util.LinkedHashMap;
 
 public class NotepadScreen extends AppCompatActivity {
+    private TextView [] textViews;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -45,41 +51,59 @@ public class NotepadScreen extends AppCompatActivity {
         final TextView textView = findViewById(R.id.moreNotesView);
 
 
+        DeckOfCards deckOfCards= new DeckOfCards();
 
-
-
-        String[] cards = {
-                "Oberst von Gatov", "Prof. Bloom", "Reverend Grün", "Baronin von Porz", "Fräulein Gloria", "Frau Weiss",
-
-                "Dolch", "Leuchter", "Pistole", "Seil", "Heizungsrohr", "Rohrzange",
-
-                "Halle", "Salon", "Speisezimmer", "Küche", "Musikzimmer", "Winterzimmer", "Biliardzimmer", "Bibliothek", "Arbeitszimmer"
+        Card[] cards = {deckOfCards.oberstVonGatow, deckOfCards.profBloom, deckOfCards.reverendGruen, deckOfCards.baroninVonPorz, deckOfCards.fraeuleinGloria, deckOfCards.frauWeiss,
+                        deckOfCards.dolch, deckOfCards.leuchter, deckOfCards.pistole, deckOfCards.seil, deckOfCards.heizungsrohr, deckOfCards.rohrzange,
+                        deckOfCards.halle, deckOfCards.salon, deckOfCards.speisezimmer, deckOfCards.kueche, deckOfCards.musikzimmer, deckOfCards.winterzimmer, deckOfCards.biliardzimmer, deckOfCards.bibliothek, deckOfCards.arbeitszimmer
         };
-
 
         final Notepad notepad = new Notepad(cards);
 
-       textViewGatov.append(cards[0]);
-       textViewBloom.append(cards[1]);
-       textViewGreen.append(cards[2]);
-       textViewPorz.append(cards[3]);
-       textViewGloria.append(cards[4]);
-       textViewWeiss.append(cards[5]);
-       textViewDolch.append(cards[6]);
-       textViewLeuchter.append(cards[7]);
-       textViewPistole.append(cards[8]);
-       textViewSeil.append(cards[9]);
-       textViewHeizungsrohr.append(cards[10]);
-       textViewRohrzange.append(cards[11]);
-       textViewHalle.append(cards[12]);
-       textViewSalon.append(cards[13]);
-       textViewSpeisezimmer.append(cards[14]);
-       textViewKüche.append(cards[15]);
-       textViewMusikzimmer.append(cards[16]);
-       textViewWinterzimmer.append(cards[17]);
-       textViewBiliardzimmer.append(cards[18]);
-       textViewBibliothek.append(cards[19]);
-       textViewArbeitszimmer.append(cards[20]);
+       textViewGatov.append(cards[0].getDesignation());
+       textViewBloom.append(cards[1].getDesignation());
+       textViewGreen.append(cards[2].getDesignation());
+       textViewPorz.append(cards[3].getDesignation());
+       textViewGloria.append(cards[4].getDesignation());
+       textViewWeiss.append(cards[5].getDesignation());
+       textViewDolch.append(cards[6].getDesignation());
+       textViewLeuchter.append(cards[7].getDesignation());
+       textViewPistole.append(cards[8].getDesignation());
+       textViewSeil.append(cards[9].getDesignation());
+       textViewHeizungsrohr.append(cards[10].getDesignation());
+       textViewRohrzange.append(cards[11].getDesignation());
+       textViewHalle.append(cards[12].getDesignation());
+       textViewSalon.append(cards[13].getDesignation());
+       textViewSpeisezimmer.append(cards[14].getDesignation());
+       textViewKüche.append(cards[15].getDesignation());
+       textViewMusikzimmer.append(cards[16].getDesignation());
+       textViewWinterzimmer.append(cards[17].getDesignation());
+       textViewBiliardzimmer.append(cards[18].getDesignation());
+       textViewBibliothek.append(cards[19].getDesignation());
+       textViewArbeitszimmer.append(cards[20].getDesignation());
+
+        textViews = new TextView[21];
+        textViews[0]= textViewGatov;
+        textViews[1]=textViewBloom;
+        textViews[2]=textViewGreen;
+        textViews[3]=textViewPorz;
+        textViews[4]=textViewGloria;
+        textViews[5]=textViewWeiss;
+        textViews[6]=textViewDolch;
+        textViews[7]=textViewLeuchter;
+        textViews[8]=textViewPistole;
+        textViews[9]=textViewSeil;
+        textViews[10]= textViewHeizungsrohr;
+        textViews[11]=textViewRohrzange;
+        textViews[12]= textViewHalle;
+        textViews[13]= textViewSalon;
+        textViews[14]= textViewSpeisezimmer;
+        textViews[15]=textViewKüche;
+        textViews[16]=textViewMusikzimmer;
+        textViews[17]=textViewWinterzimmer;
+        textViews[18]=textViewBiliardzimmer;
+        textViews[19]=textViewBibliothek;
+        textViews[20]=textViewArbeitszimmer;
 
 
 
@@ -98,6 +122,30 @@ public class NotepadScreen extends AppCompatActivity {
 
 
     }
+    public void cheatFunction(){
+       // Notepad notepad = new Notepad(notepad.getCards());
+       // Player player;
+       // player = new Player (player.getId(), player.getIP(), player.getPlayerCharacter(), notepad);
+
+
+        InvestigationFile investigationFile = new InvestigationFile();
+        Card culprite = investigationFile.getCulprit();
+        Card room = investigationFile.getRoom();
+        Card weapon = investigationFile.getWeapon();
+        TextView randomTextView;
+
+        do {randomTextView = textViews[(int) Math.floor(Math.random() * textViews.length)];}
+
+        while(randomTextView.equals(culprite)||randomTextView.equals(room)||randomTextView.equals(weapon)||randomTextView.getTag()=="grayed");
+
+
+        randomTextView.setBackgroundColor(Color.argb(150, 200, 200, 200));
+       // player.setCheated();
+
+
+    }
+
+
 
     public void grayOut(View view) {
 
