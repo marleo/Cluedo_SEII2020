@@ -31,17 +31,16 @@ public class SuspectOrAccuse extends AppCompatDialogFragment {
         DialogInterface.OnClickListener listenerSuspect = new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-               // game.gameControl(UserInput.SUSPECT);
+
                 ((GameboardScreen)getActivity()).makeSuspicion();
-               // ((GameboardScreen)getActivity()).updateGame(game);
+
 
             }
         };
         DialogInterface.OnClickListener  listenerAccuse = new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-               //game.gameControl(UserInput.ACCUSE);
-                ((GameboardScreen)getActivity()).updateGame(game);
+                ((GameboardScreen)getActivity()).accuseSomeone();
             }
         };
 

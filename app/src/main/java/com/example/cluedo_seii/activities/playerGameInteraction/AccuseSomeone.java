@@ -2,8 +2,11 @@ package com.example.cluedo_seii.activities.playerGameInteraction;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.Intent;
 import android.os.Bundle;
+
+import com.example.cluedo_seii.R;
+
+import android.content.Intent;
 
 import android.view.View;
 import android.widget.AdapterView;
@@ -13,13 +16,8 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.example.cluedo_seii.Game;
-import com.example.cluedo_seii.Player;
-import com.example.cluedo_seii.R;
 
-import java.util.LinkedList;
-
-
-public class MakeSuspicion extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
+public class AccuseSomeone extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
     private Spinner spinnerCulprit;
     private Spinner spinnerWeapon;
@@ -36,14 +34,13 @@ public class MakeSuspicion extends AppCompatActivity implements AdapterView.OnIt
     private Button suspectButton;
     private Intent intent;
     private Game game;
-    private LinkedList<String> suspectedPlayerHand;
     private Toast toast;
     private String text;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_make_suspicion);
+        setContentView(R.layout.activity_accuse_someone);
 
         spinnerCulprit = (Spinner) findViewById(R.id.suspectedCulprit);
         spinnerCulprit.setOnItemSelectedListener(this);
@@ -71,45 +68,32 @@ public class MakeSuspicion extends AppCompatActivity implements AdapterView.OnIt
 
         game = (Game)intent.getSerializableExtra("game");
 
+        suspectButton = findViewById(R.id.makeAccusationButton);
+        suspectButton.setOnClickListener(new View.OnClickListener() {
 
-       suspectButton = findViewById(R.id.makeSuspicionButton);
-       suspectButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
 
-          public void onClick(View v) {
+                if(game.getCurrentPlayer().accuse(selectedCulprit, selectedWeapon, selectedRoom, game.getInvestigationFile()) == true) {
+                    game.setGameOver(true);
+                    text = "Gratuliere, du hast das Spiel gewonnen";
+                    toast = Toast.makeText(getApplicationContext(), text, Toast.LENGTH_SHORT);
+                    toast.show();
+                    String message="hello ";
+                    intent = new Intent();
+                    intent.putExtra("game", game);
+                    setResult(1,intent);
+                    finish();
+                }
 
-           suspectedPlayerHand = game.getCurrentPlayer().suspect(selectedCulprit, selectedWeapon, selectedRoom, game.getPlayers());
-
-           for(Player player: game.getPlayers()){
-               if(player.getPlayerCharacter().getName()==selectedCulprit){
-                   player.setPosition(game.getCurrentPlayer().getPosition());
-               }
-           }
-
-
-           if(suspectedPlayerHand.size()==0) {
-               text = "Hier gibt es nichts zum sehen";
-               toast = Toast.makeText(getApplicationContext(), text, Toast.LENGTH_SHORT);
-               toast.show();
-               intent = new Intent();
-               intent.putExtra("game", game);
-               setResult(1,intent);
-               finish();
-           }
-
-           else {
-               text = "Der verdächtigte Spieler hat folgende Karten auf der Hand:" + '\n';
-               for (int i = 0; i < suspectedPlayerHand.size(); i++) {
-                   text += suspectedPlayerHand.get(i) + '\n';
-               }
-
-               toast = Toast.makeText(getApplicationContext(), text , Toast.LENGTH_SHORT);
-               toast.show();
-               intent = new Intent();
-               intent.putExtra("game", game);
-               setResult(1,intent);
-               finish();
-
-           }
+                else {
+                    text = "Du hast eine falsche Anklage erhoben und kannst das Spiel nicht mehr gewinnen";
+                    toast = Toast.makeText(getApplicationContext(), text , Toast.LENGTH_SHORT);
+                    toast.show();
+                    intent = new Intent();
+                    intent.putExtra("game", game);
+                    setResult(0,intent);
+                    finish();
+                }
             }
         });
     }
@@ -148,3 +132,4 @@ public class MakeSuspicion extends AppCompatActivity implements AdapterView.OnIt
     }
 
 }
+
