@@ -1,3 +1,5 @@
+//TODO delete NetworkScreen
+
 package com.example.cluedo_seii.activities;
 
 import android.net.wifi.WifiManager;

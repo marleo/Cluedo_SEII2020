@@ -9,6 +9,7 @@ import com.esotericsoftware.kryonet.Listener;
 import com.example.cluedo_seii.Network.Callback;
 import com.example.cluedo_seii.Network.NetworkClient;
 import com.example.cluedo_seii.Network.dto.RequestDTO;
+import com.example.cluedo_seii.Network.dto.UserNameRequestDTO;
 
 import java.io.IOException;
 import java.net.InetAddress;
@@ -83,6 +84,11 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
     @Override
     public void registerClass(Class c) {
         client.getKryo().register(c);
+    }
+
+    public void sendUsernameRequest(final UserNameRequestDTO userNameRequestDTO) {
+        Log.d("UserNameRequest", userNameRequestDTO.getUsername());
+        sendMessage(userNameRequestDTO);
     }
 
     //TODO delete

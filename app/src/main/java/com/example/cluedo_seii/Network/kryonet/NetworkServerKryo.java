@@ -7,20 +7,26 @@ import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
 import com.example.cluedo_seii.Network.Callback;
+import com.example.cluedo_seii.Network.ClientData;
 import com.example.cluedo_seii.Network.NetworkServer;
 import com.example.cluedo_seii.Network.dto.QuitGameDTO;
 import com.example.cluedo_seii.Network.dto.RequestDTO;
+import com.example.cluedo_seii.Network.dto.TextMessage;
+import com.example.cluedo_seii.Network.dto.UserNameRequestDTO;
 
 import java.io.IOException;
+import java.util.LinkedHashMap;
 
 import static android.content.ContentValues.TAG;
 
 public class NetworkServerKryo implements KryoNetComponent, NetworkServer {
-    //INSTANCE
+    //SINGLETON_INSTANCE
     private static NetworkServerKryo INSTANCE = null;
 
     private Server server;
     private Callback<RequestDTO> messageCallback;
+
+    private LinkedHashMap<Integer, ClientData> clientList;
 
     private NetworkServerKryo() {
         server = new Server();
@@ -42,10 +48,29 @@ public class NetworkServerKryo implements KryoNetComponent, NetworkServer {
             @Override
             public void received(Connection connection, Object object) {
                 if (messageCallback != null && object instanceof RequestDTO)
-                    messageCallback.callback((RequestDTO) object);
+                    handleRequest(connection, object);
+                    //messageCallback.callback((RequestDTO) object);
             }
         });
     }
+
+    private void handleRequest(Connection connection, Object object) {
+        if (object instanceof TextMessage) {
+            messageCallback.callback((TextMessage) object);
+        } else if (object instanceof UserNameRequestDTO) {
+            handleUsernameRequest(connection, (UserNameRequestDTO) object);
+        }
+    }
+
+    private void handleUsernameRequest(Connection connection, UserNameRequestDTO userNameRequestDTO) {
+        // TODO implement
+        Log.i("UserNameRequest", userNameRequestDTO.getUsername());
+        ClientData client = new ClientData();
+        client.setConnection(connection);
+
+        clientList.put(client.getId(), client);
+    }
+
 
     @Override
     public void registerCallback(Callback<RequestDTO> callback) {
@@ -91,6 +116,8 @@ public class NetworkServerKryo implements KryoNetComponent, NetworkServer {
                 INSTANCE = new NetworkServerKryo();
             }
         });
+
+        clientList.clear();
     }
 
     private void sendQuitGame() {

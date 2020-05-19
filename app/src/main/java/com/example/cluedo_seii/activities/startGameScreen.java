@@ -14,6 +14,7 @@ import com.example.cluedo_seii.Network.dto.FirstConnectDTO;
 import com.example.cluedo_seii.Network.dto.QuitGameDTO;
 import com.example.cluedo_seii.Network.dto.RequestDTO;
 import com.example.cluedo_seii.Network.dto.TextMessage;
+import com.example.cluedo_seii.Network.dto.UserNameRequestDTO;
 import com.example.cluedo_seii.Network.kryonet.NetworkClientKryo;
 import com.example.cluedo_seii.Network.kryonet.NetworkServerKryo;
 import com.example.cluedo_seii.R;
@@ -24,6 +25,8 @@ public class startGameScreen extends AppCompatActivity {
     private connectionType conType;
     private NetworkServerKryo server;
     private NetworkClientKryo client;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +42,8 @@ public class startGameScreen extends AppCompatActivity {
         server.registerClass(TextMessage.class);
         server.registerClass(QuitGameDTO.class);
         server.registerClass(FirstConnectDTO.class);
+        server.registerClass(UserNameRequestDTO.class);
+
         try {
             server.start();
         } catch (IOException e) {
@@ -63,6 +68,7 @@ public class startGameScreen extends AppCompatActivity {
             client.registerClass(TextMessage.class);
             client.registerClass(QuitGameDTO.class);
             client.registerClass(FirstConnectDTO.class);
+            client.registerClass(UserNameRequestDTO.class);
 
             //client.connect("localhost");
 
@@ -81,6 +87,11 @@ public class startGameScreen extends AppCompatActivity {
             } catch (Exception e) {
                 e.printStackTrace();
             }
+
+            EditText username_input = findViewById(R.id.usernam_input);
+            UserNameRequestDTO userNameRequestDTO = new UserNameRequestDTO(username_input.getText().toString());
+
+            client.sendUsernameRequest(userNameRequestDTO);
 
         } catch (Exception e) {
             e.printStackTrace();
