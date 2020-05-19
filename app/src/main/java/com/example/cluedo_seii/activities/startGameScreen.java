@@ -5,12 +5,14 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.text.format.Formatter;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.example.cluedo_seii.Network.Callback;
 import com.example.cluedo_seii.Network.connectionType;
-import com.example.cluedo_seii.Network.dto.FirstConnectDTO;
+import com.example.cluedo_seii.Network.dto.ConnectedDTO;
 import com.example.cluedo_seii.Network.dto.QuitGameDTO;
 import com.example.cluedo_seii.Network.dto.RequestDTO;
 import com.example.cluedo_seii.Network.dto.TextMessage;
@@ -41,7 +43,7 @@ public class startGameScreen extends AppCompatActivity {
         server.registerClass(RequestDTO.class);
         server.registerClass(TextMessage.class);
         server.registerClass(QuitGameDTO.class);
-        server.registerClass(FirstConnectDTO.class);
+        server.registerClass(ConnectedDTO.class);
         server.registerClass(UserNameRequestDTO.class);
 
         try {
@@ -67,7 +69,7 @@ public class startGameScreen extends AppCompatActivity {
             client.registerClass(RequestDTO.class);
             client.registerClass(TextMessage.class);
             client.registerClass(QuitGameDTO.class);
-            client.registerClass(FirstConnectDTO.class);
+            client.registerClass(ConnectedDTO.class);
             client.registerClass(UserNameRequestDTO.class);
 
             //client.connect("localhost");
@@ -80,18 +82,33 @@ public class startGameScreen extends AppCompatActivity {
                 ip = "192.168.178.47";
             }
 
+            EditText username_input = findViewById(R.id.usernam_input);
+            final UserNameRequestDTO userNameRequestDTO = new UserNameRequestDTO();
+            userNameRequestDTO.setUsername(username_input.getText().toString());
 
+            client.registerConnectionCallback(new Callback<ConnectedDTO>() {
+                @Override
+                public void callback(ConnectedDTO argument) {
+                    // ausführung nach erflogreichem verbinden
+                    Log.d("Connection Callback", "callback: ");
+                    client.sendUsernameRequest(userNameRequestDTO);
+                }
+            });
 
+            
             try {
                 client.connect(ip);
             } catch (Exception e) {
                 e.printStackTrace();
             }
 
-            EditText username_input = findViewById(R.id.usernam_input);
-            UserNameRequestDTO userNameRequestDTO = new UserNameRequestDTO(username_input.getText().toString());
 
-            client.sendUsernameRequest(userNameRequestDTO);
+
+
+
+
+
+
 
         } catch (Exception e) {
             e.printStackTrace();

@@ -9,10 +9,12 @@ import com.esotericsoftware.kryonet.Server;
 import com.example.cluedo_seii.Network.Callback;
 import com.example.cluedo_seii.Network.ClientData;
 import com.example.cluedo_seii.Network.NetworkServer;
+import com.example.cluedo_seii.Network.dto.ConnectedDTO;
 import com.example.cluedo_seii.Network.dto.QuitGameDTO;
 import com.example.cluedo_seii.Network.dto.RequestDTO;
 import com.example.cluedo_seii.Network.dto.TextMessage;
 import com.example.cluedo_seii.Network.dto.UserNameRequestDTO;
+import com.example.cluedo_seii.activities.GameboardScreen;
 
 import java.io.IOException;
 import java.util.LinkedHashMap;
@@ -30,6 +32,7 @@ public class NetworkServerKryo implements KryoNetComponent, NetworkServer {
 
     private NetworkServerKryo() {
         server = new Server();
+        clientList = new LinkedHashMap<>();
     }
 
     public static NetworkServerKryo getInstance() {
@@ -47,7 +50,7 @@ public class NetworkServerKryo implements KryoNetComponent, NetworkServer {
         server.addListener(new Listener() {
             @Override
             public void received(Connection connection, Object object) {
-                if (messageCallback != null && object instanceof RequestDTO)
+                if (object instanceof RequestDTO)
                     handleRequest(connection, object);
                     //messageCallback.callback((RequestDTO) object);
             }
@@ -55,17 +58,29 @@ public class NetworkServerKryo implements KryoNetComponent, NetworkServer {
     }
 
     private void handleRequest(Connection connection, Object object) {
+        Log.d("Received Object:",object.getClass().toString());
         if (object instanceof TextMessage) {
             messageCallback.callback((TextMessage) object);
+        } else if (object instanceof ConnectedDTO) {
+            Log.d("test", "ConnectedDTO");
+            handleConnectedRequest(connection, (ConnectedDTO) object);
         } else if (object instanceof UserNameRequestDTO) {
+            Log.d("test", "UserNameRequestDTO");
             handleUsernameRequest(connection, (UserNameRequestDTO) object);
         }
     }
 
+    private void handleConnectedRequest(Connection connection, ConnectedDTO connectedDTO) {
+        Log.d("Network-Server:", "Received Connected Request");
+        sendMessageToClient(connectedDTO, connection);
+    }
+
     private void handleUsernameRequest(Connection connection, UserNameRequestDTO userNameRequestDTO) {
         // TODO implement
-        Log.i("UserNameRequest", userNameRequestDTO.getUsername());
+        Log.d("tesxt","test");
+        Log.d("UserNameRequest", userNameRequestDTO.getUsername());
         ClientData client = new ClientData();
+        client.setId(1);
         client.setConnection(connection);
 
         clientList.put(client.getId(), client);
