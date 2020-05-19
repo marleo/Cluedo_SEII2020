@@ -11,6 +11,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.example.cluedo_seii.Network.Callback;
+import com.example.cluedo_seii.Network.ClientData;
 import com.example.cluedo_seii.Network.connectionType;
 import com.example.cluedo_seii.Network.dto.ConnectedDTO;
 import com.example.cluedo_seii.Network.dto.QuitGameDTO;
@@ -22,6 +23,8 @@ import com.example.cluedo_seii.Network.kryonet.NetworkServerKryo;
 import com.example.cluedo_seii.R;
 
 import java.io.IOException;
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
 
 public class startGameScreen extends AppCompatActivity {
     private connectionType conType;
@@ -45,6 +48,24 @@ public class startGameScreen extends AppCompatActivity {
         server.registerClass(QuitGameDTO.class);
         server.registerClass(ConnectedDTO.class);
         server.registerClass(UserNameRequestDTO.class);
+
+        server.registerNewClientCallback(new Callback<LinkedHashMap<Integer, ClientData>>() {
+            @Override
+            public void callback(LinkedHashMap<Integer, ClientData> argument) {
+                final LinkedList<String> usernameList = new LinkedList<>();
+                for (ClientData clientData : argument.values()) {
+                    usernameList.add(clientData.getUsername());
+                }
+
+                // UPDATE Current Players
+                runOnUiThread(new Runnable() {
+                    public void run() {
+                        TextView userNameInput = findViewById(R.id.usernam_input);
+                        userNameInput.setText(usernameList.toString());
+                    }
+                });
+            }
+        });
 
         try {
             server.start();
@@ -95,19 +116,12 @@ public class startGameScreen extends AppCompatActivity {
                 }
             });
 
-            
+
             try {
                 client.connect(ip);
             } catch (Exception e) {
                 e.printStackTrace();
             }
-
-
-
-
-
-
-
 
 
         } catch (Exception e) {

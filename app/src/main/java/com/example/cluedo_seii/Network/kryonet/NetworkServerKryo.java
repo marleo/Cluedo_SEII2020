@@ -14,6 +14,7 @@ import com.example.cluedo_seii.Network.dto.QuitGameDTO;
 import com.example.cluedo_seii.Network.dto.RequestDTO;
 import com.example.cluedo_seii.Network.dto.TextMessage;
 import com.example.cluedo_seii.Network.dto.UserNameRequestDTO;
+import com.example.cluedo_seii.Player;
 import com.example.cluedo_seii.activities.GameboardScreen;
 
 import java.io.IOException;
@@ -27,6 +28,7 @@ public class NetworkServerKryo implements KryoNetComponent, NetworkServer {
 
     private Server server;
     private Callback<RequestDTO> messageCallback;
+    private Callback<LinkedHashMap<Integer, ClientData>> newClientCallback;
 
     private LinkedHashMap<Integer, ClientData> clientList;
 
@@ -76,20 +78,26 @@ public class NetworkServerKryo implements KryoNetComponent, NetworkServer {
     }
 
     private void handleUsernameRequest(Connection connection, UserNameRequestDTO userNameRequestDTO) {
-        // TODO implement
-        Log.d("tesxt","test");
+        // TODO delete hardcoded IDs and add Player to ClientData
         Log.d("UserNameRequest", userNameRequestDTO.getUsername());
         ClientData client = new ClientData();
-        client.setId(1);
+        client.setId();
         client.setConnection(connection);
+        client.setUsername(userNameRequestDTO.getUsername());
 
         clientList.put(client.getId(), client);
+
+        newClientCallback.callback(clientList);
     }
 
 
     @Override
     public void registerCallback(Callback<RequestDTO> callback) {
         this.messageCallback = callback;
+    }
+
+    public void registerNewClientCallback(Callback<LinkedHashMap<Integer, ClientData>> callback) {
+        this.newClientCallback = callback;
     }
 
     @Override

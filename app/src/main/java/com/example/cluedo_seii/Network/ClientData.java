@@ -4,16 +4,18 @@ import com.esotericsoftware.kryonet.Connection;
 import com.example.cluedo_seii.Player;
 
 public class ClientData {
+    private static int currentID = 2;
     private int id;
     private Player player;
     private Connection connection;
+    private String username;
 
     public int getId() {
         return id;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setId() {
+        this.id = currentID++;
     }
 
     public Player getPlayer() {
@@ -30,5 +32,13 @@ public class ClientData {
 
     public void setConnection(Connection connection) {
         this.connection = connection;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getUsername() {
+        return username;
     }
 }
