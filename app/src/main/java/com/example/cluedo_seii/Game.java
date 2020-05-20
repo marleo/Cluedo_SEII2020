@@ -18,7 +18,7 @@ public class Game implements Serializable {
     private int playerIterator;
     private Player currentPlayer;
     private GameState gameState;
-    private ChangeListener changeListener;
+    private transient ChangeListener changeListener;
 
     public Game(Gameboard gameboard, LinkedList<Player>players){
 
