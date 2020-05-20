@@ -31,6 +31,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".activities.NetworkScreen" />
+        <activity android:name=".activities.startGameScreen" />
         <activity
             android:name=".activities.NotepadScreen"
             android:label="Cluedo">

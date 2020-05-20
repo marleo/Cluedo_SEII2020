@@ -1,6 +1,5 @@
 package com.example.cluedo_seii.Network.kryonet;
 
-import android.os.AsyncTask;
 import android.util.Log;
 
 import com.esotericsoftware.kryonet.Client;
@@ -8,7 +7,10 @@ import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.example.cluedo_seii.Network.Callback;
 import com.example.cluedo_seii.Network.NetworkClient;
+import com.example.cluedo_seii.Network.dto.ConnectedDTO;
 import com.example.cluedo_seii.Network.dto.RequestDTO;
+import com.example.cluedo_seii.Network.dto.TextMessage;
+import com.example.cluedo_seii.Network.dto.UserNameRequestDTO;
 
 import java.io.IOException;
 import java.net.InetAddress;
@@ -23,6 +25,9 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
 
     private Client client;
     private Callback<RequestDTO> callback;
+    private Callback<ConnectedDTO> connectionCallback;
+
+    private boolean isConnected;
 
     private NetworkClientKryo() {
         client = new Client();
@@ -47,6 +52,13 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
             public void run() {
                 try {
                     client.connect(5000,host,NetworkConstants.TCP_PORT,NetworkConstants.UDP_PORT);
+
+                    Log.d("WTF", "WTF");
+                    ConnectedDTO connectedDTO = new ConnectedDTO();
+                    connectedDTO.setConnected(true);
+                    sendMessage(connectedDTO);
+
+                    isConnected = true;
                 } catch (IOException e) {
                     Log.e(TAG, "run: ", e);
                 }
@@ -56,12 +68,23 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
         client.addListener(new Listener() {
             @Override
             public void received(Connection connection, Object object) {
-                if (callback != null && object instanceof RequestDTO) {
+                if (object instanceof RequestDTO) {
                     Log.i(TAG, "received: " + object.toString());
-                    callback.callback((RequestDTO) object );
+                    handleRequest(connection,object);
+                    //callback.callback((RequestDTO) object );
                 }
             }
         });
+    }
+
+    private void handleRequest(Connection connection, Object object) {
+        if (object instanceof TextMessage) {
+            callback.callback((RequestDTO) object );
+        } else if (object instanceof ConnectedDTO) {
+            if (connectionCallback != null) {
+                connectionCallback.callback((ConnectedDTO) object);
+            }
+        }
     }
 
     @Override
@@ -69,11 +92,17 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
         this.callback = callback;
     }
 
+    public void registerConnectionCallback(Callback<ConnectedDTO> callback) {
+        System.out.println("Callback registered");
+        this.connectionCallback = callback;
+    }
+
     @Override
     public void sendMessage(final RequestDTO message) {
         new Thread("send") {
             @Override
             public void run() {
+                Log.d("Sending Object:", message.getClass().toString());
                 client.sendTCP(message);
             }
         }.start();
@@ -83,6 +112,11 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
     @Override
     public void registerClass(Class c) {
         client.getKryo().register(c);
+    }
+
+    public void sendUsernameRequest(final UserNameRequestDTO userNameRequestDTO) {
+        Log.d("UserNameRequest", userNameRequestDTO.getUsername());
+        sendMessage(userNameRequestDTO);
     }
 
     //TODO delete
@@ -106,5 +140,10 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
     private void quitGameHandler() {
         client.close();
         client.stop();
+    }
+
+
+    public boolean isConnected() {
+        return isConnected;
     }
 }
