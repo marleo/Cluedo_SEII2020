@@ -9,7 +9,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Wer,Womit,Wo?"
+        android:text="@string/werWomitWo"
         />
 
    <LinearLayout
@@ -54,7 +54,11 @@
         android:id="@+id/makeSuspicionButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="verdächtigen"/>
+        android:textColor="#FFFFFF"
+        android:textSize="20sp"
+        android:background="@drawable/custom_button"
+        style="?android:attr/borderlessButtonStyle"
+        android:text="@string/verdaechtigenButton"/>
 
 </LinearLayout>
 
