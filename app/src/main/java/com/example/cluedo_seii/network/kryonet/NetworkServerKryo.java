@@ -1,4 +1,4 @@
-package com.example.cluedo_seii.Network.kryonet;
+package com.example.cluedo_seii.network.kryonet;
 
 import android.os.Handler;
 import android.util.Log;
@@ -6,16 +6,14 @@ import android.util.Log;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
-import com.example.cluedo_seii.Network.Callback;
-import com.example.cluedo_seii.Network.ClientData;
-import com.example.cluedo_seii.Network.NetworkServer;
-import com.example.cluedo_seii.Network.dto.ConnectedDTO;
-import com.example.cluedo_seii.Network.dto.QuitGameDTO;
-import com.example.cluedo_seii.Network.dto.RequestDTO;
-import com.example.cluedo_seii.Network.dto.TextMessage;
-import com.example.cluedo_seii.Network.dto.UserNameRequestDTO;
-import com.example.cluedo_seii.Player;
-import com.example.cluedo_seii.activities.GameboardScreen;
+import com.example.cluedo_seii.network.Callback;
+import com.example.cluedo_seii.network.ClientData;
+import com.example.cluedo_seii.network.NetworkServer;
+import com.example.cluedo_seii.network.dto.ConnectedDTO;
+import com.example.cluedo_seii.network.dto.QuitGameDTO;
+import com.example.cluedo_seii.network.dto.RequestDTO;
+import com.example.cluedo_seii.network.dto.TextMessage;
+import com.example.cluedo_seii.network.dto.UserNameRequestDTO;
 
 import java.io.IOException;
 import java.util.LinkedHashMap;
@@ -73,7 +71,7 @@ public class NetworkServerKryo implements KryoNetComponent, NetworkServer {
     }
 
     private void handleConnectedRequest(Connection connection, ConnectedDTO connectedDTO) {
-        Log.d("Network-Server:", "Received Connected Request");
+        Log.d("network-Server:", "Received Connected Request");
         sendMessageToClient(connectedDTO, connection);
     }
 
