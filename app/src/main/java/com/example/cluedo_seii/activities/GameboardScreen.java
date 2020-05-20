@@ -137,6 +137,9 @@ public class GameboardScreen extends AppCompatActivity  {
 
                 else if(game.getGameState().equals(GameState.PLAYERTURNEND)){
                     int wrongAccusers = 0;
+
+
+                    //prüfe Spielbeendigungsbedingungen
                     for(Player player: game.getPlayers()){
                         if(player.getMadeFalseAccusation()==true){
                             wrongAccusers++;
@@ -150,7 +153,6 @@ public class GameboardScreen extends AppCompatActivity  {
                         game.changeGameState(GameState.END);
                     }
                 }
-
                 else if(game.getGameState().equals(GameState.END)){
                     finish();
                 }
