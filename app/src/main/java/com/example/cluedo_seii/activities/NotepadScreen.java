@@ -1,7 +1,10 @@
 package com.example.cluedo_seii.activities;
 
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.PersistableBundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -17,7 +20,8 @@ import com.example.cluedo_seii.R;
 import java.util.LinkedHashMap;
 
 public class NotepadScreen extends AppCompatActivity {
-    private TextView [] textViews;
+    TextView[] textViews;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -82,7 +86,9 @@ public class NotepadScreen extends AppCompatActivity {
        textViewBibliothek.append(cards[19].getDesignation());
        textViewArbeitszimmer.append(cards[20].getDesignation());
 
-        textViews = new TextView[21];
+
+
+       textViews = new TextView[21];
         textViews[0]= textViewGatov;
         textViews[1]=textViewBloom;
         textViews[2]=textViewGreen;
@@ -93,11 +99,11 @@ public class NotepadScreen extends AppCompatActivity {
         textViews[7]=textViewLeuchter;
         textViews[8]=textViewPistole;
         textViews[9]=textViewSeil;
-        textViews[10]= textViewHeizungsrohr;
+        textViews[10]=textViewHeizungsrohr;
         textViews[11]=textViewRohrzange;
-        textViews[12]= textViewHalle;
-        textViews[13]= textViewSalon;
-        textViews[14]= textViewSpeisezimmer;
+        textViews[12]=textViewHalle;
+        textViews[13]=textViewSalon;
+        textViews[14]=textViewSpeisezimmer;
         textViews[15]=textViewKüche;
         textViews[16]=textViewMusikzimmer;
         textViews[17]=textViewWinterzimmer;
@@ -120,26 +126,25 @@ public class NotepadScreen extends AppCompatActivity {
 
 
 
-
     }
+
     public void cheatFunction(){
        // Notepad notepad = new Notepad(notepad.getCards());
        // Player player;
        // player = new Player (player.getId(), player.getIP(), player.getPlayerCharacter(), notepad);
 
-
         InvestigationFile investigationFile = new InvestigationFile();
         Card culprite = investigationFile.getCulprit();
         Card room = investigationFile.getRoom();
         Card weapon = investigationFile.getWeapon();
-        TextView randomTextView;
+        TextView view;
 
-        do {randomTextView = textViews[(int) Math.floor(Math.random() * textViews.length)];}
+        do {view = textViews[(int) Math.floor(Math.random() * textViews.length)];}
 
-        while(randomTextView.equals(culprite)||randomTextView.equals(room)||randomTextView.equals(weapon)||randomTextView.getTag()=="grayed");
+        while(view.equals(culprite)||view.equals(room)||view.equals(weapon)||view.getTag()=="grayed");
 
 
-        randomTextView.setBackgroundColor(Color.argb(150, 200, 200, 200));
+        view.setBackgroundColor(Color.argb(150, 200, 200, 200));
        // player.setCheated();
 
 

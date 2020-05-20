@@ -1,10 +1,8 @@
 package com.example.cluedo_seii;
 
-import java.util.LinkedHashMap;
 
 
 public class Notepad  {
-    public LinkedHashMap<String, String> notes;
     private Card[] cards;
     private String moreNotes;
 
