@@ -2,6 +2,7 @@
 
 package com.example.cluedo_seii.activities;
 
+import android.annotation.SuppressLint;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.text.format.Formatter;
@@ -11,14 +12,14 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.cluedo_seii.Network.Callback;
-import com.example.cluedo_seii.Network.connectionType;
-import com.example.cluedo_seii.Network.dto.ConnectedDTO;
-import com.example.cluedo_seii.Network.dto.QuitGameDTO;
-import com.example.cluedo_seii.Network.dto.RequestDTO;
-import com.example.cluedo_seii.Network.dto.TextMessage;
-import com.example.cluedo_seii.Network.kryonet.NetworkClientKryo;
-import com.example.cluedo_seii.Network.kryonet.NetworkServerKryo;
+import com.example.cluedo_seii.network.Callback;
+import com.example.cluedo_seii.network.connectionType;
+import com.example.cluedo_seii.network.dto.ConnectedDTO;
+import com.example.cluedo_seii.network.dto.QuitGameDTO;
+import com.example.cluedo_seii.network.dto.RequestDTO;
+import com.example.cluedo_seii.network.dto.TextMessage;
+import com.example.cluedo_seii.network.kryonet.NetworkClientKryo;
+import com.example.cluedo_seii.network.kryonet.NetworkServerKryo;
 
 import com.example.cluedo_seii.R;
 
@@ -36,6 +37,7 @@ public class NetworkScreen extends AppCompatActivity {
 
     }
 
+    @SuppressLint("SetTextI18n")
     public void selectHost(View view) {
         this.conType = connectionType.HOST;
 
@@ -82,6 +84,7 @@ public class NetworkScreen extends AppCompatActivity {
         }
     }
 
+    @SuppressLint("SetTextI18n")
     public void selectClient(View view) {
         try {
             this.conType = connectionType.CLIENT;

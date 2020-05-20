@@ -1,4 +1,4 @@
-package com.example.cluedo_seii.Network;
+package com.example.cluedo_seii.network;
 
 import com.esotericsoftware.kryonet.Connection;
 import com.example.cluedo_seii.Player;

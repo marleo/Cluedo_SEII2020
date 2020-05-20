@@ -1,16 +1,16 @@
-package com.example.cluedo_seii.Network.kryonet;
+package com.example.cluedo_seii.network.kryonet;
 
 import android.util.Log;
 
 import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
-import com.example.cluedo_seii.Network.Callback;
-import com.example.cluedo_seii.Network.NetworkClient;
-import com.example.cluedo_seii.Network.dto.ConnectedDTO;
-import com.example.cluedo_seii.Network.dto.RequestDTO;
-import com.example.cluedo_seii.Network.dto.TextMessage;
-import com.example.cluedo_seii.Network.dto.UserNameRequestDTO;
+import com.example.cluedo_seii.network.Callback;
+import com.example.cluedo_seii.network.NetworkClient;
+import com.example.cluedo_seii.network.dto.ConnectedDTO;
+import com.example.cluedo_seii.network.dto.RequestDTO;
+import com.example.cluedo_seii.network.dto.TextMessage;
+import com.example.cluedo_seii.network.dto.UserNameRequestDTO;
 
 import java.io.IOException;
 import java.net.InetAddress;
