@@ -1,12 +1,11 @@
-
 <resources>
     <string name="app_name">Cluedo</string>
     <string name="mainScreenTitle">Cluedo</string>
-    <string name="mainScreenPlayButton">Start Game</string>
-    <string name="mainScreenOptionsButton">Options</string>
-    <string name="mainScreenExitButton">Exit Game</string>
+    <string name="mainScreenPlayButton">Spiel starten</string>
+    <string name="mainScreenOptionsButton">Optionen</string>
+    <string name="mainScreenExitButton">Beenden</string>
     <string name="optionsScreenCheatToggle">Schummelfunktion</string>
-    <string name="mainScreenCheatInformation">Cheating Disabled</string>
+    <string name="mainScreenCheatInformation">Schummeln deaktiviert</string>
     <string name="notepadHeading">Notizblock</string>
     <string name="notepadButton">Notizblock</string>
     <string name="excludeOpp">Type in</string>
@@ -14,6 +13,8 @@
     <string name="addMoreNotes">Type in</string>
     <string name="addNotesButton">Bestätigen</string>
     <string name="addMoreNotesButton">Bestätigen</string>
+    <string name="gameRules">Spielregeln</string>
+    <string name="gesturerules">Steuerung</string>
 
     <string-array name="culprits">
         <item>Oberst von Gatov</item>
@@ -44,5 +45,85 @@
         <item>Bibliothek</item>
         <item>Arbeitszimmer</item>
     </string-array>
+
+    <string name="fragmentControlTab">
+        WORK IN PROGRESS\n\n
+        Es stehen noch nicht alle Steuerungsarten fest.
+    </string>
+    <string name="fragmentGameplayTab1">
+        GRAF ERMORDET – POLIZEI VERHÖRT VERDÄCHTIGE
+    </string>
+    <string name="fragmentGameplayTab2">
+        Heute führen die zuständigen Kriminalbeamten Untersuchungen über den Mord an Graf Eutin vor,
+        der am letzten Freitagabend in seinem Landsitz Schloss Neubrunn tot aufgefunden wurde. Eine
+        Reihe von verdächtigen Personen, die beim Grafen über das Wochenende zu Gast waren, sollen
+        dabei verhört werden. Weiterhin werden einige Gegenstände, die als mögliche Tatwerkzeuge in
+        Frage kommen, einer genauen Prüfung unterzogen.
+    </string>
+    <string name="fragmentGameplayTab3">
+        WER? WO? WIE?
+    </string>
+    <string name="fragmentGameplayTab4">
+        Jeder Raum des weitläufigen Schlosses wird von den Detektiven genauestens untersucht. Dabei
+        will man herausfinden, welcher der Verdächtigen den Grafen in welchem Raum des Schlosses und
+        mit welcher Waffe hinterrücks ermordet hat.
+    </string>
+    <string name="fragmentGameplayTab5">
+        DIE AUSSTATTUNG ZUR ERFÜLLUNG DIESER SCHWIERIGEN AUFGABE
+    </string>
+    <string name="fragmentGameplayTab6">
+        Den Detektiven stehen für ihre Untersuchungen folgende Gegenstände zur
+        Verfügung: 6 Spielfiguren, 6 Waffen (Dolch, Leuchter, Pistole, Seil,
+        Heizungsrohr und Rohrzange), 21 Karten – je eine für die 6 Verdächtigen, 6 Waffen und
+        10 Räume (Für das Schwimmbad gibt es keine Karte), 1 Detektiv-Notizblock, 1 Umschlag für
+        die geheime Ermittlungsakte und 2 Würfel.
+    </string>
+    <string name="fragmentGameplayTab8">
+        VORBEREITUNG
+    </string>
+    <string name="fragmentGameplayTab9">
+        Alle Detektive starten in der Mitte des Spielplans. Jeder von euch ist verdächtig und sucht
+        sich eine Spielfigur aus. Nach der Auswahl erhält jeder Spieler gleich viele Mörder-,
+        Tatwaffe- und Tatortkarten. Eine Karte von jedem dieser Stapel befindet sich auch in der
+        Fallakte.
+        \n\n
+        Jeder Detektiv hat auch einen Detektivblock. Kreuzt von diesem schon einmal jene Karten weg,
+        die ihr erhalten habt. Der Detektivblock ist sehr wirchtig, denn im Laufe des Spiels müsst
+        ihr dort weitere Eintragungen vornehmen, wenn ihr hier und da die Karten der anderen seht.
+    </string>
+    <string name="fragmentGameplayTab10">
+        SPIELABLAUF
+    </string>
+    <string name="fragmentGameplayTab11">
+        Der Detektiv, der am Zug ist, muss nacheinander vier Phasen durchlaufen:\n\n
+        1. Würfeln, bewegen und Raum betreten.\n
+        2. Befrage deine Mitspieler und hol dir Hinweise.\n
+        3. Kreuze die Hinweise auf dem Detektivblock an.\n
+        4. Beende deinen Zug
+        \n\nBeim Bewegen könnt ihr euch bis auf diagonale Züge frei bewegen, wobei das Ziel immer sein
+        sollte, einen Raum zu erreichen. Dafür braucht es nur eine ausreichende Zahl Würfelaugen.
+        Dabei ist es auch möglich, Verbindungstüren und Geheimgänge zu nutzen. \n\nHat man es in einen
+        der Räume geschafft, beginnt die Befragung der
+        Mitspieler nach deren Wissen zu einem Verdächtigen, einer Waffe und was über den Raum, in
+        dem man sich befindet, bekannt ist. Dabei sollten die Fragen klug gestellt werden, um ans
+        Ziel zu kommen. Sobald die Frage nach bestimmten Karten kommen, werden diese gezeigt.
+        (allerdings höchstens eine). Kann der Spieler, den man gerade befragt, nicht „helfen“,
+        antwortet der Nächste – bis man eine Karte gesehen hat. \n\nDas Ergebnis, und vor Allem die
+        Karte, die man gesehen hat, muss man auf dem Notizzettel eintragen.
+        Danach ist der nächste Spieler an der Reihe.
+    </string>
+    <string name="fragmentGameplayTab12">
+        SPIELENDE
+    </string>
+    <string name="fragmentGameplayTab13">
+        Sind auf dem Detektivblock nur noch drei Hinweiskarten offen, oder man ist sich sicher,
+        den Mord aufdecken zu können, endet das Spiel und man kann den Mord aufklären. \nDazu muss
+        man in den Cluedo-Raum ziehen, Anklage erheben, den
+        Verdächtigen benennen und die Karten in der Fallakte abgleichen.
+        \nGewonnen hat man, wenn alle drei Fakten richtig sind, ist aber nur eine falsch, verliert
+        man seinen Status als Detektiv – die Karten wandern zurück in die Akte. So kann es auch
+        passieren, dass keiner von euch auf die Lösung kommt und der Mörder die Fliege macht.
+    </string>
+    <string name="helpButton">HILFE</string>
 
 </resources>

@@ -1,6 +1,6 @@
 package com.example.cluedo_seii.Network.dto;
 
-public class FirstConnectDTO extends RequestDTO{
+public class ConnectedDTO extends RequestDTO{
     private boolean isConnected;
 
     public void setConnected(boolean connected) {

@@ -45,6 +45,8 @@ public class MakeSuspicion extends AppCompatActivity implements AdapterView.OnIt
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_make_suspicion);
 
+        //Speicherung der Auswahl des Spielers
+
         spinnerCulprit = (Spinner) findViewById(R.id.suspectedCulprit);
         spinnerCulprit.setOnItemSelectedListener(this);
         adapterCulprit = ArrayAdapter.createFromResource(this, R.array.culprits, android.R.layout.simple_spinner_item);
@@ -85,6 +87,7 @@ public class MakeSuspicion extends AppCompatActivity implements AdapterView.OnIt
                }
            }
 
+           //Zeigt Spielerkarten des Verdächtigten
 
            if(suspectedPlayerHand.size()==0) {
                text = "Hier gibt es nichts zum sehen";
@@ -95,6 +98,8 @@ public class MakeSuspicion extends AppCompatActivity implements AdapterView.OnIt
                setResult(1,intent);
                finish();
            }
+
+           //Meldugn falls Verdächtiger keine der Karten auf seiner Hand hat
 
            else {
                text = "Der verdächtigte Spieler hat folgende Karten auf der Hand:" + '\n';

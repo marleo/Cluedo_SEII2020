@@ -5,11 +5,21 @@ import android.os.Bundle;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+
+import com.example.cluedo_seii.DeckOfCards;
+import com.example.cluedo_seii.Game;
+import com.example.cluedo_seii.GameCharacter;
+import com.example.cluedo_seii.GameState;
+
 import com.example.cluedo_seii.Player;
 import com.example.cluedo_seii.R;
 
 import com.example.cluedo_seii.spielbrett.Gameboard;
+
 import com.example.cluedo_seii.spielbrett.StartingPoint;
+
+import com.example.cluedo_seii.spielbrett.RoomElement;
+
 
 import java.util.ArrayList;
 import java.util.List;
@@ -84,7 +94,76 @@ public class GameboardScreen extends AppCompatActivity {
         gameboard.updateGameboardScreen(this);
 
 
-    }
+    private void startGame() {
+
+        //TODO initialize Game according to GameLobby Settings
+        //Instanz eines Game-objektes Zu Demonstrationszwecken
+        deckOfCards = new DeckOfCards();
+        players = new LinkedList<>();
+        GameCharacter gameCharacter = new GameCharacter("Prof. Bloom", null);
+        GameCharacter gameCharacterAlt = new GameCharacter("Fräulein Weiss", null);
+        Player player1 = new Player(1, "10.0.2.16", gameCharacterAlt);
+        Player player2 = new Player(2, "null", gameCharacter);
+        Player player3 = new Player(3, "null", gameCharacterAlt);
+        players.add(player1);
+        players.add(player2);
+        players.add(player3);
+        game = new Game(gameboard, players);
+
+
+        //Ausführung erfolgt wenn Methode changeGameState der Instanz game aufgerufen wird
+        game.setListener(new Game.ChangeListener() {
+            @Override
+
+            //Wird ausgeführt wenn Methode aufgerufen wird
+
+            public void onChange() {
+
+                if(game.getGameState().equals(GameState.PLAYERTURNBEGIN)){
+                    if(game.getCurrentPlayer().getPosition()instanceof RoomElement) {
+                        throwDiceOrUseSecretPassage();
+                    } else {
+                        throwDice();
+                    }
+                }
+
+                else if(game.getGameState().equals(GameState.PLAVERMOVEMENT)){
+
+                }
+
+                else if(game.getGameState().equals(GameState.PLAYERACCUSATION)){
+                    if(game.getCurrentPlayer().getPosition()instanceof RoomElement){
+                        suspectOrAccuse();
+                    } else{
+                        game.changeGameState(GameState.PLAYERTURNEND);
+                    }
+                }
+
+                else if(game.getGameState().equals(GameState.PLAYERTURNEND)){
+                    int wrongAccusers = 0;
+
+
+                    //prüfe Spielbeendigungsbedingungen
+                    for(Player player: game.getPlayers()){
+                        if(player.getMadeFalseAccusation()==true){
+                            wrongAccusers++;
+                        }
+                    }
+                    if(wrongAccusers==game.getPlayers().size()){
+                        game.setGameOver(true);
+                        game.changeGameState(GameState.END);
+                    }
+                    else if(game.getGameOver()==true){
+                        game.changeGameState(GameState.END);
+                    }
+                }
+                else if(game.getGameState().equals(GameState.END)){
+                    finish();
+                }
+            }
+        });
+        }
+
 
     public Gameboard getGameboard() {
         return gameboard;
@@ -110,11 +189,48 @@ public class GameboardScreen extends AppCompatActivity {
         this.players = players;
     }
 
+
     public int getPlayerCurrentlyPlayingId() {
-        return playerCurrentlyPlayingId;
+        return playerCurrentlyPlayingId;}
+
+    //CallBack um Resultat aus Methode zu erhalten
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data)
+    {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode==2)
+        {
+            game = (Game)data.getSerializableExtra("game");
+        }
     }
 
     public void setPlayerCurrentlyPlayingId(int playerCurrentlyPlayingId) {
         this.playerCurrentlyPlayingId = playerCurrentlyPlayingId;
     }
+
+
+    //EventListener für Swipe-Event
+    public boolean dispatchTouchEvent (MotionEvent touchEvent){
+        switch(touchEvent.getAction()){
+            case MotionEvent.ACTION_DOWN:
+                x1 = touchEvent.getX();
+                y1 = touchEvent.getY();
+
+                break;
+
+            case MotionEvent.ACTION_UP:
+                x2 = touchEvent.getX();
+                y2 = touchEvent.getY();
+
+                if(x1 < x2){
+                    startActivity(new Intent(GameboardScreen.this, NotepadScreen.class));
+                }else if(x1 > x2){
+                    showCards();
+                }
+                break;
+        }
+        return false;
+    }
+
+
 }

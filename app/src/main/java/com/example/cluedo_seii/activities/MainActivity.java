@@ -50,8 +50,8 @@ public class MainActivity extends AppCompatActivity {
 
         // Handle Cheat-Toggle State in Options Activity
         final TextView cheatText = (TextView) findViewById(R.id.mainScreenCheatInformation);
-        String cheatsOn = "Cheats Enabled";
-        String cheatsOff = "Cheats Disabled";
+        String cheatsOn = "Schummeln aktiviert";
+        String cheatsOff = "Schummeln deaktiviert";
 
         if(preferences.getBoolean("cheatEnabled", false)){ // Get Boolean Value of cheatEnabled (this is set in SettingScreen.java)
             cheatText.setText(cheatsOn);
