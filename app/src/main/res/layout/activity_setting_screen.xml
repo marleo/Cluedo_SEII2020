@@ -20,19 +20,33 @@
         android:id="@+id/network_setting"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="38dp"
-        android:layout_marginBottom="67dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginBottom="64dp"
         android:text="network"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/start_game_network"
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
         android:id="@+id/start_game_network"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="52dp"
+        android:layout_marginStart="30dp"
+        android:layout_marginEnd="46dp"
         android:layout_marginBottom="64dp"
         android:text="Start Game"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/helpButton"
         app:layout_constraintStart_toEndOf="@+id/network_setting" />
+
+    <Button
+        android:id="@+id/helpButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="64dp"
+        android:text="@string/helpButton"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/start_game_network" />
 </androidx.constraintlayout.widget.ConstraintLayout>

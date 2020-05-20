@@ -4,7 +4,6 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 
@@ -14,9 +13,7 @@ import androidx.appcompat.app.AppCompatDialogFragment;
 
 import com.example.cluedo_seii.Game;
 import com.example.cluedo_seii.R;
-import com.example.cluedo_seii.UserInput;
 import com.example.cluedo_seii.activities.GameboardScreen;
-import com.example.cluedo_seii.activities.MainActivity;
 
 public class SuspectOrAccuse extends AppCompatDialogFragment {
     Game game;
@@ -28,11 +25,11 @@ public class SuspectOrAccuse extends AppCompatDialogFragment {
         game = (Game) getArguments().getSerializable("game");
         setCancelable(false);
 
-
         DialogInterface.OnClickListener listenerSuspect = new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 ((GameboardScreen)getActivity()).makeSuspicion();
+
             }
         };
         DialogInterface.OnClickListener  listenerAccuse = new DialogInterface.OnClickListener() {
@@ -43,7 +40,7 @@ public class SuspectOrAccuse extends AppCompatDialogFragment {
         };
 
         return new AlertDialog.Builder(getActivity())
-                .setTitle("What do You Wanna Do")
+                .setTitle("Was willst du tun?")
                 .setView(view)
                 .setPositiveButton("Verdächtigen", listenerSuspect)
                 .setNegativeButton("Anklagen", listenerAccuse)

@@ -16,11 +16,6 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.example.cluedo_seii.Game;
-import com.example.cluedo_seii.activities.GameboardScreen;
-import com.example.cluedo_seii.activities.MainActivity;
-
-
-import java.util.LinkedList;
 
 public class AccuseSomeone extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
@@ -46,6 +41,8 @@ public class AccuseSomeone extends AppCompatActivity implements AdapterView.OnIt
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_accuse_someone);
+
+        //Speicherung der Auswahl des Spielers
 
         spinnerCulprit = (Spinner) findViewById(R.id.suspectedCulprit);
         spinnerCulprit.setOnItemSelectedListener(this);
@@ -78,6 +75,8 @@ public class AccuseSomeone extends AppCompatActivity implements AdapterView.OnIt
 
             public void onClick(View v) {
 
+                //Im Falle einer erfolgreichen Anklage
+
                 if(game.getCurrentPlayer().accuse(selectedCulprit, selectedWeapon, selectedRoom, game.getInvestigationFile()) == true) {
                     game.setGameOver(true);
                     text = "Gratuliere, du hast das Spiel gewonnen";
@@ -89,6 +88,8 @@ public class AccuseSomeone extends AppCompatActivity implements AdapterView.OnIt
                     setResult(1,intent);
                     finish();
                 }
+
+                //Im Fall einer falschen Anklage
 
                 else {
                     text = "Du hast eine falsche Anklage erhoben und kannst das Spiel nicht mehr gewinnen";

@@ -1,35 +1,29 @@
 package com.example.cluedo_seii;
 
-
-
-
 import com.example.cluedo_seii.spielbrett.Gameboard;
-
 import java.io.Serializable;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.Random;
 
-
-
 public class Game implements Serializable {
 
-    private transient  Gameboard gameboard;
-    private transient  DeckOfCards deckOfCards;
+    private transient Gameboard gameboard;
+    private transient DeckOfCards deckOfCards;
     private InvestigationFile investigationFile;
     private LinkedList<Player>players;
     private Boolean gameOver;
-    private transient  Random random;
+    private transient Random random;
     private int round;
-
     private int playerIterator;
-
     private Player currentPlayer;
+    private GameState gameState;
+    private ChangeListener changeListener;
 
-    public Game(Gameboard gameboard, DeckOfCards deckOfCards, LinkedList<Player>players){
+    public Game(Gameboard gameboard, LinkedList<Player>players){
 
         this.gameboard = gameboard;
-        this.deckOfCards = deckOfCards;
+        this.deckOfCards = new DeckOfCards();
         this.players = players;
         investigationFile = new InvestigationFile();
         random = new Random();
@@ -37,31 +31,73 @@ public class Game implements Serializable {
         round = 1;
         playerIterator = 0;
         currentPlayer = players.get(playerIterator);
+        gameState = GameState.START;
     }
+
+    //Getter und Setter
 
     public InvestigationFile getInvestigationFile() {
         return investigationFile;
-    }
-
-    public void setGameOver(Boolean gameOver) {
-        this.gameOver = gameOver;
     }
 
     public LinkedList<Player> getPlayers() {
         return players;
     }
 
+    public Boolean getGameOver() {
+        return gameOver;
+    }
+
+    public GameState getGameState() {
+        return gameState;
+    }
+
     public Player getCurrentPlayer() {
         return currentPlayer;
     }
 
+    public int getRound() {
+        return round;
+    }
+
+    public void setGameOver(Boolean gameOver) {
+        this.gameOver = gameOver;
+    }
+
+    //Methode  zum ändern des Spielstatus und Implementierung von ChangeListener
+
+    public void changeGameState(GameState gameState){
+        this.gameState = gameState;
+        if(changeListener != null) changeListener.onChange();
+    }
+
+    public ChangeListener getListener() {
+        return changeListener;
+    }
+
+    public void setListener(ChangeListener changeListener) {
+        this.changeListener = changeListener;
+    }
+
+    public interface ChangeListener {
+        void onChange();
+    }
+
+    //Methode zur Kartenverteilung
 
     public void distributeCards(){
 
         LinkedList<Card> cardStack =  deckOfCards.getGameCardsStandard();
+
+        //Verteilen zufälliger Karten in die Ermittlungsakte
+
         int randomPersonId = random.nextInt(6);
-        int randomWeaponId = random.nextInt(6) + 6;
-        int randomRoomId = random.nextInt(9) + 12;
+        int randomWeaponId = 6 + random.nextInt(6);
+        int randomRoomId = 12 + random.nextInt(9);
+
+        investigationFile.setCulprit(cardStack.get(randomPersonId));
+        investigationFile.setWeapon(cardStack.get(randomWeaponId));
+        investigationFile.setRoom(cardStack.get(randomRoomId));
 
         for(Card card:cardStack){
             if(card.getId()==randomPersonId){
@@ -71,7 +107,7 @@ public class Game implements Serializable {
         }
 
         for(Card card:cardStack){
-            if(card.getId()==randomWeaponId) {
+            if(card.getId()==randomWeaponId){
                 cardStack.remove(card);
                 break;
             }
@@ -88,39 +124,33 @@ public class Game implements Serializable {
 
         int i = 0;
 
+        //Verteilen der restlichen Karten an die Spieler
+
         while(i<cardStack.size())
         {
          for(int j = 0; j<players.size(); j++){
-
-             Player temp = players.get(j);
-
-             if(i==cardStack.size())
-             {break;}
-
-             temp.addCard(cardStack.get(i));
+             if(i==cardStack.size()) {
+                 break;}
+             else if(cardStack.get(i)!=null){
+                 Player temp = players.get(j);
+                 temp.addCard(cardStack.get(i));
+                  }
              i++;
          }
-
         }
-
     }
 
-    public void nextPlayer(){
+    //Methode für Spielerwechsel und Rundenzähler
 
+    public void nextPlayer(){
         if(playerIterator==players.size()-1)
         {
             playerIterator=0;
             round++;
         }
-
         else {
             playerIterator++;
         }
-
         currentPlayer = players.get(playerIterator);
-
     }
-
-
-    
 }
