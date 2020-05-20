@@ -7,7 +7,9 @@ import android.os.Bundle;
 import android.text.format.Formatter;
 import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.example.cluedo_seii.Network.Callback;
@@ -40,6 +42,7 @@ public class startGameScreen extends AppCompatActivity {
     }
 
     public void selectHost(View view) {
+        final ListView clientList = findViewById(R.id.clientList);
         this.conType = connectionType.HOST;
 
         server = NetworkServerKryo.getInstance();
@@ -60,7 +63,9 @@ public class startGameScreen extends AppCompatActivity {
                 // UPDATE Current Players
                 runOnUiThread(new Runnable() {
                     public void run() {
-                        TextView userNameInput = findViewById(R.id.usernam_input);
+                        TextView userNameInput = findViewById(R.id.username_input);
+                        ArrayAdapter<String> clientListAdapter = new ArrayAdapter<String>(startGameScreen.this, android.R.layout.simple_list_item_1,usernameList);
+                        clientList.setAdapter(clientListAdapter);
                         userNameInput.setText(usernameList.toString());
                     }
                 });
@@ -76,8 +81,17 @@ public class startGameScreen extends AppCompatActivity {
         WifiManager wm = (WifiManager) getApplicationContext().getSystemService(WIFI_SERVICE);
         String ip = Formatter.formatIpAddress(wm.getConnectionInfo().getIpAddress());
 
-        TextView serverResponse = findViewById(R.id.ipAddress);
-        serverResponse.setText(ip);
+        TextView ipAddressField = findViewById(R.id.ipAddress);
+        ipAddressField.setText(ip);
+
+        // hide Username Input Field && show UserList
+        findViewById(R.id.username_input).setVisibility(View.INVISIBLE);
+
+        clientList.setVisibility(View.VISIBLE);
+
+
+
+
     }
 
     public void selectClient(View view) {
@@ -103,7 +117,7 @@ public class startGameScreen extends AppCompatActivity {
                 ip = "192.168.178.47";
             }
 
-            EditText username_input = findViewById(R.id.usernam_input);
+            EditText username_input = findViewById(R.id.username_input);
             final UserNameRequestDTO userNameRequestDTO = new UserNameRequestDTO();
             userNameRequestDTO.setUsername(username_input.getText().toString());
 
