@@ -43,6 +43,11 @@ public class NetworkServerKryo implements KryoNetComponent, NetworkServer {
         return INSTANCE;
     }
 
+    public static void deleteInstance() {
+        INSTANCE = null;
+    }
+
+
     public void start() throws IOException {
         server.start();
         server.bind(NetworkConstants.TCP_PORT,NetworkConstants.UDP_PORT);

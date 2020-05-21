@@ -41,6 +41,10 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
         return INSTANCE;
     }
 
+    public static void deleteInstance() {
+        INSTANCE = null;
+    }
+
     @Override
     public void connect(final String host) throws IOException {
         client.start();
@@ -83,6 +87,8 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
         } else if (object instanceof ConnectedDTO) {
             if (connectionCallback != null) {
                 connectionCallback.callback((ConnectedDTO) object);
+                // reset connection Callback
+                connectionCallback = null;
             }
         }
     }
@@ -93,7 +99,6 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
     }
 
     public void registerConnectionCallback(Callback<ConnectedDTO> callback) {
-        System.out.println("Callback registered");
         this.connectionCallback = callback;
     }
 

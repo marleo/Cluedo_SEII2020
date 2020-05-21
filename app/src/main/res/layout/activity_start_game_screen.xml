@@ -68,8 +68,8 @@
 
     <ListView
         android:id="@+id/clientList"
-        android:layout_width="409dp"
-        android:layout_height="523dp"
+        android:layout_width="224dp"
+        android:layout_height="520dp"
         android:layout_marginTop="62dp"
         android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
