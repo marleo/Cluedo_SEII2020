@@ -15,6 +15,8 @@
     <string name="addMoreNotesButton">Bestätigen</string>
     <string name="gameRules">Spielregeln</string>
     <string name="gesturerules">Steuerung</string>
+    <string name="startGameOptions">Start Game</string>
+    <string name="networkButtonOptions">Netzwerk</string>
 
     <string-array name="culprits">
         <item>Oberst von Gatov</item>
@@ -125,5 +127,17 @@
         passieren, dass keiner von euch auf die Lösung kommt und der Mörder die Fliege macht.
     </string>
     <string name="helpButton">HILFE</string>
+    <string name="verdaechtigenButton">verdächtigen</string>
+    <string name="werWomitWo">Wer,Womit,Wo?</string>
+    <string name="hostButtonSettings">Host</string>
+    <string name="clientButtonOptions">Client</string>
+    <string name="ipInputField">ip</string>
+    <string name="usernameInputField">Username Input</string>
+    <string name="hostButtonNetwork">Host</string>
+    <string name="clientButtonNetwork">Client</string>
+    <string name="msgInputField">msg</string>
+    <string name="sendButtonNetwork">Send</string>
+    <string name="connectButtonNetwork">Connect</string>
+    <string name="backbuttonSettings">backButton</string>
 
 </resources>

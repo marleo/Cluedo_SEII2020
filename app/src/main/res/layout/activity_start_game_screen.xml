@@ -13,7 +13,11 @@
         android:layout_marginStart="51dp"
         android:layout_marginTop="44dp"
         android:onClick="selectHost"
-        android:text="Host"
+        android:text="@string/hostButtonSettings"
+        android:textColor="#FFFFFF"
+        android:textSize="15sp"
+        android:background="@drawable/custom_button"
+        style="?android:attr/borderlessButtonStyle"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -24,11 +28,16 @@
         android:layout_marginTop="44dp"
         android:layout_marginEnd="30dp"
         android:onClick="selectClient"
-        android:text="Client"
+        android:text="@string/clientButtonOptions"
+        android:textColor="#FFFFFF"
+        android:textSize="15sp"
+        android:background="@drawable/custom_button"
+        style="?android:attr/borderlessButtonStyle"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
+        android:hint="@string/ipInputField"
         android:id="@+id/ipAddress"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -37,7 +46,7 @@
         android:layout_marginEnd="102dp"
         android:ems="10"
         android:inputType="textPersonName"
-        android:text="ip"
+        android:autofillHints="ip"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/button" />
@@ -50,8 +59,9 @@
         android:layout_marginTop="15dp"
         android:layout_marginEnd="103dp"
         android:ems="10"
+        android:autofillHints="ip"
+        android:hint="@string/usernameInputField"
         android:inputType="textPersonName"
-        android:text="Username Input"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/ipAddress" />
