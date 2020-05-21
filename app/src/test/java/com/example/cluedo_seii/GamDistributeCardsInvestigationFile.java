@@ -17,7 +17,7 @@ import static org.junit.Assert.assertEquals;
 
 @RunWith(Parameterized.class)
 public class GamDistributeCardsInvestigationFile {
-    private Player player1;
+ /*   private Player player1;
     private Player player2;
     private Player player3;
     private Player player4;
@@ -130,7 +130,7 @@ public class GamDistributeCardsInvestigationFile {
 
         }
         assertEquals(rightCards, true);
-    }
+    }*/
 
 
 }

@@ -3,6 +3,7 @@ package com.example.cluedo_seii.activities;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MotionEvent;
 
 import androidx.annotation.Nullable;
@@ -79,7 +80,7 @@ public class GameboardScreen extends AppCompatActivity  {
         manager = getSupportFragmentManager();
 
 
-
+        game = Game.getInstance();
         startGame();
 
         /*final Button notepad_Button = findViewById(R.id.notepadButton);
@@ -95,6 +96,7 @@ public class GameboardScreen extends AppCompatActivity  {
 
         //TODO initialize Game according to GameLobby Settings
         //Instanz eines Game-objektes Zu Demonstrationszwecken
+
         deckOfCards = new DeckOfCards();
         players = new LinkedList<>();
         GameCharacter gameCharacter = new GameCharacter("Prof. Bloom", null);
@@ -105,7 +107,10 @@ public class GameboardScreen extends AppCompatActivity  {
         players.add(player1);
         players.add(player2);
         players.add(player3);
-        game = new Game(gameboard, players);
+        game.setPlayers(players);
+        game.setGameboard(gameboard);
+        game.distributeCards();
+        suspectOrAccuse();
 
         //Ausführung erfolgt wenn Methode changeGameState der Instanz game aufgerufen wird
         game.setListener(new Game.ChangeListener() {
@@ -165,47 +170,39 @@ public class GameboardScreen extends AppCompatActivity  {
     //Aufruf von DialogOptionen
     public void throwDice(){
         ThrowDice dialog = new ThrowDice();
-        bundle.putSerializable("game", game);
-        dialog.setArguments(bundle);
         dialog.show(manager, mesaggeDialogTag);
     }
 
     public void throwDiceOrUseSecretPassage(){
         ThrowDiceOrUseSecretPassage dialog = new ThrowDiceOrUseSecretPassage();
-        bundle.putSerializable("game", game);
-        dialog.setArguments(bundle);
         dialog.show(manager, mesaggeDialogTag);
     }
 
     public void suspectOrAccuse(){
         SuspectOrAccuse dialog = new SuspectOrAccuse();
-        bundle.putSerializable("game", game);
-        dialog.setArguments(bundle);
         dialog.show(manager, mesaggeDialogTag);
     }
 
-    //UI Aufruf von Verdächtigung und Anklage
+    //UI Aufruf von Würfeln, Verdächtigung und Anklage
+    public void rollDice(){
+        //TODO Aufruf von Würfelfunktion
+    }
+
     public void makeSuspicion(){
-        intent = new Intent(this, MakeSuspicion.class);
-        intent.putExtra("game", game);
-        startActivityForResult(intent, 2);
+        startActivity(new Intent(this, MakeSuspicion.class));
     }
 
     public void accuseSomeone(){
-        intent = new Intent(this, AccuseSomeone.class);
-        intent.putExtra("game", game);
-        startActivityForResult(intent, 2);
+        startActivity(new Intent(this, AccuseSomeone.class));
     }
 
     //Zeigt Karten auf Spielerhand
     public void showCards(){
-        intent = new Intent(this, ShowCards.class);
-        intent.putExtra("game", game);
-        startActivity(intent);
+        startActivity(new Intent(this, ShowCards.class));
     }
 
     //CallBack um Resultat aus Methode zu erhalten
-    @Override
+  /*  @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data)
     {
         super.onActivityResult(requestCode, resultCode, data);
@@ -213,7 +210,7 @@ public class GameboardScreen extends AppCompatActivity  {
         {
             game = (Game)data.getSerializableExtra("game");
         }
-    }
+    }*/
 
     public void updateGame(Game gameUpdate){
         game = gameUpdate;
