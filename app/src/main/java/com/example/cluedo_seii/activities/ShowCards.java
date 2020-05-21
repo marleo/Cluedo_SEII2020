@@ -22,18 +22,14 @@ import java.util.LinkedList;
 public class ShowCards extends AppCompatActivity {
 
     float x1, x2, y1, y2;
-    private WifiManager wifiManager;
     private Game game;
     private LinkedList<String> playerHand;
-    private Intent intent;
     private ListView listView;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
        super.onCreate(savedInstanceState);
-
-       intent = getIntent();
 
        game = Game.getInstance();
 
@@ -43,23 +39,15 @@ public class ShowCards extends AppCompatActivity {
 
        playerHand.add("YOUR CARDS");
 
-       wifiManager = (WifiManager)getApplicationContext().getSystemService(WIFI_SERVICE);
-
-       String deviceIP = Formatter.formatIpAddress(wifiManager.getConnectionInfo().getIpAddress());
-
-       for(Player player: game.getPlayers()){
-
-            if(player.getIP().equals(deviceIP)){
-
-                for(Card card: player.getPlayerCards()){
+       for(Card card: game.getLocalPlayer().getPlayerCards()){
 
                     playerHand.add(card.getDesignation());
 
                 }
 
-            }
 
-        }
+
+
 
         ArrayAdapter<String> cardListViewAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, playerHand);
         listView = findViewById(R.id.playerHandDisplay);
