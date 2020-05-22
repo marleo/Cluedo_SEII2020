@@ -11,11 +11,9 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.example.cluedo_seii.Card;
-import com.example.cluedo_seii.DeckOfCards;
 import com.example.cluedo_seii.Game;
 import com.example.cluedo_seii.Player;
 import com.example.cluedo_seii.R;
-import com.example.cluedo_seii.spielbrett.Gameboard;
 
 import java.util.LinkedList;
 
@@ -64,24 +62,26 @@ public class ShowCards extends AppCompatActivity {
         ArrayAdapter<String> cardListViewAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, playerHand);
         listView = findViewById(R.id.playerHandDisplay);
         listView.setAdapter(cardListViewAdapter);
-
     }
 
-    public boolean onTouchEvent (MotionEvent touchEvent){
-        switch(touchEvent.getAction()){
 
+
+    //EventListener für Swipe-Event
+    public boolean dispatchTouchEvent (MotionEvent touchEvent){
+        switch(touchEvent.getAction()){
             case MotionEvent.ACTION_DOWN:
                 x1 = touchEvent.getX();
                 y1 = touchEvent.getY();
 
                 break;
+
             case MotionEvent.ACTION_UP:
                 x2 = touchEvent.getX();
                 y2 = touchEvent.getY();
 
-                if(x1 < x2){
+                if(x1 < x2- 250){
                     finish();
-                }else if(x1 > x2){
+                }else if(x1-250 > x2){
                     finish();
                 }
                 break;

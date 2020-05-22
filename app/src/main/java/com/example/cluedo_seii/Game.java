@@ -83,7 +83,7 @@ public class Game implements Serializable {
 
     //Methode zur Kartenverteilung
 
-    void distributeCards(){
+    public void distributeCards(){
 
         LinkedList<Card> cardStack =  deckOfCards.getGameCardsStandard();
 
@@ -140,7 +140,7 @@ public class Game implements Serializable {
 
     //Methode für Spielerwechsel und Rundenzähler
 
-    void nextPlayer(){
+    public void nextPlayer(){
         if(playerIterator==players.size()-1)
         {
             playerIterator=0;

@@ -32,13 +32,13 @@ public class ThrowDiceOrUseSecretPassage extends AppCompatDialogFragment {
         DialogInterface.OnClickListener listenerThrowDice = new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                ((GameboardScreen)getActivity()).updateGame(game);
+               // ((GameboardScreen)getActivity()).updateGame(game);
             }
         };
         DialogInterface.OnClickListener  listenerUseSecretPassage = new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                ((GameboardScreen)getActivity()).updateGame(game);
+              //  ((GameboardScreen)getActivity()).updateGame(game);
         }
         };
 

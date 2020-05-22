@@ -9,7 +9,6 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 
-import com.example.cluedo_seii.DeckOfCards;
 import com.example.cluedo_seii.Game;
 import com.example.cluedo_seii.GameCharacter;
 import com.example.cluedo_seii.GameState;
@@ -31,7 +30,6 @@ public class GameboardScreen extends AppCompatActivity  {
     private Gameboard gameboard;
     private Game game;
     private LinkedList<Player> players;
-    private DeckOfCards deckOfCards;
     private FragmentManager manager;
     private String mesaggeDialogTag;
     private Bundle bundle;
@@ -43,12 +41,14 @@ public class GameboardScreen extends AppCompatActivity  {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_spielbrett_screen);
 
+
         /*
             0 = GameField
             1 = NoneWalkableElement
             2 = StartingPoint
             3 = Room
          */
+
 
         String gameBoard =
                 "1112011102111" +
@@ -73,12 +73,11 @@ public class GameboardScreen extends AppCompatActivity  {
 
         gameboard = new Gameboard(this,13,19, gameBoard);
         setContentView(gameboard.getLayout());
+       //spielbrettScreenLayout=gameboard.getLayout();
 
         bundle = new Bundle();
         mesaggeDialogTag = "MessageDialog";
         manager = getSupportFragmentManager();
-
-
 
         startGame();
 
@@ -95,7 +94,6 @@ public class GameboardScreen extends AppCompatActivity  {
 
         //TODO initialize Game according to GameLobby Settings
         //Instanz eines Game-objektes Zu Demonstrationszwecken
-        deckOfCards = new DeckOfCards();
         players = new LinkedList<>();
         GameCharacter gameCharacter = new GameCharacter("Prof. Bloom", null);
         GameCharacter gameCharacterAlt = new GameCharacter("Fräulein Weiss", null);
@@ -106,6 +104,7 @@ public class GameboardScreen extends AppCompatActivity  {
         players.add(player2);
         players.add(player3);
         game = new Game(gameboard, players);
+        game.distributeCards();
 
         //Ausführung erfolgt wenn Methode changeGameState der Instanz game aufgerufen wird
         game.setListener(new Game.ChangeListener() {
@@ -215,9 +214,11 @@ public class GameboardScreen extends AppCompatActivity  {
         }
     }
 
+
     public void updateGame(Game gameUpdate){
         game = gameUpdate;
     }
+
 
     //EventListener für Swipe-Event
     public boolean dispatchTouchEvent (MotionEvent touchEvent){
@@ -232,17 +233,15 @@ public class GameboardScreen extends AppCompatActivity  {
                 x2 = touchEvent.getX();
                 y2 = touchEvent.getY();
 
-                if(x1 < x2){
+                if(x1 < x2- 250){
                     startActivity(new Intent(GameboardScreen.this, NotepadScreen.class));
-                }else if(x1 > x2){
+                }else if(x1-250 > x2){
                     showCards();
                 }
                 break;
         }
         return false;
     }
-
-
 
 }
 
