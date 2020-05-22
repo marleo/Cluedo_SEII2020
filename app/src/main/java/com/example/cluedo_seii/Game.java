@@ -21,6 +21,8 @@ public class Game implements Serializable {
     private GameState gameState;
     private Gameboard gameboard;
     private transient ChangeListener changeListener;
+    private Player localPlayer;
+
 
     private Game(){
         this.deckOfCards = new DeckOfCards();
@@ -74,6 +76,14 @@ public class Game implements Serializable {
     public void setPlayers(LinkedList<Player> players) {
         this.players = players;
         currentPlayer = players.get(playerIterator);
+    }
+
+    public void setLocalPlayer(Player localPlayer) {
+        this.localPlayer = localPlayer;
+    }
+
+    public Player getLocalPlayer() {
+        return localPlayer;
     }
 
     public void setGameboard(Gameboard gameboard){
