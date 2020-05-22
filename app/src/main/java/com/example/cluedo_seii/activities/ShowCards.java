@@ -35,7 +35,7 @@ public class ShowCards extends AppCompatActivity {
 
        intent = getIntent();
 
-       game = (Game)intent.getSerializableExtra("game");
+       game = Game.getInstance();
 
        setContentView(R.layout.activity_show_cards);
 

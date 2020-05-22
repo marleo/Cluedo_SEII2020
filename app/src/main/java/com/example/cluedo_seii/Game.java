@@ -8,6 +8,8 @@ import java.util.Random;
 
 public class Game implements Serializable {
 
+    private static Game game = null;
+
     private transient DeckOfCards deckOfCards;
     private InvestigationFile investigationFile;
     private LinkedList<Player>players;
@@ -17,22 +19,29 @@ public class Game implements Serializable {
     private int playerIterator;
     private Player currentPlayer;
     private GameState gameState;
+    private Gameboard gameboard;
     private transient ChangeListener changeListener;
 
-    public Game(Gameboard gameboard, LinkedList<Player>players){
-
+    private Game(){
         this.deckOfCards = new DeckOfCards();
-        this.players = players;
         investigationFile = new InvestigationFile();
         random = new Random();
         gameOver = false;
         round = 1;
         playerIterator = 0;
-        currentPlayer = players.get(playerIterator);
         gameState = GameState.START;
     }
 
     //Getter und Setter
+    public static Game getInstance(){
+        if(game==null){
+            game = new Game();
+        }
+        return game;
+    }
+
+    public static void reset(){
+        game = null;}
 
     public InvestigationFile getInvestigationFile() {
         return investigationFile;
@@ -62,8 +71,16 @@ public class Game implements Serializable {
         this.gameOver = gameOver;
     }
 
-    //Methode  zum ändern des Spielstatus und Implementierung von ChangeListener
+    public void setPlayers(LinkedList<Player> players) {
+        this.players = players;
+        currentPlayer = players.get(playerIterator);
+    }
 
+    public void setGameboard(Gameboard gameboard){
+        this.gameboard = gameboard;
+    }
+
+    //Methode  zum ändern des Spielstatus und Implementierung von ChangeListener
     public void changeGameState(GameState gameState){
         this.gameState = gameState;
         if(changeListener != null) changeListener.onChange();
@@ -83,7 +100,7 @@ public class Game implements Serializable {
 
     //Methode zur Kartenverteilung
 
-    void distributeCards(){
+    public void distributeCards(){
 
         LinkedList<Card> cardStack =  deckOfCards.getGameCardsStandard();
 
@@ -140,7 +157,7 @@ public class Game implements Serializable {
 
     //Methode für Spielerwechsel und Rundenzähler
 
-    void nextPlayer(){
+    public void nextPlayer(){
         if(playerIterator==players.size()-1)
         {
             playerIterator=0;

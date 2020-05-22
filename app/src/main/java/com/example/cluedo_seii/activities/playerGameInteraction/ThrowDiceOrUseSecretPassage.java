@@ -26,19 +26,19 @@ public class ThrowDiceOrUseSecretPassage extends AppCompatDialogFragment {
         View view = LayoutInflater.from(getActivity()).inflate(R.layout.player_game_interaction_layout, null);
         setCancelable(false);
 
-        game = (Game) savedInstanceState.getSerializable("game");
+        game = Game.getInstance();
 
 
         DialogInterface.OnClickListener listenerThrowDice = new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                ((GameboardScreen)getActivity()).updateGame(game);
+                ((GameboardScreen)getActivity()).rollDice();
             }
         };
         DialogInterface.OnClickListener  listenerUseSecretPassage = new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                ((GameboardScreen)getActivity()).updateGame(game);
+                //((GameboardScreen)getActivity()).useSecretPassage();
         }
         };
 

@@ -71,7 +71,9 @@ public class GameTest {
 
         deckOfCards = new DeckOfCards();
 
-        game = new Game(gameboard, players);
+        game = Game.getInstance();
+        game.setPlayers(players);
+        game.setGameboard(gameboard);
 
     }
 
@@ -95,7 +97,7 @@ public class GameTest {
 
         deckOfCards = null;
 
-        game = null;
+         Game.reset();
 
         players = null;
 

@@ -30,7 +30,6 @@ public class GamDistributeCardsInvestigationFile {
     private GameCharacter baroninVonPorz;
     private GameCharacter fraeuleinGloria;
     private GameCharacter frauWeiss;
-    private DeckOfCards deckOfCards;
     private Gameboard gameboard;
 
     private StartingpointElement oberstVonGatovStart;
@@ -71,13 +70,17 @@ public class GamDistributeCardsInvestigationFile {
         players.add(player5);
         players.add(player6);
 
-        deckOfCards = new DeckOfCards();
+        game = Game.getInstance();
+        game.setPlayers(players);
+        game.setGameboard(gameboard);
 
-        game = new Game(gameboard, players);
+
     }
 
     @After
     public void setBack(){
+
+        Game.reset();
 
         oberstVonGatov = null;
         profBloom = null;
@@ -92,9 +95,6 @@ public class GamDistributeCardsInvestigationFile {
         player4 = null;
         player5 = null;
         player6 = null;
-
-
-        deckOfCards = null;
 
         game = null;
 
