@@ -7,6 +7,19 @@
     tools:context=".activities.startGameScreen">
 
     <Button
+        android:id="@+id/chooseCharacter"
+        style="?android:attr/borderlessButtonStyle"
+        android:layout_width="179dp"
+        android:layout_height="47dp"
+        android:layout_marginBottom="36dp"
+        android:background="@drawable/custom_button"
+        android:text="CHOOSE CHARACTER"
+        android:textColor="#FFFFFF"
+        android:textSize="15sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        tools:layout_editor_absoluteX="116dp" />
+
+    <Button
         android:id="@+id/button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -68,11 +81,10 @@
 
     <ListView
         android:id="@+id/clientList"
-        android:layout_width="224dp"
-        android:layout_height="520dp"
+        android:layout_width="223dp"
+        android:layout_height="379dp"
         android:layout_marginTop="62dp"
         android:visibility="invisible"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/ipAddress" />
