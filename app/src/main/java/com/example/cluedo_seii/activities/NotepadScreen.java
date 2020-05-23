@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.cluedo_seii.Notepad;
@@ -17,7 +18,6 @@ import com.example.cluedo_seii.R;
 import java.util.Random;
 
 public class NotepadScreen extends AppCompatActivity {
-    public TextView[] textViews;
     private TextView textViewGatov;
     private  TextView textViewBloom;
     private  TextView textViewGreen ;
@@ -39,10 +39,16 @@ public class NotepadScreen extends AppCompatActivity {
     private  TextView textViewBiliardzimmer;
     private  TextView textViewBibliothek;
     private  TextView textViewArbeitszimmer;
+
     private EditText editText1;
     private Button btn1;
     private TextView textView;
     private Notepad notepad;
+
+    private SensorManager sensorManager;
+    private Sensor lightSensor;
+    private SensorEventListener lightEventListener;
+    private float sensorValue;
 
 
     @Override
@@ -135,48 +141,35 @@ public class NotepadScreen extends AppCompatActivity {
         };
         btn1.setOnClickListener(onButtonClickListener1);
 
-        //notepad.cheatFunction();
 
 
-        /*SensorManager mySensorManager = (SensorManager)getSystemService(SENSOR_SERVICE);
-
-        Sensor lightSensor = mySensorManager.getDefaultSensor(Sensor.TYPE_LIGHT);
-        if(lightSensor != null){
-
-            mySensorManager.registerListener(
-                    lightSensorListener,
-                    lightSensor,
-                    SensorManager.SENSOR_DELAY_NORMAL);
-
-        } else {
-            // textLIGHT_available.setText("Sensor.TYPE_LIGHT NOT Available");
+        sensorManager = (SensorManager)getSystemService(SENSOR_SERVICE);
+        lightSensor = sensorManager.getDefaultSensor(Sensor.TYPE_LIGHT);
+        if(lightSensor == null){
+            finish();
         }
 
+        sensorManager.registerListener( new SensorEventListener() {
+            @Override
+            public void onSensorChanged(SensorEvent event) {
+                if (event.sensor.getType() == Sensor.TYPE_LIGHT) {
+                    if (event.values[0] < 3) {
+                        sensorValue = event.values[0];
+                    }
+                    if (event.values[0] == 0) {
+                        notepad.cheatFunction();
+                    }
+                }
+
+            }
+
+            @Override
+            public void onAccuracyChanged(Sensor sensor, int accuracy) {
+
+            }
+        }, lightSensor, SensorManager.SENSOR_DELAY_NORMAL);
 
     }
-    private final SensorEventListener lightSensorListener
-            = new SensorEventListener(){
-
-        @Override
-        public void onAccuracyChanged(Sensor sensor, int accuracy) {
-            if (sensor.getType() == Sensor.TYPE_LIGHT) {
-                cheatFunction(textViews, culprit, room, weapon);
-            }
-
-        }
-
-        @Override
-        public void onSensorChanged(SensorEvent event) {
-            if(event.sensor.getType() == Sensor.TYPE_LIGHT){
-                //textLIGHT_reading.setText("LIGHT: " + event.values[0]);
-            }
-        }*/
-
-    }//;
-
-
-
-
 
 
 
