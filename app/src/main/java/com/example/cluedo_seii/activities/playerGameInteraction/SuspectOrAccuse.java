@@ -4,7 +4,6 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 
@@ -14,9 +13,7 @@ import androidx.appcompat.app.AppCompatDialogFragment;
 
 import com.example.cluedo_seii.Game;
 import com.example.cluedo_seii.R;
-import com.example.cluedo_seii.UserInput;
 import com.example.cluedo_seii.activities.GameboardScreen;
-import com.example.cluedo_seii.activities.MainActivity;
 
 public class SuspectOrAccuse extends AppCompatDialogFragment {
     Game game;
@@ -31,17 +28,14 @@ public class SuspectOrAccuse extends AppCompatDialogFragment {
         DialogInterface.OnClickListener listenerSuspect = new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-               // game.gameControl(UserInput.SUSPECT);
                 ((GameboardScreen)getActivity()).makeSuspicion();
-               // ((GameboardScreen)getActivity()).updateGame(game);
 
             }
         };
         DialogInterface.OnClickListener  listenerAccuse = new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-               //game.gameControl(UserInput.ACCUSE);
-                ((GameboardScreen)getActivity()).updateGame(game);
+                ((GameboardScreen)getActivity()).accuseSomeone();
             }
         };
 

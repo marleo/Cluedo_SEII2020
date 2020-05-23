@@ -1,10 +1,10 @@
 package com.example.cluedo_seii;
 
-import java.io.Serializable;
 import java.util.LinkedList;
 
 
 public class DeckOfCards  {
+
 
     public Card oberstVonGatow = new Card(0, "Oberst von Gatov", CardType.PERSON);
     public Card profBloom = new Card(1, "Prof. Bloom", CardType.PERSON);
@@ -30,7 +30,8 @@ public class DeckOfCards  {
     public Card bibliothek = new Card(19, "Bibliothek", CardType.ROOM);
     public Card arbeitszimmer = new Card(20, "Arbeitszimmer", CardType.ROOM);
 
-    private LinkedList<Card> gameCardsStandard = new LinkedList<Card>();
+
+    private LinkedList<Card> gameCardsStandard = new LinkedList<>();
 
     public LinkedList<Card> getGameCardsStandard(){
 

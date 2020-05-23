@@ -1,4 +1,4 @@
-package com.example.cluedo_seii.Network;
+package com.example.cluedo_seii.network;
 
 public interface Callback<T> {
 

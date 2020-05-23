@@ -4,7 +4,6 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 
@@ -14,7 +13,6 @@ import androidx.appcompat.app.AppCompatDialogFragment;
 
 import com.example.cluedo_seii.Game;
 import com.example.cluedo_seii.R;
-import com.example.cluedo_seii.UserInput;
 import com.example.cluedo_seii.activities.GameboardScreen;
 
 public class ThrowDice extends AppCompatDialogFragment {
@@ -32,11 +30,6 @@ public class ThrowDice extends AppCompatDialogFragment {
         DialogInterface.OnClickListener listenerThrowDice = new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-
-
-                //game.gameControl(UserInput.THROWDICE);
-
-
                 ((GameboardScreen)getActivity()).updateGame(game);
             }
         };
