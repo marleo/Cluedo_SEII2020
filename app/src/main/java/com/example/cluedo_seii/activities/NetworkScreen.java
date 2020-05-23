@@ -1,5 +1,8 @@
+//TODO delete NetworkScreen
+
 package com.example.cluedo_seii.activities;
 
+import android.annotation.SuppressLint;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.text.format.Formatter;
@@ -9,14 +12,14 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.cluedo_seii.Network.Callback;
-import com.example.cluedo_seii.Network.connectionType;
-import com.example.cluedo_seii.Network.dto.FirstConnectDTO;
-import com.example.cluedo_seii.Network.dto.QuitGameDTO;
-import com.example.cluedo_seii.Network.dto.RequestDTO;
-import com.example.cluedo_seii.Network.dto.TextMessage;
-import com.example.cluedo_seii.Network.kryonet.NetworkClientKryo;
-import com.example.cluedo_seii.Network.kryonet.NetworkServerKryo;
+import com.example.cluedo_seii.network.Callback;
+import com.example.cluedo_seii.network.connectionType;
+import com.example.cluedo_seii.network.dto.ConnectedDTO;
+import com.example.cluedo_seii.network.dto.QuitGameDTO;
+import com.example.cluedo_seii.network.dto.RequestDTO;
+import com.example.cluedo_seii.network.dto.TextMessage;
+import com.example.cluedo_seii.network.kryonet.NetworkClientKryo;
+import com.example.cluedo_seii.network.kryonet.NetworkServerKryo;
 
 import com.example.cluedo_seii.R;
 
@@ -34,6 +37,7 @@ public class NetworkScreen extends AppCompatActivity {
 
     }
 
+    @SuppressLint("SetTextI18n")
     public void selectHost(View view) {
         this.conType = connectionType.HOST;
 
@@ -44,7 +48,7 @@ public class NetworkScreen extends AppCompatActivity {
         server.registerClass(RequestDTO.class);
         server.registerClass(TextMessage.class);
         server.registerClass(QuitGameDTO.class);
-        server.registerClass(FirstConnectDTO.class);
+        server.registerClass(ConnectedDTO.class);
         try {
             server.start();
         } catch (IOException e) {
@@ -60,8 +64,8 @@ public class NetworkScreen extends AppCompatActivity {
         server.registerCallback(new Callback<RequestDTO>() {
             @Override
             public void callback(RequestDTO argument) {
-                TextView serverResponseT = findViewById(R.id.serverResponse);
-                serverResponseT.setText(argument.toString());
+                System.out.println("Received:" + argument.toString());
+                updateServerResponseMessage(argument.toString());
             }
         });
     }
@@ -80,6 +84,7 @@ public class NetworkScreen extends AppCompatActivity {
         }
     }
 
+    @SuppressLint("SetTextI18n")
     public void selectClient(View view) {
         try {
             this.conType = connectionType.CLIENT;
@@ -93,7 +98,7 @@ public class NetworkScreen extends AppCompatActivity {
             client.registerClass(RequestDTO.class);
             client.registerClass(TextMessage.class);
             client.registerClass(QuitGameDTO.class);
-            client.registerClass(FirstConnectDTO.class);
+            client.registerClass(ConnectedDTO.class);
 
             client.registerCallback(new Callback<RequestDTO>() {
                 @Override

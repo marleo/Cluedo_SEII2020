@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CompoundButton;
+import android.widget.ImageButton;
 import android.widget.Switch;
 
 import com.example.cluedo_seii.R;
@@ -62,6 +63,23 @@ public class SettingScreen extends AppCompatActivity {
                 startActivity(new Intent(SettingScreen.this, startGameScreen.class));
             }
         });
+
+        final Button helpButton = findViewById(R.id.helpButton);
+        helpButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                startActivity(new Intent(SettingScreen.this, helpSettings.class));
+            }
+        });
+
+        final ImageButton backButton = findViewById(R.id.backButtonOptions);
+        backButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                startActivity(new Intent(SettingScreen.this, MainActivity.class));
+            }
+        });
+
     }
 
     public static Boolean getCheatEnabled() {

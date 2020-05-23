@@ -13,17 +13,15 @@ public class Player implements Serializable {
     private GameboardElement position;
     private String IP;
     private GameCharacter playerCharacter;
-    private Notepad notepad;
     private Boolean madeFalseAccusation;
     private Boolean cheated;
 
-    public Player(int id , String IP, GameCharacter playerCharacter, Notepad notepad){
+    public Player(int id , String IP, GameCharacter playerCharacter){
         this.id = id;
         playerCards = new LinkedList<>();
         this.position = playerCharacter.getStartingPoint();
         this.IP = IP;
         this.playerCharacter = playerCharacter;
-        this.notepad = notepad;
         madeFalseAccusation = false;
         cheated = false;
     }
@@ -52,6 +50,10 @@ public class Player implements Serializable {
         this.madeFalseAccusation = madeFalseAccusation;
     }
 
+    public Boolean getMadeFalseAccusation() {
+        return madeFalseAccusation;
+    }
+
     public void setCheated(){
         cheated=true;
     }
@@ -61,6 +63,7 @@ public class Player implements Serializable {
     }
 
 
+    //Verdächtigungsfunktion
     public LinkedList<String> suspect(String suspectedCulprit, String suspectedWeapon, String suspectedLocation, LinkedList<Player> players){
 
         LinkedList<String>wrongSuspicions = new LinkedList<>();
@@ -91,5 +94,26 @@ public class Player implements Serializable {
 
         return wrongSuspicions;
     }
+
+    public void setPosition(GameboardElement position) {
+        this.position = position;
+    }
+
+    //Anklagefunktion
+    public boolean accuse(String accusedPerson, String accusedWeapon, String accusedLocation, InvestigationFile investigationFile){
+
+        if(investigationFile.getCulprit().getDesignation().equals(accusedPerson)
+                && investigationFile.getWeapon().getDesignation().equals(accusedWeapon)
+                && investigationFile.getRoom().getDesignation().equals(accusedLocation))
+        {
+            return true;
+        }
+
+        else{
+           madeFalseAccusation = true;
+           return  false;
+        }
+    }
+
 
 }
