@@ -41,8 +41,8 @@ public class GameboardScreen extends AppCompatActivity {
             1 = NoneWalkableElement
             2 = StartingPoint
             3 = Room
-            //4 = StartingPointPlayer
-            //5 = GamefieldPlayer
+            4 = Room_noneW
+            5 = Kitchenblack
             //6 = RoomPlayer
          */
 

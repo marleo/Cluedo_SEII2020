@@ -82,6 +82,12 @@ public class Gameboard {
                                         LinearLayout.LayoutParams.MATCH_PARENT));
                         gameboardElement.getGameBoardElement().setImageResource(R.drawable.nonwalkable_element);
                         break;
+                    case '5':
+                        gameboardElement = new KitchenBlack(gameboardScreen, x, y, new LinearLayout.LayoutParams
+                                (LinearLayout.LayoutParams.WRAP_CONTENT,
+                                        LinearLayout.LayoutParams.MATCH_PARENT));
+                        gameboardElement.getGameBoardElement().setImageResource(R.drawable.kitchen_black);
+                        break;
                 }
                 gameboardElement.getGameBoardElement().setTag(y + 1 + (x * 4));
                 gameboardElement.getGameBoardElement().setId(y + 1 + (x * 4));
