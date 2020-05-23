@@ -41,7 +41,7 @@ public abstract class GameboardElement {
         // Für später beim kalkulieren wie viele Schritte erlaubt sind
         Point oldPosition;
         // Welcher Spieler macht gerade den Zug
-        for(Player player: gameboardScreen.getPlayers()) {
+        for(Player player: gameboardScreen.getPlayerMove()) {
             if(player.getId() == gameboardScreen.getPlayerCurrentlyPlayingId()) {
                 // Wo befindet sich der Spieler
                 for(GameboardElement gameboardElementTemp: gameboardScreen.getGameboard().getListeGameboardElemente()) {

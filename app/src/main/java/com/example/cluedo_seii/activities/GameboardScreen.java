@@ -12,15 +12,21 @@ import androidx.fragment.app.FragmentManager;
 import com.example.cluedo_seii.DeckOfCards;
 import com.example.cluedo_seii.Game;
 import com.example.cluedo_seii.GameCharacter;
+import com.example.cluedo_seii.GameState;
 import com.example.cluedo_seii.Player;
 import com.example.cluedo_seii.R;
+import com.example.cluedo_seii.activities.playerGameInteraction.AccuseSomeone;
 import com.example.cluedo_seii.activities.playerGameInteraction.MakeSuspicion;
 import com.example.cluedo_seii.activities.playerGameInteraction.SuspectOrAccuse;
 import com.example.cluedo_seii.activities.playerGameInteraction.ThrowDice;
 import com.example.cluedo_seii.activities.playerGameInteraction.ThrowDiceOrUseSecretPassage;
 import com.example.cluedo_seii.spielbrett.Gameboard;
+import com.example.cluedo_seii.spielbrett.StartingPoint;
+import com.example.cluedo_seii.spielbrett.RoomElement;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.List;
 
 public class GameboardScreen extends AppCompatActivity  {
 
@@ -33,6 +39,10 @@ public class GameboardScreen extends AppCompatActivity  {
     private String mesaggeDialogTag;
     private Bundle bundle;
     private Intent intent;
+    private List<StartingPoint> startingPoints;
+    private List<Player> playerMove;
+    private int playerCurrentlyPlayingId;
+
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
@@ -49,26 +59,26 @@ public class GameboardScreen extends AppCompatActivity  {
 
         String gameBoard =
                 "1112011102111" +
-                        "1110011100111" +
-                        "1130011100111" +
-                        "0000003300111" +
-                        "1110000003111" +
-                        "1113000000000" +
-                        "1113000000002" +
-                        "1110000000002" +
-                        "0000000000000" +
-                        "1111300031111" +
-                        "1111100001111" +
-                        "1111300031111" +
-                        "0000000000000" +
-                        "1111100031111" +
-                        "1111100031111" +
-                        "1111300011111" +
-                        "0000000000000" +
-                        "0000031100000" +
-                        "0020111102000";
+                "1110011100111" +
+                "1130011100111" +
+                "0000003300111" +
+                "1110000003111" +
+                "1113000000000" +
+                "1113000000002" +
+                "1110000000002" +
+                "0000000000000" +
+                "1111300031111" +
+                "1111100001111" +
+                "1111300031111" +
+                "0000000000000" +
+                "1111100031111" +
+                "1111100031111" +
+                "1111300011111" +
+                "0000000000000" +
+                "0000031100000" +
+                "0020111102000";
 
-        gameboard = new Gameboard(this, 13, 19, gameBoard);
+        gameboard = new Gameboard(this,13,19, gameBoard);
         setContentView(gameboard.getLayout());
 
         bundle = new Bundle();
@@ -79,6 +89,64 @@ public class GameboardScreen extends AppCompatActivity  {
         startGame();
 
 
+        startingPoints = new ArrayList<>();
+        startingPoints.add(new StartingPoint(0, 0));
+        startingPoints.add(new StartingPoint(2, 1));
+
+        gameboard.spawnPlayer(startingPoints, this);
+
+        playerMove = new ArrayList<>();
+        for(StartingPoint startingPoint: startingPoints) {
+            /*Log.i("Test",
+                    "StartingPoint Position: " + startingPoint.getPlayerPosition().x + ":"
+                            + startingPoint.getPlayerPosition().y);*/
+            /*
+            playerMove.add(
+                    new Player(
+                            startingPoint.getPlayerId(),
+                            startingPoint.getPlayerPosition()
+                    )
+            );
+            */
+        }
+
+        // Wenn sich die Id ändert, dann danach updateGameboardScreen machen so wie hier!
+        playerCurrentlyPlayingId = 0;
+        gameboard.updateGameboardScreen(this);
+
+
+    }
+
+    public Gameboard getGameboard() {
+        return gameboard;
+    }
+
+    public void setGameboard(Gameboard gameboard) {
+        this.gameboard = gameboard;
+    }
+
+    public List<StartingPoint> getStartingPoints() {
+        return startingPoints;
+    }
+
+    public void setStartingPoints(List<StartingPoint> startingPoints) {
+        this.startingPoints = startingPoints;
+    }
+
+    public List<Player> getPlayerMove() {
+        return playerMove;
+    }
+
+    public void setPlayerMove(List<Player> playerMove) {
+        this.playerMove = playerMove;
+    }
+
+    public int getPlayerCurrentlyPlayingId() {
+        return playerCurrentlyPlayingId;
+    }
+
+    public void setPlayerCurrentlyPlayingId(int playerCurrentlyPlayingId) {
+        this.playerCurrentlyPlayingId = playerCurrentlyPlayingId;
     }
 
     private void startGame(){
@@ -100,15 +168,9 @@ public class GameboardScreen extends AppCompatActivity  {
         game.distributeCards();*/
         //suspectOrAccuse();
         // makeSuspicion();
-
     }
 
-    public void makeSuspicion(){
-        intent = new Intent(this, MakeSuspicion.class);
-        intent.putExtra("game", game);
-        startActivity(intent);
-    }
-
+    //Aufruf von DialogOptionen
     public void throwDice(){
         ThrowDice dialog = new ThrowDice();
         bundle.putSerializable("game", game);
@@ -130,17 +192,42 @@ public class GameboardScreen extends AppCompatActivity  {
         dialog.show(manager, mesaggeDialogTag);
     }
 
+    //UI Aufruf von Verdächtigung und Anklage
+    public void makeSuspicion(){
+        intent = new Intent(this, MakeSuspicion.class);
+        intent.putExtra("game", game);
+        startActivityForResult(intent, 2);
+    }
 
+    public void accuseSomeone(){
+        intent = new Intent(this, AccuseSomeone.class);
+        intent.putExtra("game", game);
+        startActivityForResult(intent, 2);
+    }
+
+    //Zeigt Karten auf Spielerhand
     public void showCards(){
         intent = new Intent(this, ShowCards.class);
         intent.putExtra("game", game);
         startActivity(intent);
     }
 
+    //CallBack um Resultat aus Methode zu erhalten
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data)
+    {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode==2)
+        {
+            game = (Game)data.getSerializableExtra("game");
+        }
+    }
+
     public void updateGame(Game gameUpdate){
         game = gameUpdate;
     }
 
+    //EventListener für Swipe-Event
     public boolean dispatchTouchEvent (MotionEvent touchEvent){
         switch(touchEvent.getAction()){
             case MotionEvent.ACTION_DOWN:
@@ -162,7 +249,4 @@ public class GameboardScreen extends AppCompatActivity  {
         }
         return false;
     }
-
-
-
 }
