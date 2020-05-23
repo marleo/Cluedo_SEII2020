@@ -1,36 +1,40 @@
 package com.example.cluedo_seii.activities;
 
+import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.MotionEvent;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-
+import androidx.fragment.app.FragmentManager;
 
 import com.example.cluedo_seii.DeckOfCards;
 import com.example.cluedo_seii.Game;
 import com.example.cluedo_seii.GameCharacter;
-import com.example.cluedo_seii.GameState;
-
 import com.example.cluedo_seii.Player;
 import com.example.cluedo_seii.R;
-
+import com.example.cluedo_seii.activities.playerGameInteraction.MakeSuspicion;
+import com.example.cluedo_seii.activities.playerGameInteraction.SuspectOrAccuse;
+import com.example.cluedo_seii.activities.playerGameInteraction.ThrowDice;
+import com.example.cluedo_seii.activities.playerGameInteraction.ThrowDiceOrUseSecretPassage;
 import com.example.cluedo_seii.spielbrett.Gameboard;
 
-import com.example.cluedo_seii.spielbrett.StartingPoint;
+import java.util.LinkedList;
 
-import com.example.cluedo_seii.spielbrett.RoomElement;
+public class GameboardScreen extends AppCompatActivity  {
 
-
-import java.util.ArrayList;
-import java.util.List;
-
-public class GameboardScreen extends AppCompatActivity {
-
+    private float x1, x2, y1, y2;
     private Gameboard gameboard;
-    private List<StartingPoint> startingPoints;
-    private List<Player> players;
-    private int playerCurrentlyPlayingId;
+    private Game game;
+    private LinkedList<Player> players;
+    private DeckOfCards deckOfCards;
+    private FragmentManager manager;
+    private String mesaggeDialogTag;
+    private Bundle bundle;
+    private Intent intent;
 
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,175 +45,102 @@ public class GameboardScreen extends AppCompatActivity {
             1 = NoneWalkableElement
             2 = StartingPoint
             3 = Room
-            4 = Room_noneW
-            5 = Kitchenblack
-            //6 = RoomPlayer
          */
 
         String gameBoard =
                 "1112011102111" +
-                "1110011100111" +
-                "1130011100111" +
-                "0000003300111" +
-                "1110000003111" +
-                "1113000000000" +
-                "1113000000002" +
-                "1110000000002" +
-                "0000000000000" +
-                "1111300031111" +
-                "1111100001111" +
-                "1111300031111" +
-                "0000000000000" +
-                "1111100031111" +
-                "1111100031111" +
-                "1111300011111" +
-                "0000000000000" +
-                "0000031100000" +
-                "0020111102000";
+                        "1110011100111" +
+                        "1130011100111" +
+                        "0000003300111" +
+                        "1110000003111" +
+                        "1113000000000" +
+                        "1113000000002" +
+                        "1110000000002" +
+                        "0000000000000" +
+                        "1111300031111" +
+                        "1111100001111" +
+                        "1111300031111" +
+                        "0000000000000" +
+                        "1111100031111" +
+                        "1111100031111" +
+                        "1111300011111" +
+                        "0000000000000" +
+                        "0000031100000" +
+                        "0020111102000";
 
-        gameboard = new Gameboard(this,13,19, gameBoard);
+        gameboard = new Gameboard(this, 13, 19, gameBoard);
         setContentView(gameboard.getLayout());
 
-        startingPoints = new ArrayList<>();
-        startingPoints.add(new StartingPoint(0, 0));
-        startingPoints.add(new StartingPoint(2, 1));
-
-        gameboard.spawnPlayer(startingPoints, this);
-
-        players = new ArrayList<>();
-        for(StartingPoint startingPoint: startingPoints) {
-            /*Log.i("Test",
-                    "StartingPoint Position: " + startingPoint.getPlayerPosition().x + ":"
-                            + startingPoint.getPlayerPosition().y);*/
-            players.add(
-                    new Player(
-                            startingPoint.getPlayerId(),
-                            startingPoint.getPlayerPosition()
-                    )
-            );
-        }
-
-        // Wenn sich die Id ändert, dann danach updateGameboardScreen machen so wie hier!
-        playerCurrentlyPlayingId = 0;
-        gameboard.updateGameboardScreen(this);
+        bundle = new Bundle();
+        mesaggeDialogTag = "MessageDialog";
+        manager = getSupportFragmentManager();
 
 
-    private void startGame() {
+        startGame();
+
+
+    }
+
+    private void startGame(){
 
         //TODO initialize Game according to GameLobby Settings
-        //Instanz eines Game-objektes Zu Demonstrationszwecken
-        deckOfCards = new DeckOfCards();
+
+        //Zu Demonstrationszwecken
+        /*deckOfCards = new DeckOfCards();
         players = new LinkedList<>();
         GameCharacter gameCharacter = new GameCharacter("Prof. Bloom", null);
         GameCharacter gameCharacterAlt = new GameCharacter("Fräulein Weiss", null);
-        Player player1 = new Player(1, "10.0.2.16", gameCharacterAlt);
-        Player player2 = new Player(2, "null", gameCharacter);
-        Player player3 = new Player(3, "null", gameCharacterAlt);
+        Player player1 = new Player(1, "10.0.2.16", gameCharacterAlt, null);
+        Player player2 = new Player(2,  "null", gameCharacter, null);
+        Player player3 = new Player(3, "null", gameCharacterAlt, null);
         players.add(player1);
         players.add(player2);
         players.add(player3);
-        game = new Game(gameboard, players);
+        game = new Game(gameboard, deckOfCards, players);
+        game.distributeCards();*/
+        //suspectOrAccuse();
+        // makeSuspicion();
 
-
-        //Ausführung erfolgt wenn Methode changeGameState der Instanz game aufgerufen wird
-        game.setListener(new Game.ChangeListener() {
-            @Override
-
-            //Wird ausgeführt wenn Methode aufgerufen wird
-
-            public void onChange() {
-
-                if(game.getGameState().equals(GameState.PLAYERTURNBEGIN)){
-                    if(game.getCurrentPlayer().getPosition()instanceof RoomElement) {
-                        throwDiceOrUseSecretPassage();
-                    } else {
-                        throwDice();
-                    }
-                }
-
-                else if(game.getGameState().equals(GameState.PLAVERMOVEMENT)){
-
-                }
-
-                else if(game.getGameState().equals(GameState.PLAYERACCUSATION)){
-                    if(game.getCurrentPlayer().getPosition()instanceof RoomElement){
-                        suspectOrAccuse();
-                    } else{
-                        game.changeGameState(GameState.PLAYERTURNEND);
-                    }
-                }
-
-                else if(game.getGameState().equals(GameState.PLAYERTURNEND)){
-                    int wrongAccusers = 0;
-
-
-                    //prüfe Spielbeendigungsbedingungen
-                    for(Player player: game.getPlayers()){
-                        if(player.getMadeFalseAccusation()==true){
-                            wrongAccusers++;
-                        }
-                    }
-                    if(wrongAccusers==game.getPlayers().size()){
-                        game.setGameOver(true);
-                        game.changeGameState(GameState.END);
-                    }
-                    else if(game.getGameOver()==true){
-                        game.changeGameState(GameState.END);
-                    }
-                }
-                else if(game.getGameState().equals(GameState.END)){
-                    finish();
-                }
-            }
-        });
-        }
-
-
-    public Gameboard getGameboard() {
-        return gameboard;
     }
 
-    public void setGameboard(Gameboard gameboard) {
-        this.gameboard = gameboard;
+    public void makeSuspicion(){
+        intent = new Intent(this, MakeSuspicion.class);
+        intent.putExtra("game", game);
+        startActivity(intent);
     }
 
-    public List<StartingPoint> getStartingPoints() {
-        return startingPoints;
+    public void throwDice(){
+        ThrowDice dialog = new ThrowDice();
+        bundle.putSerializable("game", game);
+        dialog.setArguments(bundle);
+        dialog.show(manager, mesaggeDialogTag);
     }
 
-    public void setStartingPoints(List<StartingPoint> startingPoints) {
-        this.startingPoints = startingPoints;
+    public void throwDiceOrUseSecretPassage(){
+        ThrowDiceOrUseSecretPassage dialog = new ThrowDiceOrUseSecretPassage();
+        bundle.putSerializable("game", game);
+        dialog.setArguments(bundle);
+        dialog.show(manager, mesaggeDialogTag);
     }
 
-    public List<Player> getPlayers() {
-        return players;
-    }
-
-    public void setPlayers(List<Player> players) {
-        this.players = players;
+    public void suspectOrAccuse(){
+        SuspectOrAccuse dialog = new SuspectOrAccuse();
+        bundle.putSerializable("game", game);
+        dialog.setArguments(bundle);
+        dialog.show(manager, mesaggeDialogTag);
     }
 
 
-    public int getPlayerCurrentlyPlayingId() {
-        return playerCurrentlyPlayingId;}
-
-    //CallBack um Resultat aus Methode zu erhalten
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data)
-    {
-        super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode==2)
-        {
-            game = (Game)data.getSerializableExtra("game");
-        }
+    public void showCards(){
+        intent = new Intent(this, ShowCards.class);
+        intent.putExtra("game", game);
+        startActivity(intent);
     }
 
-    public void setPlayerCurrentlyPlayingId(int playerCurrentlyPlayingId) {
-        this.playerCurrentlyPlayingId = playerCurrentlyPlayingId;
+    public void updateGame(Game gameUpdate){
+        game = gameUpdate;
     }
 
-
-    //EventListener für Swipe-Event
     public boolean dispatchTouchEvent (MotionEvent touchEvent){
         switch(touchEvent.getAction()){
             case MotionEvent.ACTION_DOWN:
@@ -231,6 +162,7 @@ public class GameboardScreen extends AppCompatActivity {
         }
         return false;
     }
+
 
 
 }
