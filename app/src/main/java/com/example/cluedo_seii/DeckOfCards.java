@@ -6,6 +6,7 @@ import java.util.LinkedList;
 
 public class DeckOfCards  {
 
+
     public Card oberstVonGatow = new Card(0, "Oberst von Gatov", CardType.PERSON);
     public Card profBloom = new Card(1, "Prof. Bloom", CardType.PERSON);
     public Card reverendGruen = new Card(2, "Reverend Gruen", CardType.PERSON);

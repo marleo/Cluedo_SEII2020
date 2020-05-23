@@ -50,13 +50,18 @@ public class Player implements Serializable {
         this.madeFalseAccusation = madeFalseAccusation;
     }
 
+
     public Boolean getMadeFalseAccusation() {
         return madeFalseAccusation;
     }
 
+
+
+
     public void setCheated(){
-        cheated=true;
-    }
+        cheated = true;
+}
+
 
     public void addCard(Card card){
         playerCards.add(card);
