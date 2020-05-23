@@ -1,8 +1,10 @@
 package com.example.cluedo_seii.spielbrett;
 
-import android.util.Log;
+import android.graphics.Point;
 import android.widget.LinearLayout;
 
+import com.example.cluedo_seii.Player;
+import com.example.cluedo_seii.R;
 import com.example.cluedo_seii.activities.GameboardScreen;
 
 import java.util.ArrayList;
@@ -15,6 +17,7 @@ public class Gameboard {
     private int breite;
     private LinearLayout layout;
     private String board;
+    private int startingPointTotal;
 
     public Gameboard(GameboardScreen gameboardScreen, int laenge, int breite, String board) {
         this.laenge = laenge;
@@ -43,6 +46,7 @@ public class Gameboard {
             }
         }
 
+        int startingPointCounter = 0;
         for (int y = 0; y < breite; y++) {
             LinearLayout row = new LinearLayout(gameboardScreen);
             row.setLayoutParams(new LinearLayout.LayoutParams
@@ -65,12 +69,24 @@ public class Gameboard {
                     case '2':
                         gameboardElement = new StartingpointElement(gameboardScreen, x, y, new LinearLayout.LayoutParams
                                 (LinearLayout.LayoutParams.WRAP_CONTENT,
-                                        LinearLayout.LayoutParams.MATCH_PARENT));
+                                        LinearLayout.LayoutParams.MATCH_PARENT), startingPointCounter++);
                         break;
                     case '3':
                         gameboardElement = new RoomElement(gameboardScreen, x, y, new LinearLayout.LayoutParams
                                 (LinearLayout.LayoutParams.WRAP_CONTENT,
                                         LinearLayout.LayoutParams.MATCH_PARENT));
+                        break;
+                    case '4':
+                        gameboardElement = new RoomElement(gameboardScreen, x, y, new LinearLayout.LayoutParams
+                                (LinearLayout.LayoutParams.WRAP_CONTENT,
+                                        LinearLayout.LayoutParams.MATCH_PARENT));
+                        gameboardElement.getGameBoardElement().setImageResource(R.drawable.nonwalkable_element);
+                        break;
+                    case '5':
+                        gameboardElement = new KitchenBlack(gameboardScreen, x, y, new LinearLayout.LayoutParams
+                                (LinearLayout.LayoutParams.WRAP_CONTENT,
+                                        LinearLayout.LayoutParams.MATCH_PARENT));
+                        gameboardElement.getGameBoardElement().setImageResource(R.drawable.kitchen_black);
                         break;
                 }
 
@@ -87,6 +103,39 @@ public class Gameboard {
                 // else => Spielfeld
             }
             layout.addView(row);
+        }
+
+        this.startingPointTotal = startingPointCounter-1;
+    }
+
+    public void spawnPlayer(List<StartingPoint> startingPoints, GameboardScreen gameboardScreen) {
+        for(GameboardElement gameboardElement: listeGameboardElemente) {
+            if(gameboardElement instanceof StartingpointElement) {
+                checkAndSetPlayerOnStartingPoints(startingPoints, gameboardElement);
+            }
+        }
+
+        // Immer bei jeder Methode die Änderungen am Board vornimmt danach ausführen
+        updateGameboardScreen(gameboardScreen);
+    }
+
+    private void checkAndSetPlayerOnStartingPoints(List<StartingPoint> startingPoints, GameboardElement gameboardElement) {
+        for(StartingPoint startingPoint : startingPoints){
+            if(startingPoint.getStartingPointId() == ((StartingpointElement) gameboardElement).getStartingPointId()) {
+                ((StartingpointElement) gameboardElement).positionPlayer(true);
+                startingPoint.setPlayerPosition(
+                        new Point(
+                            ((StartingpointElement) gameboardElement).getxKoordinate(),
+                            ((StartingpointElement) gameboardElement).getyKoordinate()
+                        ));
+
+            }
+        }
+    }
+
+    public void updateGameboardScreen(GameboardScreen gameboardScreen) {
+        for(GameboardElement gameboardElement: listeGameboardElemente) {
+            gameboardElement.setGameboardScreen(gameboardScreen);
         }
     }
 

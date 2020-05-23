@@ -1,43 +1,36 @@
 package com.example.cluedo_seii.activities;
 
-import android.annotation.SuppressLint;
-import android.content.Intent;
 import android.os.Bundle;
-import android.view.MotionEvent;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.FragmentManager;
+
 
 import com.example.cluedo_seii.DeckOfCards;
 import com.example.cluedo_seii.Game;
 import com.example.cluedo_seii.GameCharacter;
 import com.example.cluedo_seii.GameState;
+
 import com.example.cluedo_seii.Player;
 import com.example.cluedo_seii.R;
-import com.example.cluedo_seii.activities.playerGameInteraction.AccuseSomeone;
-import com.example.cluedo_seii.activities.playerGameInteraction.MakeSuspicion;
-import com.example.cluedo_seii.activities.playerGameInteraction.SuspectOrAccuse;
-import com.example.cluedo_seii.activities.playerGameInteraction.ThrowDice;
-import com.example.cluedo_seii.activities.playerGameInteraction.ThrowDiceOrUseSecretPassage;
+
 import com.example.cluedo_seii.spielbrett.Gameboard;
+
+import com.example.cluedo_seii.spielbrett.StartingPoint;
+
 import com.example.cluedo_seii.spielbrett.RoomElement;
 
-import java.util.LinkedList;
 
-public class GameboardScreen extends AppCompatActivity  {
+import java.util.ArrayList;
+import java.util.List;
 
-    private float x1, x2, y1, y2;
+public class GameboardScreen extends AppCompatActivity {
+
     private Gameboard gameboard;
-    private Game game;
-    private LinkedList<Player> players;
-    private DeckOfCards deckOfCards;
-    private FragmentManager manager;
-    private String mesaggeDialogTag;
-    private Bundle bundle;
-    private Intent intent;
+    private List<StartingPoint> startingPoints;
+    private List<Player> players;
+    private int playerCurrentlyPlayingId;
 
-    @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,6 +41,9 @@ public class GameboardScreen extends AppCompatActivity  {
             1 = NoneWalkableElement
             2 = StartingPoint
             3 = Room
+            4 = Room_noneW
+            5 = Kitchenblack
+            //6 = RoomPlayer
          */
 
         String gameBoard =
@@ -74,22 +70,29 @@ public class GameboardScreen extends AppCompatActivity  {
         gameboard = new Gameboard(this,13,19, gameBoard);
         setContentView(gameboard.getLayout());
 
-        bundle = new Bundle();
-        mesaggeDialogTag = "MessageDialog";
-        manager = getSupportFragmentManager();
+        startingPoints = new ArrayList<>();
+        startingPoints.add(new StartingPoint(0, 0));
+        startingPoints.add(new StartingPoint(2, 1));
 
+        gameboard.spawnPlayer(startingPoints, this);
 
+        players = new ArrayList<>();
+        for(StartingPoint startingPoint: startingPoints) {
+            /*Log.i("Test",
+                    "StartingPoint Position: " + startingPoint.getPlayerPosition().x + ":"
+                            + startingPoint.getPlayerPosition().y);*/
+            players.add(
+                    new Player(
+                            startingPoint.getPlayerId(),
+                            startingPoint.getPlayerPosition()
+                    )
+            );
+        }
 
-        startGame();
+        // Wenn sich die Id ändert, dann danach updateGameboardScreen machen so wie hier!
+        playerCurrentlyPlayingId = 0;
+        gameboard.updateGameboardScreen(this);
 
-        /*final Button notepad_Button = findViewById(R.id.notepadButton);
-        notepad_Button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(GameboardScreen.this, NotepadScreen.class));
-            }
-        });*/
-    }
 
     private void startGame() {
 
@@ -106,6 +109,7 @@ public class GameboardScreen extends AppCompatActivity  {
         players.add(player2);
         players.add(player3);
         game = new Game(gameboard, players);
+
 
         //Ausführung erfolgt wenn Methode changeGameState der Instanz game aufgerufen wird
         game.setListener(new Game.ChangeListener() {
@@ -161,48 +165,33 @@ public class GameboardScreen extends AppCompatActivity  {
         }
 
 
-
-    //Aufruf von DialogOptionen
-    public void throwDice(){
-        ThrowDice dialog = new ThrowDice();
-        bundle.putSerializable("game", game);
-        dialog.setArguments(bundle);
-        dialog.show(manager, mesaggeDialogTag);
+    public Gameboard getGameboard() {
+        return gameboard;
     }
 
-    public void throwDiceOrUseSecretPassage(){
-        ThrowDiceOrUseSecretPassage dialog = new ThrowDiceOrUseSecretPassage();
-        bundle.putSerializable("game", game);
-        dialog.setArguments(bundle);
-        dialog.show(manager, mesaggeDialogTag);
+    public void setGameboard(Gameboard gameboard) {
+        this.gameboard = gameboard;
     }
 
-    public void suspectOrAccuse(){
-        SuspectOrAccuse dialog = new SuspectOrAccuse();
-        bundle.putSerializable("game", game);
-        dialog.setArguments(bundle);
-        dialog.show(manager, mesaggeDialogTag);
+    public List<StartingPoint> getStartingPoints() {
+        return startingPoints;
     }
 
-    //UI Aufruf von Verdächtigung und Anklage
-    public void makeSuspicion(){
-        intent = new Intent(this, MakeSuspicion.class);
-        intent.putExtra("game", game);
-        startActivityForResult(intent, 2);
+    public void setStartingPoints(List<StartingPoint> startingPoints) {
+        this.startingPoints = startingPoints;
     }
 
-    public void accuseSomeone(){
-        intent = new Intent(this, AccuseSomeone.class);
-        intent.putExtra("game", game);
-        startActivityForResult(intent, 2);
+    public List<Player> getPlayers() {
+        return players;
     }
 
-    //Zeigt Karten auf Spielerhand
-    public void showCards(){
-        intent = new Intent(this, ShowCards.class);
-        intent.putExtra("game", game);
-        startActivity(intent);
+    public void setPlayers(List<Player> players) {
+        this.players = players;
     }
+
+
+    public int getPlayerCurrentlyPlayingId() {
+        return playerCurrentlyPlayingId;}
 
     //CallBack um Resultat aus Methode zu erhalten
     @Override
@@ -215,9 +204,10 @@ public class GameboardScreen extends AppCompatActivity  {
         }
     }
 
-    public void updateGame(Game gameUpdate){
-        game = gameUpdate;
+    public void setPlayerCurrentlyPlayingId(int playerCurrentlyPlayingId) {
+        this.playerCurrentlyPlayingId = playerCurrentlyPlayingId;
     }
+
 
     //EventListener für Swipe-Event
     public boolean dispatchTouchEvent (MotionEvent touchEvent){
@@ -243,10 +233,4 @@ public class GameboardScreen extends AppCompatActivity  {
     }
 
 
-
 }
-
-
-
-
-
