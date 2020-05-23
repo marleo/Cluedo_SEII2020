@@ -16,7 +16,7 @@ public class Game implements Serializable {
 
     private transient Gameboard gameboard;
     private transient DeckOfCards deckOfCards;
-    private InvestigationFile investigationFile;
+    public InvestigationFile investigationFile;
     private LinkedList<Player>players;
     private Boolean gameOver;
     private transient Random random;

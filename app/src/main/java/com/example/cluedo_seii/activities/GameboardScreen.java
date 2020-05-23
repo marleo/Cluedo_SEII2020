@@ -2,10 +2,6 @@ package com.example.cluedo_seii.activities;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.hardware.Sensor;
-import android.hardware.SensorEvent;
-import android.hardware.SensorEventListener;
-import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.view.MotionEvent;
 
@@ -16,7 +12,6 @@ import androidx.fragment.app.FragmentManager;
 import com.example.cluedo_seii.DeckOfCards;
 import com.example.cluedo_seii.Game;
 import com.example.cluedo_seii.GameCharacter;
-import com.example.cluedo_seii.Notepad;
 import com.example.cluedo_seii.Player;
 import com.example.cluedo_seii.R;
 import com.example.cluedo_seii.activities.playerGameInteraction.MakeSuspicion;
@@ -82,42 +77,8 @@ public class GameboardScreen extends AppCompatActivity  {
 
 
         startGame();
-       /*SensorManager mySensorManager = (SensorManager)getSystemService(SENSOR_SERVICE);
-
-        Sensor lightSensor = mySensorManager.getDefaultSensor(Sensor.TYPE_LIGHT);
-        if(lightSensor != null){
-
-            mySensorManager.registerListener(
-                    lightSensorListener,
-                    lightSensor,
-                    SensorManager.SENSOR_DELAY_NORMAL);
-
-        } else {
-           // textLIGHT_available.setText("Sensor.TYPE_LIGHT NOT Available");
-        }
 
 
-    }
-    private final SensorEventListener lightSensorListener
-            = new SensorEventListener(){
-
-        @Override
-        public void onAccuracyChanged(Sensor sensor, int accuracy) {
-            if (sensor.getType() == Sensor.TYPE_LIGHT) {
-
-                NotepadScreen notepadScreen= new NotepadScreen();
-                notepadScreen.cheatFunction();
-            }
-
-        }
-
-        @Override
-        public void onSensorChanged(SensorEvent event) {
-            if(event.sensor.getType() == Sensor.TYPE_LIGHT){
-                //textLIGHT_reading.setText("LIGHT: " + event.values[0]);
-            }
-        }
-*/
     }
 
     private void startGame(){

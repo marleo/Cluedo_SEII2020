@@ -1,26 +1,48 @@
 package com.example.cluedo_seii.activities;
 
-import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.os.Bundle;
-import android.os.PersistableBundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.cluedo_seii.Card;
-import com.example.cluedo_seii.DeckOfCards;
-import com.example.cluedo_seii.InvestigationFile;
 import com.example.cluedo_seii.Notepad;
-import com.example.cluedo_seii.Player;
 import com.example.cluedo_seii.R;
-import java.util.LinkedHashMap;
+import java.util.Random;
 
 public class NotepadScreen extends AppCompatActivity {
-    TextView[] textViews;
+    public TextView[] textViews;
+    private TextView textViewGatov;
+    private  TextView textViewBloom;
+    private  TextView textViewGreen ;
+    private  TextView textViewPorz;
+    private TextView textViewGloria;
+    private  TextView textViewWeiss;
+    private  TextView textViewDolch;
+    private  TextView textViewLeuchter;
+    private  TextView textViewPistole;
+    private  TextView textViewSeil;
+    private  TextView textViewHeizungsrohr;
+    private  TextView textViewRohrzange;
+    private  TextView textViewHalle;
+    private  TextView textViewSalon;
+    private  TextView textViewSpeisezimmer;
+    private  TextView textViewKüche;
+    private TextView textViewMusikzimmer;
+    private  TextView textViewWinterzimmer;
+    private  TextView textViewBiliardzimmer;
+    private  TextView textViewBibliothek;
+    private  TextView textViewArbeitszimmer;
+    private EditText editText1;
+    private Button btn1;
+    private TextView textView;
+    private Notepad notepad;
 
 
     @Override
@@ -28,88 +50,77 @@ public class NotepadScreen extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_notepad);
 
-        final TextView textViewGatov = findViewById(R.id.notepad_gatov);
-        final TextView textViewBloom = findViewById(R.id.notepad_bloom);
-        final TextView textViewGreen = findViewById(R.id.notepad_green);
-        final TextView textViewPorz = findViewById(R.id.notepad_porz);
-        final TextView textViewGloria = findViewById(R.id.notepad_gloria);
-        final TextView textViewWeiss = findViewById(R.id.notepad_weiss);
-        final TextView textViewDolch = findViewById(R.id.notepad_dolch);
-        final TextView textViewLeuchter = findViewById(R.id.notepad_leuchter);
-        final TextView textViewPistole = findViewById(R.id.notepad_pistole);
-        final TextView textViewSeil = findViewById(R.id.notepad_seil);
-        final TextView textViewHeizungsrohr = findViewById(R.id.notepad_heizungsrohr);
-        final TextView textViewRohrzange = findViewById(R.id.notepad_rohrzange);
-        final TextView textViewHalle = findViewById(R.id.notepad_Halle);
-        final TextView textViewSalon = findViewById(R.id.notepad_salon);
-        final TextView textViewSpeisezimmer = findViewById(R.id.notepad_speisezimmer);
-        final TextView textViewKüche = findViewById(R.id.notepad_küche);
-        final TextView textViewMusikzimmer = findViewById(R.id.notepad_musikzimmer);
-        final TextView textViewWinterzimmer = findViewById(R.id.notepad_winterzimmer);
-        final TextView textViewBiliardzimmer = findViewById(R.id.notepad_biliardzimmer);
-        final TextView textViewBibliothek = findViewById(R.id.notepad_bibliothek);
-        final TextView textViewArbeitszimmer = findViewById(R.id.notepad_arbeitszimmer);
-        final LinkedHashMap<String, String> notes = new LinkedHashMap<>();
-        final EditText editText1 = findViewById(R.id.addMoreNotes);
-        final Button btn1 = findViewById(R.id.addMoreNotesButton);
-        final TextView textView = findViewById(R.id.moreNotesView);
+        notepad = new Notepad();
+
+        textViewGatov = findViewById(R.id.notepad_gatov);
+        textViewBloom = findViewById(R.id.notepad_bloom);
+        textViewGreen = findViewById(R.id.notepad_green);
+        textViewPorz = findViewById(R.id.notepad_porz);
+        textViewGloria = findViewById(R.id.notepad_gloria);
+        textViewWeiss = findViewById(R.id.notepad_weiss);
+        textViewDolch = findViewById(R.id.notepad_dolch);
+        textViewLeuchter = findViewById(R.id.notepad_leuchter);
+        textViewPistole = findViewById(R.id.notepad_pistole);
+        textViewSeil = findViewById(R.id.notepad_seil);
+        textViewHeizungsrohr = findViewById(R.id.notepad_heizungsrohr);
+        textViewRohrzange = findViewById(R.id.notepad_rohrzange);
+        textViewHalle = findViewById(R.id.notepad_Halle);
+        textViewSalon = findViewById(R.id.notepad_salon);
+        textViewSpeisezimmer = findViewById(R.id.notepad_speisezimmer);
+        textViewKüche = findViewById(R.id.notepad_küche);
+        textViewMusikzimmer = findViewById(R.id.notepad_musikzimmer);
+        textViewWinterzimmer = findViewById(R.id.notepad_winterzimmer);
+        textViewBiliardzimmer = findViewById(R.id.notepad_biliardzimmer);
+        textViewBibliothek = findViewById(R.id.notepad_bibliothek);
+        textViewArbeitszimmer = findViewById(R.id.notepad_arbeitszimmer);
+        editText1 = findViewById(R.id.addMoreNotes);
+        btn1 = findViewById(R.id.addMoreNotesButton);
+        textView = findViewById(R.id.moreNotesView);
 
 
-        DeckOfCards deckOfCards= new DeckOfCards();
+        textViewGatov.append(notepad.getCards()[0].getDesignation());
+        textViewBloom.append(notepad.getCards()[1].getDesignation());
+        textViewGreen.append(notepad.getCards()[2].getDesignation());
+        textViewPorz.append(notepad.getCards()[3].getDesignation());
+        textViewGloria.append(notepad.getCards()[4].getDesignation());
+        textViewWeiss.append(notepad.getCards()[5].getDesignation());
+        textViewDolch.append(notepad.getCards()[6].getDesignation());
+        textViewLeuchter.append(notepad.getCards()[7].getDesignation());
+        textViewPistole.append(notepad.getCards()[8].getDesignation());
+        textViewSeil.append(notepad.getCards()[9].getDesignation());
+        textViewHeizungsrohr.append(notepad.getCards()[10].getDesignation());
+        textViewRohrzange.append(notepad.getCards()[11].getDesignation());
+        textViewHalle.append(notepad.getCards()[12].getDesignation());
+        textViewSalon.append(notepad.getCards()[13].getDesignation());
+        textViewSpeisezimmer.append(notepad.getCards()[14].getDesignation());
+        textViewKüche.append(notepad.getCards()[15].getDesignation());
+        textViewMusikzimmer.append(notepad.getCards()[16].getDesignation());
+        textViewWinterzimmer.append(notepad.getCards()[17].getDesignation());
+        textViewBiliardzimmer.append(notepad.getCards()[18].getDesignation());
+        textViewBibliothek.append(notepad.getCards()[19].getDesignation());
+        textViewArbeitszimmer.append(notepad.getCards()[20].getDesignation());
 
-        Card[] cards = {deckOfCards.oberstVonGatow, deckOfCards.profBloom, deckOfCards.reverendGruen, deckOfCards.baroninVonPorz, deckOfCards.fraeuleinGloria, deckOfCards.frauWeiss,
-                        deckOfCards.dolch, deckOfCards.leuchter, deckOfCards.pistole, deckOfCards.seil, deckOfCards.heizungsrohr, deckOfCards.rohrzange,
-                        deckOfCards.halle, deckOfCards.salon, deckOfCards.speisezimmer, deckOfCards.kueche, deckOfCards.musikzimmer, deckOfCards.winterzimmer, deckOfCards.biliardzimmer, deckOfCards.bibliothek, deckOfCards.arbeitszimmer
-        };
-
-        final Notepad notepad = new Notepad(cards);
-
-       textViewGatov.append(cards[0].getDesignation());
-       textViewBloom.append(cards[1].getDesignation());
-       textViewGreen.append(cards[2].getDesignation());
-       textViewPorz.append(cards[3].getDesignation());
-       textViewGloria.append(cards[4].getDesignation());
-       textViewWeiss.append(cards[5].getDesignation());
-       textViewDolch.append(cards[6].getDesignation());
-       textViewLeuchter.append(cards[7].getDesignation());
-       textViewPistole.append(cards[8].getDesignation());
-       textViewSeil.append(cards[9].getDesignation());
-       textViewHeizungsrohr.append(cards[10].getDesignation());
-       textViewRohrzange.append(cards[11].getDesignation());
-       textViewHalle.append(cards[12].getDesignation());
-       textViewSalon.append(cards[13].getDesignation());
-       textViewSpeisezimmer.append(cards[14].getDesignation());
-       textViewKüche.append(cards[15].getDesignation());
-       textViewMusikzimmer.append(cards[16].getDesignation());
-       textViewWinterzimmer.append(cards[17].getDesignation());
-       textViewBiliardzimmer.append(cards[18].getDesignation());
-       textViewBibliothek.append(cards[19].getDesignation());
-       textViewArbeitszimmer.append(cards[20].getDesignation());
-
-
-
-       textViews = new TextView[21];
-        textViews[0]= textViewGatov;
-        textViews[1]=textViewBloom;
-        textViews[2]=textViewGreen;
-        textViews[3]=textViewPorz;
-        textViews[4]=textViewGloria;
-        textViews[5]=textViewWeiss;
-        textViews[6]=textViewDolch;
-        textViews[7]=textViewLeuchter;
-        textViews[8]=textViewPistole;
-        textViews[9]=textViewSeil;
-        textViews[10]=textViewHeizungsrohr;
-        textViews[11]=textViewRohrzange;
-        textViews[12]=textViewHalle;
-        textViews[13]=textViewSalon;
-        textViews[14]=textViewSpeisezimmer;
-        textViews[15]=textViewKüche;
-        textViews[16]=textViewMusikzimmer;
-        textViews[17]=textViewWinterzimmer;
-        textViews[18]=textViewBiliardzimmer;
-        textViews[19]=textViewBibliothek;
-        textViews[20]=textViewArbeitszimmer;
+        notepad.setTextViews(textViewGatov,0);
+        notepad.setTextViews(textViewBloom,1);
+        notepad.setTextViews(textViewGreen,2);
+        notepad.setTextViews(textViewPorz,3);
+        notepad.setTextViews(textViewGloria,4);
+        notepad.setTextViews(textViewWeiss,5);
+        notepad.setTextViews(textViewDolch,6);
+        notepad.setTextViews(textViewLeuchter,7);
+        notepad.setTextViews(textViewPistole,8);
+        notepad.setTextViews(textViewSeil,9);
+        notepad.setTextViews(textViewHeizungsrohr,10);
+        notepad.setTextViews(textViewRohrzange,11);
+        notepad.setTextViews(textViewHalle,12);
+        notepad.setTextViews(textViewSalon,13);
+        notepad.setTextViews(textViewSpeisezimmer,14);
+        notepad.setTextViews(textViewKüche,15);
+        notepad.setTextViews(textViewMusikzimmer,16);
+        notepad.setTextViews(textViewWinterzimmer,17);
+        notepad.setTextViews(textViewBiliardzimmer,18);
+        notepad.setTextViews(textViewBibliothek,19);
+        notepad.setTextViews(textViewArbeitszimmer,20);
 
 
 
@@ -124,30 +135,54 @@ public class NotepadScreen extends AppCompatActivity {
         };
         btn1.setOnClickListener(onButtonClickListener1);
 
+        //notepad.cheatFunction();
+
+
+        /*SensorManager mySensorManager = (SensorManager)getSystemService(SENSOR_SERVICE);
+
+        Sensor lightSensor = mySensorManager.getDefaultSensor(Sensor.TYPE_LIGHT);
+        if(lightSensor != null){
+
+            mySensorManager.registerListener(
+                    lightSensorListener,
+                    lightSensor,
+                    SensorManager.SENSOR_DELAY_NORMAL);
+
+        } else {
+            // textLIGHT_available.setText("Sensor.TYPE_LIGHT NOT Available");
+        }
 
 
     }
+    private final SensorEventListener lightSensorListener
+            = new SensorEventListener(){
 
-    public void cheatFunction(){
-       // Notepad notepad = new Notepad(notepad.getCards());
-       // Player player;
-       // player = new Player (player.getId(), player.getIP(), player.getPlayerCharacter(), notepad);
+        @Override
+        public void onAccuracyChanged(Sensor sensor, int accuracy) {
+            if (sensor.getType() == Sensor.TYPE_LIGHT) {
+                cheatFunction(textViews, culprit, room, weapon);
+            }
 
-        InvestigationFile investigationFile = new InvestigationFile();
-        Card culprite = investigationFile.getCulprit();
-        Card room = investigationFile.getRoom();
-        Card weapon = investigationFile.getWeapon();
-        TextView view;
+        }
 
-        do {view = textViews[(int) Math.floor(Math.random() * textViews.length)];}
+        @Override
+        public void onSensorChanged(SensorEvent event) {
+            if(event.sensor.getType() == Sensor.TYPE_LIGHT){
+                //textLIGHT_reading.setText("LIGHT: " + event.values[0]);
+            }
+        }*/
 
-        while(view.equals(culprite)||view.equals(room)||view.equals(weapon)||view.getTag()=="grayed");
-
-
-        view.setBackgroundColor(Color.argb(150, 200, 200, 200));
-       // player.setCheated();
+    }//;
 
 
+
+
+
+
+
+    public  TextView getRandom(TextView[] array) {
+        int random = new Random().nextInt(array.length);
+        return array[random];
     }
 
 
@@ -162,4 +197,5 @@ public class NotepadScreen extends AppCompatActivity {
             view.setTag("");
         }
     }
+
 }
