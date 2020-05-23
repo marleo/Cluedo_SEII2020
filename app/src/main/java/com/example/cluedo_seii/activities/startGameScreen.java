@@ -12,16 +12,16 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.example.cluedo_seii.Network.Callback;
-import com.example.cluedo_seii.Network.ClientData;
-import com.example.cluedo_seii.Network.connectionType;
-import com.example.cluedo_seii.Network.dto.ConnectedDTO;
-import com.example.cluedo_seii.Network.dto.QuitGameDTO;
-import com.example.cluedo_seii.Network.dto.RequestDTO;
-import com.example.cluedo_seii.Network.dto.TextMessage;
-import com.example.cluedo_seii.Network.dto.UserNameRequestDTO;
-import com.example.cluedo_seii.Network.kryonet.NetworkClientKryo;
-import com.example.cluedo_seii.Network.kryonet.NetworkServerKryo;
+import com.example.cluedo_seii.network.Callback;
+import com.example.cluedo_seii.network.ClientData;
+import com.example.cluedo_seii.network.connectionType;
+import com.example.cluedo_seii.network.dto.ConnectedDTO;
+import com.example.cluedo_seii.network.dto.QuitGameDTO;
+import com.example.cluedo_seii.network.dto.RequestDTO;
+import com.example.cluedo_seii.network.dto.TextMessage;
+import com.example.cluedo_seii.network.dto.UserNameRequestDTO;
+import com.example.cluedo_seii.network.kryonet.NetworkClientKryo;
+import com.example.cluedo_seii.network.kryonet.NetworkServerKryo;
 import com.example.cluedo_seii.R;
 
 import java.io.IOException;
@@ -64,7 +64,7 @@ public class startGameScreen extends AppCompatActivity {
                 runOnUiThread(new Runnable() {
                     public void run() {
                         TextView userNameInput = findViewById(R.id.username_input);
-                        ArrayAdapter<String> clientListAdapter = new ArrayAdapter<String>(startGameScreen.this, android.R.layout.simple_list_item_1,usernameList);
+                        ArrayAdapter<String> clientListAdapter = new ArrayAdapter<>(startGameScreen.this, android.R.layout.simple_list_item_1,usernameList);
                         clientList.setAdapter(clientListAdapter);
                         userNameInput.setText(usernameList.toString());
                     }

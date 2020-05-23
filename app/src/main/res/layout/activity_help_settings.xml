@@ -16,13 +16,17 @@
             android:id="@+id/gameplayTab"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/gameRules" />
+            android:text="@string/gameRules"
+            android:textSize="20sp"
+            />
 
         <com.google.android.material.tabs.TabItem
             android:id="@+id/controlTab"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/gesturerules" />
+            android:text="@string/gesturerules"
+            android:textSize="20sp"
+            />
 
 
     </com.google.android.material.tabs.TabLayout>

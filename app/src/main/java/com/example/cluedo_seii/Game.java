@@ -8,7 +8,6 @@ import java.util.Random;
 
 public class Game implements Serializable {
 
-    private transient Gameboard gameboard;
     private transient DeckOfCards deckOfCards;
     private InvestigationFile investigationFile;
     private LinkedList<Player>players;
@@ -22,7 +21,6 @@ public class Game implements Serializable {
 
     public Game(Gameboard gameboard, LinkedList<Player>players){
 
-        this.gameboard = gameboard;
         this.deckOfCards = new DeckOfCards();
         this.players = players;
         investigationFile = new InvestigationFile();
@@ -56,7 +54,7 @@ public class Game implements Serializable {
         return currentPlayer;
     }
 
-    public int getRound() {
+    int getRound() {
         return round;
     }
 
@@ -85,7 +83,7 @@ public class Game implements Serializable {
 
     //Methode zur Kartenverteilung
 
-    public void distributeCards(){
+    void distributeCards(){
 
         LinkedList<Card> cardStack =  deckOfCards.getGameCardsStandard();
 
@@ -142,7 +140,7 @@ public class Game implements Serializable {
 
     //Methode für Spielerwechsel und Rundenzähler
 
-    public void nextPlayer(){
+    void nextPlayer(){
         if(playerIterator==players.size()-1)
         {
             playerIterator=0;
