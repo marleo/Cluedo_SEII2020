@@ -99,6 +99,7 @@ public class GameboardScreen extends AppCompatActivity  {
         players.add(player2);
         players.add(player3);
         game = new Game(gameboard, players);
+        game.distributeCards(); //um Notepad cheatFunction zu demonstrieren
 
         //Ausführung erfolgt wenn Methode changeGameState der Instanz game aufgerufen wird
         game.setListener(new Game.ChangeListener() {
@@ -184,6 +185,12 @@ public class GameboardScreen extends AppCompatActivity  {
         startActivityForResult(intent, 2);
     }
 
+    public void startNotepad(){
+        intent = new Intent(this, NotepadScreen.class);
+        intent.putExtra("game",game);
+        startActivityForResult(intent, 2);
+    }
+
     public void accuseSomeone(){
         intent = new Intent(this, AccuseSomeone.class);
         intent.putExtra("game", game);
@@ -226,7 +233,7 @@ public class GameboardScreen extends AppCompatActivity  {
                 y2 = touchEvent.getY();
 
                 if(x1 < x2){
-                    startActivity(new Intent(GameboardScreen.this, NotepadScreen.class));
+                    startNotepad();
                 }else if(x1 > x2){
                     showCards();
                 }

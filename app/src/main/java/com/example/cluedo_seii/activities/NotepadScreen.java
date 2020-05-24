@@ -144,7 +144,7 @@ public class NotepadScreen extends AppCompatActivity {
             public void onClick(View v) {
                 String message = editText1.getText().toString();
                 notepad.addMoreNotes(message);
-                textView.append(message);
+                textView.append(notepad.getMoreNotes());
 
             }
         };

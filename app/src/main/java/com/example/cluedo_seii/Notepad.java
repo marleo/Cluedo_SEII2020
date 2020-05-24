@@ -35,7 +35,7 @@ public class Notepad {
     }
 
     public void addMoreNotes(String message) {
-        moreNotes += message;
+        moreNotes +=" "+ message;
     }
 
     public TextView[] getTextViews(){
