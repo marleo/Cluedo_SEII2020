@@ -47,20 +47,20 @@ public class Notepad {
 
     }
 
-    public void cheatFunction() {
-        InvestigationFile investigationFile = new InvestigationFile();
-        DeckOfCards deckOfCards = new DeckOfCards();
-        Card card = deckOfCards.arbeitszimmer; //Zu Demonstrationszwecken
-        investigationFile.setCulprit(card);
+    public void cheatFunction(InvestigationFile investigationFile) {
+        //InvestigationFile investigationFile= new InvestigationFile();
+        //DeckOfCards deckOfCards = new DeckOfCards();
+        //Card card = deckOfCards.arbeitszimmer; //Zu Demonstrationszwecken
+        //investigationFile.setCulprit(card);
 
         Card culprit = investigationFile.getCulprit();
         String culpritString = culprit.getDesignation();
 
-        /*Card room = investigationFile.getRoom();
+        Card room = investigationFile.getRoom();
         String roomString = room.getDesignation();
 
         Card weapon = investigationFile.getWeapon();
-        String weaponString = weapon.getDesignation();*/
+        String weaponString = weapon.getDesignation();
 
         TextView randomTextView;
         String randomString;
@@ -71,7 +71,7 @@ public class Notepad {
             randomTextView = notepadScreen.getRandom(textViews);
             randomString = randomTextView.getText().toString();
         }
-        while(randomString.equals(culpritString)/*||randomString.equals(roomString)||randomString.equals(weaponString)*/||randomTextView.getTag()=="grayed");
+        while(randomString.equals(culpritString)||randomString.equals(roomString)||randomString.equals(weaponString)||randomTextView.getTag()=="grayed");
 
         randomTextView.setBackgroundColor(Color.argb(150, 200, 200, 200));
     }

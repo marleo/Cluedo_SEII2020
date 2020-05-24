@@ -62,6 +62,7 @@ public class Player implements Serializable {
         cheated = true;
 }
 
+    public Boolean getCheated(){return cheated;}
 
     public void addCard(Card card){
         playerCards.add(card);

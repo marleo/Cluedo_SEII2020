@@ -1,5 +1,6 @@
 package com.example.cluedo_seii.activities;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
@@ -13,6 +14,7 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.cluedo_seii.Game;
 import com.example.cluedo_seii.Notepad;
 import com.example.cluedo_seii.R;
 import java.util.Random;
@@ -44,10 +46,12 @@ public class NotepadScreen extends AppCompatActivity {
     private Button btn1;
     private TextView textView;
     private Notepad notepad;
+    private Game game;
+    private Intent intent;
+
 
     private SensorManager sensorManager;
     private Sensor lightSensor;
-    private SensorEventListener lightEventListener;
     private float sensorValue;
 
 
@@ -57,6 +61,11 @@ public class NotepadScreen extends AppCompatActivity {
         setContentView(R.layout.activity_notepad);
 
         notepad = new Notepad();
+
+        intent = getIntent();
+
+        game = (Game)intent.getSerializableExtra("game");
+
 
         textViewGatov = findViewById(R.id.notepad_gatov);
         textViewBloom = findViewById(R.id.notepad_bloom);
@@ -152,15 +161,19 @@ public class NotepadScreen extends AppCompatActivity {
         sensorManager.registerListener( new SensorEventListener() {
             @Override
             public void onSensorChanged(SensorEvent event) {
-                if (event.sensor.getType() == Sensor.TYPE_LIGHT) {
-                    if (event.values[0] < 3) {
-                        sensorValue = event.values[0];
-                    }
-                    if (event.values[0] == 0) {
-                        notepad.cheatFunction();
-                    }
-                }
+                if (!game.getCurrentPlayer().getCheated()) {
+                    if (event.sensor.getType() == Sensor.TYPE_LIGHT) {
+                        if (event.values[0] < 3) {
+                            sensorValue = event.values[0];
+                        }
+                        if (event.values[0] == 0) {
+                            notepad.cheatFunction(game.getInvestigationFile());
+                            game.getCurrentPlayer().setCheated();
 
+                        }
+                    }
+
+                }
             }
 
             @Override

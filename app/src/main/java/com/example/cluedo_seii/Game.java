@@ -9,7 +9,7 @@ import java.util.Random;
 public class Game implements Serializable {
 
     private transient DeckOfCards deckOfCards;
-    public InvestigationFile investigationFile;
+    private InvestigationFile investigationFile;
     private LinkedList<Player>players;
     private Boolean gameOver;
     private transient Random random;
