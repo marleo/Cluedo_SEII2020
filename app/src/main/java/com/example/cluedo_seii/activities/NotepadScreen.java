@@ -1,21 +1,26 @@
 package com.example.cluedo_seii.activities;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.net.wifi.WifiManager;
 import android.os.Bundle;
+import android.text.format.Formatter;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.cluedo_seii.Game;
 import com.example.cluedo_seii.Notepad;
+import com.example.cluedo_seii.Player;
 import com.example.cluedo_seii.R;
 import java.util.Random;
 
@@ -48,6 +53,8 @@ public class NotepadScreen extends AppCompatActivity {
     private Notepad notepad;
     private Game game;
     private Intent intent;
+    private Player player;
+    private WifiManager wifiManager;
 
 
     private SensorManager sensorManager;
@@ -58,13 +65,22 @@ public class NotepadScreen extends AppCompatActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        intent = getIntent();
+        game = (Game)intent.getSerializableExtra("game");
+        final SharedPreferences preferences = getSharedPreferences("com.example.cluedo_seii", MODE_PRIVATE);
         setContentView(R.layout.activity_notepad);
+
+       // player  = game.getCurrentPlayer();
+
+
+
+        //notepad = player.getNotepad();
+
+
 
         notepad = new Notepad();
 
-        intent = getIntent();
 
-        game = (Game)intent.getSerializableExtra("game");
 
 
         textViewGatov = findViewById(R.id.notepad_gatov);
@@ -161,7 +177,7 @@ public class NotepadScreen extends AppCompatActivity {
         sensorManager.registerListener( new SensorEventListener() {
             @Override
             public void onSensorChanged(SensorEvent event) {
-                if (!game.getCurrentPlayer().getCheated()) {
+                if (!game.getCurrentPlayer().getCheated()&& preferences.getBoolean("cheatEnabled",false)) {
                     if (event.sensor.getType() == Sensor.TYPE_LIGHT) {
                         if (event.values[0] < 3) {
                             sensorValue = event.values[0];
@@ -181,6 +197,14 @@ public class NotepadScreen extends AppCompatActivity {
 
             }
         }, lightSensor, SensorManager.SENSOR_DELAY_NORMAL);
+
+        final ImageButton backButton = findViewById(R.id.backButtonNotepad);
+        backButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                startActivity(new Intent(NotepadScreen.this, GameboardScreen.class));
+            }
+        });
 
     }
 

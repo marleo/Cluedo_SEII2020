@@ -13,6 +13,7 @@ import com.example.cluedo_seii.DeckOfCards;
 import com.example.cluedo_seii.Game;
 import com.example.cluedo_seii.GameCharacter;
 import com.example.cluedo_seii.GameState;
+import com.example.cluedo_seii.Notepad;
 import com.example.cluedo_seii.Player;
 import com.example.cluedo_seii.R;
 import com.example.cluedo_seii.activities.playerGameInteraction.AccuseSomeone;
@@ -90,6 +91,7 @@ public class GameboardScreen extends AppCompatActivity  {
         //Instanz eines Game-objektes Zu Demonstrationszwecken
         deckOfCards = new DeckOfCards();
         players = new LinkedList<>();
+
         GameCharacter gameCharacter = new GameCharacter("Prof. Bloom", null);
         GameCharacter gameCharacterAlt = new GameCharacter("Fräulein Weiss", null);
         Player player1 = new Player(1, "10.0.2.16", gameCharacterAlt);
@@ -188,7 +190,7 @@ public class GameboardScreen extends AppCompatActivity  {
     public void startNotepad(){
         intent = new Intent(this, NotepadScreen.class);
         intent.putExtra("game",game);
-        startActivityForResult(intent, 2);
+        startActivity(intent);
     }
 
     public void accuseSomeone(){
