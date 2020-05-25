@@ -38,8 +38,6 @@
             android:name=".activities.NotepadScreen"
             android:label="Cluedo">
         </activity>
-
-
         <activity
             android:name=".activities.RollDiceScreen"
             android:exported="true"
