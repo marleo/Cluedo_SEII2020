@@ -79,7 +79,6 @@ public class GameboardScreen extends AppCompatActivity  {
         manager = getSupportFragmentManager();
 
 
-
         startGame();
 
         /*final Button notepad_Button = findViewById(R.id.notepadButton);
@@ -225,6 +224,12 @@ public class GameboardScreen extends AppCompatActivity  {
             case MotionEvent.ACTION_DOWN:
                 x1 = touchEvent.getX();
                 y1 = touchEvent.getY();
+
+                if(x2>x1){
+
+                }else if(x2<x1){
+                    startActivity(new Intent(GameboardScreen.this, RollDiceScreen.class));
+                }
 
                 break;
 
