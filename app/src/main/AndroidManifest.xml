@@ -41,6 +41,15 @@
 
 
         <activity
+            android:name=".activities.RollDiceScreen"
+            android:exported="true"
+            android:label="Roll Dices" />
+        <activity
+            android:name=".activities.PlayerSelectionScreen"
+            android:exported="true"
+
+            android:label="Cluedo"> </activity>
+        <activity
             android:name=".activities.playerGameInteraction.AccuseSomeone"
             android:label="Cluedo">
         </activity>
