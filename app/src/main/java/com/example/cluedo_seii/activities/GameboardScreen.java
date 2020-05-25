@@ -36,6 +36,7 @@ public class GameboardScreen extends AppCompatActivity  {
     private String mesaggeDialogTag;
     private Bundle bundle;
     private Intent intent;
+    static final int MIN_SWIPE_DISTANCE = 150;
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
@@ -219,27 +220,28 @@ public class GameboardScreen extends AppCompatActivity  {
     }
 
     //EventListener für Swipe-Event
+    @Override
     public boolean dispatchTouchEvent (MotionEvent touchEvent){
         switch(touchEvent.getAction()){
             case MotionEvent.ACTION_DOWN:
                 x1 = touchEvent.getX();
                 y1 = touchEvent.getY();
-
-                if(x2>x1){
-
-                }else if(x2<x1){
-                    startActivity(new Intent(GameboardScreen.this, RollDiceScreen.class));
-                }
-
                 break;
 
             case MotionEvent.ACTION_UP:
                 x2 = touchEvent.getX();
                 y2 = touchEvent.getY();
+                float swipeRight = x2-x1,
+                        swipeLeft = x1-x2,
+                        swipeDown = y2-y1,
+                        swipeUp = y1-y2;
 
-                if(x1 < x2){
+
+                if(swipeDown > MIN_SWIPE_DISTANCE){
+                    startActivity(new Intent(GameboardScreen.this, RollDiceScreen.class));
+                }else if(swipeRight > MIN_SWIPE_DISTANCE){
                     startActivity(new Intent(GameboardScreen.this, NotepadScreen.class));
-                }else if(x1 > x2){
+                } else if(swipeLeft > MIN_SWIPE_DISTANCE){
                     showCards();
                 }
                 break;
