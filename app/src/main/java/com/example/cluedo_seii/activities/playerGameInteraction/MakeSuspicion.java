@@ -2,10 +2,9 @@ package com.example.cluedo_seii.activities.playerGameInteraction;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
+
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -14,11 +13,11 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.example.cluedo_seii.Game;
+import com.example.cluedo_seii.Player;
 import com.example.cluedo_seii.R;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
-import java.util.List;
+
 
 public class MakeSuspicion extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
@@ -45,6 +44,8 @@ public class MakeSuspicion extends AppCompatActivity implements AdapterView.OnIt
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_make_suspicion);
+
+        //Speicherung der Auswahl des Spielers
 
         spinnerCulprit = (Spinner) findViewById(R.id.suspectedCulprit);
         spinnerCulprit.setOnItemSelectedListener(this);
@@ -76,19 +77,29 @@ public class MakeSuspicion extends AppCompatActivity implements AdapterView.OnIt
        suspectButton = findViewById(R.id.makeSuspicionButton);
        suspectButton.setOnClickListener(new View.OnClickListener() {
 
-            public void onClick(View v) {
-
-           game.getCurrentPlayer().suspect(selectedCulprit, selectedWeapon, selectedRoom, game.getPlayers());
+          public void onClick(View v) {
 
            suspectedPlayerHand = game.getCurrentPlayer().suspect(selectedCulprit, selectedWeapon, selectedRoom, game.getPlayers());
+
+           for(Player player: game.getPlayers()){
+               if(player.getPlayerCharacter().getName()==selectedCulprit){
+                   player.setPosition(game.getCurrentPlayer().getPosition());
+               }
+           }
+
+           //Zeigt Spielerkarten des Verdächtigten
 
            if(suspectedPlayerHand.size()==0) {
                text = "Hier gibt es nichts zum sehen";
                toast = Toast.makeText(getApplicationContext(), text, Toast.LENGTH_SHORT);
                toast.show();
-
+               intent = new Intent();
+               intent.putExtra("game", game);
+               setResult(1,intent);
                finish();
            }
+
+           //Meldugn falls Verdächtiger keine der Karten auf seiner Hand hat
 
            else {
                text = "Der verdächtigte Spieler hat folgende Karten auf der Hand:" + '\n';
@@ -98,7 +109,9 @@ public class MakeSuspicion extends AppCompatActivity implements AdapterView.OnIt
 
                toast = Toast.makeText(getApplicationContext(), text , Toast.LENGTH_SHORT);
                toast.show();
-
+               intent = new Intent();
+               intent.putExtra("game", game);
+               setResult(1,intent);
                finish();
 
            }

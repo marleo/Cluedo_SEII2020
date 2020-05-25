@@ -73,9 +73,13 @@ public class Gameboard {
                                         LinearLayout.LayoutParams.MATCH_PARENT));
                         break;
                 }
-                gameboardElement.getGameBoardElement().setTag(y + 1 + (x * 4));
-                gameboardElement.getGameBoardElement().setId(y + 1 + (x * 4));
-                row.addView(gameboardElement.getGameBoardElement());
+
+                if (gameboardElement != null) {
+                    gameboardElement.getGameBoardElement().setTag(y + 1 + (x * 4));
+                    gameboardElement.getGameBoardElement().setId(y + 1 + (x * 4));
+                    row.addView(gameboardElement.getGameBoardElement());
+                }
+
                 listeGameboardElemente.add(gameboardElement);
 
                 // welche Felder an welcher Position eingespeichert werden sollen
