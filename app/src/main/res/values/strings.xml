@@ -16,7 +16,7 @@
     <string name="gameRules">Spielregeln</string>
     <string name="gesturerules">Steuerung</string>
     <string name="startGameOptions">Start Game</string>
-    <string name="networkButtonOptions">Netzwerk</string>
+    <string name="networkButtonOptions">Playground</string>
 
     <string-array name="culprits">
         <item>Oberst von Gatov</item>

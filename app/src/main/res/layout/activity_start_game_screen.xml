@@ -11,13 +11,16 @@
         style="?android:attr/borderlessButtonStyle"
         android:layout_width="179dp"
         android:layout_height="47dp"
+        android:layout_marginStart="116dp"
+        android:layout_marginEnd="116dp"
         android:layout_marginBottom="36dp"
         android:background="@drawable/custom_button"
         android:text="CHOOSE CHARACTER"
         android:textColor="#FFFFFF"
         android:textSize="15sp"
         app:layout_constraintBottom_toBottomOf="parent"
-        tools:layout_editor_absoluteX="116dp" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <Button
         android:id="@+id/button"

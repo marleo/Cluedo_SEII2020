@@ -2,12 +2,14 @@ package com.example.cluedo_seii.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.text.format.Formatter;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -29,7 +31,7 @@ import java.util.LinkedHashMap;
 import java.util.LinkedList;
 
 public class startGameScreen extends AppCompatActivity {
-    private connectionType conType;
+    public static connectionType conType;
     private NetworkServerKryo server;
     private NetworkClientKryo client;
 
@@ -39,11 +41,20 @@ public class startGameScreen extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start_game_screen);
+
+        //TODO add Logic if the game is ready to start
+        final Button chooseCharacter = findViewById(R.id.chooseCharacter);
+        chooseCharacter.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                startActivity(new Intent(startGameScreen.this, ChoosePlayerScreen.class));
+            }
+        });
     }
 
     public void selectHost(View view) {
         final ListView clientList = findViewById(R.id.clientList);
-        this.conType = connectionType.HOST;
+        conType = connectionType.HOST;
 
         server = NetworkServerKryo.getInstance();
         server.registerClass(RequestDTO.class);
@@ -96,7 +107,7 @@ public class startGameScreen extends AppCompatActivity {
 
     public void selectClient(View view) {
         try {
-            this.conType = connectionType.CLIENT;
+            conType = connectionType.CLIENT;
 
             client = NetworkClientKryo.getInstance();
 

@@ -10,6 +10,7 @@ import com.example.cluedo_seii.network.Callback;
 import com.example.cluedo_seii.network.ClientData;
 import com.example.cluedo_seii.network.NetworkServer;
 import com.example.cluedo_seii.network.dto.ConnectedDTO;
+import com.example.cluedo_seii.network.dto.GameCharacterDTO;
 import com.example.cluedo_seii.network.dto.QuitGameDTO;
 import com.example.cluedo_seii.network.dto.RequestDTO;
 import com.example.cluedo_seii.network.dto.TextMessage;
@@ -72,6 +73,8 @@ public class NetworkServerKryo implements KryoNetComponent, NetworkServer {
         } else if (object instanceof UserNameRequestDTO) {
             Log.d("test", "UserNameRequestDTO");
             handleUsernameRequest(connection, (UserNameRequestDTO) object);
+        } else if (object instanceof GameCharacterDTO) {
+            handleGameCharacterRequest(connection, (GameCharacterDTO) object);
         }
     }
 
@@ -91,6 +94,10 @@ public class NetworkServerKryo implements KryoNetComponent, NetworkServer {
         clientList.put(client.getId(), client);
 
         newClientCallback.callback(clientList);
+    }
+
+    private void handleGameCharacterRequest(Connection connection, GameCharacterDTO gameCharacterDTO) {
+        // TODO implement
     }
 
 

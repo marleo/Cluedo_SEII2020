@@ -7,7 +7,7 @@
     tools:context=".activities.ChoosePlayerScreen">
 
     <TextView
-        android:id="@+id/Waiting for Host"
+        android:id="@+id/waitingForHostText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="108dp"
@@ -21,8 +21,12 @@
         android:id="@+id/chooseCharacterListView"
         android:layout_width="314dp"
         android:layout_height="409dp"
-        tools:layout_editor_absoluteX="48dp"
-        tools:layout_editor_absoluteY="34dp">
+        android:layout_marginStart="48dp"
+        android:layout_marginTop="34dp"
+        android:layout_marginEnd="49dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
     </ListView>
 

@@ -8,6 +8,7 @@ import com.esotericsoftware.kryonet.Listener;
 import com.example.cluedo_seii.network.Callback;
 import com.example.cluedo_seii.network.NetworkClient;
 import com.example.cluedo_seii.network.dto.ConnectedDTO;
+import com.example.cluedo_seii.network.dto.GameCharacterDTO;
 import com.example.cluedo_seii.network.dto.RequestDTO;
 import com.example.cluedo_seii.network.dto.TextMessage;
 import com.example.cluedo_seii.network.dto.UserNameRequestDTO;
@@ -90,7 +91,13 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
                 // reset connection Callback
                 connectionCallback = null;
             }
+        } else if (object instanceof GameCharacterDTO) {
+            handleGameCharacterResponse(connection, (GameCharacterDTO) object);
         }
+    }
+
+    private void handleGameCharacterResponse(Connection connection,  GameCharacterDTO gameCharacterDTO) {
+        //TODO implement
     }
 
     @Override
