@@ -13,6 +13,7 @@ import com.example.cluedo_seii.DeckOfCards;
 import com.example.cluedo_seii.Game;
 import com.example.cluedo_seii.GameCharacter;
 import com.example.cluedo_seii.GameState;
+import com.example.cluedo_seii.Notepad;
 import com.example.cluedo_seii.Player;
 import com.example.cluedo_seii.R;
 import com.example.cluedo_seii.activities.playerGameInteraction.AccuseSomeone;
@@ -196,25 +197,78 @@ public class GameboardScreen extends AppCompatActivity  {
     }
 
     private void startGame(){
+            //TODO initialize Game according to GameLobby Settings
+            //Instanz eines Game-objektes Zu Demonstrationszwecken
+            deckOfCards = new DeckOfCards();
+            players = new LinkedList<>();
 
-        //TODO initialize Game according to GameLobby Settings
+            GameCharacter gameCharacter = new GameCharacter("Prof. Bloom", null);
+            GameCharacter gameCharacterAlt = new GameCharacter("Fräulein Weiss", null);
+            Player player1 = new Player(1, "10.0.2.16", gameCharacterAlt);
+            Player player2 = new Player(2, "null", gameCharacter);
+            Player player3 = new Player(3, "null", gameCharacterAlt);
+            players.add(player1);
+            players.add(player2);
+            players.add(player3);
+            game = new Game(gameboard, players);
+            game.distributeCards(); //um Notepad cheatFunction zu demonstrieren
 
-        //Zu Demonstrationszwecken
-        /*deckOfCards = new DeckOfCards();
-        players = new LinkedList<>();
-        GameCharacter gameCharacter = new GameCharacter("Prof. Bloom", null);
-        GameCharacter gameCharacterAlt = new GameCharacter("Fräulein Weiss", null);
-        Player player1 = new Player(1, "10.0.2.16", gameCharacterAlt, null);
-        Player player2 = new Player(2,  "null", gameCharacter, null);
-        Player player3 = new Player(3, "null", gameCharacterAlt, null);
-        players.add(player1);
-        players.add(player2);
-        players.add(player3);
-        game = new Game(gameboard, deckOfCards, players);
-        game.distributeCards();*/
-        //suspectOrAccuse();
-        // makeSuspicion();
+        //Ausführung erfolgt wenn Methode changeGameState der Instanz game aufgerufen wird
+        game.setListener(new Game.ChangeListener() {
+            @Override
+
+            //Wird ausgeführt wenn Methode aufgerufen wird
+
+            public void onChange() {
+/*
+                if(game.getGameState().equals(GameState.PLAYERTURNBEGIN)){
+                    if(game.getCurrentPlayer().getPosition()instanceof RoomElement) {
+                        throwDiceOrUseSecretPassage();
+                    } else {
+                        throwDice();
+                    }
+                }
+
+                else if(game.getGameState().equals(GameState.PLAVERMOVEMENT)){
+
+                }
+
+                else if(game.getGameState().equals(GameState.PLAYERACCUSATION)){
+                    if(game.getCurrentPlayer().getPosition()instanceof RoomElement){
+                        suspectOrAccuse();
+                    } else{
+                        game.changeGameState(GameState.PLAYERTURNEND);
+                    }
+                }
+
+                else if(game.getGameState().equals(GameState.PLAYERTURNEND)){
+                    int wrongAccusers = 0;
+
+
+                    //prüfe Spielbeendigungsbedingungen
+                    for(Player player: game.getPlayers()){
+                        if(player.getMadeFalseAccusation()==true){
+                            wrongAccusers++;
+                        }
+                    }
+                    if(wrongAccusers==game.getPlayers().size()){
+                        game.setGameOver(true);
+                        game.changeGameState(GameState.END);
+                    }
+                    else if(game.getGameOver()==true){
+                        game.changeGameState(GameState.END);
+                    }
+                }
+                else if(game.getGameState().equals(GameState.END)){
+                    finish();
+                }*/
+            }
+        });
     }
+
+
+
+
 
     //Aufruf von DialogOptionen
     public void throwDice(){
@@ -243,6 +297,12 @@ public class GameboardScreen extends AppCompatActivity  {
         intent = new Intent(this, MakeSuspicion.class);
         intent.putExtra("game", game);
         startActivityForResult(intent, 2);
+    }
+
+    public void startNotepad(){
+        intent = new Intent(this, NotepadScreen.class);
+        intent.putExtra("game",game);
+        startActivity(intent);
     }
 
     public void accuseSomeone(){
@@ -294,7 +354,7 @@ public class GameboardScreen extends AppCompatActivity  {
                 if(swipeDown > MIN_SWIPE_DISTANCE){
                     startActivity(new Intent(GameboardScreen.this, RollDiceScreen.class));
                 }else if(swipeRight > MIN_SWIPE_DISTANCE){
-                    startActivity(new Intent(GameboardScreen.this, NotepadScreen.class));
+                    startNotepad();
                 } else if(swipeLeft > MIN_SWIPE_DISTANCE){
                     showCards();
                 }
@@ -302,4 +362,9 @@ public class GameboardScreen extends AppCompatActivity  {
         }
         return false;
     }
+
+
+
 }
+
+

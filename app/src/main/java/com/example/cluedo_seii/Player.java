@@ -3,6 +3,7 @@ package com.example.cluedo_seii;
 
 import android.graphics.Point;
 import com.example.cluedo_seii.spielbrett.GameboardElement;
+
 import java.io.Serializable;
 import java.util.LinkedList;
 
