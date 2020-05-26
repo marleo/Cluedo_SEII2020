@@ -84,9 +84,6 @@ public class GameboardScreen extends AppCompatActivity  {
             t = Bib9
             u = Bib10
 
-
-
-
          */
 
         String gameBoard =

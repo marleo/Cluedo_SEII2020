@@ -271,6 +271,12 @@ public class Gameboard {
                                         LinearLayout.LayoutParams.MATCH_PARENT));
                         gameboardElement.getGameBoardElement().setImageResource(R.drawable.bib10);
                         break;
+                    case 'v':
+                        gameboardElement = new Bib10(gameboardScreen, x, y, new LinearLayout.LayoutParams
+                                (LinearLayout.LayoutParams.WRAP_CONTENT,
+                                        LinearLayout.LayoutParams.MATCH_PARENT));
+                        gameboardElement.getGameBoardElement().setImageResource(R.drawable.bib10);
+                        break;
                 }
 
                 if (gameboardElement != null) {
