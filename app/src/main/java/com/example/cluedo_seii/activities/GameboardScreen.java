@@ -55,27 +55,59 @@ public class GameboardScreen extends AppCompatActivity  {
             1 = NoneWalkableElement
             2 = StartingPoint
             3 = Room
+            4 = Entrace1
+            5 = Entrace2
+            6 = Entrace3
+            7 = Entrace4
+            8 = Entrace5
+            9 = Entrace6
+            a = Entrace7
+            b = Entrace9
+            c = WorkingRoom1
+            d = WorkingRoom2
+            e = WorkingRoom3
+            f = WorkingRoom4
+            g = WorkingRoom5
+            h = WorkingRoom6
+            i = WorkingRoom7
+            j = WorkingRoom8
+            A = Geheimgang
+            k = Workingroom9
+            l = Bib1
+            m = Bib2
+            n = Bib3
+            o = Bib4
+            p = Bib5
+            q = Bib6
+            r = Bib7
+            s = Bib8
+            t = Bib9
+            u = Bib10
+
+
+
+
          */
 
         String gameBoard =
-                "1112011102111" +
-                "1110011100111" +
-                "1130011100111" +
-                "0000003300111" +
-                "1110000003111" +
-                "1113000000000" +
-                "1113000000002" +
-                "1110000000002" +
-                "0000000000000" +
+                "cdef045621111" +
+                "ghij078901111" +
+                "Akk30a3b03111" +
+                "2000000000000" +
+                "lmt0000000000" +
+                "opq3000000002" +
+                "r3u0000000000" +
+                "0000000000002" +
+                "0000000011111" +
                 "1111300031111" +
-                "1111100001111" +
-                "1111300031111" +
+                "1111100011111" +
+                "1111300000000" +
                 "0000000000000" +
                 "1111100031111" +
                 "1111100031111" +
                 "1111300011111" +
                 "0000000000000" +
-                "0000031100000" +
+                "0000111100000" +
                 "0020111102000";
 
         gameboard = new Gameboard(this,13,19, gameBoard);

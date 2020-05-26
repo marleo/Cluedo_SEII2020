@@ -3,9 +3,36 @@ package com.example.cluedo_seii.spielbrett;
 import android.graphics.Point;
 import android.widget.LinearLayout;
 
-import com.example.cluedo_seii.Player;
 import com.example.cluedo_seii.R;
 import com.example.cluedo_seii.activities.GameboardScreen;
+import com.example.cluedo_seii.spielbrett.Entrace.Entrace1;
+import com.example.cluedo_seii.spielbrett.Entrace.Entrace2;
+import com.example.cluedo_seii.spielbrett.Entrace.Entrace3;
+import com.example.cluedo_seii.spielbrett.Entrace.Entrace4;
+import com.example.cluedo_seii.spielbrett.Entrace.Entrace5;
+import com.example.cluedo_seii.spielbrett.Entrace.Entrace6;
+import com.example.cluedo_seii.spielbrett.Entrace.Entrace7;
+import com.example.cluedo_seii.spielbrett.Entrace.Entrace8;
+import com.example.cluedo_seii.spielbrett.Entrace.Geheimgang;
+import com.example.cluedo_seii.spielbrett.WorkingRoom.WorkingRoom1;
+import com.example.cluedo_seii.spielbrett.WorkingRoom.WorkingRoom2;
+import com.example.cluedo_seii.spielbrett.WorkingRoom.WorkingRoom3;
+import com.example.cluedo_seii.spielbrett.WorkingRoom.WorkingRoom4;
+import com.example.cluedo_seii.spielbrett.WorkingRoom.WorkingRoom5;
+import com.example.cluedo_seii.spielbrett.WorkingRoom.WorkingRoom6;
+import com.example.cluedo_seii.spielbrett.WorkingRoom.WorkingRoom7;
+import com.example.cluedo_seii.spielbrett.WorkingRoom.WorkingRoom8;
+import com.example.cluedo_seii.spielbrett.WorkingRoom.WorkingRoom9;
+import com.example.cluedo_seii.spielbrett.bib.Bib1;
+import com.example.cluedo_seii.spielbrett.bib.Bib10;
+import com.example.cluedo_seii.spielbrett.bib.Bib2;
+import com.example.cluedo_seii.spielbrett.bib.Bib3;
+import com.example.cluedo_seii.spielbrett.bib.Bib4;
+import com.example.cluedo_seii.spielbrett.bib.Bib5;
+import com.example.cluedo_seii.spielbrett.bib.Bib6;
+import com.example.cluedo_seii.spielbrett.bib.Bib7;
+import com.example.cluedo_seii.spielbrett.bib.Bib8;
+import com.example.cluedo_seii.spielbrett.bib.Bib9;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -77,12 +104,173 @@ public class Gameboard {
                                         LinearLayout.LayoutParams.MATCH_PARENT));
                         break;
                     case '4':
-                        gameboardElement = new RoomElement(gameboardScreen, x, y, new LinearLayout.LayoutParams
+                        gameboardElement = new Entrace1(gameboardScreen, x, y, new LinearLayout.LayoutParams
                                 (LinearLayout.LayoutParams.WRAP_CONTENT,
                                         LinearLayout.LayoutParams.MATCH_PARENT));
-                        gameboardElement.getGameBoardElement().setImageResource(R.drawable.nonwalkable_element);
+                        gameboardElement.getGameBoardElement().setImageResource(R.drawable.e1);
                         break;
-
+                    case '5':
+                        gameboardElement = new Entrace2(gameboardScreen, x, y, new LinearLayout.LayoutParams
+                                (LinearLayout.LayoutParams.WRAP_CONTENT,
+                                        LinearLayout.LayoutParams.MATCH_PARENT));
+                        gameboardElement.getGameBoardElement().setImageResource(R.drawable.e2);
+                        break;
+                    case '6':
+                        gameboardElement = new Entrace3(gameboardScreen, x, y, new LinearLayout.LayoutParams
+                                (LinearLayout.LayoutParams.WRAP_CONTENT,
+                                        LinearLayout.LayoutParams.MATCH_PARENT));
+                        gameboardElement.getGameBoardElement().setImageResource(R.drawable.e3);
+                        break;
+                    case '7':
+                        gameboardElement = new Entrace4(gameboardScreen, x, y, new LinearLayout.LayoutParams
+                                (LinearLayout.LayoutParams.WRAP_CONTENT,
+                                        LinearLayout.LayoutParams.MATCH_PARENT));
+                        gameboardElement.getGameBoardElement().setImageResource(R.drawable.e4);
+                        break;
+                    case '8':
+                        gameboardElement = new Entrace5(gameboardScreen, x, y, new LinearLayout.LayoutParams
+                                (LinearLayout.LayoutParams.WRAP_CONTENT,
+                                        LinearLayout.LayoutParams.MATCH_PARENT));
+                        gameboardElement.getGameBoardElement().setImageResource(R.drawable.e5);
+                        break;
+                    case '9':
+                        gameboardElement = new Entrace6(gameboardScreen, x, y, new LinearLayout.LayoutParams
+                                (LinearLayout.LayoutParams.WRAP_CONTENT,
+                                        LinearLayout.LayoutParams.MATCH_PARENT));
+                        gameboardElement.getGameBoardElement().setImageResource(R.drawable.e6);
+                        break;
+                    case 'a':
+                        gameboardElement = new Entrace7(gameboardScreen, x, y, new LinearLayout.LayoutParams
+                                (LinearLayout.LayoutParams.WRAP_CONTENT,
+                                        LinearLayout.LayoutParams.MATCH_PARENT));
+                        gameboardElement.getGameBoardElement().setImageResource(R.drawable.e7);
+                        break;
+                    case 'b':
+                        gameboardElement = new Entrace8(gameboardScreen, x, y, new LinearLayout.LayoutParams
+                                (LinearLayout.LayoutParams.WRAP_CONTENT,
+                                        LinearLayout.LayoutParams.MATCH_PARENT));
+                        gameboardElement.getGameBoardElement().setImageResource(R.drawable.e9);
+                        break;
+                    case 'c':
+                        gameboardElement = new WorkingRoom1(gameboardScreen, x, y, new LinearLayout.LayoutParams
+                                (LinearLayout.LayoutParams.WRAP_CONTENT,
+                                        LinearLayout.LayoutParams.MATCH_PARENT));
+                        gameboardElement.getGameBoardElement().setImageResource(R.drawable.a1);
+                        break;
+                    case 'd':
+                        gameboardElement = new WorkingRoom2(gameboardScreen, x, y, new LinearLayout.LayoutParams
+                                (LinearLayout.LayoutParams.WRAP_CONTENT,
+                                        LinearLayout.LayoutParams.MATCH_PARENT));
+                        gameboardElement.getGameBoardElement().setImageResource(R.drawable.a2);
+                        break;
+                    case 'e':
+                        gameboardElement = new WorkingRoom3(gameboardScreen, x, y, new LinearLayout.LayoutParams
+                                (LinearLayout.LayoutParams.WRAP_CONTENT,
+                                        LinearLayout.LayoutParams.MATCH_PARENT));
+                        gameboardElement.getGameBoardElement().setImageResource(R.drawable.a3);
+                        break;
+                    case 'f':
+                        gameboardElement = new WorkingRoom4(gameboardScreen, x, y, new LinearLayout.LayoutParams
+                                (LinearLayout.LayoutParams.WRAP_CONTENT,
+                                        LinearLayout.LayoutParams.MATCH_PARENT));
+                        gameboardElement.getGameBoardElement().setImageResource(R.drawable.a4);
+                        break;
+                    case 'g':
+                        gameboardElement = new WorkingRoom5(gameboardScreen, x, y, new LinearLayout.LayoutParams
+                                (LinearLayout.LayoutParams.WRAP_CONTENT,
+                                        LinearLayout.LayoutParams.MATCH_PARENT));
+                        gameboardElement.getGameBoardElement().setImageResource(R.drawable.a5);
+                        break;
+                    case 'h':
+                        gameboardElement = new WorkingRoom6(gameboardScreen, x, y, new LinearLayout.LayoutParams
+                                (LinearLayout.LayoutParams.WRAP_CONTENT,
+                                        LinearLayout.LayoutParams.MATCH_PARENT));
+                        gameboardElement.getGameBoardElement().setImageResource(R.drawable.a6);
+                        break;
+                    case 'i':
+                        gameboardElement = new WorkingRoom7(gameboardScreen, x, y, new LinearLayout.LayoutParams
+                                (LinearLayout.LayoutParams.WRAP_CONTENT,
+                                        LinearLayout.LayoutParams.MATCH_PARENT));
+                        gameboardElement.getGameBoardElement().setImageResource(R.drawable.a7);
+                        break;
+                    case 'j':
+                        gameboardElement = new WorkingRoom8(gameboardScreen, x, y, new LinearLayout.LayoutParams
+                                (LinearLayout.LayoutParams.WRAP_CONTENT,
+                                        LinearLayout.LayoutParams.MATCH_PARENT));
+                        gameboardElement.getGameBoardElement().setImageResource(R.drawable.a8);
+                        break;
+                    case 'A':
+                        gameboardElement = new Geheimgang(gameboardScreen, x, y, new LinearLayout.LayoutParams
+                                (LinearLayout.LayoutParams.WRAP_CONTENT,
+                                        LinearLayout.LayoutParams.MATCH_PARENT));
+                        gameboardElement.getGameBoardElement().setImageResource(R.drawable.geheimgang);
+                        break;
+                    case 'k':
+                        gameboardElement = new WorkingRoom9(gameboardScreen, x, y, new LinearLayout.LayoutParams
+                                (LinearLayout.LayoutParams.WRAP_CONTENT,
+                                        LinearLayout.LayoutParams.MATCH_PARENT));
+                        gameboardElement.getGameBoardElement().setImageResource(R.drawable.a9);
+                        break;
+                    case 'l':
+                        gameboardElement = new Bib1(gameboardScreen, x, y, new LinearLayout.LayoutParams
+                                (LinearLayout.LayoutParams.WRAP_CONTENT,
+                                        LinearLayout.LayoutParams.MATCH_PARENT));
+                        gameboardElement.getGameBoardElement().setImageResource(R.drawable.bib1);
+                        break;
+                    case 'm':
+                        gameboardElement = new Bib2(gameboardScreen, x, y, new LinearLayout.LayoutParams
+                                (LinearLayout.LayoutParams.WRAP_CONTENT,
+                                        LinearLayout.LayoutParams.MATCH_PARENT));
+                        gameboardElement.getGameBoardElement().setImageResource(R.drawable.bib2);
+                        break;
+                    case 'n':
+                        gameboardElement = new Bib3(gameboardScreen, x, y, new LinearLayout.LayoutParams
+                                (LinearLayout.LayoutParams.WRAP_CONTENT,
+                                        LinearLayout.LayoutParams.MATCH_PARENT));
+                        gameboardElement.getGameBoardElement().setImageResource(R.drawable.bib3);
+                        break;
+                    case 'o':
+                        gameboardElement = new Bib4(gameboardScreen, x, y, new LinearLayout.LayoutParams
+                                (LinearLayout.LayoutParams.WRAP_CONTENT,
+                                        LinearLayout.LayoutParams.MATCH_PARENT));
+                        gameboardElement.getGameBoardElement().setImageResource(R.drawable.bib4);
+                        break;
+                    case 'p':
+                        gameboardElement = new Bib5(gameboardScreen, x, y, new LinearLayout.LayoutParams
+                                (LinearLayout.LayoutParams.WRAP_CONTENT,
+                                        LinearLayout.LayoutParams.MATCH_PARENT));
+                        gameboardElement.getGameBoardElement().setImageResource(R.drawable.bib5);
+                        break;
+                    case 'q':
+                        gameboardElement = new Bib6(gameboardScreen, x, y, new LinearLayout.LayoutParams
+                                (LinearLayout.LayoutParams.WRAP_CONTENT,
+                                        LinearLayout.LayoutParams.MATCH_PARENT));
+                        gameboardElement.getGameBoardElement().setImageResource(R.drawable.bib6);
+                        break;
+                    case 'r':
+                        gameboardElement = new Bib7 (gameboardScreen, x, y, new LinearLayout.LayoutParams
+                                (LinearLayout.LayoutParams.WRAP_CONTENT,
+                                        LinearLayout.LayoutParams.MATCH_PARENT));
+                        gameboardElement.getGameBoardElement().setImageResource(R.drawable.bib7);
+                        break;
+                    case 's':
+                        gameboardElement = new Bib8(gameboardScreen, x, y, new LinearLayout.LayoutParams
+                                (LinearLayout.LayoutParams.WRAP_CONTENT,
+                                        LinearLayout.LayoutParams.MATCH_PARENT));
+                        gameboardElement.getGameBoardElement().setImageResource(R.drawable.bib8);
+                        break;
+                    case 't':
+                        gameboardElement = new Bib9(gameboardScreen, x, y, new LinearLayout.LayoutParams
+                                (LinearLayout.LayoutParams.WRAP_CONTENT,
+                                        LinearLayout.LayoutParams.MATCH_PARENT));
+                        gameboardElement.getGameBoardElement().setImageResource(R.drawable.bib9);
+                        break;
+                    case 'u':
+                        gameboardElement = new Bib10(gameboardScreen, x, y, new LinearLayout.LayoutParams
+                                (LinearLayout.LayoutParams.WRAP_CONTENT,
+                                        LinearLayout.LayoutParams.MATCH_PARENT));
+                        gameboardElement.getGameBoardElement().setImageResource(R.drawable.bib10);
+                        break;
                 }
 
                 if (gameboardElement != null) {
