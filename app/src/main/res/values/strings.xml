@@ -139,6 +139,7 @@
     <string name="sendButtonNetwork">Send</string>
     <string name="connectButtonNetwork">Connect</string>
     <string name="backbuttonSettings">backButton</string>
+    <string name="backbuttonNotepad">backButton</string>
 
     <string name="PleaseShake">Shake your phone to roll the dices</string>
     <string name="ShakeEventDetected">Dices rolled!</string>

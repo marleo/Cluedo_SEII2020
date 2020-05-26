@@ -1,53 +1,81 @@
 package com.example.cluedo_seii;
 
 
-import android.os.Build;
+import android.graphics.Color;
+import android.widget.TextView;
 
+import com.example.cluedo_seii.activities.NotepadScreen;
 
-import androidx.annotation.RequiresApi;
-
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-
-
-public class Notepad  {
-    public LinkedHashMap<String, String> notes;
-    private String[] cards;
+public class Notepad {
+    private Card[] cards;
     private String moreNotes;
+    private TextView[] textViews;
 
 
+    public Notepad() {
+        DeckOfCards deckOfCards = new DeckOfCards();
+
+        this.cards =new Card[]{deckOfCards.oberstVonGatow, deckOfCards.profBloom, deckOfCards.reverendGruen, deckOfCards.baroninVonPorz, deckOfCards.fraeuleinGloria, deckOfCards.frauWeiss,
+                deckOfCards.dolch, deckOfCards.leuchter, deckOfCards.pistole, deckOfCards.seil, deckOfCards.heizungsrohr, deckOfCards.rohrzange,
+                deckOfCards.halle, deckOfCards.salon, deckOfCards.speisezimmer, deckOfCards.kueche, deckOfCards.musikzimmer, deckOfCards.winterzimmer, deckOfCards.biliardzimmer, deckOfCards.bibliothek, deckOfCards.arbeitszimmer};
+        this.moreNotes = " ";
+
+        this.textViews=new TextView[21];
 
 
-
-
-    public Notepad(String[] cards, LinkedHashMap<String,String> notes){
-        this.cards=cards;
-        this.moreNotes=" ";
-
-        for (String c : cards) {
-                notes.put(c, " ");
-            }
-        }
-
-
-
-        @RequiresApi(api = Build.VERSION_CODES.N)
-        public void excludeOpportunity (String bezeichnung, HashMap<String,String> notes){
-           if (notes.containsKey(bezeichnung)){
-                    notes.replace(bezeichnung," ", "X");
-                }
-            }
-
-
-
-
-
-        public String getMoreNotes () {
-            return this.moreNotes;
-        }
-
-        public void addMoreNotes (String message){
-            moreNotes += message;
-        }
     }
+
+
+    public String getMoreNotes() {
+        return this.moreNotes;
+    }
+
+    public Card[] getCards() {
+        return cards;
+    }
+
+    public void addMoreNotes(String message) {
+        moreNotes +=" "+ message;
+    }
+
+    public TextView[] getTextViews(){
+        return textViews;
+    }
+
+    public void setTextViews(TextView textView, int number){
+        this.textViews[number]=textView;
+
+    }
+
+    public void cheatFunction(InvestigationFile investigationFile) {
+        //InvestigationFile investigationFile= new InvestigationFile();
+        //DeckOfCards deckOfCards = new DeckOfCards();
+        //Card card = deckOfCards.arbeitszimmer; //Zu Demonstrationszwecken
+        //investigationFile.setCulprit(card);
+
+        Card culprit = investigationFile.getCulprit();
+        String culpritString = culprit.getDesignation();
+
+        Card room = investigationFile.getRoom();
+        String roomString = room.getDesignation();
+
+        Card weapon = investigationFile.getWeapon();
+        String weaponString = weapon.getDesignation();
+
+        TextView randomTextView;
+        String randomString;
+
+        NotepadScreen notepadScreen = new NotepadScreen();
+
+        do {
+            randomTextView = notepadScreen.getRandom(textViews);
+            randomString = randomTextView.getText().toString();
+        }
+        while(randomString.equals(culpritString)||randomString.equals(roomString)||randomString.equals(weaponString)||randomTextView.getTag()=="grayed");
+
+        randomTextView.setBackgroundColor(Color.argb(150, 200, 200, 200));
+    }
+}
+
+
 

@@ -13,6 +13,7 @@ import com.example.cluedo_seii.DeckOfCards;
 import com.example.cluedo_seii.Game;
 import com.example.cluedo_seii.GameCharacter;
 import com.example.cluedo_seii.GameState;
+import com.example.cluedo_seii.Notepad;
 import com.example.cluedo_seii.Player;
 import com.example.cluedo_seii.R;
 import com.example.cluedo_seii.activities.playerGameInteraction.AccuseSomeone;
@@ -53,26 +54,26 @@ public class GameboardScreen extends AppCompatActivity  {
 
         String gameBoard =
                 "1112011102111" +
-                "1110011100111" +
-                "1130011100111" +
-                "0000003300111" +
-                "1110000003111" +
-                "1113000000000" +
-                "1113000000002" +
-                "1110000000002" +
-                "0000000000000" +
-                "1111300031111" +
-                "1111100001111" +
-                "1111300031111" +
-                "0000000000000" +
-                "1111100031111" +
-                "1111100031111" +
-                "1111300011111" +
-                "0000000000000" +
-                "0000031100000" +
-                "0020111102000";
+                        "1110011100111" +
+                        "1130011100111" +
+                        "0000003300111" +
+                        "1110000003111" +
+                        "1113000000000" +
+                        "1113000000002" +
+                        "1110000000002" +
+                        "0000000000000" +
+                        "1111300031111" +
+                        "1111100001111" +
+                        "1111300031111" +
+                        "0000000000000" +
+                        "1111100031111" +
+                        "1111100031111" +
+                        "1111300011111" +
+                        "0000000000000" +
+                        "0000031100000" +
+                        "0020111102000";
 
-        gameboard = new Gameboard(this,13,19, gameBoard);
+        gameboard = new Gameboard(this, 13, 19, gameBoard);
         setContentView(gameboard.getLayout());
 
         bundle = new Bundle();
@@ -82,13 +83,7 @@ public class GameboardScreen extends AppCompatActivity  {
 
         startGame();
 
-        /*final Button notepad_Button = findViewById(R.id.notepadButton);
-        notepad_Button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(GameboardScreen.this, NotepadScreen.class));
-            }
-        });*/
+
     }
 
     private void startGame() {
@@ -97,6 +92,7 @@ public class GameboardScreen extends AppCompatActivity  {
         //Instanz eines Game-objektes Zu Demonstrationszwecken
         deckOfCards = new DeckOfCards();
         players = new LinkedList<>();
+
         GameCharacter gameCharacter = new GameCharacter("Prof. Bloom", null);
         GameCharacter gameCharacterAlt = new GameCharacter("Fräulein Weiss", null);
         Player player1 = new Player(1, "10.0.2.16", gameCharacterAlt);
@@ -106,6 +102,7 @@ public class GameboardScreen extends AppCompatActivity  {
         players.add(player2);
         players.add(player3);
         game = new Game(gameboard, players);
+        game.distributeCards(); //um Notepad cheatFunction zu demonstrieren
 
         //Ausführung erfolgt wenn Methode changeGameState der Instanz game aufgerufen wird
         game.setListener(new Game.ChangeListener() {
@@ -191,6 +188,12 @@ public class GameboardScreen extends AppCompatActivity  {
         startActivityForResult(intent, 2);
     }
 
+    public void startNotepad(){
+        intent = new Intent(this, NotepadScreen.class);
+        intent.putExtra("game",game);
+        startActivity(intent);
+    }
+
     public void accuseSomeone(){
         intent = new Intent(this, AccuseSomeone.class);
         intent.putExtra("game", game);
@@ -240,7 +243,7 @@ public class GameboardScreen extends AppCompatActivity  {
                 if(swipeDown > MIN_SWIPE_DISTANCE){
                     startActivity(new Intent(GameboardScreen.this, RollDiceScreen.class));
                 }else if(swipeRight > MIN_SWIPE_DISTANCE){
-                    startActivity(new Intent(GameboardScreen.this, NotepadScreen.class));
+                    startNotepad();
                 } else if(swipeLeft > MIN_SWIPE_DISTANCE){
                     showCards();
                 }
