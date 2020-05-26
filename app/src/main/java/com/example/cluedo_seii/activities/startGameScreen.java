@@ -138,6 +138,8 @@ public class startGameScreen extends AppCompatActivity {
                     // ausführung nach erflogreichem verbinden
                     Log.d("Connection Callback", "callback: ");
                     client.sendUsernameRequest(userNameRequestDTO);
+                    // after a succesfull connection the client gets forwarded to the choose Player Activity
+                    startActivity(new Intent(startGameScreen.this, ChoosePlayerScreen.class));
                 }
             });
 

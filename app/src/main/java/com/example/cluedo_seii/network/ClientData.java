@@ -5,6 +5,7 @@ import com.example.cluedo_seii.Player;
 
 public class ClientData {
     private static int currentID = 2;
+
     private int id;
     private Player player;
     private Connection connection;

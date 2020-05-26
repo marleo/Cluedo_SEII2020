@@ -27,6 +27,7 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
     private Client client;
     private Callback<RequestDTO> callback;
     private Callback<ConnectedDTO> connectionCallback;
+    private Callback<GameCharacterDTO> characterCallback;
 
     private boolean isConnected;
 
@@ -84,15 +85,20 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
 
     private void handleRequest(Connection connection, Object object) {
         if (object instanceof TextMessage) {
+            //TODO delete
             callback.callback((RequestDTO) object );
         } else if (object instanceof ConnectedDTO) {
-            if (connectionCallback != null) {
-                connectionCallback.callback((ConnectedDTO) object);
-                // reset connection Callback
-                connectionCallback = null;
-            }
+            handleConnectionResponse(connection, (ConnectedDTO) object);
         } else if (object instanceof GameCharacterDTO) {
             handleGameCharacterResponse(connection, (GameCharacterDTO) object);
+        }
+    }
+
+    private void handleConnectionResponse(Connection connection, ConnectedDTO connectedDTO) {
+        if (connectionCallback != null) {
+            connectionCallback.callback(connectedDTO);
+            // reset connection Callback
+            connectionCallback = null;
         }
     }
 
@@ -107,6 +113,11 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
 
     public void registerConnectionCallback(Callback<ConnectedDTO> callback) {
         this.connectionCallback = callback;
+    }
+
+    public void registerCharacterCallback(Callback<GameCharacterDTO> callback) {
+        this.characterCallback = null;
+        this.characterCallback = callback;
     }
 
     @Override
