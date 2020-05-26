@@ -5,24 +5,36 @@ import android.widget.LinearLayout;
 
 import com.example.cluedo_seii.R;
 import com.example.cluedo_seii.activities.GameboardScreen;
-import com.example.cluedo_seii.spielbrett.Entrace.Entrace1;
-import com.example.cluedo_seii.spielbrett.Entrace.Entrace2;
-import com.example.cluedo_seii.spielbrett.Entrace.Entrace3;
-import com.example.cluedo_seii.spielbrett.Entrace.Entrace4;
-import com.example.cluedo_seii.spielbrett.Entrace.Entrace5;
-import com.example.cluedo_seii.spielbrett.Entrace.Entrace6;
-import com.example.cluedo_seii.spielbrett.Entrace.Entrace7;
-import com.example.cluedo_seii.spielbrett.Entrace.Entrace8;
-import com.example.cluedo_seii.spielbrett.Entrace.Geheimgang;
-import com.example.cluedo_seii.spielbrett.WorkingRoom.WorkingRoom1;
-import com.example.cluedo_seii.spielbrett.WorkingRoom.WorkingRoom2;
-import com.example.cluedo_seii.spielbrett.WorkingRoom.WorkingRoom3;
-import com.example.cluedo_seii.spielbrett.WorkingRoom.WorkingRoom4;
-import com.example.cluedo_seii.spielbrett.WorkingRoom.WorkingRoom5;
-import com.example.cluedo_seii.spielbrett.WorkingRoom.WorkingRoom6;
-import com.example.cluedo_seii.spielbrett.WorkingRoom.WorkingRoom7;
-import com.example.cluedo_seii.spielbrett.WorkingRoom.WorkingRoom8;
-import com.example.cluedo_seii.spielbrett.WorkingRoom.WorkingRoom9;
+import com.example.cluedo_seii.spielbrett.billiard.Billard1;
+import com.example.cluedo_seii.spielbrett.billiard.Billard10;
+import com.example.cluedo_seii.spielbrett.billiard.Billard11;
+import com.example.cluedo_seii.spielbrett.billiard.Billard12;
+import com.example.cluedo_seii.spielbrett.billiard.Billard2;
+import com.example.cluedo_seii.spielbrett.billiard.Billard3;
+import com.example.cluedo_seii.spielbrett.billiard.Billard4;
+import com.example.cluedo_seii.spielbrett.billiard.Billard5;
+import com.example.cluedo_seii.spielbrett.billiard.Billard6;
+import com.example.cluedo_seii.spielbrett.billiard.Billard7;
+import com.example.cluedo_seii.spielbrett.billiard.Billard8;
+import com.example.cluedo_seii.spielbrett.billiard.Billard9;
+import com.example.cluedo_seii.spielbrett.entrace.Entrace1;
+import com.example.cluedo_seii.spielbrett.entrace.Entrace2;
+import com.example.cluedo_seii.spielbrett.entrace.Entrace3;
+import com.example.cluedo_seii.spielbrett.entrace.Entrace4;
+import com.example.cluedo_seii.spielbrett.entrace.Entrace5;
+import com.example.cluedo_seii.spielbrett.entrace.Entrace6;
+import com.example.cluedo_seii.spielbrett.entrace.Entrace7;
+import com.example.cluedo_seii.spielbrett.entrace.Entrace8;
+import com.example.cluedo_seii.spielbrett.entrace.Geheimgang;
+import com.example.cluedo_seii.spielbrett.workingRoom.WorkingRoom1;
+import com.example.cluedo_seii.spielbrett.workingRoom.WorkingRoom2;
+import com.example.cluedo_seii.spielbrett.workingRoom.WorkingRoom3;
+import com.example.cluedo_seii.spielbrett.workingRoom.WorkingRoom4;
+import com.example.cluedo_seii.spielbrett.workingRoom.WorkingRoom5;
+import com.example.cluedo_seii.spielbrett.workingRoom.WorkingRoom6;
+import com.example.cluedo_seii.spielbrett.workingRoom.WorkingRoom7;
+import com.example.cluedo_seii.spielbrett.workingRoom.WorkingRoom8;
+import com.example.cluedo_seii.spielbrett.workingRoom.WorkingRoom9;
 import com.example.cluedo_seii.spielbrett.bib.Bib1;
 import com.example.cluedo_seii.spielbrett.bib.Bib10;
 import com.example.cluedo_seii.spielbrett.bib.Bib2;
@@ -36,6 +48,8 @@ import com.example.cluedo_seii.spielbrett.bib.Bib9;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.example.cluedo_seii.R.drawable.b12;
 
 public class Gameboard {
 
@@ -272,10 +286,82 @@ public class Gameboard {
                         gameboardElement.getGameBoardElement().setImageResource(R.drawable.bib10);
                         break;
                     case 'v':
-                        gameboardElement = new Bib10(gameboardScreen, x, y, new LinearLayout.LayoutParams
+                        gameboardElement = new Billard1(gameboardScreen, x, y, new LinearLayout.LayoutParams
                                 (LinearLayout.LayoutParams.WRAP_CONTENT,
                                         LinearLayout.LayoutParams.MATCH_PARENT));
-                        gameboardElement.getGameBoardElement().setImageResource(R.drawable.bib10);
+                        gameboardElement.getGameBoardElement().setImageResource(R.drawable.b1);
+                        break;
+                    case 'w':
+                        gameboardElement = new Billard2(gameboardScreen, x, y, new LinearLayout.LayoutParams
+                                (LinearLayout.LayoutParams.WRAP_CONTENT,
+                                        LinearLayout.LayoutParams.MATCH_PARENT));
+                        gameboardElement.getGameBoardElement().setImageResource(R.drawable.b2);
+                        break;
+                    case 'x':
+                        gameboardElement = new Billard3(gameboardScreen, x, y, new LinearLayout.LayoutParams
+                                (LinearLayout.LayoutParams.WRAP_CONTENT,
+                                        LinearLayout.LayoutParams.MATCH_PARENT));
+                        gameboardElement.getGameBoardElement().setImageResource(R.drawable.b3);
+                        break;
+                    case 'y':
+                        gameboardElement = new Billard4(gameboardScreen, x, y, new LinearLayout.LayoutParams
+                                (LinearLayout.LayoutParams.WRAP_CONTENT,
+                                        LinearLayout.LayoutParams.MATCH_PARENT));
+                        gameboardElement.getGameBoardElement().setImageResource(R.drawable.b4);
+                        break;
+                    case 'z':
+                        gameboardElement = new Billard5(gameboardScreen, x, y, new LinearLayout.LayoutParams
+                                (LinearLayout.LayoutParams.WRAP_CONTENT,
+                                        LinearLayout.LayoutParams.MATCH_PARENT));
+                        gameboardElement.getGameBoardElement().setImageResource(R.drawable.b5);
+                        break;
+                    case 'B':
+                        gameboardElement = new Billard6(gameboardScreen, x, y, new LinearLayout.LayoutParams
+                                (LinearLayout.LayoutParams.WRAP_CONTENT,
+                                        LinearLayout.LayoutParams.MATCH_PARENT));
+                        gameboardElement.getGameBoardElement().setImageResource(R.drawable.b6);
+                        break;
+                    case 'C':
+                        gameboardElement = new Billard7(gameboardScreen, x, y, new LinearLayout.LayoutParams
+                                (LinearLayout.LayoutParams.WRAP_CONTENT,
+                                        LinearLayout.LayoutParams.MATCH_PARENT));
+                        gameboardElement.getGameBoardElement().setImageResource(R.drawable.b7);
+                        break;
+                    case 'D':
+                        gameboardElement = new Billard8(gameboardScreen, x, y, new LinearLayout.LayoutParams
+                                (LinearLayout.LayoutParams.WRAP_CONTENT,
+                                        LinearLayout.LayoutParams.MATCH_PARENT));
+                        gameboardElement.getGameBoardElement().setImageResource(R.drawable.b8);
+                        break;
+                    case 'E':
+                        gameboardElement = new Billard9(gameboardScreen, x, y, new LinearLayout.LayoutParams
+                                (LinearLayout.LayoutParams.WRAP_CONTENT,
+                                        LinearLayout.LayoutParams.MATCH_PARENT));
+                        gameboardElement.getGameBoardElement().setImageResource(R.drawable.b9);
+                        break;
+                    case 'F':
+                        gameboardElement = new Billard10(gameboardScreen, x, y, new LinearLayout.LayoutParams
+                                (LinearLayout.LayoutParams.WRAP_CONTENT,
+                                        LinearLayout.LayoutParams.MATCH_PARENT));
+                        gameboardElement.getGameBoardElement().setImageResource(R.drawable.b10);
+                        break;
+                    case 'G':
+                        gameboardElement = new Billard11(gameboardScreen, x, y, new LinearLayout.LayoutParams
+                                (LinearLayout.LayoutParams.WRAP_CONTENT,
+                                        LinearLayout.LayoutParams.MATCH_PARENT));
+                        gameboardElement.getGameBoardElement().setImageResource(R.drawable.b11);
+                        break;
+                    case 'H':
+                        gameboardElement = new Billard12(gameboardScreen, x, y, new LinearLayout.LayoutParams
+                                (LinearLayout.LayoutParams.WRAP_CONTENT,
+                                        LinearLayout.LayoutParams.MATCH_PARENT));
+                        gameboardElement.getGameBoardElement().setImageResource(R.drawable.b13);
+                        break;
+                    case 'I':
+                        gameboardElement = new Billard12(gameboardScreen, x, y, new LinearLayout.LayoutParams
+                                (LinearLayout.LayoutParams.WRAP_CONTENT,
+                                        LinearLayout.LayoutParams.MATCH_PARENT));
+                        gameboardElement.getGameBoardElement().setImageResource(b12);
                         break;
                 }
 

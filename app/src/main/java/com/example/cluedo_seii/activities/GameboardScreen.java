@@ -83,6 +83,22 @@ public class GameboardScreen extends AppCompatActivity  {
             s = Bib8
             t = Bib9
             u = Bib10
+            v = Billard1
+            w = Billard2
+            x = Billard3
+            y = Billard4
+            z = Billard5
+            B = Billard6
+            C = Billard7
+            D = Billard8
+            E = Billard9
+            F = Billard10
+            G = Billard11
+            H = Billard13
+            I = Billard12
+            J
+            K
+
 
          */
 
@@ -96,9 +112,9 @@ public class GameboardScreen extends AppCompatActivity  {
                 "r3u0000000000" +
                 "0000000000002" +
                 "0000000011111" +
-                "1111300031111" +
-                "1111100011111" +
-                "1111300000000" +
+                "v3wxy00031111" +
+                "zBCD300111111" +
+                "EFGHI00000000" +
                 "0000000000000" +
                 "1111100031111" +
                 "1111100031111" +
