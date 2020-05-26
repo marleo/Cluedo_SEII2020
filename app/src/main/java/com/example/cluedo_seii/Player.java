@@ -2,9 +2,7 @@ package com.example.cluedo_seii;
 
 
 import android.graphics.Point;
-
 import com.example.cluedo_seii.spielbrett.GameboardElement;
-
 import java.io.Serializable;
 import java.util.LinkedList;
 
@@ -17,6 +15,7 @@ public class Player implements Serializable {
     private GameCharacter playerCharacter;
     private Boolean madeFalseAccusation;
     private Boolean cheated;
+    //private Notepad notepad;
 
     public Player(int id , String IP, GameCharacter playerCharacter){
         this.id = id;
@@ -53,13 +52,19 @@ public class Player implements Serializable {
     }
 
 
+    public Boolean getMadeFalseAccusation() {
+        return madeFalseAccusation;
+    }
+
     public void setCheated(){
         cheated = true;
 }
-    public Boolean getMadeFalseAccusati0n() {
-        return madeFalseAccusation;
 
-    }
+    public Boolean getCheated(){return cheated;}
+
+    /*public Notepad getNotepad() {
+        return notepad;
+    }*/
 
     public void addCard(Card card){
         playerCards.add(card);
