@@ -1,4 +1,4 @@
-package com.example.cluedo_seii;
+/*package com.example.cluedo_seii;
 
 import com.example.cluedo_seii.spielbrett.Gameboard;
 import com.example.cluedo_seii.spielbrett.StartingpointElement;
@@ -158,4 +158,4 @@ public class PlayerTest {
         assertEquals(player1.getMadeFalseAccusation(), true);
     }
 
-}
+} */

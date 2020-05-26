@@ -1,4 +1,4 @@
-package com.example.cluedo_seii;
+/*package com.example.cluedo_seii;
 
 import android.util.Log;
 
@@ -217,4 +217,4 @@ public class GameTest {
 
 
 
-}
+}*/
