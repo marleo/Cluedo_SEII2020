@@ -224,7 +224,7 @@ public class NotepadScreen extends AppCompatActivity {
     }
 
     @Override
-    public boolean dispatchTouchEvent (MotionEvent touchEvent){
+    public boolean onTouchEvent (MotionEvent touchEvent){
         switch(touchEvent.getAction()){
 
             case MotionEvent.ACTION_DOWN:
