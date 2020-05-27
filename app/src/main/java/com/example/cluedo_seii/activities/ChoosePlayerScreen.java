@@ -4,10 +4,15 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.cluedo_seii.GameCharacter;
 import com.example.cluedo_seii.network.Callback;
+import com.example.cluedo_seii.network.ClientData;
 import com.example.cluedo_seii.network.connectionType;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+import android.widget.TextView;
 
 import com.example.cluedo_seii.R;
 import com.example.cluedo_seii.network.dto.GameCharacterDTO;
@@ -21,6 +26,8 @@ public class ChoosePlayerScreen extends AppCompatActivity {
     private connectionType conType;
     private NetworkServerKryo server;
     private NetworkClientKryo client;
+    private ListView characterList;
+    private TextView waitingForHost;
 
     private LinkedList<GameCharacter> availableCharacters;
 
@@ -28,6 +35,9 @@ public class ChoosePlayerScreen extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_choose_player);
+
+        characterList = findViewById(R.id.chooseCharacterListView);
+        waitingForHost = findViewById(R.id.waitingForHostText);
 
         this.conType = startGameScreen.conType;
 
@@ -67,11 +77,22 @@ public class ChoosePlayerScreen extends AppCompatActivity {
     }
 
     private void hostChooseCharacter() {
+        final LinkedList<String> characterNameList = new LinkedList<>();
+        for (GameCharacter gameCharacter : availableCharacters) {
+            characterNameList.add(gameCharacter.getName());
+        }
+
+        waitingForHost.setVisibility(View.INVISIBLE);
+
+        ArrayAdapter<String> characterListAdapter = new ArrayAdapter<>(ChoosePlayerScreen.this, android.R.layout.simple_list_item_1,characterNameList);
+        characterList.setAdapter(characterListAdapter);
+
+        // UPDATE Current Players
         server.registerCharacterDTOCallback(new Callback<GameCharacterDTO>() {
             @Override
             public void callback(GameCharacterDTO argument) {
-
                 // TODO implement
+                updateCharacterList(argument.getAvailablePlayers());
             }
         });
     }
@@ -81,9 +102,26 @@ public class ChoosePlayerScreen extends AppCompatActivity {
             @Override
             public void callback(GameCharacterDTO argument) {
                 // TODO implement
+                waitingForHost.setVisibility(View.INVISIBLE);
+                updateCharacterList(argument.getAvailablePlayers());
             }
         });
 
+    }
+
+    private void updateCharacterList(LinkedList<GameCharacter> gameCharacters) {
+        final LinkedList<String> characterNameList = new LinkedList<>();
+        for (GameCharacter gameCharacter : gameCharacters) {
+            characterNameList.add(gameCharacter.getName());
+        }
+
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                ArrayAdapter<String> characterListAdapter = new ArrayAdapter<>(ChoosePlayerScreen.this, android.R.layout.simple_list_item_1,characterNameList);
+                characterList.setAdapter(characterListAdapter);
+            }
+        });
     }
 
 

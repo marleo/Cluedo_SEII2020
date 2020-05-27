@@ -14,12 +14,14 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.example.cluedo_seii.Game;
 import com.example.cluedo_seii.GameCharacter;
 import com.example.cluedo_seii.network.Callback;
 import com.example.cluedo_seii.network.ClientData;
 import com.example.cluedo_seii.network.connectionType;
 import com.example.cluedo_seii.network.dto.ConnectedDTO;
 import com.example.cluedo_seii.network.dto.GameCharacterDTO;
+import com.example.cluedo_seii.network.dto.GameDTO;
 import com.example.cluedo_seii.network.dto.PlayerDTO;
 import com.example.cluedo_seii.network.dto.QuitGameDTO;
 import com.example.cluedo_seii.network.dto.RequestDTO;
@@ -69,6 +71,8 @@ public class startGameScreen extends AppCompatActivity {
         server.registerClass(PlayerDTO.class);
         server.registerClass(LinkedList.class);
         server.registerClass(GameCharacter.class);
+        server.registerClass(GameDTO.class);
+        server.registerClass(Game.class);
 
         server.registerNewClientCallback(new Callback<LinkedHashMap<Integer, ClientData>>() {
             @Override
@@ -128,6 +132,8 @@ public class startGameScreen extends AppCompatActivity {
             client.registerClass(PlayerDTO.class);
             client.registerClass(LinkedList.class);
             client.registerClass(GameCharacter.class);
+            client.registerClass(GameDTO.class);
+            client.registerClass(Game.class);
 
             //client.connect("localhost");
 

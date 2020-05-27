@@ -6,6 +6,7 @@ import android.util.Log;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
+import com.example.cluedo_seii.Game;
 import com.example.cluedo_seii.GameCharacter;
 import com.example.cluedo_seii.Player;
 import com.example.cluedo_seii.network.Callback;
@@ -13,6 +14,7 @@ import com.example.cluedo_seii.network.ClientData;
 import com.example.cluedo_seii.network.NetworkServer;
 import com.example.cluedo_seii.network.dto.ConnectedDTO;
 import com.example.cluedo_seii.network.dto.GameCharacterDTO;
+import com.example.cluedo_seii.network.dto.GameDTO;
 import com.example.cluedo_seii.network.dto.PlayerDTO;
 import com.example.cluedo_seii.network.dto.QuitGameDTO;
 import com.example.cluedo_seii.network.dto.RequestDTO;
@@ -80,6 +82,8 @@ public class NetworkServerKryo implements KryoNetComponent, NetworkServer {
             handleUsernameRequest(connection, (UserNameRequestDTO) object);
         } else if (object instanceof GameCharacterDTO) {
             handleGameCharacterRequest(connection, (GameCharacterDTO) object);
+        } else if (object instanceof GameDTO) {
+            handleGameRequest(connection, (GameDTO) object);
         }
     }
 
@@ -128,6 +132,13 @@ public class NetworkServerKryo implements KryoNetComponent, NetworkServer {
             gameCharacterDTOCallback.callback(gameCharacterDTO);
         }
 
+    }
+
+    private void handleGameRequest(Connection connection, GameDTO gameDTO) {
+        broadcastMessage(gameDTO);
+
+        Game game = Game.getInstance();
+        // TODO set game attributes
     }
 
 

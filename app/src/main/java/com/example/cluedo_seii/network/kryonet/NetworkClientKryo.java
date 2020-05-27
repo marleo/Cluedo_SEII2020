@@ -5,10 +5,12 @@ import android.util.Log;
 import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
+import com.example.cluedo_seii.Game;
 import com.example.cluedo_seii.network.Callback;
 import com.example.cluedo_seii.network.NetworkClient;
 import com.example.cluedo_seii.network.dto.ConnectedDTO;
 import com.example.cluedo_seii.network.dto.GameCharacterDTO;
+import com.example.cluedo_seii.network.dto.GameDTO;
 import com.example.cluedo_seii.network.dto.PlayerDTO;
 import com.example.cluedo_seii.network.dto.RequestDTO;
 import com.example.cluedo_seii.network.dto.TextMessage;
@@ -95,6 +97,8 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
             handleGameCharacterResponse(connection, (GameCharacterDTO) object);
         } else if (object instanceof  PlayerDTO) {
             handlePlayerResponse(connection, (PlayerDTO) object);
+        } else if (object instanceof GameDTO) {
+            handleGameResponse(connection, (GameDTO) object);
         }
     }
 
@@ -117,6 +121,12 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
         // delete character Callback, because the client already choose his character
         characterCallback = null;
         // TODO implement
+    }
+
+    private void handleGameResponse(Connection connection, GameDTO gameDTO) {
+        Game game = Game.getInstance();
+        // TODO set game attributes
+
     }
 
     @Override
