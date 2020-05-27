@@ -6,11 +6,14 @@ import android.util.Log;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
+import com.example.cluedo_seii.GameCharacter;
+import com.example.cluedo_seii.Player;
 import com.example.cluedo_seii.network.Callback;
 import com.example.cluedo_seii.network.ClientData;
 import com.example.cluedo_seii.network.NetworkServer;
 import com.example.cluedo_seii.network.dto.ConnectedDTO;
 import com.example.cluedo_seii.network.dto.GameCharacterDTO;
+import com.example.cluedo_seii.network.dto.PlayerDTO;
 import com.example.cluedo_seii.network.dto.QuitGameDTO;
 import com.example.cluedo_seii.network.dto.RequestDTO;
 import com.example.cluedo_seii.network.dto.TextMessage;
@@ -18,6 +21,7 @@ import com.example.cluedo_seii.network.dto.UserNameRequestDTO;
 
 import java.io.IOException;
 import java.util.LinkedHashMap;
+import java.util.LinkedList;
 
 import static android.content.ContentValues.TAG;
 
@@ -28,6 +32,7 @@ public class NetworkServerKryo implements KryoNetComponent, NetworkServer {
     private Server server;
     private Callback<RequestDTO> messageCallback;
     private Callback<LinkedHashMap<Integer, ClientData>> newClientCallback;
+    private Callback<GameCharacterDTO> gameCharacterDTOCallback;
 
     private LinkedHashMap<Integer, ClientData> clientList;
 
@@ -98,6 +103,31 @@ public class NetworkServerKryo implements KryoNetComponent, NetworkServer {
 
     private void handleGameCharacterRequest(Connection connection, GameCharacterDTO gameCharacterDTO) {
         // TODO implement
+        //remove the chosen Player from the List
+        GameCharacter chosenCharacter = gameCharacterDTO.getChoosenPlayer();
+        gameCharacterDTO.getAvailablePlayers().remove(chosenCharacter);
+
+        //forward the created Player to the Client
+        for (ClientData clientData: clientList.values()) {
+            if (clientData.getConnection().equals(connection)) {
+                Player player = new Player(clientData.getId(), chosenCharacter);
+                clientData.setPlayer(player);
+
+                PlayerDTO playerDTO = new PlayerDTO();
+                playerDTO.setPlayer(player);
+                sendMessageToClient(playerDTO, connection);
+            }
+        }
+
+        // forward the remaining characters to the other Clients
+        gameCharacterDTO.setChoosenPlayer(null);
+        broadcastMessage(gameCharacterDTO);
+
+        // fire callback
+        if (gameCharacterDTOCallback != null) {
+            gameCharacterDTOCallback.callback(gameCharacterDTO);
+        }
+
     }
 
 
@@ -108,6 +138,10 @@ public class NetworkServerKryo implements KryoNetComponent, NetworkServer {
 
     public void registerNewClientCallback(Callback<LinkedHashMap<Integer, ClientData>> callback) {
         this.newClientCallback = callback;
+    }
+
+    public void registerCharacterDTOCallback(Callback<GameCharacterDTO> gameCharacterDTOCallback) {
+        this.gameCharacterDTOCallback = gameCharacterDTOCallback;
     }
 
     @Override

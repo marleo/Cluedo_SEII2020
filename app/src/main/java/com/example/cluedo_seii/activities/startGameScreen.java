@@ -14,10 +14,13 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.example.cluedo_seii.GameCharacter;
 import com.example.cluedo_seii.network.Callback;
 import com.example.cluedo_seii.network.ClientData;
 import com.example.cluedo_seii.network.connectionType;
 import com.example.cluedo_seii.network.dto.ConnectedDTO;
+import com.example.cluedo_seii.network.dto.GameCharacterDTO;
+import com.example.cluedo_seii.network.dto.PlayerDTO;
 import com.example.cluedo_seii.network.dto.QuitGameDTO;
 import com.example.cluedo_seii.network.dto.RequestDTO;
 import com.example.cluedo_seii.network.dto.TextMessage;
@@ -62,6 +65,10 @@ public class startGameScreen extends AppCompatActivity {
         server.registerClass(QuitGameDTO.class);
         server.registerClass(ConnectedDTO.class);
         server.registerClass(UserNameRequestDTO.class);
+        server.registerClass(GameCharacterDTO.class);
+        server.registerClass(PlayerDTO.class);
+        server.registerClass(LinkedList.class);
+        server.registerClass(GameCharacter.class);
 
         server.registerNewClientCallback(new Callback<LinkedHashMap<Integer, ClientData>>() {
             @Override
@@ -117,6 +124,10 @@ public class startGameScreen extends AppCompatActivity {
             client.registerClass(QuitGameDTO.class);
             client.registerClass(ConnectedDTO.class);
             client.registerClass(UserNameRequestDTO.class);
+            client.registerClass(GameCharacterDTO.class);
+            client.registerClass(PlayerDTO.class);
+            client.registerClass(LinkedList.class);
+            client.registerClass(GameCharacter.class);
 
             //client.connect("localhost");
 

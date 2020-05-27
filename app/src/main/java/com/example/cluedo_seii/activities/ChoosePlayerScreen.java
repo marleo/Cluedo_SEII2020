@@ -3,6 +3,7 @@ package com.example.cluedo_seii.activities;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.cluedo_seii.GameCharacter;
+import com.example.cluedo_seii.network.Callback;
 import com.example.cluedo_seii.network.connectionType;
 
 import android.os.Bundle;
@@ -33,7 +34,9 @@ public class ChoosePlayerScreen extends AppCompatActivity {
         if (conType == connectionType.CLIENT) {
             client = NetworkClientKryo.getInstance();
             //TODO register Callback
-        } else if (conType.equals(connectionType.HOST)) {
+            clientChooseCharacter();
+
+        } else if (conType == connectionType.HOST) {
             server = NetworkServerKryo.getInstance();
 
             //TODO implement the startingPoint from the Characters
@@ -44,6 +47,7 @@ public class ChoosePlayerScreen extends AppCompatActivity {
             GameCharacter character5 = new GameCharacter("Character 5", null);
             GameCharacter character6 = new GameCharacter("Character 6", null);
 
+            availableCharacters = new LinkedList<>();
             availableCharacters.add(character1);
             availableCharacters.add(character2);
             availableCharacters.add(character3);
@@ -55,27 +59,32 @@ public class ChoosePlayerScreen extends AppCompatActivity {
             gameCharacterDTO.setAvailablePlayers(availableCharacters);
             server.broadcastMessage(gameCharacterDTO);
             //TODO register Callback
+
+            hostChooseCharacter();
         } else {
             Log.d("ERROR", "Neither Client nor Server at Choose Player Screen");
         }
     }
 
+    private void hostChooseCharacter() {
+        server.registerCharacterDTOCallback(new Callback<GameCharacterDTO>() {
+            @Override
+            public void callback(GameCharacterDTO argument) {
 
+                // TODO implement
+            }
+        });
+    }
 
+    private void clientChooseCharacter() {
+        client.registerCharacterCallback(new Callback<GameCharacterDTO>() {
+            @Override
+            public void callback(GameCharacterDTO argument) {
+                // TODO implement
+            }
+        });
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+    }
 
 
 

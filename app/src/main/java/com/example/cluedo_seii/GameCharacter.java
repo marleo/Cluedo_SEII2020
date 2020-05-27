@@ -9,6 +9,10 @@ public class GameCharacter implements Serializable {
     private String name;
     private GameboardElement startingPoint;
 
+    public GameCharacter() {
+
+    }
+
     public GameCharacter(String name, GameboardElement startingPoint){
 
         this.name = name;
