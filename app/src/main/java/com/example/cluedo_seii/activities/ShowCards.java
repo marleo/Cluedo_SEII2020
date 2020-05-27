@@ -21,10 +21,15 @@ import java.util.LinkedList;
 
 public class ShowCards extends AppCompatActivity {
 
-    float x1, x2, y1, y2;
+
+    float x1, x2;
+    static final int MIN_SWIPE_DISTANCE = 150;
+    private WifiManager wifiManager;
     private Game game;
     private LinkedList<String> playerHand;
     private ListView listView;
+
+
 
 
     @Override
@@ -55,22 +60,21 @@ public class ShowCards extends AppCompatActivity {
 
     }
 
+    @Override
     public boolean onTouchEvent (MotionEvent touchEvent){
         switch(touchEvent.getAction()){
 
             case MotionEvent.ACTION_DOWN:
                 x1 = touchEvent.getX();
-                y1 = touchEvent.getY();
-
                 break;
             case MotionEvent.ACTION_UP:
                 x2 = touchEvent.getX();
-                y2 = touchEvent.getY();
 
-                if(x1 < x2){
+                float swipeRight = x2-x1;
+
+                if(swipeRight > MIN_SWIPE_DISTANCE){
                     finish();
-                }else if(x1 > x2){
-                    finish();
+                    overridePendingTransition(R.anim.slide_right_in, R.anim.slide_right_out);
                 }
                 break;
         }

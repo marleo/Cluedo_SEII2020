@@ -1,5 +1,7 @@
 package com.example.cluedo_seii;
 
+import android.graphics.Point;
+
 import com.example.cluedo_seii.spielbrett.GameboardElement;
 
 import java.io.Serializable;
@@ -7,13 +9,15 @@ import java.io.Serializable;
 public class GameCharacter implements Serializable {
 
     private String name;
-    private GameboardElement startingPoint;
+    private Point startingPoint;
+
 
     public GameCharacter() {
 
     }
 
-    public GameCharacter(String name, GameboardElement startingPoint){
+    public GameCharacter(String name, Point startingPoint){
+
 
         this.name = name;
         this.startingPoint = startingPoint;
@@ -24,5 +28,5 @@ public class GameCharacter implements Serializable {
         return name;
     }
 
-    public GameboardElement getStartingPoint() { return startingPoint; }
+    public Point getStartingPoint() { return startingPoint; }
 }

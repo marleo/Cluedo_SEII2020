@@ -7,29 +7,17 @@
     android:layout_height="match_parent"
     tools:context=".activities.NotepadScreen">
 
-    <EditText
-        android:id="@+id/excludeOpp"
-        android:layout_width="143dp"
-        android:layout_height="40dp"
-        android:layout_marginStart="16dp"
-        android:autofillHints=""
-        android:ems="10"
-        android:hint="@string/excludeOpp"
-        android:inputType="textPersonName"
-        app:layout_constraintBottom_toTopOf="@+id/exclude_button"
-        app:layout_constraintStart_toStartOf="parent" />
 
     <EditText
         android:id="@+id/addMoreNotes"
         android:layout_width="143dp"
         android:layout_height="40dp"
-        android:layout_marginEnd="16dp"
-        android:autofillHints=""
         android:ems="10"
         android:hint="@string/addMoreNotes"
         android:inputType="textPersonName"
         app:layout_constraintBottom_toTopOf="@+id/addMoreNotesButton"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        android:autofillHints="" />
 
     <TextView
         android:id="@+id/notepadHeading"
@@ -42,52 +30,296 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/notes"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="88dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <Button
-        android:id="@+id/exclude_button"
-        style="?android:attr/borderlessButtonStyle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginBottom="16dp"
-        android:background="@drawable/custom_button"
-        android:padding="5dp"
-        android:text="@string/exclude_button"
-        android:textColor="#FFFFFF"
-        android:textSize="15sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
     <Button
         android:id="@+id/addMoreNotesButton"
-        style="?android:attr/borderlessButtonStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
-        android:layout_marginBottom="16dp"
-        android:background="@drawable/custom_button"
-        android:padding="5dp"
         android:text="@string/addMoreNotesButton"
         android:textColor="#FFFFFF"
         android:textSize="15sp"
+        android:background="@drawable/custom_button"
+        style="?android:attr/borderlessButtonStyle"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
     <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="100dp"
+        android:layout_marginLeft="280dp"
+        android:text="  Notizen  "
+        android:textColor="#FFFFFF"
+        android:textSize="15sp"
+        android:background="@drawable/custom_button"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <TextView
         android:id="@+id/moreNotesView"
-        android:layout_width="165dp"
-        android:layout_height="537dp"
-        android:layout_marginTop="88dp"
-        android:layout_marginEnd="15dp"
+        android:layout_width="155dp"
+        android:layout_height="430dp"
+        android:layout_marginTop="128dp"
+        android:layout_marginEnd="16dp"
+        android:textSize="15sp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="100dp"
+        android:layout_marginLeft="70dp"
+        android:text="  Verdächtige  "
+        android:textColor="#FFFFFF"
+        android:textSize="15sp"
+        android:background="@drawable/custom_button"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+
+    <TextView
+        android:id="@+id/notepad_green"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="130dp"
+        android:textSize="15sp"
+        android:onClick="grayOut"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/notepad_gatov"
+        android:layout_width="0dp"
+        android:layout_height="19dp"
+        android:layout_marginTop="130dp"
+        android:layout_marginEnd="5dp"
+        android:textSize="15sp"
+        android:onClick="grayOut"
+        app:layout_constraintEnd_toStartOf="@+id/moreNotesView"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/notepad_bloom"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="170dp"
+        android:textSize="15sp"
+        android:onClick="grayOut"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/notepad_weiss"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="170dp"
+        android:layout_marginEnd="5dp"
+        android:textSize="15sp"
+        android:onClick="grayOut"
+        app:layout_constraintEnd_toStartOf="@+id/moreNotesView"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/notepad_porz"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="210dp"
+        android:layout_marginEnd="5dp"
+        android:textSize="15sp"
+        android:onClick="grayOut"
+        app:layout_constraintEnd_toStartOf="@+id/moreNotesView"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/notepad_gloria"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="210dp"
+        android:textSize="15sp"
+        android:onClick="grayOut"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="260dp"
+        android:layout_marginLeft="90dp"
+        android:text="  Waffen  "
+        android:textColor="#FFFFFF"
+        android:textSize="15sp"
+        android:background="@drawable/custom_button"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <TextView
+        android:id="@+id/notepad_dolch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="290dp"
+        android:textSize="15sp"
+        android:onClick="grayOut"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/notepad_leuchter"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="290dp"
+        android:layout_marginEnd="5dp"
+        android:textSize="15sp"
+        android:onClick="grayOut"
+        app:layout_constraintEnd_toStartOf="@+id/moreNotesView"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/notepad_pistole"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="330dp"
+        android:textSize="15sp"
+        android:onClick="grayOut"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/notepad_seil"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="330dp"
+        android:layout_marginEnd="5dp"
+        android:textSize="15sp"
+        android:onClick="grayOut"
+        app:layout_constraintEnd_toStartOf="@+id/moreNotesView"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/notepad_heizungsrohr"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="370dp"
+        android:textSize="15sp"
+        android:onClick="grayOut"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/notepad_rohrzange"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="370dp"
+        android:layout_marginEnd="5dp"
+        android:textSize="15sp"
+        android:onClick="grayOut"
+        app:layout_constraintEnd_toStartOf="@+id/moreNotesView"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="420dp"
+        android:layout_marginLeft="90dp"
+        android:text="  Räume  "
+        android:textColor="#FFFFFF"
+        android:textSize="15sp"
+        android:background="@drawable/custom_button"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <TextView
+        android:id="@+id/notepad_Halle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="450dp"
+        android:textSize="15sp"
+        android:onClick="grayOut"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/notepad_salon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="450dp"
+        android:layout_marginEnd="5dp"
+        android:textSize="15sp"
+        android:onClick="grayOut"
+        app:layout_constraintEnd_toStartOf="@+id/moreNotesView"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/notepad_speisezimmer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="490dp"
+        android:textSize="15sp"
+        android:onClick="grayOut"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/notepad_küche"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="490dp"
+        android:layout_marginEnd="5dp"
+        android:textSize="15sp"
+        android:onClick="grayOut"
+        app:layout_constraintEnd_toStartOf="@+id/moreNotesView"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/notepad_musikzimmer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="530dp"
+        android:textSize="15sp"
+        android:onClick="grayOut"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/notepad_winterzimmer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="530dp"
+        android:layout_marginEnd="5dp"
+        android:textSize="15sp"
+        android:onClick="grayOut"
+        app:layout_constraintEnd_toStartOf="@+id/moreNotesView"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/notepad_biliardzimmer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="570dp"
+        android:textSize="15sp"
+        android:onClick="grayOut"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/notepad_bibliothek"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="570dp"
+        android:layout_marginEnd="5dp"
+        android:textSize="15sp"
+        android:onClick="grayOut"
+        app:layout_constraintEnd_toStartOf="@+id/moreNotesView"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/notepad_arbeitszimmer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="610dp"
+        android:textSize="15sp"
+        android:onClick="grayOut"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

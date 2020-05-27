@@ -139,5 +139,18 @@
     <string name="sendButtonNetwork">Send</string>
     <string name="connectButtonNetwork">Connect</string>
     <string name="backbuttonSettings">backButton</string>
+    <string name="backbuttonNotepad">backButton</string>
+
+    <string name="PleaseShake">Shake your phone to roll the dices</string>
+    <string name="ShakeEventDetected">Dices rolled!</string>
+    <string name="NoShakeAction">No Shake action detected!</string>
+    <string name="dice1">leftDice</string>
+    <string name="dice2">rightDice</string>
+
+    <string name="selectPlayer">Choose your Character</string>
+    <string name="Player1">Character1</string>
+    <string name="Player2">Character2</string>
+    <string name="Player3">Character3</string>
+    <string name="playerSelected">Start</string>
 
 </resources>
