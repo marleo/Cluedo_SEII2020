@@ -12,7 +12,6 @@ public class Player implements Serializable {
     private int id;
     private LinkedList<Card> playerCards;
     private Point position;
-    private String IP;
     private GameCharacter playerCharacter;
     private Boolean madeFalseAccusation;
     private Boolean cheated;

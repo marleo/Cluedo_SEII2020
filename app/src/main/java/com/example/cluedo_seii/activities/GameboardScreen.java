@@ -206,13 +206,14 @@ public class GameboardScreen extends AppCompatActivity  {
 
             GameCharacter gameCharacter = new GameCharacter("Prof. Bloom", null);
             GameCharacter gameCharacterAlt = new GameCharacter("Fräulein Weiss", null);
-            Player player1 = new Player(1, "10.0.2.16", gameCharacterAlt);
-            Player player2 = new Player(2, "null", gameCharacter);
-            Player player3 = new Player(3, "null", gameCharacterAlt);
+            Player player1 = new Player(1, gameCharacterAlt);
+            Player player2 = new Player(2,  gameCharacter);
+            Player player3 = new Player(3,  gameCharacterAlt);
             players.add(player1);
             players.add(player2);
             players.add(player3);
-            game = new Game(gameboard, players);
+            //game = new Game(gameboard, players);
+            game = Game.getInstance();
             game.distributeCards(); //um Notepad cheatFunction zu demonstrieren
 
 
