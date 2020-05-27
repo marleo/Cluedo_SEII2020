@@ -303,6 +303,8 @@ public class GameboardScreen extends AppCompatActivity  {
         intent = new Intent(this, NotepadScreen.class);
         intent.putExtra("game",game);
         startActivity(intent);
+        overridePendingTransition(R.anim.slide_right_in, R.anim.slide_right_out);
+
     }
 
     public void accuseSomeone(){
@@ -316,6 +318,7 @@ public class GameboardScreen extends AppCompatActivity  {
         intent = new Intent(this, ShowCards.class);
         intent.putExtra("game", game);
         startActivity(intent);
+        overridePendingTransition(R.anim.slide_left_in, R.anim.slide_left_out);
     }
 
     //CallBack um Resultat aus Methode zu erhalten
@@ -353,6 +356,7 @@ public class GameboardScreen extends AppCompatActivity  {
 
                 if(swipeDown > MIN_SWIPE_DISTANCE){
                     startActivity(new Intent(GameboardScreen.this, RollDiceScreen.class));
+                    overridePendingTransition(R.anim.slide_down_in, R.anim.slide_down_out);
                 }else if(swipeRight > MIN_SWIPE_DISTANCE){
                     startNotepad();
                 } else if(swipeLeft > MIN_SWIPE_DISTANCE){
