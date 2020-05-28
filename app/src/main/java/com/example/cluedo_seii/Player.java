@@ -1,6 +1,7 @@
 package com.example.cluedo_seii;
 
 
+import android.graphics.Point;
 import com.example.cluedo_seii.spielbrett.GameboardElement;
 
 import java.io.Serializable;
@@ -10,7 +11,7 @@ public class Player implements Serializable {
 
     private int id;
     private LinkedList<Card> playerCards;
-    private GameboardElement position;
+    private Point position;
     private String IP;
     private GameCharacter playerCharacter;
     private Boolean madeFalseAccusation;
@@ -27,7 +28,7 @@ public class Player implements Serializable {
         cheated = false;
     }
 
-    public GameboardElement getPosition() {
+    public Point getPosition() {
         return position;
     }
 
@@ -103,7 +104,7 @@ public class Player implements Serializable {
         return wrongSuspicions;
     }
 
-    public void setPosition(GameboardElement position) {
+    public void setPosition(Point position) {
         this.position = position;
     }
 

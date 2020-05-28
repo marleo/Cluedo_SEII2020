@@ -10,6 +10,7 @@ import android.hardware.SensorManager;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.text.format.Formatter;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -25,6 +26,9 @@ import com.example.cluedo_seii.R;
 import java.util.Random;
 
 public class NotepadScreen extends AppCompatActivity {
+    float x1, x2;
+    static final int MIN_SWIPE_DISTANCE = 150;
+
     private TextView textViewGatov;
     private  TextView textViewBloom;
     private  TextView textViewGreen ;
@@ -197,15 +201,6 @@ public class NotepadScreen extends AppCompatActivity {
 
             }
         }, lightSensor, SensorManager.SENSOR_DELAY_NORMAL);
-
-        final ImageButton backButton = findViewById(R.id.backButtonNotepad);
-        backButton.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v){
-                startActivity(new Intent(NotepadScreen.this, GameboardScreen.class));
-            }
-        });
-
     }
 
 
@@ -226,6 +221,27 @@ public class NotepadScreen extends AppCompatActivity {
             view.setBackgroundColor(0);
             view.setTag("");
         }
+    }
+
+    @Override
+    public boolean onTouchEvent (MotionEvent touchEvent){
+        switch(touchEvent.getAction()){
+
+            case MotionEvent.ACTION_DOWN:
+                x1 = touchEvent.getX();
+                break;
+            case MotionEvent.ACTION_UP:
+                x2 = touchEvent.getX();
+
+                float swipeLeft = x1-x2;
+
+                if(swipeLeft > MIN_SWIPE_DISTANCE){
+                    finish();
+                    overridePendingTransition(R.anim.slide_left_in, R.anim.slide_left_out);
+                }
+                break;
+        }
+        return false;
     }
 
 }
