@@ -182,7 +182,7 @@ public class NotepadScreen extends AppCompatActivity {
                         if (event.values[0] < 3) {
                             sensorValue = event.values[0];
                         }
-                        if (event.values[0] == 0) {
+                        if (event.values[0] == 10) {
                             notepad.cheatFunction(game.getInvestigationFile());
                             game.getCurrentPlayer().setCheated();
 
