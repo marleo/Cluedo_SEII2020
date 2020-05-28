@@ -1,4 +1,4 @@
-package com.example.cluedo_seii.spielbrett.entrace;
+package com.example.cluedo_seii.spielbrett;
 
 import android.widget.LinearLayout;
 

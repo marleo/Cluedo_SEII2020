@@ -98,8 +98,36 @@ public class GameboardScreen extends AppCompatActivity  {
             G = Billard11
             H = Billard13
             I = Billard12
-            J
-            K
+            J = Musikzimmer1
+            K = Musikzimmer3
+            L = Musikzimmer5
+            M = Musikzimmer6
+            N = Musikzimmer7
+            O = Musikzimmer8
+            P = Musikzimmer9
+            Q = Musikzimmer10
+            R = Musikzimmer11
+            T = Musikzimmer12
+            S = Salon1
+            U = Salon2
+            V = Salon3
+            W = Salon4
+            X = Salon5
+            Y = Salon6
+            Z = Kueche1
+            ! = Kueche2
+            ä = Kueche3
+            ö = Kueche4
+            ü = Kueche5
+            $ = Kueche6
+            % = Kueche7
+            & = Kueche8
+            / = Kueche9
+            ( = Kueche10
+            ) = Kueche11
+            + = Kueche12
+            - = Kueche13
+
 
 
          */
@@ -118,12 +146,12 @@ public class GameboardScreen extends AppCompatActivity  {
                 "zBCD300111111" +
                 "EFGHI00000000" +
                 "0000000000000" +
-                "1111100031111" +
-                "1111100031111" +
-                "1111300011111" +
+                "JAK30000Z3!äö" +
+                "LMNO0000ü$%&-" +
+                "PQRT0000A/()+" +
                 "0000000000000" +
-                "0000111100000" +
-                "0020111102000";
+                "00003SU300000" +
+                "0020VWXY02000";
 
         gameboard = new Gameboard(this,13,19, gameBoard);
         setContentView(gameboard.getLayout());
