@@ -127,23 +127,46 @@ public class GameboardScreen extends AppCompatActivity  {
             ) = Kueche11
             + = Kueche12
             - = Kueche13
+            * = Speisezimmer2
+            . = Speisezimmer3
+            , = Speisezimmer4
+            # = Speisezimmer5
+            : = Speisezimmer6
+            ; = Speisezimmer7
+            < = Speisezimmer8
+            > = Speisezimmer9
+            = = Speisezimmer10 --frei!
+            @ = Speisezimmer11
+            [ = Speisezimmer12
+            ] = Speisezimmer13
+            ^ = Speisezimmer 14
+            = = Veranda1
+            _ = Veranda2
+            { = Veranda3
+            } = Veranda4
+            ~ = Veranda5
+            € = Veranda6
+            Ü = Veranda7
+            Ö = Veranda8
+            Ä = Veranda9
+
 
 
 
          */
 
         String gameBoard =
-                "cdef045621111" +
-                "ghij078901111" +
-                "Akk30a3b03111" +
+                "cdef04562=_{}" +
+                "ghij07890~€ÜÖ" +
+                "Akk30a3b03ÄÄA" +
                 "2000000000000" +
                 "lmt0000000000" +
                 "opq3000000002" +
                 "r3u0000000000" +
                 "0000000000002" +
-                "0000000011111" +
-                "v3wxy00031111" +
-                "zBCD300111111" +
+                "000000003*.,#" +
+                "v3wxy0003:;<>" +
+                "zBCD30000@[]^" +
                 "EFGHI00000000" +
                 "0000000000000" +
                 "JAK30000Z3!äö" +
@@ -151,9 +174,10 @@ public class GameboardScreen extends AppCompatActivity  {
                 "PQRT0000A/()+" +
                 "0000000000000" +
                 "00003SU300000" +
-                "0020VWXY02000";
+                "0000VWXY00000" +
+                "0020000002000";
 
-        gameboard = new Gameboard(this,13,19, gameBoard);
+        gameboard = new Gameboard(this,13,20, gameBoard);
         setContentView(gameboard.getLayout());
 
         bundle = new Bundle();

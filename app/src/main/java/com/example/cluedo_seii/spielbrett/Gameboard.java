@@ -80,6 +80,28 @@ import static com.example.cluedo_seii.R.drawable.s3;
 import static com.example.cluedo_seii.R.drawable.s4;
 import static com.example.cluedo_seii.R.drawable.s5;
 import static com.example.cluedo_seii.R.drawable.s6;
+import static com.example.cluedo_seii.R.drawable.sp10;
+import static com.example.cluedo_seii.R.drawable.sp11;
+import static com.example.cluedo_seii.R.drawable.sp12;
+import static com.example.cluedo_seii.R.drawable.sp13;
+import static com.example.cluedo_seii.R.drawable.sp14;
+import static com.example.cluedo_seii.R.drawable.sp2;
+import static com.example.cluedo_seii.R.drawable.sp3;
+import static com.example.cluedo_seii.R.drawable.sp4;
+import static com.example.cluedo_seii.R.drawable.sp5;
+import static com.example.cluedo_seii.R.drawable.sp6;
+import static com.example.cluedo_seii.R.drawable.sp7;
+import static com.example.cluedo_seii.R.drawable.sp8;
+import static com.example.cluedo_seii.R.drawable.sp9;
+import static com.example.cluedo_seii.R.drawable.v1;
+import static com.example.cluedo_seii.R.drawable.v2;
+import static com.example.cluedo_seii.R.drawable.v3;
+import static com.example.cluedo_seii.R.drawable.v4;
+import static com.example.cluedo_seii.R.drawable.v5;
+import static com.example.cluedo_seii.R.drawable.v6;
+import static com.example.cluedo_seii.R.drawable.v7;
+import static com.example.cluedo_seii.R.drawable.v8;
+import static com.example.cluedo_seii.R.drawable.v9;
 
 public class Gameboard {
 
@@ -567,10 +589,132 @@ public class Gameboard {
                                         LinearLayout.LayoutParams.MATCH_PARENT));
                         gameboardElement.getGameBoardElement().setImageResource(k13);
                         break;
-
-
-
-
+                    case '*':
+                        gameboardElement = new Billard12(gameboardScreen, x, y, new LinearLayout.LayoutParams
+                                (LinearLayout.LayoutParams.WRAP_CONTENT,
+                                        LinearLayout.LayoutParams.MATCH_PARENT));
+                        gameboardElement.getGameBoardElement().setImageResource(sp2);
+                        break;
+                    case '.':
+                        gameboardElement = new Billard12(gameboardScreen, x, y, new LinearLayout.LayoutParams
+                                (LinearLayout.LayoutParams.WRAP_CONTENT,
+                                        LinearLayout.LayoutParams.MATCH_PARENT));
+                        gameboardElement.getGameBoardElement().setImageResource(sp3);
+                        break;
+                    case ',':
+                        gameboardElement = new Billard12(gameboardScreen, x, y, new LinearLayout.LayoutParams
+                                (LinearLayout.LayoutParams.WRAP_CONTENT,
+                                        LinearLayout.LayoutParams.MATCH_PARENT));
+                        gameboardElement.getGameBoardElement().setImageResource(sp4);
+                        break;
+                    case '#':
+                        gameboardElement = new Billard12(gameboardScreen, x, y, new LinearLayout.LayoutParams
+                                (LinearLayout.LayoutParams.WRAP_CONTENT,
+                                        LinearLayout.LayoutParams.MATCH_PARENT));
+                        gameboardElement.getGameBoardElement().setImageResource(sp5);
+                        break;
+                    case ':':
+                        gameboardElement = new Billard12(gameboardScreen, x, y, new LinearLayout.LayoutParams
+                                (LinearLayout.LayoutParams.WRAP_CONTENT,
+                                        LinearLayout.LayoutParams.MATCH_PARENT));
+                        gameboardElement.getGameBoardElement().setImageResource(sp6);
+                        break;
+                    case ';':
+                        gameboardElement = new Billard12(gameboardScreen, x, y, new LinearLayout.LayoutParams
+                                (LinearLayout.LayoutParams.WRAP_CONTENT,
+                                        LinearLayout.LayoutParams.MATCH_PARENT));
+                        gameboardElement.getGameBoardElement().setImageResource(sp7);
+                        break;
+                    case '<':
+                        gameboardElement = new Billard12(gameboardScreen, x, y, new LinearLayout.LayoutParams
+                                (LinearLayout.LayoutParams.WRAP_CONTENT,
+                                        LinearLayout.LayoutParams.MATCH_PARENT));
+                        gameboardElement.getGameBoardElement().setImageResource(sp8);
+                        break;
+                    case '>':
+                        gameboardElement = new Billard12(gameboardScreen, x, y, new LinearLayout.LayoutParams
+                                (LinearLayout.LayoutParams.WRAP_CONTENT,
+                                        LinearLayout.LayoutParams.MATCH_PARENT));
+                        gameboardElement.getGameBoardElement().setImageResource(sp9);
+                        break;
+                    case '@':
+                        gameboardElement = new Billard12(gameboardScreen, x, y, new LinearLayout.LayoutParams
+                                (LinearLayout.LayoutParams.WRAP_CONTENT,
+                                        LinearLayout.LayoutParams.MATCH_PARENT));
+                        gameboardElement.getGameBoardElement().setImageResource(sp11);
+                        break;
+                    case '[':
+                        gameboardElement = new Billard12(gameboardScreen, x, y, new LinearLayout.LayoutParams
+                                (LinearLayout.LayoutParams.WRAP_CONTENT,
+                                        LinearLayout.LayoutParams.MATCH_PARENT));
+                        gameboardElement.getGameBoardElement().setImageResource(sp12);
+                        break;
+                    case ']':
+                        gameboardElement = new Billard12(gameboardScreen, x, y, new LinearLayout.LayoutParams
+                                (LinearLayout.LayoutParams.WRAP_CONTENT,
+                                        LinearLayout.LayoutParams.MATCH_PARENT));
+                        gameboardElement.getGameBoardElement().setImageResource(sp13);
+                        break;
+                    case '^':
+                        gameboardElement = new Billard12(gameboardScreen, x, y, new LinearLayout.LayoutParams
+                                (LinearLayout.LayoutParams.WRAP_CONTENT,
+                                        LinearLayout.LayoutParams.MATCH_PARENT));
+                        gameboardElement.getGameBoardElement().setImageResource(sp14);
+                        break;
+                    case '=':
+                        gameboardElement = new Billard12(gameboardScreen, x, y, new LinearLayout.LayoutParams
+                                (LinearLayout.LayoutParams.WRAP_CONTENT,
+                                        LinearLayout.LayoutParams.MATCH_PARENT));
+                        gameboardElement.getGameBoardElement().setImageResource(v1);
+                        break;
+                    case '_':
+                        gameboardElement = new Billard12(gameboardScreen, x, y, new LinearLayout.LayoutParams
+                                (LinearLayout.LayoutParams.WRAP_CONTENT,
+                                        LinearLayout.LayoutParams.MATCH_PARENT));
+                        gameboardElement.getGameBoardElement().setImageResource(v2);
+                        break;
+                    case '{':
+                        gameboardElement = new Billard12(gameboardScreen, x, y, new LinearLayout.LayoutParams
+                                (LinearLayout.LayoutParams.WRAP_CONTENT,
+                                        LinearLayout.LayoutParams.MATCH_PARENT));
+                        gameboardElement.getGameBoardElement().setImageResource(v3);
+                        break;
+                    case '}':
+                        gameboardElement = new Billard12(gameboardScreen, x, y, new LinearLayout.LayoutParams
+                                (LinearLayout.LayoutParams.WRAP_CONTENT,
+                                        LinearLayout.LayoutParams.MATCH_PARENT));
+                        gameboardElement.getGameBoardElement().setImageResource(v4);
+                        break;
+                    case '~':
+                        gameboardElement = new Billard12(gameboardScreen, x, y, new LinearLayout.LayoutParams
+                                (LinearLayout.LayoutParams.WRAP_CONTENT,
+                                        LinearLayout.LayoutParams.MATCH_PARENT));
+                        gameboardElement.getGameBoardElement().setImageResource(v5);
+                        break;
+                    case '€':
+                        gameboardElement = new Billard12(gameboardScreen, x, y, new LinearLayout.LayoutParams
+                                (LinearLayout.LayoutParams.WRAP_CONTENT,
+                                        LinearLayout.LayoutParams.MATCH_PARENT));
+                        gameboardElement.getGameBoardElement().setImageResource(v6);
+                        break;
+                    case 'Ü':
+                        gameboardElement = new Billard12(gameboardScreen, x, y, new LinearLayout.LayoutParams
+                                (LinearLayout.LayoutParams.WRAP_CONTENT,
+                                        LinearLayout.LayoutParams.MATCH_PARENT));
+                        gameboardElement.getGameBoardElement().setImageResource(v7);
+                        break;
+                    case 'Ö':
+                        gameboardElement = new Billard12(gameboardScreen, x, y, new LinearLayout.LayoutParams
+                                (LinearLayout.LayoutParams.WRAP_CONTENT,
+                                        LinearLayout.LayoutParams.MATCH_PARENT));
+                        gameboardElement.getGameBoardElement().setImageResource(v8);
+                        break;
+                    case 'Ä':
+                        gameboardElement = new Billard12(gameboardScreen, x, y, new LinearLayout.LayoutParams
+                                (LinearLayout.LayoutParams.WRAP_CONTENT,
+                                        LinearLayout.LayoutParams.MATCH_PARENT));
+                        gameboardElement.getGameBoardElement().setImageResource(v9);
+                        break;
 
 
 
