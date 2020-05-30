@@ -214,6 +214,9 @@ public class GameboardScreen extends AppCompatActivity  {
             players.add(player3);
             //game = new Game(gameboard, players);
             game = Game.getInstance();
+            game.setGameboard(gameboard);
+            game.setPlayers(players);
+            game.setLocalPlayer(player2);
             game.distributeCards(); //um Notepad cheatFunction zu demonstrieren
 
 
@@ -301,7 +304,7 @@ public class GameboardScreen extends AppCompatActivity  {
 
     public void startNotepad(){
         intent = new Intent(this, NotepadScreen.class);
-        intent.putExtra("game",game);
+        //intent.putExtra("game",game);
         startActivity(intent);
         overridePendingTransition(R.anim.slide_right_in, R.anim.slide_right_out);
 
@@ -314,7 +317,7 @@ public class GameboardScreen extends AppCompatActivity  {
     //Zeigt Karten auf Spielerhand
     public void showCards(){
         intent = new Intent(this, ShowCards.class);
-        intent.putExtra("game", game);
+        //intent.putExtra("game", game);
         startActivity(intent);
         overridePendingTransition(R.anim.slide_left_in, R.anim.slide_left_out);
     }
