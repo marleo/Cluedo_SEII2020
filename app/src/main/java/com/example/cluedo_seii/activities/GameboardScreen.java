@@ -3,6 +3,7 @@ package com.example.cluedo_seii.activities;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MotionEvent;
 
 import androidx.annotation.Nullable;
@@ -42,7 +43,10 @@ public class GameboardScreen extends AppCompatActivity  {
     private Intent intent;
     private List<StartingPoint> startingPoints;
     private List<Player> playerMove;
+
+    private Player currentPlayerInDoor;// TODO: Aufräumen und vielleicht nur mehr das Player Objekt anstatt id und Player Objekt
     private int playerCurrentlyPlayingId;
+
     static final int MIN_SWIPE_DISTANCE = 150;
 
 
@@ -177,6 +181,15 @@ public class GameboardScreen extends AppCompatActivity  {
                 "0000VWXY00000" +
                 "0020000002000";
 
+        // Init Starting Points
+        startingPoints = new ArrayList<>();
+        startingPoints.add(new StartingPoint(0, 0));
+        startingPoints.add(new StartingPoint(2, 1));
+
+        // Init Player Ids and PlayerMove-Array
+        int countPlayerIds = 0;
+        playerMove = new ArrayList<>();
+
         gameboard = new Gameboard(this,13,20, gameBoard);
         setContentView(gameboard.getLayout());
 
@@ -184,36 +197,23 @@ public class GameboardScreen extends AppCompatActivity  {
         mesaggeDialogTag = "MessageDialog";
         manager = getSupportFragmentManager();
 
-
         startGame();
-
-
-        startingPoints = new ArrayList<>();
-        startingPoints.add(new StartingPoint(0, 0));
-        startingPoints.add(new StartingPoint(2, 1));
 
         gameboard.spawnPlayer(startingPoints, this);
 
-        playerMove = new ArrayList<>();
         for(StartingPoint startingPoint: startingPoints) {
-            /*Log.i("Test",
+            Log.i("Test",
                     "StartingPoint Position: " + startingPoint.getPlayerPosition().x + ":"
-                            + startingPoint.getPlayerPosition().y);*/
-            /*
+                            + startingPoint.getPlayerPosition().y);
+            GameCharacter gameCharacter = new GameCharacter("Player_"+countPlayerIds, startingPoint.getPlayerPosition());
             playerMove.add(
-                    new Player(
-                            startingPoint.getPlayerId(),
-                            startingPoint.getPlayerPosition()
-                    )
+                    new Player(countPlayerIds++, "", gameCharacter)
             );
-            */
         }
 
         // Wenn sich die Id ändert, dann danach updateGameboardScreen machen so wie hier!
         playerCurrentlyPlayingId = 0;
         gameboard.updateGameboardScreen(this);
-
-
     }
 
     public Gameboard getGameboard() {
@@ -246,6 +246,14 @@ public class GameboardScreen extends AppCompatActivity  {
 
     public void setPlayerCurrentlyPlayingId(int playerCurrentlyPlayingId) {
         this.playerCurrentlyPlayingId = playerCurrentlyPlayingId;
+    }
+
+    public Player getCurrentPlayerInDoor() {
+        return currentPlayerInDoor;
+    }
+
+    public void setCurrentPlayerInDoor(Player currentPlayerInDoor) {
+        this.currentPlayerInDoor = currentPlayerInDoor;
     }
 
     private void startGame(){
