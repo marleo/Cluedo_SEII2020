@@ -39,6 +39,7 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
         client = new Client();
     }
 
+
     public static NetworkClientKryo getInstance() {
         if (INSTANCE == null) {
             INSTANCE = new NetworkClientKryo();
@@ -119,8 +120,11 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
 
     private void handlePlayerResponse(Connection connection, PlayerDTO playerDTO) {
         // delete character Callback, because the client already choose his character
-        characterCallback = null;
+        // characterCallback = null;
         // TODO implement
+
+        //set Player as LocalPlayer
+        Game.getInstance().setLocalPlayer(playerDTO.getPlayer());
         Log.d("Player Response:", playerDTO.toString());
     }
 
@@ -135,10 +139,12 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
         this.callback = callback;
     }
 
+    @Override
     public void registerConnectionCallback(Callback<ConnectedDTO> callback) {
         this.connectionCallback = callback;
     }
 
+    @Override
     public void registerCharacterCallback(Callback<GameCharacterDTO> callback) {
         this.characterCallback = null;
         this.characterCallback = callback;

@@ -15,27 +15,17 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.example.cluedo_seii.Game;
-import com.example.cluedo_seii.GameCharacter;
-import com.example.cluedo_seii.Player;
 import com.example.cluedo_seii.network.Callback;
 import com.example.cluedo_seii.network.ClientData;
 import com.example.cluedo_seii.network.connectionType;
 import com.example.cluedo_seii.network.dto.ConnectedDTO;
-import com.example.cluedo_seii.network.dto.GameCharacterDTO;
-import com.example.cluedo_seii.network.dto.GameDTO;
-import com.example.cluedo_seii.network.dto.PlayerDTO;
-import com.example.cluedo_seii.network.dto.QuitGameDTO;
-import com.example.cluedo_seii.network.dto.RequestDTO;
-import com.example.cluedo_seii.network.dto.TextMessage;
 import com.example.cluedo_seii.network.dto.UserNameRequestDTO;
 import com.example.cluedo_seii.network.kryonet.KryoHelper;
-import com.example.cluedo_seii.network.kryonet.KryoNetComponent;
 import com.example.cluedo_seii.network.kryonet.NetworkClientKryo;
 import com.example.cluedo_seii.network.kryonet.NetworkServerKryo;
 import com.example.cluedo_seii.R;
 
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 
@@ -70,23 +60,7 @@ public class startGameScreen extends AppCompatActivity {
         
         server = NetworkServerKryo.getInstance();
         KryoHelper.registerClasses(server);
-/*
-        //TODO refactor to helper Class
-        server = NetworkServerKryo.getInstance();
-        server.registerClass(RequestDTO.class);
-        server.registerClass(TextMessage.class);
-        server.registerClass(QuitGameDTO.class);
-        server.registerClass(ConnectedDTO.class);
-        server.registerClass(UserNameRequestDTO.class);
-        server.registerClass(GameCharacterDTO.class);
-        server.registerClass(PlayerDTO.class);
-        server.registerClass(LinkedList.class);
-        server.registerClass(GameCharacter.class);
-        server.registerClass(GameDTO.class);
-        server.registerClass(Game.class);
-        server.registerClass(HashMap.class);
-        server.registerClass(Player.class);
-*/
+
         server.registerNewClientCallback(new Callback<LinkedHashMap<Integer, ClientData>>() {
             @Override
             public void callback(LinkedHashMap<Integer, ClientData> argument) {
@@ -135,25 +109,6 @@ public class startGameScreen extends AppCompatActivity {
 
             client = NetworkClientKryo.getInstance();
             KryoHelper.registerClasses(client);
-
-/*
-            client.registerClass(RequestDTO.class);
-            client.registerClass(TextMessage.class);
-            client.registerClass(QuitGameDTO.class);
-            client.registerClass(ConnectedDTO.class);
-            client.registerClass(UserNameRequestDTO.class);
-            client.registerClass(GameCharacterDTO.class);
-            client.registerClass(PlayerDTO.class);
-            client.registerClass(LinkedList.class);
-            client.registerClass(GameCharacter.class);
-            client.registerClass(GameDTO.class);
-            client.registerClass(Game.class);
-            client.registerClass(HashMap.class);
-            client.registerClass(Player.class);
-
- */
-
-            //client.connect("localhost");
 
             EditText ipInput = findViewById(R.id.ipAddress);
             String ip = ipInput.getText().toString();

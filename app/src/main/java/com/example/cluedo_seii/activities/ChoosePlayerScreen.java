@@ -85,30 +85,7 @@ public class ChoosePlayerScreen extends AppCompatActivity {
     }
 
     private void hostChooseCharacter() {
-
-        final LinkedList<String> characterNameList = new LinkedList<>(availableCharacters.keySet());
         waitingForHost.setVisibility(View.INVISIBLE);
-
-        /*
-        ArrayAdapter<String> characterListAdapter = new ArrayAdapter<>(ChoosePlayerScreen.this, android.R.layout.simple_list_item_1,characterNameList);
-        characterList.setAdapter(characterListAdapter);
-        characterList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                String selectedItem = (String) parent.getItemAtPosition(position);
-                Log.d("Selected shit:", selectedItem);
-
-                GameCharacter selectedCharacter = availableCharacters.get(selectedItem);
-                Log.d("Selected Character", selectedCharacter.toString());
-                availableCharacters.remove(selectedItem);
-
-                GameCharacterDTO gameCharacterDTO = new GameCharacterDTO();
-                gameCharacterDTO.setAvailablePlayers(availableCharacters);
-
-                server.broadcastMessage(gameCharacterDTO);
-            }
-        });
-        */
 
         updateCharacterList(availableCharacters);
 
@@ -119,6 +96,17 @@ public class ChoosePlayerScreen extends AppCompatActivity {
                 // TODO implement
                 availableCharacters = argument.getAvailablePlayers();
                 updateCharacterList(availableCharacters);
+
+                if (everyOneHasChosenACharacter()) {
+                    //TODO implement next step
+                    Log.d("test", "Finished Choosing Characters");
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            findViewById(R.id.proceedToGameButton).setVisibility(View.VISIBLE);
+                        }
+                    });
+                }
             }
         });
     }
@@ -134,6 +122,7 @@ public class ChoosePlayerScreen extends AppCompatActivity {
         });
 
 
+
     }
 
     private void updateCharacterList(final HashMap<String,GameCharacter> gameCharacters) {
@@ -146,9 +135,7 @@ public class ChoosePlayerScreen extends AppCompatActivity {
                 characterList.setAdapter(characterListAdapter);
 
                 //remove on Click Listener if the character is already chosen
-                System.out.println(game.getLocalPlayer());
                 if (game.getLocalPlayer() == null) {
-                    System.out.println("in the if");
                     characterList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                         @Override
                         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -168,9 +155,14 @@ public class ChoosePlayerScreen extends AppCompatActivity {
 
                                 server.broadcastMessage(gameCharacterDTO);
 
-                                //set local Player
+                                //set local Player and add Player to the Players List
                                 Player player = new Player(1, selectedCharacter);
                                 game.setLocalPlayer(player);
+
+                                LinkedList<Player> playerLinkedList = game.getPlayers();
+                                if (playerLinkedList == null) playerLinkedList = new LinkedList<>();
+                                playerLinkedList.add(player);
+                                game.setPlayers(playerLinkedList);
 
                                 updateCharacterList(gameCharacters);
                             } else if (conType == connectionType.CLIENT) {
@@ -187,6 +179,14 @@ public class ChoosePlayerScreen extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    private boolean everyOneHasChosenACharacter() {
+        if (game.getPlayers().size() == server.getClientList().size() + 1) {
+            return true;
+        }
+
+        return false;
     }
 
 

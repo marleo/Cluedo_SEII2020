@@ -30,4 +30,19 @@
 
     </ListView>
 
+    <Button
+        android:id="@+id/proceedToGameButton"
+        style="?android:attr/borderlessButtonStyle"
+        android:layout_width="170dp"
+        android:layout_height="47dp"
+        android:layout_marginBottom="68dp"
+        android:background="@drawable/custom_button"
+        android:textColor="#FFFFFF"
+        android:textSize="15sp"
+        android:visibility="visible"
+        android:text="Proceed To Game"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
