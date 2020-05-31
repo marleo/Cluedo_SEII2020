@@ -109,7 +109,7 @@ public class NetworkServerKryo implements KryoNetComponent, NetworkServer {
         // TODO implement
         //remove the chosen Player from the List
         GameCharacter chosenCharacter = gameCharacterDTO.getChoosenPlayer();
-        gameCharacterDTO.getAvailablePlayers().remove(chosenCharacter);
+        gameCharacterDTO.getAvailablePlayers().remove(chosenCharacter.getName());
 
         //forward the created Player to the Client
         for (ClientData clientData: clientList.values()) {

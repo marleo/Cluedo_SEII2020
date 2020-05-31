@@ -32,6 +32,7 @@ import com.example.cluedo_seii.network.kryonet.NetworkServerKryo;
 import com.example.cluedo_seii.R;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 
@@ -47,6 +48,9 @@ public class startGameScreen extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start_game_screen);
 
+        //reset Game
+        Game.reset();
+
         //TODO add Logic if the game is ready to start
         final Button chooseCharacter = findViewById(R.id.chooseCharacter);
         chooseCharacter.setOnClickListener(new View.OnClickListener(){
@@ -61,6 +65,9 @@ public class startGameScreen extends AppCompatActivity {
         final ListView clientList = findViewById(R.id.clientList);
         conType = connectionType.HOST;
 
+
+
+        //TODO refactor to helper Class
         server = NetworkServerKryo.getInstance();
         server.registerClass(RequestDTO.class);
         server.registerClass(TextMessage.class);
@@ -73,6 +80,7 @@ public class startGameScreen extends AppCompatActivity {
         server.registerClass(GameCharacter.class);
         server.registerClass(GameDTO.class);
         server.registerClass(Game.class);
+        server.registerClass(HashMap.class);
 
         server.registerNewClientCallback(new Callback<LinkedHashMap<Integer, ClientData>>() {
             @Override
@@ -134,6 +142,7 @@ public class startGameScreen extends AppCompatActivity {
             client.registerClass(GameCharacter.class);
             client.registerClass(GameDTO.class);
             client.registerClass(Game.class);
+            client.registerClass(HashMap.class);
 
             //client.connect("localhost");
 

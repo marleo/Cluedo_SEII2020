@@ -2,7 +2,9 @@ package com.example.cluedo_seii.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.cluedo_seii.Game;
 import com.example.cluedo_seii.GameCharacter;
+import com.example.cluedo_seii.Player;
 import com.example.cluedo_seii.network.Callback;
 import com.example.cluedo_seii.network.ClientData;
 import com.example.cluedo_seii.network.connectionType;
@@ -10,6 +12,7 @@ import com.example.cluedo_seii.network.connectionType;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -20,6 +23,7 @@ import com.example.cluedo_seii.network.kryonet.NetworkClientKryo;
 import com.example.cluedo_seii.network.kryonet.NetworkServerKryo;
 import com.example.cluedo_seii.spielbrett.GameFieldElement;
 
+import java.util.HashMap;
 import java.util.LinkedList;
 
 public class ChoosePlayerScreen extends AppCompatActivity {
@@ -29,7 +33,9 @@ public class ChoosePlayerScreen extends AppCompatActivity {
     private ListView characterList;
     private TextView waitingForHost;
 
-    private LinkedList<GameCharacter> availableCharacters;
+    private Game game;
+
+    private HashMap<String,GameCharacter> availableCharacters;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +44,8 @@ public class ChoosePlayerScreen extends AppCompatActivity {
 
         characterList = findViewById(R.id.chooseCharacterListView);
         waitingForHost = findViewById(R.id.waitingForHostText);
+
+        game = Game.getInstance();
 
         this.conType = startGameScreen.conType;
 
@@ -57,13 +65,13 @@ public class ChoosePlayerScreen extends AppCompatActivity {
             GameCharacter character5 = new GameCharacter("Character 5", null);
             GameCharacter character6 = new GameCharacter("Character 6", null);
 
-            availableCharacters = new LinkedList<>();
-            availableCharacters.add(character1);
-            availableCharacters.add(character2);
-            availableCharacters.add(character3);
-            availableCharacters.add(character4);
-            availableCharacters.add(character5);
-            availableCharacters.add(character6);
+            availableCharacters = new HashMap<>();
+            availableCharacters.put(character1.getName(),character1);
+            availableCharacters.put(character2.getName(),character2);
+            availableCharacters.put(character3.getName(),character3);
+            availableCharacters.put(character4.getName(),character4);
+            availableCharacters.put(character5.getName(),character5);
+            availableCharacters.put(character6.getName(),character6);
 
             GameCharacterDTO gameCharacterDTO = new GameCharacterDTO();
             gameCharacterDTO.setAvailablePlayers(availableCharacters);
@@ -77,15 +85,32 @@ public class ChoosePlayerScreen extends AppCompatActivity {
     }
 
     private void hostChooseCharacter() {
-        final LinkedList<String> characterNameList = new LinkedList<>();
-        for (GameCharacter gameCharacter : availableCharacters) {
-            characterNameList.add(gameCharacter.getName());
-        }
 
+        final LinkedList<String> characterNameList = new LinkedList<>(availableCharacters.keySet());
         waitingForHost.setVisibility(View.INVISIBLE);
 
+        /*
         ArrayAdapter<String> characterListAdapter = new ArrayAdapter<>(ChoosePlayerScreen.this, android.R.layout.simple_list_item_1,characterNameList);
         characterList.setAdapter(characterListAdapter);
+        characterList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                String selectedItem = (String) parent.getItemAtPosition(position);
+                Log.d("Selected shit:", selectedItem);
+
+                GameCharacter selectedCharacter = availableCharacters.get(selectedItem);
+                Log.d("Selected Character", selectedCharacter.toString());
+                availableCharacters.remove(selectedItem);
+
+                GameCharacterDTO gameCharacterDTO = new GameCharacterDTO();
+                gameCharacterDTO.setAvailablePlayers(availableCharacters);
+
+                server.broadcastMessage(gameCharacterDTO);
+            }
+        });
+        */
+
+        updateCharacterList(availableCharacters);
 
         // UPDATE Current Players
         server.registerCharacterDTOCallback(new Callback<GameCharacterDTO>() {
@@ -107,19 +132,57 @@ public class ChoosePlayerScreen extends AppCompatActivity {
             }
         });
 
+
     }
 
-    private void updateCharacterList(LinkedList<GameCharacter> gameCharacters) {
-        final LinkedList<String> characterNameList = new LinkedList<>();
-        for (GameCharacter gameCharacter : gameCharacters) {
-            characterNameList.add(gameCharacter.getName());
-        }
+    private void updateCharacterList(final HashMap<String,GameCharacter> gameCharacters) {
+        final LinkedList<String> characterNameList = new LinkedList<>(gameCharacters.keySet());
 
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                ArrayAdapter<String> characterListAdapter = new ArrayAdapter<>(ChoosePlayerScreen.this, android.R.layout.simple_list_item_1,characterNameList);
+                ArrayAdapter<String> characterListAdapter = new ArrayAdapter<>(ChoosePlayerScreen.this, android.R.layout.simple_list_item_1, characterNameList);
                 characterList.setAdapter(characterListAdapter);
+
+                //remove on Click Listener if the character is already chosen
+                System.out.println(game.getLocalPlayer());
+                if (game.getLocalPlayer() == null) {
+                    System.out.println("in the if");
+                    characterList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                            String selectedItem = (String) parent.getItemAtPosition(position);
+                            Log.d("Selected shit:", selectedItem);
+
+                            GameCharacter selectedCharacter = gameCharacters.get(selectedItem);
+                            Log.d("Selected Character", selectedCharacter.toString());
+
+
+                            if (conType == connectionType.HOST) {
+                                //remove Character from List and forward it to all clients
+                                gameCharacters.remove(selectedItem);
+
+                                GameCharacterDTO gameCharacterDTO = new GameCharacterDTO();
+                                gameCharacterDTO.setAvailablePlayers(gameCharacters);
+
+                                server.broadcastMessage(gameCharacterDTO);
+
+                                //set local Player
+                                Player player = new Player(1, selectedCharacter);
+                                game.setLocalPlayer(player);
+
+                                updateCharacterList(gameCharacters);
+                            } else if (conType == connectionType.CLIENT) {
+                                GameCharacterDTO gameCharacterDTO = new GameCharacterDTO();
+                                gameCharacterDTO.setChoosenPlayer(selectedCharacter);
+
+                                client.sendMessage(gameCharacterDTO);
+                            }
+                        }
+                    });
+                } else {
+                    characterList.setOnItemClickListener(null);
+                }
             }
         });
     }

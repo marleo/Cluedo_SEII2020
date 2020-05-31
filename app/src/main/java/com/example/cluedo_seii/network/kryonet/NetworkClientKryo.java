@@ -121,6 +121,7 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
         // delete character Callback, because the client already choose his character
         characterCallback = null;
         // TODO implement
+        Log.d("Player Response:", playerDTO.toString());
     }
 
     private void handleGameResponse(Connection connection, GameDTO gameDTO) {
