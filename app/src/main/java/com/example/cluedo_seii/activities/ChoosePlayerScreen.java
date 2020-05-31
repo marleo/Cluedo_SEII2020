@@ -117,7 +117,8 @@ public class ChoosePlayerScreen extends AppCompatActivity {
             @Override
             public void callback(GameCharacterDTO argument) {
                 // TODO implement
-                updateCharacterList(argument.getAvailablePlayers());
+                availableCharacters = argument.getAvailablePlayers();
+                updateCharacterList(availableCharacters);
             }
         });
     }
@@ -175,6 +176,7 @@ public class ChoosePlayerScreen extends AppCompatActivity {
                             } else if (conType == connectionType.CLIENT) {
                                 GameCharacterDTO gameCharacterDTO = new GameCharacterDTO();
                                 gameCharacterDTO.setChoosenPlayer(selectedCharacter);
+                                gameCharacterDTO.setAvailablePlayers(gameCharacters);
 
                                 client.sendMessage(gameCharacterDTO);
                             }

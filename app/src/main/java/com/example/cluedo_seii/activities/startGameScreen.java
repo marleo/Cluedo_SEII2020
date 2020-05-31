@@ -16,6 +16,7 @@ import android.widget.TextView;
 
 import com.example.cluedo_seii.Game;
 import com.example.cluedo_seii.GameCharacter;
+import com.example.cluedo_seii.Player;
 import com.example.cluedo_seii.network.Callback;
 import com.example.cluedo_seii.network.ClientData;
 import com.example.cluedo_seii.network.connectionType;
@@ -27,6 +28,8 @@ import com.example.cluedo_seii.network.dto.QuitGameDTO;
 import com.example.cluedo_seii.network.dto.RequestDTO;
 import com.example.cluedo_seii.network.dto.TextMessage;
 import com.example.cluedo_seii.network.dto.UserNameRequestDTO;
+import com.example.cluedo_seii.network.kryonet.KryoHelper;
+import com.example.cluedo_seii.network.kryonet.KryoNetComponent;
 import com.example.cluedo_seii.network.kryonet.NetworkClientKryo;
 import com.example.cluedo_seii.network.kryonet.NetworkServerKryo;
 import com.example.cluedo_seii.R;
@@ -64,9 +67,10 @@ public class startGameScreen extends AppCompatActivity {
     public void selectHost(View view) {
         final ListView clientList = findViewById(R.id.clientList);
         conType = connectionType.HOST;
-
-
-
+        
+        server = NetworkServerKryo.getInstance();
+        KryoHelper.registerClasses(server);
+/*
         //TODO refactor to helper Class
         server = NetworkServerKryo.getInstance();
         server.registerClass(RequestDTO.class);
@@ -81,7 +85,8 @@ public class startGameScreen extends AppCompatActivity {
         server.registerClass(GameDTO.class);
         server.registerClass(Game.class);
         server.registerClass(HashMap.class);
-
+        server.registerClass(Player.class);
+*/
         server.registerNewClientCallback(new Callback<LinkedHashMap<Integer, ClientData>>() {
             @Override
             public void callback(LinkedHashMap<Integer, ClientData> argument) {
@@ -129,8 +134,9 @@ public class startGameScreen extends AppCompatActivity {
             conType = connectionType.CLIENT;
 
             client = NetworkClientKryo.getInstance();
+            KryoHelper.registerClasses(client);
 
-
+/*
             client.registerClass(RequestDTO.class);
             client.registerClass(TextMessage.class);
             client.registerClass(QuitGameDTO.class);
@@ -143,6 +149,9 @@ public class startGameScreen extends AppCompatActivity {
             client.registerClass(GameDTO.class);
             client.registerClass(Game.class);
             client.registerClass(HashMap.class);
+            client.registerClass(Player.class);
+
+ */
 
             //client.connect("localhost");
 
