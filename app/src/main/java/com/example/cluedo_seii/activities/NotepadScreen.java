@@ -70,7 +70,8 @@ public class NotepadScreen extends AppCompatActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         intent = getIntent();
-        game = (Game)intent.getSerializableExtra("game");
+        //game = (Game)intent.getSerializableExtra("game");
+        game = Game.getInstance();
         final SharedPreferences preferences = getSharedPreferences("com.example.cluedo_seii", MODE_PRIVATE);
         setContentView(R.layout.activity_notepad);
 

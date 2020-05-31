@@ -2,20 +2,27 @@ package com.example.cluedo_seii.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.text.format.Formatter;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.example.cluedo_seii.Game;
+import com.example.cluedo_seii.GameCharacter;
 import com.example.cluedo_seii.network.Callback;
 import com.example.cluedo_seii.network.ClientData;
 import com.example.cluedo_seii.network.connectionType;
 import com.example.cluedo_seii.network.dto.ConnectedDTO;
+import com.example.cluedo_seii.network.dto.GameCharacterDTO;
+import com.example.cluedo_seii.network.dto.GameDTO;
+import com.example.cluedo_seii.network.dto.PlayerDTO;
 import com.example.cluedo_seii.network.dto.QuitGameDTO;
 import com.example.cluedo_seii.network.dto.RequestDTO;
 import com.example.cluedo_seii.network.dto.TextMessage;
@@ -29,7 +36,7 @@ import java.util.LinkedHashMap;
 import java.util.LinkedList;
 
 public class startGameScreen extends AppCompatActivity {
-    private connectionType conType;
+    public static connectionType conType;
     private NetworkServerKryo server;
     private NetworkClientKryo client;
 
@@ -39,11 +46,20 @@ public class startGameScreen extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start_game_screen);
+
+        //TODO add Logic if the game is ready to start
+        final Button chooseCharacter = findViewById(R.id.chooseCharacter);
+        chooseCharacter.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                startActivity(new Intent(startGameScreen.this, ChoosePlayerScreen.class));
+            }
+        });
     }
 
     public void selectHost(View view) {
         final ListView clientList = findViewById(R.id.clientList);
-        this.conType = connectionType.HOST;
+        conType = connectionType.HOST;
 
         server = NetworkServerKryo.getInstance();
         server.registerClass(RequestDTO.class);
@@ -51,6 +67,12 @@ public class startGameScreen extends AppCompatActivity {
         server.registerClass(QuitGameDTO.class);
         server.registerClass(ConnectedDTO.class);
         server.registerClass(UserNameRequestDTO.class);
+        server.registerClass(GameCharacterDTO.class);
+        server.registerClass(PlayerDTO.class);
+        server.registerClass(LinkedList.class);
+        server.registerClass(GameCharacter.class);
+        server.registerClass(GameDTO.class);
+        server.registerClass(Game.class);
 
         server.registerNewClientCallback(new Callback<LinkedHashMap<Integer, ClientData>>() {
             @Override
@@ -96,7 +118,7 @@ public class startGameScreen extends AppCompatActivity {
 
     public void selectClient(View view) {
         try {
-            this.conType = connectionType.CLIENT;
+            conType = connectionType.CLIENT;
 
             client = NetworkClientKryo.getInstance();
 
@@ -106,6 +128,12 @@ public class startGameScreen extends AppCompatActivity {
             client.registerClass(QuitGameDTO.class);
             client.registerClass(ConnectedDTO.class);
             client.registerClass(UserNameRequestDTO.class);
+            client.registerClass(GameCharacterDTO.class);
+            client.registerClass(PlayerDTO.class);
+            client.registerClass(LinkedList.class);
+            client.registerClass(GameCharacter.class);
+            client.registerClass(GameDTO.class);
+            client.registerClass(Game.class);
 
             //client.connect("localhost");
 
@@ -127,6 +155,8 @@ public class startGameScreen extends AppCompatActivity {
                     // ausführung nach erflogreichem verbinden
                     Log.d("Connection Callback", "callback: ");
                     client.sendUsernameRequest(userNameRequestDTO);
+                    // after a succesfull connection the client gets forwarded to the choose Player Activity
+                    startActivity(new Intent(startGameScreen.this, ChoosePlayerScreen.class));
                 }
             });
 
