@@ -153,4 +153,7 @@
     <string name="Player3">Character3</string>
     <string name="playerSelected">Start</string>
 
+    <string name="exposeCheaterButton">Schummler \n verdächtigen</string>
+    <string name="accuseCheaterButton">Verdächtigen</string>
+
 </resources>

@@ -204,9 +204,12 @@ public class GameboardScreen extends AppCompatActivity  {
 
             GameCharacter gameCharacter = new GameCharacter("Prof. Bloom", null);
             GameCharacter gameCharacterAlt = new GameCharacter("Fräulein Weiss", null);
-            Player player1 = new Player(1, "10.0.2.16", gameCharacterAlt);
-            Player player2 = new Player(2, "null", gameCharacter);
-            Player player3 = new Player(3, "null", gameCharacterAlt);
+            Notepad notepad1= new Notepad();
+            Notepad notepad2 = new Notepad();
+            Notepad notepad3 = new Notepad();
+            Player player1 = new Player(1, "10.0.2.16", gameCharacterAlt, notepad1);
+            Player player2 = new Player(2, "null", gameCharacter, notepad2);
+            Player player3 = new Player(3, "null", gameCharacterAlt, notepad3);
             players.add(player1);
             players.add(player2);
             players.add(player3);

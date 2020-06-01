@@ -6,9 +6,11 @@ import android.widget.TextView;
 
 import com.example.cluedo_seii.activities.NotepadScreen;
 
-public class Notepad {
+import java.io.Serializable;
+
+public class Notepad implements Serializable {
     private Card[] cards;
-    private String moreNotes;
+    private String notes;
     private TextView[] textViews;
 
 
@@ -18,7 +20,7 @@ public class Notepad {
         this.cards =new Card[]{deckOfCards.oberstVonGatow, deckOfCards.profBloom, deckOfCards.reverendGruen, deckOfCards.baroninVonPorz, deckOfCards.fraeuleinGloria, deckOfCards.frauWeiss,
                 deckOfCards.dolch, deckOfCards.leuchter, deckOfCards.pistole, deckOfCards.seil, deckOfCards.heizungsrohr, deckOfCards.rohrzange,
                 deckOfCards.halle, deckOfCards.salon, deckOfCards.speisezimmer, deckOfCards.kueche, deckOfCards.musikzimmer, deckOfCards.winterzimmer, deckOfCards.biliardzimmer, deckOfCards.bibliothek, deckOfCards.arbeitszimmer};
-        this.moreNotes = " ";
+        notes = " ";
 
         this.textViews=new TextView[21];
 
@@ -26,16 +28,16 @@ public class Notepad {
     }
 
 
-    public String getMoreNotes() {
-        return this.moreNotes;
+    public String getNotes() {
+        return this.notes;
     }
 
     public Card[] getCards() {
         return cards;
     }
 
-    public void addMoreNotes(String message) {
-        moreNotes +=" "+ message;
+    public void setNotes(String message) {
+        notes +=" "+ message;
     }
 
     public TextView[] getTextViews(){
@@ -48,10 +50,6 @@ public class Notepad {
     }
 
     public void cheatFunction(InvestigationFile investigationFile) {
-        //InvestigationFile investigationFile= new InvestigationFile();
-        //DeckOfCards deckOfCards = new DeckOfCards();
-        //Card card = deckOfCards.arbeitszimmer; //Zu Demonstrationszwecken
-        //investigationFile.setCulprit(card);
 
         Card culprit = investigationFile.getCulprit();
         String culpritString = culprit.getDesignation();
@@ -74,6 +72,7 @@ public class Notepad {
         while(randomString.equals(culpritString)||randomString.equals(roomString)||randomString.equals(weaponString)||randomTextView.getTag()=="grayed");
 
         randomTextView.setBackgroundColor(Color.argb(150, 200, 200, 200));
+        randomTextView.setTag("grayed");
     }
 }
 

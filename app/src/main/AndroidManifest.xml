@@ -51,6 +51,9 @@
             android:name=".activities.playerGameInteraction.AccuseSomeone"
             android:label="Cluedo">
         </activity>
+        <activity android:name=".activities.playerGameInteraction.ExposeCheater"
+            android:theme="@style/Theme.AppCompat.Dialog.Alert">
+            </activity>
     </application>
 
 </manifest>
