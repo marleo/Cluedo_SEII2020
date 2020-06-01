@@ -68,7 +68,7 @@ public class AccuseSomeone extends AppCompatActivity implements AdapterView.OnIt
 
         intent = getIntent();
 
-        game = (Game)intent.getSerializableExtra("game");
+        game = Game.getInstance();
 
         suspectButton = findViewById(R.id.makeAccusationButton);
         suspectButton.setOnClickListener(new View.OnClickListener() {
@@ -82,10 +82,6 @@ public class AccuseSomeone extends AppCompatActivity implements AdapterView.OnIt
                     text = "Gratuliere, du hast das Spiel gewonnen";
                     toast = Toast.makeText(getApplicationContext(), text, Toast.LENGTH_SHORT);
                     toast.show();
-                    String message="hello ";
-                    intent = new Intent();
-                    intent.putExtra("game", game);
-                    setResult(1,intent);
                     finish();
                 }
 
@@ -95,9 +91,6 @@ public class AccuseSomeone extends AppCompatActivity implements AdapterView.OnIt
                     text = "Du hast eine falsche Anklage erhoben und kannst das Spiel nicht mehr gewinnen";
                     toast = Toast.makeText(getApplicationContext(), text , Toast.LENGTH_SHORT);
                     toast.show();
-                    intent = new Intent();
-                    intent.putExtra("game", game);
-                    setResult(0,intent);
                     finish();
                 }
             }

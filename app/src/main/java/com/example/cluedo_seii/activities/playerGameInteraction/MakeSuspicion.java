@@ -71,7 +71,7 @@ public class MakeSuspicion extends AppCompatActivity implements AdapterView.OnIt
 
         intent = getIntent();
 
-        game = (Game)intent.getSerializableExtra("game");
+        game = Game.getInstance();
 
 
        suspectButton = findViewById(R.id.makeSuspicionButton);
@@ -93,9 +93,6 @@ public class MakeSuspicion extends AppCompatActivity implements AdapterView.OnIt
                text = "Hier gibt es nichts zum sehen";
                toast = Toast.makeText(getApplicationContext(), text, Toast.LENGTH_SHORT);
                toast.show();
-               intent = new Intent();
-               intent.putExtra("game", game);
-               setResult(1,intent);
                finish();
            }
 
@@ -109,9 +106,6 @@ public class MakeSuspicion extends AppCompatActivity implements AdapterView.OnIt
 
                toast = Toast.makeText(getApplicationContext(), text , Toast.LENGTH_SHORT);
                toast.show();
-               intent = new Intent();
-               intent.putExtra("game", game);
-               setResult(1,intent);
                finish();
 
            }

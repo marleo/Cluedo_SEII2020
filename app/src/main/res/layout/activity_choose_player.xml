@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activities.ChoosePlayerScreen">
+
+    <TextView
+        android:id="@+id/waitingForHostText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="108dp"
+        android:text="Waiting for Host"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.525"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ListView
+        android:id="@+id/chooseCharacterListView"
+        android:layout_width="314dp"
+        android:layout_height="409dp"
+        android:layout_marginStart="48dp"
+        android:layout_marginTop="34dp"
+        android:layout_marginEnd="49dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+    </ListView>
+
+    <Button
+        android:id="@+id/proceedToGameButton"
+        style="?android:attr/borderlessButtonStyle"
+        android:layout_width="170dp"
+        android:layout_height="47dp"
+        android:layout_marginBottom="68dp"
+        android:background="@drawable/custom_button"
+        android:textColor="#FFFFFF"
+        android:textSize="15sp"
+        android:visibility="visible"
+        android:text="Proceed To Game"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

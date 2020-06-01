@@ -12,17 +12,20 @@ public class Player implements Serializable {
     private int id;
     private LinkedList<Card> playerCards;
     private Point position;
-    private String IP;
     private GameCharacter playerCharacter;
     private Boolean madeFalseAccusation;
     private int cheated;
     private Notepad notepad;
 
-    public Player(int id , String IP, GameCharacter playerCharacter, Notepad notepad){
+
+    public Player() {
+        //no arg constructor for deserialization
+    }
+
+    public Player(int id, GameCharacter playerCharacter){
         this.id = id;
         playerCards = new LinkedList<>();
         this.position = playerCharacter.getStartingPoint();
-        this.IP = IP;
         this.playerCharacter = playerCharacter;
         madeFalseAccusation = false;
         cheated = 0;
@@ -41,9 +44,6 @@ public class Player implements Serializable {
         return playerCards;
     }
 
-    public String getIP() {
-        return IP;
-    }
 
     public GameCharacter getPlayerCharacter() {
         return playerCharacter;

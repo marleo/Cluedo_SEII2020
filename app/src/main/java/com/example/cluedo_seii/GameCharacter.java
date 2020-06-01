@@ -11,7 +11,13 @@ public class GameCharacter implements Serializable {
     private String name;
     private Point startingPoint;
 
+
+    public GameCharacter() {
+        //no arg constructor for deserialization
+    }
+
     public GameCharacter(String name, Point startingPoint){
+
 
         this.name = name;
         this.startingPoint = startingPoint;
