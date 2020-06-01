@@ -6,14 +6,15 @@ import com.example.cluedo_seii.Game;
 import com.example.cluedo_seii.GameCharacter;
 import com.example.cluedo_seii.Player;
 import com.example.cluedo_seii.network.Callback;
-import com.example.cluedo_seii.network.ClientData;
 import com.example.cluedo_seii.network.connectionType;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -21,7 +22,6 @@ import com.example.cluedo_seii.R;
 import com.example.cluedo_seii.network.dto.GameCharacterDTO;
 import com.example.cluedo_seii.network.kryonet.NetworkClientKryo;
 import com.example.cluedo_seii.network.kryonet.NetworkServerKryo;
-import com.example.cluedo_seii.spielbrett.GameFieldElement;
 
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -47,11 +47,10 @@ public class ChoosePlayerScreen extends AppCompatActivity {
 
         game = Game.getInstance();
 
-        this.conType = startGameScreen.conType;
+        this.conType = StartGameScreen.conType;
 
         if (conType == connectionType.CLIENT) {
             client = NetworkClientKryo.getInstance();
-            //TODO register Callback
             clientChooseCharacter();
 
         } else if (conType == connectionType.HOST) {
@@ -76,7 +75,6 @@ public class ChoosePlayerScreen extends AppCompatActivity {
             GameCharacterDTO gameCharacterDTO = new GameCharacterDTO();
             gameCharacterDTO.setAvailablePlayers(availableCharacters);
             server.broadcastMessage(gameCharacterDTO);
-            //TODO register Callback
 
             hostChooseCharacter();
         } else {
@@ -103,7 +101,15 @@ public class ChoosePlayerScreen extends AppCompatActivity {
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            findViewById(R.id.proceedToGameButton).setVisibility(View.VISIBLE);
+                            final Button proceedToGame = findViewById(R.id.proceedToGameButton);
+                            proceedToGame.setVisibility(View.VISIBLE);
+                            proceedToGame.setOnClickListener(new View.OnClickListener(){
+                                @Override
+                                public void onClick(View v){
+                                    prepareGame();
+                                    startActivity(new Intent(ChoosePlayerScreen.this, GameboardScreen.class));
+                                }
+                            });
                         }
                     });
                 }
@@ -182,13 +188,12 @@ public class ChoosePlayerScreen extends AppCompatActivity {
     }
 
     private boolean everyOneHasChosenACharacter() {
-        if (game.getPlayers().size() == server.getClientList().size() + 1) {
-            return true;
-        }
-
-        return false;
+        return game.getPlayers().size() == server.getClientList().size() + 1;
     }
 
+    private void prepareGame() {
+
+    }
 
 
 

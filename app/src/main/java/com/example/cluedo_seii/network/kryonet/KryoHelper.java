@@ -16,6 +16,11 @@ import java.util.HashMap;
 import java.util.LinkedList;
 
 public class KryoHelper {
+
+    private KryoHelper() {
+
+    }
+
     public static void registerClasses (KryoNetComponent kryoNetComponent) {
 
         kryoNetComponent.registerClass(RequestDTO.class);

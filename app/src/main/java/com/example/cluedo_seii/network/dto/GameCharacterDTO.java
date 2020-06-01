@@ -3,11 +3,9 @@ package com.example.cluedo_seii.network.dto;
 import com.example.cluedo_seii.GameCharacter;
 
 import java.util.HashMap;
-import java.util.LinkedList;
 
 public class GameCharacterDTO extends RequestDTO{
     private GameCharacter choosenPlayer;
-    private boolean isAccpeted;
     private HashMap<String,GameCharacter> availablePlayers;
 
     public GameCharacter getChoosenPlayer() {
@@ -16,14 +14,6 @@ public class GameCharacterDTO extends RequestDTO{
 
     public void setChoosenPlayer(GameCharacter choosenPlayer) {
         this.choosenPlayer = choosenPlayer;
-    }
-
-    public void setAccpeted(boolean accpeted) {
-        isAccpeted = accpeted;
-    }
-
-    public boolean isAccpeted() {
-        return isAccpeted;
     }
 
     public void setAvailablePlayers(HashMap<String, GameCharacter> availablePlayers) {

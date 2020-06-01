@@ -56,11 +56,11 @@ public class SettingScreen extends AppCompatActivity {
             }
         });
 
-        final Button start_game_network = findViewById(R.id.start_game_network);
-        start_game_network.setOnClickListener(new View.OnClickListener(){
+        final Button startGameNetwork = findViewById(R.id.start_game_network);
+        startGameNetwork.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-                startActivity(new Intent(SettingScreen.this, startGameScreen.class));
+                startActivity(new Intent(SettingScreen.this, StartGameScreen.class));
             }
         });
 

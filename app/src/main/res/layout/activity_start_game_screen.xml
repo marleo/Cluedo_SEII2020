@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activities.startGameScreen">
+    tools:context=".activities.StartGameScreen">
 
     <Button
         android:id="@+id/button"
@@ -85,6 +85,7 @@
         android:layout_height="47dp"
         android:layout_marginBottom="68dp"
         android:background="@drawable/custom_button"
+        android:visibility="invisible"
         android:text="CHOOSE CHARACTER"
         android:textColor="#FFFFFF"
         android:textSize="15sp"

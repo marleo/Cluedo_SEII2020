@@ -93,7 +93,6 @@ public class NetworkServerKryo implements KryoNetComponent, NetworkServer {
     }
 
     private void handleUsernameRequest(Connection connection, UserNameRequestDTO userNameRequestDTO) {
-        // TODO delete hardcoded IDs and add Player to ClientData
         Log.d("UserNameRequest", userNameRequestDTO.getUsername());
         ClientData client = new ClientData();
         client.setId();
@@ -188,7 +187,6 @@ public class NetworkServerKryo implements KryoNetComponent, NetworkServer {
         return null;
     }
 
-    //TODO delete Users from List
     public void resetNetwork() {
         sendQuitGame();
         new Handler().post(new Runnable() {
