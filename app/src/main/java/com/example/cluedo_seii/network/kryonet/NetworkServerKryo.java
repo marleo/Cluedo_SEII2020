@@ -109,13 +109,19 @@ public class NetworkServerKryo implements KryoNetComponent, NetworkServer {
         // TODO implement
         //remove the chosen Player from the List
         GameCharacter chosenCharacter = gameCharacterDTO.getChoosenPlayer();
-        gameCharacterDTO.getAvailablePlayers().remove(chosenCharacter);
+        gameCharacterDTO.getAvailablePlayers().remove(chosenCharacter.getName());
 
         //forward the created Player to the Client
         for (ClientData clientData: clientList.values()) {
             if (clientData.getConnection().equals(connection)) {
                 Player player = new Player(clientData.getId(), chosenCharacter);
                 clientData.setPlayer(player);
+
+                //add Players to local Game Object
+                 LinkedList<Player> playerLinkedList = Game.getInstance().getPlayers();
+                if (playerLinkedList == null) playerLinkedList = new LinkedList<>();
+                 playerLinkedList.add(player);
+                 Game.getInstance().setPlayers(playerLinkedList);
 
                 PlayerDTO playerDTO = new PlayerDTO();
                 playerDTO.setPlayer(player);
@@ -201,5 +207,9 @@ public class NetworkServerKryo implements KryoNetComponent, NetworkServer {
     private void sendQuitGame() {
         QuitGameDTO quitGame = new QuitGameDTO();
         broadcastMessage(quitGame);
+    }
+
+    public LinkedHashMap<Integer, ClientData> getClientList() {
+        return clientList;
     }
 }

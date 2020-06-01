@@ -17,6 +17,10 @@ public class Player implements Serializable {
     private Boolean cheated;
     //private Notepad notepad;
 
+    public Player() {
+        //no arg constructor for deserialization
+    }
+
     public Player(int id, GameCharacter playerCharacter){
         this.id = id;
         playerCards = new LinkedList<>();
