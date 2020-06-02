@@ -1,10 +1,9 @@
 package com.example.cluedo_seii;
 
 
-import android.graphics.Color;
+
 import android.widget.TextView;
 
-import com.example.cluedo_seii.activities.NotepadScreen;
 
 import java.io.Serializable;
 
@@ -47,32 +46,6 @@ public class Notepad implements Serializable {
     public void setTextViews(TextView textView, int number){
         this.textViews[number]=textView;
 
-    }
-
-    public void cheatFunction(InvestigationFile investigationFile) {
-
-        Card culprit = investigationFile.getCulprit();
-        String culpritString = culprit.getDesignation();
-
-        Card room = investigationFile.getRoom();
-        String roomString = room.getDesignation();
-
-        Card weapon = investigationFile.getWeapon();
-        String weaponString = weapon.getDesignation();
-
-        TextView randomTextView;
-        String randomString;
-
-        NotepadScreen notepadScreen = new NotepadScreen();
-
-        do {
-            randomTextView = notepadScreen.getRandom(textViews);
-            randomString = randomTextView.getText().toString();
-        }
-        while(randomString.equals(culpritString)||randomString.equals(roomString)||randomString.equals(weaponString)||randomTextView.getTag()=="grayed");
-
-        randomTextView.setBackgroundColor(Color.argb(150, 200, 200, 200));
-        randomTextView.setTag("grayed");
     }
 }
 

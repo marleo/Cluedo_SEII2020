@@ -7,25 +7,22 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
-import android.net.wifi.WifiManager;
 import android.os.Bundle;
-import android.text.format.Formatter;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.cluedo_seii.Card;
 import com.example.cluedo_seii.Game;
+import com.example.cluedo_seii.InvestigationFile;
 import com.example.cluedo_seii.Notepad;
 import com.example.cluedo_seii.Player;
 import com.example.cluedo_seii.R;
 import com.example.cluedo_seii.activities.playerGameInteraction.ExposeCheater;
-
-import java.util.ArrayList;
 import java.util.Random;
 
 public class NotepadScreen extends AppCompatActivity {
@@ -59,15 +56,13 @@ public class NotepadScreen extends AppCompatActivity {
     private TextView textView;
     private Notepad notepad;
     private Game game;
-    private Intent intent;
     private Player player;
-    private WifiManager wifiManager;
+    private Intent intent;
 
 
     private SensorManager sensorManager;
     private Sensor lightSensor;
     private float sensorValue;
-    ArrayList<View> grayViews;
 
 
     private String test = " ";
@@ -85,33 +80,97 @@ public class NotepadScreen extends AppCompatActivity {
         final SharedPreferences.Editor editor = getSharedPreferences("com.example.cluedo_seii", MODE_PRIVATE).edit();
         setContentView(R.layout.activity_notepad);
 
-
         player = game.getCurrentPlayer();
         notepad = player.getNotepad();
-        grayViews = new ArrayList<>();
 
 
         textViewGatov = findViewById(R.id.notepad_gatov);
+        if(preferences.getBoolean("gatovGray",false)){
+            textViewGatov.setBackgroundColor(Color.argb(150, 200, 200, 200));
+        }
+
         textViewBloom = findViewById(R.id.notepad_bloom);
+        if(preferences.getBoolean("bloomGray",false)){
+            textViewBloom.setBackgroundColor(Color.argb(150, 200, 200, 200));
+        }
+
         textViewGreen = findViewById(R.id.notepad_green);
+        if(preferences.getBoolean("greenGray",false)){
+            textViewGreen.setBackgroundColor(Color.argb(150, 200, 200, 200));
+        }
         textViewPorz = findViewById(R.id.notepad_porz);
+        if(preferences.getBoolean("porzGray",false)){
+            textViewPorz.setBackgroundColor(Color.argb(150, 200, 200, 200));
+        }
         textViewGloria = findViewById(R.id.notepad_gloria);
+        if(preferences.getBoolean("gloriaGray",false)){
+            textViewGloria.setBackgroundColor(Color.argb(150, 200, 200, 200));
+        }
         textViewWeiss = findViewById(R.id.notepad_weiss);
+        if(preferences.getBoolean("weissGray",false)){
+            textViewWeiss.setBackgroundColor(Color.argb(150, 200, 200, 200));
+        }
         textViewDolch = findViewById(R.id.notepad_dolch);
+        if(preferences.getBoolean("dolchGray",false)){
+            textViewDolch.setBackgroundColor(Color.argb(150, 200, 200, 200));
+        }
         textViewLeuchter = findViewById(R.id.notepad_leuchter);
+        if(preferences.getBoolean("leuchterGray",false)){
+            textViewLeuchter.setBackgroundColor(Color.argb(150, 200, 200, 200));
+        }
         textViewPistole = findViewById(R.id.notepad_pistole);
+        if(preferences.getBoolean("pistoleGray",false)){
+            textViewPistole.setBackgroundColor(Color.argb(150, 200, 200, 200));
+        }
         textViewSeil = findViewById(R.id.notepad_seil);
+        if(preferences.getBoolean("seilGray",false)){
+            textViewSeil.setBackgroundColor(Color.argb(150, 200, 200, 200));
+        }
         textViewHeizungsrohr = findViewById(R.id.notepad_heizungsrohr);
+        if(preferences.getBoolean("heizungsrohrGray",false)){
+            textViewHeizungsrohr.setBackgroundColor(Color.argb(150, 200, 200, 200));
+        }
         textViewRohrzange = findViewById(R.id.notepad_rohrzange);
+        if(preferences.getBoolean("rohrzangeGray",false)){
+            textViewRohrzange.setBackgroundColor(Color.argb(150, 200, 200, 200));
+        }
         textViewHalle = findViewById(R.id.notepad_Halle);
+        if(preferences.getBoolean("halleGray",false)){
+            textViewHalle.setBackgroundColor(Color.argb(150, 200, 200, 200));
+        }
         textViewSalon = findViewById(R.id.notepad_salon);
+        if(preferences.getBoolean("salonGray",false)){
+            textViewSalon.setBackgroundColor(Color.argb(150, 200, 200, 200));
+        }
         textViewSpeisezimmer = findViewById(R.id.notepad_speisezimmer);
+        if(preferences.getBoolean("speisezimmerGray",false)){
+            textViewSpeisezimmer.setBackgroundColor(Color.argb(150, 200, 200, 200));
+        }
         textViewKüche = findViewById(R.id.notepad_küche);
+        if(preferences.getBoolean("kücheGray",false)){
+            textViewKüche.setBackgroundColor(Color.argb(150, 200, 200, 200));
+        }
         textViewMusikzimmer = findViewById(R.id.notepad_musikzimmer);
+        if(preferences.getBoolean("musikzimmerGray",false)){
+            textViewMusikzimmer.setBackgroundColor(Color.argb(150, 200, 200, 200));
+        }
         textViewWinterzimmer = findViewById(R.id.notepad_winterzimmer);
+        if(preferences.getBoolean("winterzimmerGray",false)){
+            textViewWinterzimmer.setBackgroundColor(Color.argb(150, 200, 200, 200));
+        }
         textViewBiliardzimmer = findViewById(R.id.notepad_biliardzimmer);
+        if(preferences.getBoolean("biliardzimmerGray",false)){
+            textViewBiliardzimmer.setBackgroundColor(Color.argb(150, 200, 200, 200));
+        }
         textViewBibliothek = findViewById(R.id.notepad_bibliothek);
+        if(preferences.getBoolean("bibliothekGray",false)){
+            textViewBibliothek.setBackgroundColor(Color.argb(150, 200, 200, 200));
+        }
         textViewArbeitszimmer = findViewById(R.id.notepad_arbeitszimmer);
+        if(preferences.getBoolean("arbeitszimmerGray",false)){
+            textViewArbeitszimmer.setBackgroundColor(Color.argb(150, 200, 200, 200));
+        }
+
         editText1 = findViewById(R.id.addMoreNotes);
         btn1 = findViewById(R.id.addMoreNotesButton);
         textView = findViewById(R.id.moreNotesView);
@@ -188,20 +247,8 @@ public class NotepadScreen extends AppCompatActivity {
             sensorManager.registerListener(new SensorEventListener() {
                 @Override
                 public void onSensorChanged(SensorEvent event) {
-                    if (game.getCurrentPlayer().getCheated() < 1 && preferences.getBoolean("cheatEnabled", false)) {
-                        if (event.sensor.getType() == Sensor.TYPE_LIGHT) {
-                            if (event.values[0] < 3) {
-                                sensorValue = event.values[0];
-                            }
-                            if (event.values[0] < 10) {
-                                notepad.cheatFunction(game.getInvestigationFile());
-                                int value = 1;
-                                game.getCurrentPlayer().setCheated(value);
+                    lightEvent(event);
 
-                            }
-                        }
-
-                    }
                 }
 
                 @Override
@@ -221,12 +268,6 @@ public class NotepadScreen extends AppCompatActivity {
 
         }
 
-        /*@Override
-        public void onSaveInstanceState(Bundle savedInstanceState) {
-            super.onSaveInstanceState(savedInstanceState);
-            savedInstanceState.putString("My String","test");
-
-        }*/
 
 
 
@@ -237,55 +278,160 @@ public class NotepadScreen extends AppCompatActivity {
             final SharedPreferences.Editor editor = getSharedPreferences("com.example.cluedo_seii", MODE_PRIVATE).edit();
             textView.append(preferences.getString("notes", " "));
 
-            for(View v : grayViews){
-                v.setBackgroundColor(Color.argb(150, 200, 200, 200));
+
+
+
             }
 
-
-
-
-            /*for (int i = 0; i < count.length(); i++) {
-                int j= count.charAt(i);
-                notepad.getTextViews()[j].setBackgroundColor(Color.argb(150, 200, 200, 200));
-            }
-
-
-
-                //notepad.getTextViews()[Integer.parseInt(preferences.getString("gray", "0"))].setBackgroundColor(Color.argb(150, 200, 200, 200));
-
-
-            /*for (int i = 0; i < preferences.getString("gray", " ").length(); i++) {
-                for (int j = 0; j < textViews.length; j++) {
-                    if (preferences.getString("gray", " ").charAt(i) == j) {
-
-                        textViews[preferences.getString("gray", " ").charAt(i)].setBackgroundColor(Color.argb(150, 200, 200, 200));
-                    }
-                }
-            }*/
+            public void onDestroy() {
+                super.onDestroy();
+                getSharedPreferences("com.example.cluedo_seii", MODE_PRIVATE).edit().clear().commit();
             }
 
 
 
 
 
-        public TextView getRandom (TextView[]array){
-            int random = new Random().nextInt(array.length);
-            return array[random];
+        public void cheatFunction (InvestigationFile investigationFile){
+
+            Card culprit = investigationFile.getCulprit();
+            String culpritString = culprit.getDesignation();
+
+            Card room = investigationFile.getRoom();
+            String roomString = room.getDesignation();
+
+            Card weapon = investigationFile.getWeapon();
+            String weaponString = weapon.getDesignation();
+
+            TextView randomTextView;
+            String randomString;
+
+            do{
+                int random = new Random().nextInt(notepad.getTextViews().length);
+                randomTextView= notepad.getTextViews()[random];
+                randomString=randomTextView.getText().toString();}
+            while (randomString.equals(culpritString)||randomString.equals(roomString)||randomString.equals(weaponString)||randomTextView.getTag()=="grayed");
+            grayOut(randomTextView);
         }
 
 
 
 
         public void grayOut (View view){
+            SharedPreferences.Editor editor = getSharedPreferences("com.example.cluedo_seii",MODE_PRIVATE).edit();
 
             if (view.getTag() != "grayed") {
                 view.setBackgroundColor(Color.argb(150, 200, 200, 200));
                 view.setTag("grayed");
-                grayViews.add(view);
+                if(view.getId()==textViewGatov.getId()){
+                    editor.putBoolean("gatovGray", true);
+                    editor.apply();
+                }
+                else if(view.getId()==textViewBloom.getId()){
+                    editor.putBoolean("bloomGray",true);
+                    editor.apply();
+                }
+                else if(view.getId()==textViewGreen.getId()){
+                    editor.putBoolean("greenGray",true);
+                    editor.apply();
+                }
+                else if(view.getId()==textViewGloria.getId()){
+                    editor.putBoolean("gloriaGray",true);
+                    editor.apply();
+                }
+                else if(view.getId()==textViewPorz.getId()){
+                    editor.putBoolean("porzGray",true);
+                    editor.apply();
+                }
+                else if(view.getId()==textViewWeiss.getId()){
+                    editor.putBoolean("weissGray",true);
+                    editor.apply();
+                }
+                else if(view.getId()==textViewDolch.getId()){
+                    editor.putBoolean("dolchGray",true);
+                    editor.apply();
+                }
+                else if(view.getId()==textViewHeizungsrohr.getId()){
+                    editor.putBoolean("heizungsrohrGray",true);
+                    editor.apply();
+                }
+                else if(view.getId()==textViewLeuchter.getId()){
+                    editor.putBoolean("leuchterGray",true);
+                    editor.apply();
+                }
+                else if(view.getId()==textViewPistole.getId()){
+                    editor.putBoolean("pistoleGray",true);
+                    editor.apply();
+                }
+                else if(view.getId()==textViewRohrzange.getId()){
+                    editor.putBoolean("rohrzangeGray",true);
+                    editor.apply();
+                }
+                else if(view.getId()==textViewSeil.getId()){
+                    editor.putBoolean("seilGray",true);
+                    editor.apply();
+                }
+                else if(view.getId()==textViewArbeitszimmer.getId()){
+                    editor.putBoolean("arbeitszimmerGray",true);
+                    editor.apply();
+                }
+                else if(view.getId()==textViewBibliothek.getId()){
+                    editor.putBoolean("bibliothekGray",true);
+                    editor.apply();
+                }
+                else if(view.getId()==textViewBiliardzimmer.getId()){
+                    editor.putBoolean("biliardzimmerGray",true);
+                    editor.apply();
+                }
+                else if(view.getId()==textViewMusikzimmer.getId()){
+                    editor.putBoolean("musikzimmerGray",true);
+                    editor.apply();
+                }
+                else if(view.getId()==textViewSalon.getId()){
+                    editor.putBoolean("salonGray",true);
+                    editor.apply();
+                }
+                else if(view.getId()==textViewSpeisezimmer.getId()){
+                    editor.putBoolean("speisezimmerGray",true);
+                    editor.apply();
+                }
+                else if(view.getId()==textViewWinterzimmer.getId()){
+                    editor.putBoolean("winterzimmerGray",true);
+                    editor.apply();
+                }
+                else if(view.getId()==textViewHalle.getId()){
+                    editor.putBoolean("halleGray",true);
+                    editor.apply();
+                }
+                else if(view.getId()==textViewKüche.getId()){
+                    editor.putBoolean("kücheGray",true);
+                    editor.apply();
+                }
+
+
             } else {
                 view.setBackgroundColor(0);
                 view.setTag("");
             }
+        }
+
+        public void lightEvent(SensorEvent event){
+        SharedPreferences preferences=getSharedPreferences("com.example.cluedo_seii",MODE_PRIVATE);
+            if (player.getCheated() < 1 && preferences.getBoolean("cheatEnabled", false)) {
+                if (event.sensor.getType() == Sensor.TYPE_LIGHT) {
+                    if (event.values[0] < 3) {
+                        sensorValue = event.values[0];
+                    }
+                    if (event.values[0] < 10) {
+                        cheatFunction(game.getInvestigationFile());
+                        int value = 1;
+                        player.setCheated(value);
+
+                    }
+                }
+
+            }
+
         }
 
         @Override
@@ -301,7 +447,8 @@ public class NotepadScreen extends AppCompatActivity {
                     float swipeLeft = x1 - x2;
 
                     if (swipeLeft > MIN_SWIPE_DISTANCE) {
-                        finish();
+                        startActivity(new Intent(NotepadScreen.this, GameboardScreen.class));
+                        //finish();
                         overridePendingTransition(R.anim.slide_left_in, R.anim.slide_left_out);
                     }
                     break;

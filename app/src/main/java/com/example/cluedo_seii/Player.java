@@ -29,7 +29,7 @@ public class Player implements Serializable {
         this.playerCharacter = playerCharacter;
         madeFalseAccusation = false;
         cheated = 0;
-        this.notepad= notepad;
+        this.notepad= new Notepad();
     }
 
     public Point getPosition() {
