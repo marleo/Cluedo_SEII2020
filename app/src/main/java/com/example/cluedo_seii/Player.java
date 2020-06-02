@@ -1,6 +1,7 @@
 package com.example.cluedo_seii;
 
 
+import android.graphics.Point;
 import com.example.cluedo_seii.spielbrett.GameboardElement;
 
 import java.io.Serializable;
@@ -10,21 +11,26 @@ public class Player implements Serializable {
 
     private int id;
     private LinkedList<Card> playerCards;
-    private GameboardElement position;
-    private String IP;
+    private Point position;
     private GameCharacter playerCharacter;
     private Boolean madeFalseAccusation;
+    private Boolean cheated;
+    //private Notepad notepad;
 
-    public Player(int id , String IP, GameCharacter playerCharacter){
+    public Player() {
+        //no arg constructor for deserialization
+    }
+
+    public Player(int id, GameCharacter playerCharacter){
         this.id = id;
         playerCards = new LinkedList<>();
         this.position = playerCharacter.getStartingPoint();
-        this.IP = IP;
         this.playerCharacter = playerCharacter;
         madeFalseAccusation = false;
+        cheated = false;
     }
 
-    public GameboardElement getPosition() {
+    public Point getPosition() {
         return position;
     }
 
@@ -36,9 +42,6 @@ public class Player implements Serializable {
         return playerCards;
     }
 
-    public String getIP() {
-        return IP;
-    }
 
     public GameCharacter getPlayerCharacter() {
         return playerCharacter;
@@ -48,9 +51,20 @@ public class Player implements Serializable {
         this.madeFalseAccusation = madeFalseAccusation;
     }
 
+
     public Boolean getMadeFalseAccusation() {
         return madeFalseAccusation;
     }
+
+    public void setCheated(){
+        cheated = true;
+}
+
+    public Boolean getCheated(){return cheated;}
+
+    /*public Notepad getNotepad() {
+        return notepad;
+    }*/
 
     public void addCard(Card card){
         playerCards.add(card);
@@ -89,7 +103,7 @@ public class Player implements Serializable {
         return wrongSuspicions;
     }
 
-    public void setPosition(GameboardElement position) {
+    public void setPosition(Point position) {
         this.position = position;
     }
 

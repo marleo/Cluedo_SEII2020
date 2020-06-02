@@ -21,21 +21,22 @@ import java.util.LinkedList;
 
 public class ShowCards extends AppCompatActivity {
 
-    float x1, x2, y1, y2;
+
+    float x1, x2;
+    static final int MIN_SWIPE_DISTANCE = 150;
     private WifiManager wifiManager;
     private Game game;
     private LinkedList<String> playerHand;
-    private Intent intent;
     private ListView listView;
+
+
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
        super.onCreate(savedInstanceState);
 
-       intent = getIntent();
-
-       game = (Game)intent.getSerializableExtra("game");
+       game = Game.getInstance();
 
        setContentView(R.layout.activity_show_cards);
 
@@ -43,23 +44,15 @@ public class ShowCards extends AppCompatActivity {
 
        playerHand.add("YOUR CARDS");
 
-       wifiManager = (WifiManager)getApplicationContext().getSystemService(WIFI_SERVICE);
-
-       String deviceIP = Formatter.formatIpAddress(wifiManager.getConnectionInfo().getIpAddress());
-
-       for(Player player: game.getPlayers()){
-
-            if(player.getIP().equals(deviceIP)){
-
-                for(Card card: player.getPlayerCards()){
+       for(Card card: game.getLocalPlayer().getPlayerCards()){
 
                     playerHand.add(card.getDesignation());
 
                 }
 
-            }
 
-        }
+
+
 
         ArrayAdapter<String> cardListViewAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, playerHand);
         listView = findViewById(R.id.playerHandDisplay);
@@ -67,22 +60,21 @@ public class ShowCards extends AppCompatActivity {
 
     }
 
+    @Override
     public boolean onTouchEvent (MotionEvent touchEvent){
         switch(touchEvent.getAction()){
 
             case MotionEvent.ACTION_DOWN:
                 x1 = touchEvent.getX();
-                y1 = touchEvent.getY();
-
                 break;
             case MotionEvent.ACTION_UP:
                 x2 = touchEvent.getX();
-                y2 = touchEvent.getY();
 
-                if(x1 < x2){
+                float swipeRight = x2-x1;
+
+                if(swipeRight > MIN_SWIPE_DISTANCE){
                     finish();
-                }else if(x1 > x2){
-                    finish();
+                    overridePendingTransition(R.anim.slide_right_in, R.anim.slide_right_out);
                 }
                 break;
         }

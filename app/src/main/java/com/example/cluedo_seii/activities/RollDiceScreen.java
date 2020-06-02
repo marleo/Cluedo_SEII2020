@@ -5,6 +5,7 @@ import android.content.Context;
 import android.hardware.Sensor;
 import android.hardware.SensorManager;
 import android.os.Bundle;
+import android.view.MotionEvent;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
@@ -14,6 +15,9 @@ import com.example.cluedo_seii.sensorik.ShakeDetector;
 import java.util.Random;
 
 public class RollDiceScreen extends Activity {
+
+    float y1, y2;
+    static final int MIN_SWIPE_DISTANCE = 150;
     private SensorManager sensorManager;
     private Sensor accel;
     private ShakeDetector shakeDetector;
@@ -106,6 +110,28 @@ public class RollDiceScreen extends Activity {
 
     public static int randomDiceValue(){
         return random.nextInt(6)+1;
+    }
+
+
+    @Override
+    public boolean dispatchTouchEvent (MotionEvent touchEvent){
+        switch(touchEvent.getAction()){
+
+            case MotionEvent.ACTION_DOWN:
+                y1 = touchEvent.getY();
+                break;
+            case MotionEvent.ACTION_UP:
+                y2 = touchEvent.getY();
+
+                float swipeUp = y1-y2;
+
+                if(swipeUp > MIN_SWIPE_DISTANCE){
+                    finish();
+                    overridePendingTransition(R.anim.slide_up_in, R.anim.slide_up_out);
+                }
+                break;
+        }
+        return false;
     }
 
 }

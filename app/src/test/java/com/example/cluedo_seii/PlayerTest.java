@@ -1,4 +1,4 @@
-package com.example.cluedo_seii;
+/*package com.example.cluedo_seii;
 
 import com.example.cluedo_seii.spielbrett.Gameboard;
 import com.example.cluedo_seii.spielbrett.StartingpointElement;
@@ -62,12 +62,12 @@ public class PlayerTest {
         fraeuleinGloria = new GameCharacter("Fräulein Gloria", fraeuleinGloriaStart);
         frauWeiss = new GameCharacter("Frau Weiss", frauWeissStart);
 
-        player1 = new Player(1, "10.0.0.8", oberstVonGatov);
-        player2 = new Player(2, "10.0.0.9", profBloom);
-        player3 = new Player(3, "10.0.0.10", reverendGruen);
-        player4 = new Player(4, "10.0.0.11", baroninVonPorz);
-        player5 = new Player(5, "10.0.0.12", fraeuleinGloria);
-        player6 = new Player(6, "10.0.0.13", frauWeiss);
+        player1 = new Player(1,  oberstVonGatov);
+        player2 = new Player(2,  profBloom);
+        player3 = new Player(3,  reverendGruen);
+        player4 = new Player(4,  baroninVonPorz);
+        player5 = new Player(5, fraeuleinGloria);
+        player6 = new Player(6,  frauWeiss);
 
         players = new LinkedList<>();
 
@@ -158,4 +158,4 @@ public class PlayerTest {
         assertEquals(player1.getMadeFalseAccusation(), true);
     }
 
-}
+} */

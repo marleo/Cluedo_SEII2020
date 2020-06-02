@@ -5,9 +5,13 @@ import android.util.Log;
 import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
+import com.example.cluedo_seii.Game;
 import com.example.cluedo_seii.network.Callback;
 import com.example.cluedo_seii.network.NetworkClient;
 import com.example.cluedo_seii.network.dto.ConnectedDTO;
+import com.example.cluedo_seii.network.dto.GameCharacterDTO;
+import com.example.cluedo_seii.network.dto.GameDTO;
+import com.example.cluedo_seii.network.dto.PlayerDTO;
 import com.example.cluedo_seii.network.dto.RequestDTO;
 import com.example.cluedo_seii.network.dto.TextMessage;
 import com.example.cluedo_seii.network.dto.UserNameRequestDTO;
@@ -26,6 +30,8 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
     private Client client;
     private Callback<RequestDTO> callback;
     private Callback<ConnectedDTO> connectionCallback;
+    private Callback<GameCharacterDTO> characterCallback;
+    private Callback<PlayerDTO> playerCallback;
 
     private boolean isConnected;
 
@@ -33,12 +39,17 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
         client = new Client();
     }
 
+
     public static NetworkClientKryo getInstance() {
         if (INSTANCE == null) {
             INSTANCE = new NetworkClientKryo();
         }
 
         return INSTANCE;
+    }
+
+    public static void deleteInstance() {
+        INSTANCE = null;
     }
 
     @Override
@@ -79,12 +90,48 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
 
     private void handleRequest(Connection connection, Object object) {
         if (object instanceof TextMessage) {
+            //TODO delete
             callback.callback((RequestDTO) object );
         } else if (object instanceof ConnectedDTO) {
-            if (connectionCallback != null) {
-                connectionCallback.callback((ConnectedDTO) object);
-            }
+            handleConnectionResponse(connection, (ConnectedDTO) object);
+        } else if (object instanceof GameCharacterDTO) {
+            handleGameCharacterResponse(connection, (GameCharacterDTO) object);
+        } else if (object instanceof  PlayerDTO) {
+            handlePlayerResponse(connection, (PlayerDTO) object);
+        } else if (object instanceof GameDTO) {
+            handleGameResponse(connection, (GameDTO) object);
         }
+    }
+
+    private void handleConnectionResponse(Connection connection, ConnectedDTO connectedDTO) {
+        if (connectionCallback != null) {
+            connectionCallback.callback(connectedDTO);
+            // reset connection Callback
+            connectionCallback = null;
+        }
+    }
+
+    private void handleGameCharacterResponse(Connection connection,  GameCharacterDTO gameCharacterDTO) {
+        //TODO implement
+        if (characterCallback != null) {
+            characterCallback.callback(gameCharacterDTO);
+        }
+    }
+
+    private void handlePlayerResponse(Connection connection, PlayerDTO playerDTO) {
+        // delete character Callback, because the client already choose his character
+        // characterCallback = null;
+        // TODO implement
+
+        //set Player as LocalPlayer
+        Game.getInstance().setLocalPlayer(playerDTO.getPlayer());
+        Log.d("Player Response:", playerDTO.toString());
+    }
+
+    private void handleGameResponse(Connection connection, GameDTO gameDTO) {
+        Game game = Game.getInstance();
+        // TODO set game attributes
+
     }
 
     @Override
@@ -92,9 +139,15 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
         this.callback = callback;
     }
 
+    @Override
     public void registerConnectionCallback(Callback<ConnectedDTO> callback) {
-        System.out.println("Callback registered");
         this.connectionCallback = callback;
+    }
+
+    @Override
+    public void registerCharacterCallback(Callback<GameCharacterDTO> callback) {
+        this.characterCallback = null;
+        this.characterCallback = callback;
     }
 
     @Override
