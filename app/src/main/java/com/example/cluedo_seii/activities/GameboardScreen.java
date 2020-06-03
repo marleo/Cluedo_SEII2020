@@ -43,7 +43,10 @@ public class GameboardScreen extends AppCompatActivity  {
     private Intent intent;
     private List<StartingPoint> startingPoints;
     private List<Player> playerMove;
+
+    private Player currentPlayerInDoor;// TODO: Aufräumen und vielleicht nur mehr das Player Objekt anstatt id und Player Objekt
     private int playerCurrentlyPlayingId;
+
     static final int MIN_SWIPE_DISTANCE = 150;
 
 
@@ -99,70 +102,118 @@ public class GameboardScreen extends AppCompatActivity  {
             G = Billard11
             H = Billard13
             I = Billard12
-            J
-            K
+            J = Musikzimmer1
+            K = Musikzimmer3
+            L = Musikzimmer5
+            M = Musikzimmer6
+            N = Musikzimmer7
+            O = Musikzimmer8
+            P = Musikzimmer9
+            Q = Musikzimmer10
+            R = Musikzimmer11
+            T = Musikzimmer12
+            S = Salon1
+            U = Salon2
+            V = Salon3
+            W = Salon4
+            X = Salon5
+            Y = Salon6
+            Z = Kueche1
+            ! = Kueche2
+            ä = Kueche3
+            ö = Kueche4
+            ü = Kueche5
+            $ = Kueche6
+            % = Kueche7
+            & = Kueche8
+            / = Kueche9
+            ( = Kueche10
+            ) = Kueche11
+            + = Kueche12
+            - = Kueche13
+            * = Speisezimmer2
+            . = Speisezimmer3
+            , = Speisezimmer4
+            # = Speisezimmer5
+            : = Speisezimmer6
+            ; = Speisezimmer7
+            < = Speisezimmer8
+            > = Speisezimmer9
+            = = Speisezimmer10 --frei!
+            @ = Speisezimmer11
+            [ = Speisezimmer12
+            ] = Speisezimmer13
+            ^ = Speisezimmer 14
+            = = Veranda1
+            _ = Veranda2
+            { = Veranda3
+            } = Veranda4
+            ~ = Veranda5
+            € = Veranda6
+            Ü = Veranda7
+            Ö = Veranda8
+            Ä = Veranda9
+
+
 
 
          */
 
         String gameBoard =
-                "cdef045621111" +
-                "ghij078901111" +
-                "Akk30a3b03111" +
+                "cdef04562=_{}" +
+                "ghij07890~€ÜÖ" +
+                "Akk30a3b03ÄÄA" +
                 "2000000000000" +
                 "lmt0000000000" +
                 "opq3000000002" +
                 "r3u0000000000" +
                 "0000000000002" +
-                "0000000011111" +
-                "v3wxy00031111" +
-                "zBCD300111111" +
+                "000000003*.,#" +
+                "v3wxy0003:;<>" +
+                "zBCD30000@[]^" +
                 "EFGHI00000000" +
                 "0000000000000" +
-                "1111100031111" +
-                "1111100031111" +
-                "1111300011111" +
+                "JAK30000Z3!äö" +
+                "LMNO0000ü$%&-" +
+                "PQRT0000A/()+" +
                 "0000000000000" +
-                "0000111100000" +
-                "0020111102000";
+                "00003SU300000" +
+                "0000VWXY00000" +
+                "0020000002000";
 
-        gameboard = new Gameboard(this,13,19, gameBoard);
+        // Init Starting Points
+        startingPoints = new ArrayList<>();
+        startingPoints.add(new StartingPoint(0, 0));
+        startingPoints.add(new StartingPoint(2, 1));
+
+        // Init Player Ids and PlayerMove-Array
+        int countPlayerIds = 0;
+        playerMove = new ArrayList<>();
+
+        gameboard = new Gameboard(this,13,20, gameBoard);
         setContentView(gameboard.getLayout());
 
         bundle = new Bundle();
         mesaggeDialogTag = "MessageDialog";
         manager = getSupportFragmentManager();
 
-
         startGame();
-
-
-        startingPoints = new ArrayList<>();
-        startingPoints.add(new StartingPoint(0, 0));
-        startingPoints.add(new StartingPoint(2, 1));
 
         gameboard.spawnPlayer(startingPoints, this);
 
-        playerMove = new ArrayList<>();
         for(StartingPoint startingPoint: startingPoints) {
-            /*Log.i("Test",
+            Log.i("Test",
                     "StartingPoint Position: " + startingPoint.getPlayerPosition().x + ":"
-                            + startingPoint.getPlayerPosition().y);*/
-            /*
+                            + startingPoint.getPlayerPosition().y);
+            GameCharacter gameCharacter = new GameCharacter("Player_"+countPlayerIds, startingPoint.getPlayerPosition());
             playerMove.add(
-                    new Player(
-                            startingPoint.getPlayerId(),
-                            startingPoint.getPlayerPosition()
-                    )
+                    new Player(countPlayerIds++, gameCharacter)
             );
-            */
         }
 
         // Wenn sich die Id ändert, dann danach updateGameboardScreen machen so wie hier!
         playerCurrentlyPlayingId = 0;
         gameboard.updateGameboardScreen(this);
-
-
     }
 
     public Gameboard getGameboard() {
@@ -196,6 +247,14 @@ public class GameboardScreen extends AppCompatActivity  {
 
     public void setPlayerCurrentlyPlayingId(int playerCurrentlyPlayingId) {
         this.playerCurrentlyPlayingId = playerCurrentlyPlayingId;
+    }
+
+    public Player getCurrentPlayerInDoor() {
+        return currentPlayerInDoor;
+    }
+
+    public void setCurrentPlayerInDoor(Player currentPlayerInDoor) {
+        this.currentPlayerInDoor = currentPlayerInDoor;
     }
 
     private void startGame(){
@@ -339,7 +398,7 @@ public class GameboardScreen extends AppCompatActivity  {
 
     //EventListener für Swipe-Event
     @Override
-    public boolean dispatchTouchEvent (MotionEvent touchEvent){
+    public boolean onTouchEvent (MotionEvent touchEvent){
         switch(touchEvent.getAction()){
             case MotionEvent.ACTION_DOWN:
                 x1 = touchEvent.getX();
