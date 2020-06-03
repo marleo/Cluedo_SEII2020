@@ -2,6 +2,8 @@ package com.example.cluedo_seii.network.kryonet;
 
 import com.example.cluedo_seii.Game;
 import com.example.cluedo_seii.GameCharacter;
+import com.example.cluedo_seii.GameState;
+import com.example.cluedo_seii.InvestigationFile;
 import com.example.cluedo_seii.Player;
 import com.example.cluedo_seii.network.dto.ConnectedDTO;
 import com.example.cluedo_seii.network.dto.GameCharacterDTO;
@@ -36,5 +38,8 @@ public class KryoHelper {
         kryoNetComponent.registerClass(Game.class);
         kryoNetComponent.registerClass(HashMap.class);
         kryoNetComponent.registerClass(Player.class);
+        kryoNetComponent.registerClass(GameState.class);
+        kryoNetComponent.registerClass(InvestigationFile.class);
+
     }
 }

@@ -20,6 +20,7 @@ import android.widget.TextView;
 
 import com.example.cluedo_seii.R;
 import com.example.cluedo_seii.network.dto.GameCharacterDTO;
+import com.example.cluedo_seii.network.dto.GameDTO;
 import com.example.cluedo_seii.network.kryonet.NetworkClientKryo;
 import com.example.cluedo_seii.network.kryonet.NetworkServerKryo;
 
@@ -106,6 +107,7 @@ public class ChoosePlayerScreen extends AppCompatActivity {
                             proceedToGame.setOnClickListener(new View.OnClickListener(){
                                 @Override
                                 public void onClick(View v){
+
                                     prepareGame();
                                     startActivity(new Intent(ChoosePlayerScreen.this, GameboardScreen.class));
                                 }
@@ -127,7 +129,12 @@ public class ChoosePlayerScreen extends AppCompatActivity {
             }
         });
 
-
+        client.registerGameCallback(new Callback<GameDTO>() {
+            @Override
+            public void callback(GameDTO argument) {
+                startActivity(new Intent(ChoosePlayerScreen.this, GameboardScreen.class));
+            }
+        });
 
     }
 
@@ -192,6 +199,12 @@ public class ChoosePlayerScreen extends AppCompatActivity {
     }
 
     private void prepareGame() {
+        //TODO implement
+        GameDTO gameDTO = new GameDTO();
+        gameDTO.setGame(game);
+
+        server.broadcastMessage(gameDTO);
+
 
     }
 

@@ -32,6 +32,7 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
     private Callback<ConnectedDTO> connectionCallback;
     private Callback<GameCharacterDTO> characterCallback;
     private Callback<PlayerDTO> playerCallback;
+    private Callback<GameDTO> gameCallback;
 
     private boolean isConnected;
 
@@ -129,6 +130,8 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
     }
 
     private void handleGameResponse(Connection connection, GameDTO gameDTO) {
+        //TODO delete
+        gameCallback.callback(gameDTO);
         Game game = Game.getInstance();
         // TODO set game attributes
 
@@ -148,6 +151,10 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
     public void registerCharacterCallback(Callback<GameCharacterDTO> callback) {
         this.characterCallback = null;
         this.characterCallback = callback;
+    }
+
+    public void registerGameCallback(Callback<GameDTO> callback) {
+        this.gameCallback = callback;
     }
 
     @Override
