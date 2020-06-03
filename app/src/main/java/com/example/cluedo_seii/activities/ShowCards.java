@@ -21,12 +21,12 @@ import java.util.LinkedList;
 
 public class ShowCards extends AppCompatActivity {
 
+
     float x1, x2;
     static final int MIN_SWIPE_DISTANCE = 150;
     private WifiManager wifiManager;
     private Game game;
     private LinkedList<String> playerHand;
-    private Intent intent;
     private ListView listView;
 
 
@@ -36,9 +36,7 @@ public class ShowCards extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
        super.onCreate(savedInstanceState);
 
-       intent = getIntent();
-
-       game = (Game)intent.getSerializableExtra("game");
+       game = Game.getInstance();
 
        setContentView(R.layout.activity_show_cards);
 
@@ -46,23 +44,15 @@ public class ShowCards extends AppCompatActivity {
 
        playerHand.add("YOUR CARDS");
 
-       wifiManager = (WifiManager)getApplicationContext().getSystemService(WIFI_SERVICE);
-
-       String deviceIP = Formatter.formatIpAddress(wifiManager.getConnectionInfo().getIpAddress());
-
-       for(Player player: game.getPlayers()){
-
-            if(player.getIP().equals(deviceIP)){
-
-                for(Card card: player.getPlayerCards()){
+       for(Card card: game.getLocalPlayer().getPlayerCards()){
 
                     playerHand.add(card.getDesignation());
 
                 }
 
-            }
 
-        }
+
+
 
         ArrayAdapter<String> cardListViewAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, playerHand);
         listView = findViewById(R.id.playerHandDisplay);

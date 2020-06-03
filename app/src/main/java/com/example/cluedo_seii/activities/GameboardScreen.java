@@ -244,6 +244,7 @@ public class GameboardScreen extends AppCompatActivity  {
         return playerCurrentlyPlayingId;
     }
 
+
     public void setPlayerCurrentlyPlayingId(int playerCurrentlyPlayingId) {
         this.playerCurrentlyPlayingId = playerCurrentlyPlayingId;
     }
@@ -264,14 +265,19 @@ public class GameboardScreen extends AppCompatActivity  {
 
             GameCharacter gameCharacter = new GameCharacter("Prof. Bloom", null);
             GameCharacter gameCharacterAlt = new GameCharacter("Fräulein Weiss", null);
-            Player player1 = new Player(1, "10.0.2.16", gameCharacterAlt);
-            Player player2 = new Player(2, "null", gameCharacter);
-            Player player3 = new Player(3, "null", gameCharacterAlt);
+            Player player1 = new Player(1, gameCharacterAlt);
+            Player player2 = new Player(2,  gameCharacter);
+            Player player3 = new Player(3,  gameCharacterAlt);
             players.add(player1);
             players.add(player2);
             players.add(player3);
-            game = new Game(gameboard, players);
+            //game = new Game(gameboard, players);
+            game = Game.getInstance();
+            game.setGameboard(gameboard);
+            game.setPlayers(players);
+            game.setLocalPlayer(player2);
             game.distributeCards(); //um Notepad cheatFunction zu demonstrieren
+
 
         //Ausführung erfolgt wenn Methode changeGameState der Instanz game aufgerufen wird
         game.setListener(new Game.ChangeListener() {
@@ -333,56 +339,50 @@ public class GameboardScreen extends AppCompatActivity  {
     //Aufruf von DialogOptionen
     public void throwDice(){
         ThrowDice dialog = new ThrowDice();
-        bundle.putSerializable("game", game);
-        dialog.setArguments(bundle);
         dialog.show(manager, mesaggeDialogTag);
     }
 
     public void throwDiceOrUseSecretPassage(){
         ThrowDiceOrUseSecretPassage dialog = new ThrowDiceOrUseSecretPassage();
-        bundle.putSerializable("game", game);
-        dialog.setArguments(bundle);
         dialog.show(manager, mesaggeDialogTag);
     }
 
     public void suspectOrAccuse(){
         SuspectOrAccuse dialog = new SuspectOrAccuse();
-        bundle.putSerializable("game", game);
-        dialog.setArguments(bundle);
         dialog.show(manager, mesaggeDialogTag);
     }
 
-    //UI Aufruf von Verdächtigung und Anklage
+    //UI Aufruf von Würfeln, Verdächtigung und Anklage
+    public void rollDice(){
+        //TODO Aufruf von Würfelfunktion
+    }
+
     public void makeSuspicion(){
-        intent = new Intent(this, MakeSuspicion.class);
-        intent.putExtra("game", game);
-        startActivityForResult(intent, 2);
+        startActivity(new Intent(this, MakeSuspicion.class));
     }
 
     public void startNotepad(){
         intent = new Intent(this, NotepadScreen.class);
-        intent.putExtra("game",game);
+        //intent.putExtra("game",game);
         startActivity(intent);
         overridePendingTransition(R.anim.slide_right_in, R.anim.slide_right_out);
 
     }
 
     public void accuseSomeone(){
-        intent = new Intent(this, AccuseSomeone.class);
-        intent.putExtra("game", game);
-        startActivityForResult(intent, 2);
+        startActivity(new Intent(this, AccuseSomeone.class));
     }
 
     //Zeigt Karten auf Spielerhand
     public void showCards(){
         intent = new Intent(this, ShowCards.class);
-        intent.putExtra("game", game);
+        //intent.putExtra("game", game);
         startActivity(intent);
         overridePendingTransition(R.anim.slide_left_in, R.anim.slide_left_out);
     }
 
     //CallBack um Resultat aus Methode zu erhalten
-    @Override
+  /*  @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data)
     {
         super.onActivityResult(requestCode, resultCode, data);
@@ -390,7 +390,7 @@ public class GameboardScreen extends AppCompatActivity  {
         {
             game = (Game)data.getSerializableExtra("game");
         }
-    }
+    }*/
 
     public void updateGame(Game gameUpdate){
         game = gameUpdate;
