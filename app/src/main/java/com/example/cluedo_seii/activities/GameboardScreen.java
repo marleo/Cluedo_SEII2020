@@ -207,7 +207,7 @@ public class GameboardScreen extends AppCompatActivity  {
                             + startingPoint.getPlayerPosition().y);
             GameCharacter gameCharacter = new GameCharacter("Player_"+countPlayerIds, startingPoint.getPlayerPosition());
             playerMove.add(
-                    new Player(countPlayerIds++, "", gameCharacter)
+                    new Player(countPlayerIds++, gameCharacter)
             );
         }
 
@@ -398,7 +398,7 @@ public class GameboardScreen extends AppCompatActivity  {
 
     //EventListener für Swipe-Event
     @Override
-    public boolean dispatchTouchEvent (MotionEvent touchEvent){
+    public boolean onTouchEvent (MotionEvent touchEvent){
         switch(touchEvent.getAction()){
             case MotionEvent.ACTION_DOWN:
                 x1 = touchEvent.getX();
