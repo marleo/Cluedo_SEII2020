@@ -13,6 +13,7 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.example.cluedo_seii.Game;
+import com.example.cluedo_seii.GameState;
 import com.example.cluedo_seii.Player;
 import com.example.cluedo_seii.R;
 
@@ -113,6 +114,10 @@ public class MakeSuspicion extends AppCompatActivity implements AdapterView.OnIt
         });
     }
 
+    public void onStop(){
+        super.onStop();
+        game.changeGameState(GameState.PLAYERTURNEND);
+    }
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {

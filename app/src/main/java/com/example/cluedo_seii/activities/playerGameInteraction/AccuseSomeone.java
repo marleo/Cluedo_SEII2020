@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 
+import com.example.cluedo_seii.GameState;
 import com.example.cluedo_seii.R;
 
 import android.content.Intent;
@@ -82,6 +83,7 @@ public class AccuseSomeone extends AppCompatActivity implements AdapterView.OnIt
                     text = "Gratuliere, du hast das Spiel gewonnen";
                     toast = Toast.makeText(getApplicationContext(), text, Toast.LENGTH_SHORT);
                     toast.show();
+                    game.setGameOver(true);
                     finish();
                 }
 
@@ -97,6 +99,10 @@ public class AccuseSomeone extends AppCompatActivity implements AdapterView.OnIt
         });
     }
 
+    public void onStop(){
+        super.onStop();
+        game.changeGameState(GameState.PLAYERTURNEND);
+    }
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
