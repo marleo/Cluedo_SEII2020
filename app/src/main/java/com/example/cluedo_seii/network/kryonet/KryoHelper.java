@@ -1,5 +1,7 @@
 package com.example.cluedo_seii.network.kryonet;
 
+import com.example.cluedo_seii.Card;
+import com.example.cluedo_seii.CardType;
 import com.example.cluedo_seii.Game;
 import com.example.cluedo_seii.GameCharacter;
 import com.example.cluedo_seii.GameState;
@@ -24,7 +26,6 @@ public class KryoHelper {
     }
 
     public static void registerClasses (KryoNetComponent kryoNetComponent) {
-
         kryoNetComponent.registerClass(RequestDTO.class);
         kryoNetComponent.registerClass(TextMessage.class);
         kryoNetComponent.registerClass(QuitGameDTO.class);
@@ -40,6 +41,7 @@ public class KryoHelper {
         kryoNetComponent.registerClass(Player.class);
         kryoNetComponent.registerClass(GameState.class);
         kryoNetComponent.registerClass(InvestigationFile.class);
-
+        kryoNetComponent.registerClass(Card.class);
+        kryoNetComponent.registerClass(CardType.class);
     }
 }

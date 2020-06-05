@@ -17,7 +17,7 @@ public class Player implements Serializable {
     private Boolean cheated;
     //private Notepad notepad;
 
-    public Player() {
+    private Player() {
         //no arg constructor for deserialization
     }
 

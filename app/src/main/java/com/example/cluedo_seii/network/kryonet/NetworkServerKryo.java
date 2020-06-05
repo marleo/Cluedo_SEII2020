@@ -142,7 +142,16 @@ public class NetworkServerKryo implements KryoNetComponent, NetworkServer {
     private void handleGameRequest(Connection connection, GameDTO gameDTO) {
         broadcastMessage(gameDTO);
 
+        Game inGame = gameDTO.getGame();
+
         Game game = Game.getInstance();
+
+        game.setPlayers(inGame.getPlayers());
+        game.setCurrentPlayer(inGame.getCurrentPlayer());
+        game.setRound(inGame.getRound());
+        game.setGameOver(inGame.getGameOver());
+
+        game.setGameState(inGame.getGameState());
         // TODO set game attributes
     }
 
@@ -158,6 +167,12 @@ public class NetworkServerKryo implements KryoNetComponent, NetworkServer {
 
     public void registerCharacterDTOCallback(Callback<GameCharacterDTO> gameCharacterDTOCallback) {
         this.gameCharacterDTOCallback = gameCharacterDTOCallback;
+    }
+
+    public void sendGame(Game game) {
+        GameDTO gameDTO = new GameDTO();
+        gameDTO.setGame(game);
+        broadcastMessage(gameDTO);
     }
 
     @Override

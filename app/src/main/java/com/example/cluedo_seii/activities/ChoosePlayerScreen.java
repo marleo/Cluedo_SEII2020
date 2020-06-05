@@ -107,7 +107,6 @@ public class ChoosePlayerScreen extends AppCompatActivity {
                             proceedToGame.setOnClickListener(new View.OnClickListener(){
                                 @Override
                                 public void onClick(View v){
-
                                     prepareGame();
                                     startActivity(new Intent(ChoosePlayerScreen.this, GameboardScreen.class));
                                 }
@@ -132,6 +131,11 @@ public class ChoosePlayerScreen extends AppCompatActivity {
         client.registerGameCallback(new Callback<GameDTO>() {
             @Override
             public void callback(GameDTO argument) {
+                //Todo set distributed Cards
+                Game tempGame = argument.getGame();
+                if (tempGame.getPlayers().contains(Game.getInstance().getLocalPlayer())) {
+                    Log.d("Callback", "callback: nice");
+                }
                 startActivity(new Intent(ChoosePlayerScreen.this, GameboardScreen.class));
             }
         });
@@ -200,6 +204,7 @@ public class ChoosePlayerScreen extends AppCompatActivity {
 
     private void prepareGame() {
         //TODO implement
+        game.distributeCards();
         GameDTO gameDTO = new GameDTO();
         gameDTO.setGame(game);
 

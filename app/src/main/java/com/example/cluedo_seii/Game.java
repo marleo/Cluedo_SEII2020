@@ -65,7 +65,7 @@ public class Game implements Serializable {
         return currentPlayer;
     }
 
-    int getRound() {
+    public int getRound() {
         return round;
     }
 
@@ -89,6 +89,22 @@ public class Game implements Serializable {
     public void setGameboard(Gameboard gameboard){
         this.gameboard = gameboard;
     }
+
+    // set for Network start
+    public void setGameState(GameState gameState) {
+        this.gameState = gameState;
+    }
+
+    public void setRound(int round) {
+        this.round = round;
+    }
+
+    public void setCurrentPlayer(Player currentPlayer) {
+        this.currentPlayer = currentPlayer;
+    }
+
+    // set for Network end
+
 
     //Methode  zum ändern des Spielstatus und Implementierung von ChangeListener
     public void changeGameState(GameState gameState){
