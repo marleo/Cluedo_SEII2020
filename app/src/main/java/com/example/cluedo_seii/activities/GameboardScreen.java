@@ -2,6 +2,7 @@ package com.example.cluedo_seii.activities;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.graphics.Point;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -263,19 +264,18 @@ public class GameboardScreen extends AppCompatActivity  {
             deckOfCards = new DeckOfCards();
             players = new LinkedList<>();
 
-            GameCharacter gameCharacter = new GameCharacter("Prof. Bloom", null);
-            GameCharacter gameCharacterAlt = new GameCharacter("Fräulein Weiss", null);
+            GameCharacter gameCharacter = new GameCharacter("Prof. Bloom", new Point(0,0));
+            GameCharacter gameCharacterAlt = new GameCharacter("Fräulein Weiss", new Point(0,0));
             Player player1 = new Player(1, gameCharacterAlt);
             Player player2 = new Player(2,  gameCharacter);
             Player player3 = new Player(3,  gameCharacterAlt);
             players.add(player1);
             players.add(player2);
             players.add(player3);
-            //game = new Game(gameboard, players);
             game = Game.getInstance();
             game.setGameboard(gameboard);
             game.setPlayers(players);
-            game.setLocalPlayer(player2);
+            game.setLocalPlayer(player1);
             game.distributeCards(); //um Notepad cheatFunction zu demonstrieren
 
 
@@ -283,36 +283,71 @@ public class GameboardScreen extends AppCompatActivity  {
         game.setListener(new Game.ChangeListener() {
             @Override
 
-            //Wird ausgeführt wenn Methode aufgerufen wird
-
+            //Wird ausgeführt wenn Methode changeGameState aufgerufen wird
             public void onChange() {
-/*
+
+                //Ausgeführt bei GameState.PLAYERTURNBEGIN)
                 if(game.getGameState().equals(GameState.PLAYERTURNBEGIN)){
-                    if(game.getCurrentPlayer().getPosition()instanceof RoomElement) {
-                        throwDiceOrUseSecretPassage();
-                    } else {
-                        throwDice();
+                    if(game.getCurrentPlayer().getId()==game.getLocalPlayer().getId()){
+                        if (//Prüfe ob Spieler sich in einen Raum befindet
+                            game.getCurrentPlayer().getPosition().x == 3 && game.getCurrentPlayer().getPosition().y==2  ||
+                            game.getCurrentPlayer().getPosition().x == 6 && game.getCurrentPlayer().getPosition().y==2  ||
+                            game.getCurrentPlayer().getPosition().x == 9 && game.getCurrentPlayer().getPosition().y==2  ||
+                            game.getCurrentPlayer().getPosition().x == 3 && game.getCurrentPlayer().getPosition().y==5  ||
+                            game.getCurrentPlayer().getPosition().x == 1 && game.getCurrentPlayer().getPosition().y==6  ||
+                            game.getCurrentPlayer().getPosition().x == 3 && game.getCurrentPlayer().getPosition().y==13 ||
+                            game.getCurrentPlayer().getPosition().x == 4 && game.getCurrentPlayer().getPosition().y==17 ||
+                            game.getCurrentPlayer().getPosition().x == 7 && game.getCurrentPlayer().getPosition().y==17 ||
+                            game.getCurrentPlayer().getPosition().x == 9 && game.getCurrentPlayer().getPosition().y==13 ||
+                            game.getCurrentPlayer().getPosition().x == 8 && game.getCurrentPlayer().getPosition().y==9  ||
+                            game.getCurrentPlayer().getPosition().x == 8 && game.getCurrentPlayer().getPosition().y==8){
+                            throwDiceOrUseSecretPassage();
+                        }
+                        else{
+                            throwDice();
+                        }
+                        }
+                    else{//Spieler localPlayer ist nicht am Zug
+
                     }
                 }
 
+                //Ausgefürt bei GameState.PLAVERMOVEMENT
                 else if(game.getGameState().equals(GameState.PLAVERMOVEMENT)){
-
-                }
-
-                else if(game.getGameState().equals(GameState.PLAYERACCUSATION)){
-                    if(game.getCurrentPlayer().getPosition()instanceof RoomElement){
-                        suspectOrAccuse();
-                    } else{
-                        game.changeGameState(GameState.PLAYERTURNEND);
+                    if(game.getCurrentPlayer().getId()==game.getLocalPlayer().getId()) {
+                    }
+                    else{//Spieler localPlayer ist nicht am Zug
                     }
                 }
 
+                //Ausgeführt bei GameState.PLAYERACCUSATION
+                else if(game.getGameState().equals(GameState.PLAYERACCUSATION)){
+                   if(game.getCurrentPlayer().getId()==game.getLocalPlayer().getId()){
+                     if(//Prüfe ob Spieler sich in einen Raum befindet
+                             game.getCurrentPlayer().getPosition().x == 3 && game.getCurrentPlayer().getPosition().y==2  ||
+                             game.getCurrentPlayer().getPosition().x == 6 && game.getCurrentPlayer().getPosition().y==2  ||
+                             game.getCurrentPlayer().getPosition().x == 9 && game.getCurrentPlayer().getPosition().y==2  ||
+                             game.getCurrentPlayer().getPosition().x == 3 && game.getCurrentPlayer().getPosition().y==5  ||
+                             game.getCurrentPlayer().getPosition().x == 1 && game.getCurrentPlayer().getPosition().y==6  ||
+                             game.getCurrentPlayer().getPosition().x == 3 && game.getCurrentPlayer().getPosition().y==13 ||
+                             game.getCurrentPlayer().getPosition().x == 4 && game.getCurrentPlayer().getPosition().y==17 ||
+                             game.getCurrentPlayer().getPosition().x == 7 && game.getCurrentPlayer().getPosition().y==17 ||
+                             game.getCurrentPlayer().getPosition().x == 9 && game.getCurrentPlayer().getPosition().y==13 ||
+                             game.getCurrentPlayer().getPosition().x == 8 && game.getCurrentPlayer().getPosition().y==9  ||
+                             game.getCurrentPlayer().getPosition().x == 8 && game.getCurrentPlayer().getPosition().y==8){
+                       suspectOrAccuse();}
+                     else{game.changeGameState(GameState.PLAYERTURNEND);}
+                   }
+                   else{//Spieler localPlayer ist nicht am Zug
+                   }
+                }
+
+                //Ausgeführt bei GameState.PLAYERTURNEND
                 else if(game.getGameState().equals(GameState.PLAYERTURNEND)){
                     int wrongAccusers = 0;
 
-
                     //prüfe Spielbeendigungsbedingungen
-                    for(Player player: game.getPlayers()){
+                   for(Player player: game.getPlayers()){
                         if(player.getMadeFalseAccusation()==true){
                             wrongAccusers++;
                         }
@@ -324,77 +359,75 @@ public class GameboardScreen extends AppCompatActivity  {
                     else if(game.getGameOver()==true){
                         game.changeGameState(GameState.END);
                     }
+
+                    //wenn Abbruchbedingungen nicht zutreffen
+                    else{//nächster Spieler
+                    }
                 }
+
+
+                //Ausgeführt bei GameState.END
                 else if(game.getGameState().equals(GameState.END)){
                     finish();
-                }*/
+                }
             }
         });
     }
 
-
-
-
-
     //Aufruf von DialogOptionen
+
+    //Dialog Würfel werfen
     public void throwDice(){
         ThrowDice dialog = new ThrowDice();
         dialog.show(manager, mesaggeDialogTag);
     }
 
+    //Dialog Würfel werfen oder Geheimgang verwenden
     public void throwDiceOrUseSecretPassage(){
         ThrowDiceOrUseSecretPassage dialog = new ThrowDiceOrUseSecretPassage();
         dialog.show(manager, mesaggeDialogTag);
     }
 
+    //Dialog Anklagen oder Verdächtigen
     public void suspectOrAccuse(){
         SuspectOrAccuse dialog = new SuspectOrAccuse();
         dialog.show(manager, mesaggeDialogTag);
     }
 
     //UI Aufruf von Würfeln, Verdächtigung und Anklage
+    //Aufruf von Würfeln
     public void rollDice(){
-        //TODO Aufruf von Würfelfunktion
+        startActivity(new Intent(this, RollDiceScreen.class));
     }
 
+    //Aufruf von Verdächtigung
     public void makeSuspicion(){
         startActivity(new Intent(this, MakeSuspicion.class));
     }
 
+    //Aufruf Detektivnotizblock
     public void startNotepad(){
         intent = new Intent(this, NotepadScreen.class);
         //intent.putExtra("game",game);
         startActivity(intent);
         overridePendingTransition(R.anim.slide_right_in, R.anim.slide_right_out);
-
     }
 
+    //Aufruf Anklage
     public void accuseSomeone(){
         startActivity(new Intent(this, AccuseSomeone.class));
     }
 
     //Zeigt Karten auf Spielerhand
     public void showCards(){
-        intent = new Intent(this, ShowCards.class);
-        //intent.putExtra("game", game);
-        startActivity(intent);
+        startActivity(new Intent(this, ShowCards.class));
         overridePendingTransition(R.anim.slide_left_in, R.anim.slide_left_out);
     }
-
-    //CallBack um Resultat aus Methode zu erhalten
-  /*  @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data)
-    {
-        super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode==2)
-        {
-            game = (Game)data.getSerializableExtra("game");
-        }
-    }*/
 
     public void updateGame(Game gameUpdate){
         game = gameUpdate;
     }
+
 
     //EventListener für Swipe-Event
     @Override
@@ -426,8 +459,6 @@ public class GameboardScreen extends AppCompatActivity  {
         }
         return false;
     }
-
-
 
 }
 

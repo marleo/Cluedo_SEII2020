@@ -106,7 +106,7 @@ public class Game implements Serializable {
     // set for Network end
 
 
-    //Methode  zum ändern des Spielstatus und Implementierung von ChangeListener
+    //Methoden  zum ändern des Spielstatus und Implementierung von ChangeListener
     public void changeGameState(GameState gameState){
         this.gameState = gameState;
         if(changeListener != null) changeListener.onChange();
@@ -125,7 +125,6 @@ public class Game implements Serializable {
     }
 
     //Methode zur Kartenverteilung
-
     public void distributeCards(){
 
         LinkedList<Card> cardStack =  deckOfCards.getGameCardsStandard();
