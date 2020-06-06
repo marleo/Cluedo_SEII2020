@@ -21,6 +21,7 @@ import com.example.cluedo_seii.Player;
 import com.example.cluedo_seii.R;
 import com.example.cluedo_seii.activities.playerGameInteraction.AccuseSomeone;
 import com.example.cluedo_seii.activities.playerGameInteraction.MakeSuspicion;
+import com.example.cluedo_seii.activities.playerGameInteraction.PlayerTurnNotification;
 import com.example.cluedo_seii.activities.playerGameInteraction.SuspectOrAccuse;
 import com.example.cluedo_seii.activities.playerGameInteraction.SuspicionShowCard;
 import com.example.cluedo_seii.activities.playerGameInteraction.ThrowDice;
@@ -464,6 +465,12 @@ public class GameboardScreen extends AppCompatActivity  {
         return suspicionCards;
     }
 
+    //Dialog für SpielerBenachrichtigung bei Rundenbeginn
+    public void turnBegin() {
+        PlayerTurnNotification dialog = new PlayerTurnNotification();
+        dialog.show(manager, mesaggeDialogTag);
+    }
+
     public void updateGame(Game gameUpdate){
         game = gameUpdate;
     }
@@ -503,8 +510,3 @@ public class GameboardScreen extends AppCompatActivity  {
     }
 
 }
-
-
-
-
-
