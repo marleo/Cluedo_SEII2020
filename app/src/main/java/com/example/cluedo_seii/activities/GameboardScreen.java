@@ -6,26 +6,27 @@ import android.graphics.Point;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MotionEvent;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 
+import com.example.cluedo_seii.Card;
 import com.example.cluedo_seii.DeckOfCards;
 import com.example.cluedo_seii.Game;
 import com.example.cluedo_seii.GameCharacter;
 import com.example.cluedo_seii.GameState;
-import com.example.cluedo_seii.Notepad;
 import com.example.cluedo_seii.Player;
 import com.example.cluedo_seii.R;
 import com.example.cluedo_seii.activities.playerGameInteraction.AccuseSomeone;
 import com.example.cluedo_seii.activities.playerGameInteraction.MakeSuspicion;
 import com.example.cluedo_seii.activities.playerGameInteraction.SuspectOrAccuse;
+import com.example.cluedo_seii.activities.playerGameInteraction.SuspicionShowCard;
 import com.example.cluedo_seii.activities.playerGameInteraction.ThrowDice;
 import com.example.cluedo_seii.activities.playerGameInteraction.ThrowDiceOrUseSecretPassage;
 import com.example.cluedo_seii.spielbrett.Gameboard;
 import com.example.cluedo_seii.spielbrett.StartingPoint;
-import com.example.cluedo_seii.spielbrett.RoomElement;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -44,6 +45,7 @@ public class GameboardScreen extends AppCompatActivity  {
     private Intent intent;
     private List<StartingPoint> startingPoints;
     private List<Player> playerMove;
+    private LinkedList<Card> suspicionCards;
 
     private Player currentPlayerInDoor;// TODO: Aufräumen und vielleicht nur mehr das Player Objekt anstatt id und Player Objekt
     private int playerCurrentlyPlayingId;
@@ -371,8 +373,10 @@ public class GameboardScreen extends AppCompatActivity  {
                 else if(game.getGameState().equals(GameState.END)){
                     finish();
                 }
+
             }
         });
+
     }
 
     //Aufruf von DialogOptionen
@@ -395,7 +399,7 @@ public class GameboardScreen extends AppCompatActivity  {
         dialog.show(manager, mesaggeDialogTag);
     }
 
-    //UI Aufruf von Würfeln, Verdächtigung und Anklage
+    //UI Aufruf von Würfeln, Verdächtigung, Anklage, Spielerhand, Kartenauswahl bei Verdacht
     //Aufruf von Würfeln
     public void rollDice(){
         startActivity(new Intent(this, RollDiceScreen.class));
@@ -425,9 +429,46 @@ public class GameboardScreen extends AppCompatActivity  {
         overridePendingTransition(R.anim.slide_left_in, R.anim.slide_left_out);
     }
 
+    //Zeigt Kartenauswahl auf Spielerhand bei Verdacht
+    public void suspicionShowCard(){
+        LinkedList<Card>suspicion = new LinkedList<>();
+        suspicion.add(game.getLocalPlayer().getPlayerCards().get(0));
+        suspicion.add(game.getLocalPlayer().getPlayerCards().get(1));
+        suspicion.add(game.getLocalPlayer().getPlayerCards().get(2));
+        if(checkSuspicionCard(suspicion).size()>0){
+            SuspicionShowCard dialog = new SuspicionShowCard();
+            dialog.show(manager, mesaggeDialogTag);
+        }
+        else{
+            String text = "Du wurdest verdächtigt, hast aber keine der Karten, die Teil deines Verdachts sind, auf deiner Hand.";
+            Toast toast = Toast.makeText(getApplicationContext(), text, Toast.LENGTH_SHORT);
+            toast.show();
+        }
+    }
+
+    //Prüft ob Eine der Verdachtskarten sich auf der Spielerhand befindet
+    public List<Card> checkSuspicionCard(List<Card> cards){
+        LinkedList<Card>localPlayerSuspCards = new LinkedList<>();
+        for(Card cardSusp: cards){
+            for(Card cardLocal: game.getLocalPlayer().getPlayerCards()){
+                if(cardSusp.getDesignation().equals(cardLocal.getDesignation())){
+                    localPlayerSuspCards.add(cardSusp);
+                }
+            }
+        }
+        suspicionCards = localPlayerSuspCards;
+        return localPlayerSuspCards;
+    }
+
+    public LinkedList<Card> getSuspicionCards() {
+        return suspicionCards;
+    }
+
     public void updateGame(Game gameUpdate){
         game = gameUpdate;
     }
+
+    //TODO Methoden zum Aufrufen der Netzwerkfunktionen : GameObjekt versenden, Verdachtskarte schicken
 
 
     //EventListener für Swipe-Event
