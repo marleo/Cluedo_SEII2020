@@ -1,10 +1,8 @@
 package com.example.cluedo_seii.network;
 
-import com.esotericsoftware.kryonet.Connection;
 import com.example.cluedo_seii.network.dto.ConnectedDTO;
 import com.example.cluedo_seii.network.dto.GameCharacterDTO;
 import com.example.cluedo_seii.network.dto.RequestDTO;
-import com.example.cluedo_seii.network.kryonet.NetworkClientKryo;
 
 import java.io.IOException;
 

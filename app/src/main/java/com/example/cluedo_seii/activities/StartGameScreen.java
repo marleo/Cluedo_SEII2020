@@ -29,7 +29,7 @@ import java.io.IOException;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 
-public class startGameScreen extends AppCompatActivity {
+public class StartGameScreen extends AppCompatActivity {
     public static connectionType conType;
     private NetworkServerKryo server;
     private NetworkClientKryo client;
@@ -49,7 +49,7 @@ public class startGameScreen extends AppCompatActivity {
         chooseCharacter.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-                startActivity(new Intent(startGameScreen.this, ChoosePlayerScreen.class));
+                startActivity(new Intent(StartGameScreen.this, ChoosePlayerScreen.class));
             }
         });
     }
@@ -73,7 +73,7 @@ public class startGameScreen extends AppCompatActivity {
                 runOnUiThread(new Runnable() {
                     public void run() {
                         TextView userNameInput = findViewById(R.id.username_input);
-                        ArrayAdapter<String> clientListAdapter = new ArrayAdapter<>(startGameScreen.this, android.R.layout.simple_list_item_1,usernameList);
+                        ArrayAdapter<String> clientListAdapter = new ArrayAdapter<>(StartGameScreen.this, android.R.layout.simple_list_item_1,usernameList);
                         clientList.setAdapter(clientListAdapter);
                         userNameInput.setText(usernameList.toString());
                     }
@@ -118,9 +118,9 @@ public class startGameScreen extends AppCompatActivity {
                 ip = "192.168.178.47";
             }
 
-            EditText username_input = findViewById(R.id.username_input);
+            EditText usernameInput = findViewById(R.id.username_input);
             final UserNameRequestDTO userNameRequestDTO = new UserNameRequestDTO();
-            userNameRequestDTO.setUsername(username_input.getText().toString());
+            userNameRequestDTO.setUsername(usernameInput.getText().toString());
 
             client.registerConnectionCallback(new Callback<ConnectedDTO>() {
                 @Override
@@ -129,7 +129,7 @@ public class startGameScreen extends AppCompatActivity {
                     Log.d("Connection Callback", "callback: ");
                     client.sendUsernameRequest(userNameRequestDTO);
                     // after a succesfull connection the client gets forwarded to the choose Player Activity
-                    startActivity(new Intent(startGameScreen.this, ChoosePlayerScreen.class));
+                    startActivity(new Intent(StartGameScreen.this, ChoosePlayerScreen.class));
                 }
             });
 

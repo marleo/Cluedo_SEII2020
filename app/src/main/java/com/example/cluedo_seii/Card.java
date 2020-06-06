@@ -9,6 +9,10 @@ public class Card implements Serializable {
     private String designation;
     private CardType type;
 
+    private Card() {
+
+    }
+
     public Card(int id, String designation, CardType type) {
 
 

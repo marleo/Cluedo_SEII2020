@@ -198,6 +198,7 @@ public class GameboardScreen extends AppCompatActivity  {
         mesaggeDialogTag = "MessageDialog";
         manager = getSupportFragmentManager();
 
+        //TODO delete
         startGame();
 
         gameboard.spawnPlayer(startingPoints, this);

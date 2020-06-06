@@ -15,7 +15,7 @@
         android:theme="@style/AppTheme">
         <activity android:name=".activities.ChoosePlayerScreen"></activity>
         <activity android:name=".activities.helpSettings"></activity>
-        <activity android:name=".activities.startGameScreen" />
+        <activity android:name=".activities.StartGameScreen" />
         <activity android:name=".activities.ShowCards" />
         <activity android:name=".activities.playerGameInteraction.MakeSuspicion" />
         <activity

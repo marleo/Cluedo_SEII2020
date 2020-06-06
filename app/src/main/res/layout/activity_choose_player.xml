@@ -39,7 +39,7 @@
         android:background="@drawable/custom_button"
         android:textColor="#FFFFFF"
         android:textSize="15sp"
-        android:visibility="visible"
+        android:visibility="invisible"
         android:text="Proceed To Game"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
