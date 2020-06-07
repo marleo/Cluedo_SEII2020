@@ -4,12 +4,15 @@ package com.example.cluedo_seii.activities;
 
 import android.annotation.SuppressLint;
 import android.net.wifi.WifiManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.format.Formatter;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.cluedo_seii.network.Callback;
@@ -27,13 +30,16 @@ import com.example.cluedo_seii.network.kryonet.NetworkServerKryo;
 
 import com.example.cluedo_seii.R;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.util.Base64;
 
 public class NetworkScreen extends AppCompatActivity {
     private connectionType conType;
     //private NetworkServerKryo server;
     private NetworkClientKryo client;
-    private NetworkGlobalHost globalHost;
+    private GlobalNetworkHostKryo globalHost;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,40 +50,40 @@ public class NetworkScreen extends AppCompatActivity {
 
     @SuppressLint("SetTextI18n")
     public void selectHost(View view) {
-        this.conType = connectionType.HOST;
+        this.conType = connectionType.GLOBALHOST;
 
         TextView txtType = findViewById(R.id.typeText);
-        txtType.setText("HOST");
+        txtType.setText("GLOBALHOST");
 
         globalHost = GlobalNetworkHostKryo.getInstance();
         KryoHelper.registerClasses(globalHost);
+
         try {
-            server.start();
+            //TODO change to server IP address
+            globalHost.connect("192.168.178.219");
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        WifiManager wm = (WifiManager) getApplicationContext().getSystemService(WIFI_SERVICE);
-        String ip = Formatter.formatIpAddress(wm.getConnectionInfo().getIpAddress());
-
-        TextView serverResponse = findViewById(R.id.serverResponse);
-        serverResponse.setText(ip);
-
-        server.registerCallback(new Callback<RequestDTO>() {
+        globalHost.registerTextMessageCallback(new Callback<TextMessage>() {
             @Override
-            public void callback(RequestDTO argument) {
+            public void callback(TextMessage argument) {
                 System.out.println("Received:" + argument.toString());
                 updateServerResponseMessage(argument.toString());
             }
         });
+
     }
 
     public void sendMessage(View view) {
-        if (conType.equals(connectionType.HOST)) {
+        if (conType.equals(connectionType.GLOBALHOST)) {
             EditText msgInput = findViewById(R.id.editMessage);
             String message = msgInput.getText().toString();
 
-            server.broadcastMessage(new TextMessage(message));
+            globalHost.sendMessage(new TextMessage(message));
+
+            //globalHost.sendMessage(new RequestDTO());
+            //globalHost.broadcastMessage(new TextMessage(message));
         } else if (conType.equals(connectionType.CLIENT)) {
             EditText msgInput = findViewById(R.id.editMessage);
             String message = msgInput.getText().toString();
@@ -149,5 +155,7 @@ public class NetworkScreen extends AppCompatActivity {
         });
 
     }
-
 }
+
+
+

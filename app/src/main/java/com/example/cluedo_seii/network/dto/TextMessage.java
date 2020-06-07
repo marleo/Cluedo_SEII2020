@@ -1,6 +1,5 @@
 package com.example.cluedo_seii.network.dto;
 
-import androidx.annotation.NonNull;
 
 public class TextMessage extends RequestDTO {
     public String text;
@@ -13,7 +12,6 @@ public class TextMessage extends RequestDTO {
         this.text = text;
     }
 
-    @NonNull
     @Override
     public String toString() {
         return String.format("TextMessage: %s",text);
