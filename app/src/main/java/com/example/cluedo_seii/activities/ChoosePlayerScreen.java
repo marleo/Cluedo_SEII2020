@@ -123,7 +123,7 @@ public class ChoosePlayerScreen extends AppCompatActivity {
             @Override
             public void callback(GameCharacterDTO argument) {
                 // TODO implement
-                waitingForHost.setVisibility(View.INVISIBLE);
+
                 updateCharacterList(argument.getAvailablePlayers());
             }
         });
@@ -143,6 +143,8 @@ public class ChoosePlayerScreen extends AppCompatActivity {
     }
 
     private void updateCharacterList(final HashMap<String,GameCharacter> gameCharacters) {
+        waitingForHost.setVisibility(View.INVISIBLE);
+        
         final LinkedList<String> characterNameList = new LinkedList<>(gameCharacters.keySet());
 
         runOnUiThread(new Runnable() {
