@@ -1,4 +1,6 @@
-/*package com.example.cluedo_seii;
+package com.example.cluedo_seii;
+
+import android.graphics.Point;
 
 import com.example.cluedo_seii.spielbrett.Gameboard;
 import com.example.cluedo_seii.spielbrett.StartingpointElement;
@@ -30,14 +32,14 @@ public class PlayerTest {
     private DeckOfCards deckOfCards;
     private Gameboard gameboard;
 
-    private StartingpointElement oberstVonGatovStart;
-    private StartingpointElement profBloomStart;
-    private StartingpointElement reverendGruenStart;
-    private StartingpointElement baroninVonPorzStart;
-    private StartingpointElement fraeuleinGloriaStart;
-    private StartingpointElement frauWeissStart;
-    private StartingpointElement deckOfCardsStart;
-    private StartingpointElement gameboardStart;
+    private Point oberstVonGatovStart;
+    private Point profBloomStart;
+    private Point reverendGruenStart;
+    private Point baroninVonPorzStart;
+    private Point fraeuleinGloriaStart;
+    private Point frauWeissStart;
+    private Point deckOfCardsStart;
+    private Point gameboardStart;
 
     private LinkedList<Player>players;
     private LinkedList<Card>gameCards;
@@ -157,5 +159,4 @@ public class PlayerTest {
         assertEquals(player1.accuse(gameCards.get(4).getDesignation(), gameCards.get(10).getDesignation(), gameCards.get(18).getDesignation(), investigationFile), false);
         assertEquals(player1.getMadeFalseAccusation(), true);
     }
-
-} */
+}

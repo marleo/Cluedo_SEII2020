@@ -2,29 +2,31 @@ package com.example.cluedo_seii.activities;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.graphics.Point;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MotionEvent;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 
+import com.example.cluedo_seii.Card;
 import com.example.cluedo_seii.DeckOfCards;
 import com.example.cluedo_seii.Game;
 import com.example.cluedo_seii.GameCharacter;
 import com.example.cluedo_seii.GameState;
-import com.example.cluedo_seii.Notepad;
 import com.example.cluedo_seii.Player;
 import com.example.cluedo_seii.R;
 import com.example.cluedo_seii.activities.playerGameInteraction.AccuseSomeone;
 import com.example.cluedo_seii.activities.playerGameInteraction.MakeSuspicion;
 import com.example.cluedo_seii.activities.playerGameInteraction.SuspectOrAccuse;
+import com.example.cluedo_seii.activities.playerGameInteraction.SuspicionShowCard;
 import com.example.cluedo_seii.activities.playerGameInteraction.ThrowDice;
 import com.example.cluedo_seii.activities.playerGameInteraction.ThrowDiceOrUseSecretPassage;
 import com.example.cluedo_seii.spielbrett.Gameboard;
 import com.example.cluedo_seii.spielbrett.StartingPoint;
-import com.example.cluedo_seii.spielbrett.RoomElement;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -43,7 +45,11 @@ public class GameboardScreen extends AppCompatActivity  {
     private Intent intent;
     private List<StartingPoint> startingPoints;
     private List<Player> playerMove;
+    private LinkedList<Card> suspicionCards;
+
+    private Player currentPlayerInDoor;// TODO: Aufräumen und vielleicht nur mehr das Player Objekt anstatt id und Player Objekt
     private int playerCurrentlyPlayingId;
+
     static final int MIN_SWIPE_DISTANCE = 150;
 
 
@@ -99,70 +105,119 @@ public class GameboardScreen extends AppCompatActivity  {
             G = Billard11
             H = Billard13
             I = Billard12
-            J
-            K
+            J = Musikzimmer1
+            K = Musikzimmer3
+            L = Musikzimmer5
+            M = Musikzimmer6
+            N = Musikzimmer7
+            O = Musikzimmer8
+            P = Musikzimmer9
+            Q = Musikzimmer10
+            R = Musikzimmer11
+            T = Musikzimmer12
+            S = Salon1
+            U = Salon2
+            V = Salon3
+            W = Salon4
+            X = Salon5
+            Y = Salon6
+            Z = Kueche1
+            ! = Kueche2
+            ä = Kueche3
+            ö = Kueche4
+            ü = Kueche5
+            $ = Kueche6
+            % = Kueche7
+            & = Kueche8
+            / = Kueche9
+            ( = Kueche10
+            ) = Kueche11
+            + = Kueche12
+            - = Kueche13
+            * = Speisezimmer2
+            . = Speisezimmer3
+            , = Speisezimmer4
+            # = Speisezimmer5
+            : = Speisezimmer6
+            ; = Speisezimmer7
+            < = Speisezimmer8
+            > = Speisezimmer9
+            = = Speisezimmer10 --frei!
+            @ = Speisezimmer11
+            [ = Speisezimmer12
+            ] = Speisezimmer13
+            ^ = Speisezimmer 14
+            = = Veranda1
+            _ = Veranda2
+            { = Veranda3
+            } = Veranda4
+            ~ = Veranda5
+            € = Veranda6
+            Ü = Veranda7
+            Ö = Veranda8
+            Ä = Veranda9
+
+
 
 
          */
 
         String gameBoard =
-                "cdef045621111" +
-                "ghij078901111" +
-                "Akk30a3b03111" +
+                "cdef04562=_{}" +
+                "ghij07890~€ÜÖ" +
+                "Akk30a3b03ÄÄA" +
                 "2000000000000" +
                 "lmt0000000000" +
                 "opq3000000002" +
                 "r3u0000000000" +
                 "0000000000002" +
-                "0000000011111" +
-                "v3wxy00031111" +
-                "zBCD300111111" +
+                "000000003*.,#" +
+                "v3wxy0003:;<>" +
+                "zBCD30000@[]^" +
                 "EFGHI00000000" +
                 "0000000000000" +
-                "1111100031111" +
-                "1111100031111" +
-                "1111300011111" +
+                "JAK30000Z3!äö" +
+                "LMNO0000ü$%&-" +
+                "PQRT0000A/()+" +
                 "0000000000000" +
-                "0000111100000" +
-                "0020111102000";
+                "00003SU300000" +
+                "0000VWXY00000" +
+                "0020000002000";
 
-        gameboard = new Gameboard(this,13,19, gameBoard);
+        // Init Starting Points
+        startingPoints = new ArrayList<>();
+        startingPoints.add(new StartingPoint(0, 0));
+        startingPoints.add(new StartingPoint(2, 1));
+
+        // Init Player Ids and PlayerMove-Array
+        int countPlayerIds = 0;
+        playerMove = new ArrayList<>();
+
+        gameboard = new Gameboard(this,13,20, gameBoard);
         setContentView(gameboard.getLayout());
 
         bundle = new Bundle();
         mesaggeDialogTag = "MessageDialog";
         manager = getSupportFragmentManager();
 
-
+        //TODO delete
         startGame();
-
-
-        startingPoints = new ArrayList<>();
-        startingPoints.add(new StartingPoint(0, 0));
-        startingPoints.add(new StartingPoint(2, 1));
 
         gameboard.spawnPlayer(startingPoints, this);
 
-        playerMove = new ArrayList<>();
         for(StartingPoint startingPoint: startingPoints) {
-            /*Log.i("Test",
+            Log.i("Test",
                     "StartingPoint Position: " + startingPoint.getPlayerPosition().x + ":"
-                            + startingPoint.getPlayerPosition().y);*/
-            /*
+                            + startingPoint.getPlayerPosition().y);
+            GameCharacter gameCharacter = new GameCharacter("Player_"+countPlayerIds, startingPoint.getPlayerPosition());
             playerMove.add(
-                    new Player(
-                            startingPoint.getPlayerId(),
-                            startingPoint.getPlayerPosition()
-                    )
+                    new Player(countPlayerIds++, gameCharacter)
             );
-            */
         }
 
         // Wenn sich die Id ändert, dann danach updateGameboardScreen machen so wie hier!
         playerCurrentlyPlayingId = 0;
         gameboard.updateGameboardScreen(this);
-
-
     }
 
     public Gameboard getGameboard() {
@@ -198,25 +253,32 @@ public class GameboardScreen extends AppCompatActivity  {
         this.playerCurrentlyPlayingId = playerCurrentlyPlayingId;
     }
 
+    public Player getCurrentPlayerInDoor() {
+        return currentPlayerInDoor;
+    }
+
+    public void setCurrentPlayerInDoor(Player currentPlayerInDoor) {
+        this.currentPlayerInDoor = currentPlayerInDoor;
+    }
+
     private void startGame(){
             //TODO initialize Game according to GameLobby Settings
             //Instanz eines Game-objektes Zu Demonstrationszwecken
             deckOfCards = new DeckOfCards();
             players = new LinkedList<>();
 
-            GameCharacter gameCharacter = new GameCharacter("Prof. Bloom", null);
-            GameCharacter gameCharacterAlt = new GameCharacter("Fräulein Weiss", null);
+            GameCharacter gameCharacter = new GameCharacter("Prof. Bloom", new Point(0,0));
+            GameCharacter gameCharacterAlt = new GameCharacter("Fräulein Weiss", new Point(0,0));
             Player player1 = new Player(1, gameCharacterAlt);
             Player player2 = new Player(2,  gameCharacter);
             Player player3 = new Player(3,  gameCharacterAlt);
             players.add(player1);
             players.add(player2);
             players.add(player3);
-            //game = new Game(gameboard, players);
             game = Game.getInstance();
             game.setGameboard(gameboard);
             game.setPlayers(players);
-            game.setLocalPlayer(player2);
+            game.setLocalPlayer(player1);
             game.distributeCards(); //um Notepad cheatFunction zu demonstrieren
 
 
@@ -224,36 +286,71 @@ public class GameboardScreen extends AppCompatActivity  {
         game.setListener(new Game.ChangeListener() {
             @Override
 
-            //Wird ausgeführt wenn Methode aufgerufen wird
-
+            //Wird ausgeführt wenn Methode changeGameState aufgerufen wird
             public void onChange() {
-/*
+
+                //Ausgeführt bei GameState.PLAYERTURNBEGIN)
                 if(game.getGameState().equals(GameState.PLAYERTURNBEGIN)){
-                    if(game.getCurrentPlayer().getPosition()instanceof RoomElement) {
-                        throwDiceOrUseSecretPassage();
-                    } else {
-                        throwDice();
+                    if(game.getCurrentPlayer().getId()==game.getLocalPlayer().getId()){
+                        if (//Prüfe ob Spieler sich in einen Raum befindet
+                            game.getCurrentPlayer().getPosition().x == 3 && game.getCurrentPlayer().getPosition().y==2  ||
+                            game.getCurrentPlayer().getPosition().x == 6 && game.getCurrentPlayer().getPosition().y==2  ||
+                            game.getCurrentPlayer().getPosition().x == 9 && game.getCurrentPlayer().getPosition().y==2  ||
+                            game.getCurrentPlayer().getPosition().x == 3 && game.getCurrentPlayer().getPosition().y==5  ||
+                            game.getCurrentPlayer().getPosition().x == 1 && game.getCurrentPlayer().getPosition().y==6  ||
+                            game.getCurrentPlayer().getPosition().x == 3 && game.getCurrentPlayer().getPosition().y==13 ||
+                            game.getCurrentPlayer().getPosition().x == 4 && game.getCurrentPlayer().getPosition().y==17 ||
+                            game.getCurrentPlayer().getPosition().x == 7 && game.getCurrentPlayer().getPosition().y==17 ||
+                            game.getCurrentPlayer().getPosition().x == 9 && game.getCurrentPlayer().getPosition().y==13 ||
+                            game.getCurrentPlayer().getPosition().x == 8 && game.getCurrentPlayer().getPosition().y==9  ||
+                            game.getCurrentPlayer().getPosition().x == 8 && game.getCurrentPlayer().getPosition().y==8){
+                            throwDiceOrUseSecretPassage();
+                        }
+                        else{
+                            throwDice();
+                        }
+                        }
+                    else{//Spieler localPlayer ist nicht am Zug
+
                     }
                 }
 
+                //Ausgefürt bei GameState.PLAVERMOVEMENT
                 else if(game.getGameState().equals(GameState.PLAVERMOVEMENT)){
-
-                }
-
-                else if(game.getGameState().equals(GameState.PLAYERACCUSATION)){
-                    if(game.getCurrentPlayer().getPosition()instanceof RoomElement){
-                        suspectOrAccuse();
-                    } else{
-                        game.changeGameState(GameState.PLAYERTURNEND);
+                    if(game.getCurrentPlayer().getId()==game.getLocalPlayer().getId()) {
+                    }
+                    else{//Spieler localPlayer ist nicht am Zug
                     }
                 }
 
+                //Ausgeführt bei GameState.PLAYERACCUSATION
+                else if(game.getGameState().equals(GameState.PLAYERACCUSATION)){
+                   if(game.getCurrentPlayer().getId()==game.getLocalPlayer().getId()){
+                     if(//Prüfe ob Spieler sich in einen Raum befindet
+                             game.getCurrentPlayer().getPosition().x == 3 && game.getCurrentPlayer().getPosition().y==2  ||
+                             game.getCurrentPlayer().getPosition().x == 6 && game.getCurrentPlayer().getPosition().y==2  ||
+                             game.getCurrentPlayer().getPosition().x == 9 && game.getCurrentPlayer().getPosition().y==2  ||
+                             game.getCurrentPlayer().getPosition().x == 3 && game.getCurrentPlayer().getPosition().y==5  ||
+                             game.getCurrentPlayer().getPosition().x == 1 && game.getCurrentPlayer().getPosition().y==6  ||
+                             game.getCurrentPlayer().getPosition().x == 3 && game.getCurrentPlayer().getPosition().y==13 ||
+                             game.getCurrentPlayer().getPosition().x == 4 && game.getCurrentPlayer().getPosition().y==17 ||
+                             game.getCurrentPlayer().getPosition().x == 7 && game.getCurrentPlayer().getPosition().y==17 ||
+                             game.getCurrentPlayer().getPosition().x == 9 && game.getCurrentPlayer().getPosition().y==13 ||
+                             game.getCurrentPlayer().getPosition().x == 8 && game.getCurrentPlayer().getPosition().y==9  ||
+                             game.getCurrentPlayer().getPosition().x == 8 && game.getCurrentPlayer().getPosition().y==8){
+                       suspectOrAccuse();}
+                     else{game.changeGameState(GameState.PLAYERTURNEND);}
+                   }
+                   else{//Spieler localPlayer ist nicht am Zug
+                   }
+                }
+
+                //Ausgeführt bei GameState.PLAYERTURNEND
                 else if(game.getGameState().equals(GameState.PLAYERTURNEND)){
                     int wrongAccusers = 0;
 
-
                     //prüfe Spielbeendigungsbedingungen
-                    for(Player player: game.getPlayers()){
+                   for(Player player: game.getPlayers()){
                         if(player.getMadeFalseAccusation()==true){
                             wrongAccusers++;
                         }
@@ -265,81 +362,118 @@ public class GameboardScreen extends AppCompatActivity  {
                     else if(game.getGameOver()==true){
                         game.changeGameState(GameState.END);
                     }
+
+                    //wenn Abbruchbedingungen nicht zutreffen
+                    else{//nächster Spieler
+                    }
                 }
+
+
+                //Ausgeführt bei GameState.END
                 else if(game.getGameState().equals(GameState.END)){
                     finish();
-                }*/
+                }
+
             }
         });
+
     }
 
-
-
-
-
     //Aufruf von DialogOptionen
+
+    //Dialog Würfel werfen
     public void throwDice(){
         ThrowDice dialog = new ThrowDice();
         dialog.show(manager, mesaggeDialogTag);
     }
 
+    //Dialog Würfel werfen oder Geheimgang verwenden
     public void throwDiceOrUseSecretPassage(){
         ThrowDiceOrUseSecretPassage dialog = new ThrowDiceOrUseSecretPassage();
         dialog.show(manager, mesaggeDialogTag);
     }
 
+    //Dialog Anklagen oder Verdächtigen
     public void suspectOrAccuse(){
         SuspectOrAccuse dialog = new SuspectOrAccuse();
         dialog.show(manager, mesaggeDialogTag);
     }
 
-    //UI Aufruf von Würfeln, Verdächtigung und Anklage
+    //UI Aufruf von Würfeln, Verdächtigung, Anklage, Spielerhand, Kartenauswahl bei Verdacht
+    //Aufruf von Würfeln
     public void rollDice(){
-        //TODO Aufruf von Würfelfunktion
+        startActivity(new Intent(this, RollDiceScreen.class));
     }
 
+    //Aufruf von Verdächtigung
     public void makeSuspicion(){
         startActivity(new Intent(this, MakeSuspicion.class));
     }
 
+    //Aufruf Detektivnotizblock
     public void startNotepad(){
         intent = new Intent(this, NotepadScreen.class);
         //intent.putExtra("game",game);
         startActivity(intent);
         overridePendingTransition(R.anim.slide_right_in, R.anim.slide_right_out);
-
     }
 
+    //Aufruf Anklage
     public void accuseSomeone(){
         startActivity(new Intent(this, AccuseSomeone.class));
     }
 
     //Zeigt Karten auf Spielerhand
     public void showCards(){
-        intent = new Intent(this, ShowCards.class);
-        //intent.putExtra("game", game);
-        startActivity(intent);
+        startActivity(new Intent(this, ShowCards.class));
         overridePendingTransition(R.anim.slide_left_in, R.anim.slide_left_out);
     }
 
-    //CallBack um Resultat aus Methode zu erhalten
-  /*  @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data)
-    {
-        super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode==2)
-        {
-            game = (Game)data.getSerializableExtra("game");
+    //Zeigt Kartenauswahl auf Spielerhand bei Verdacht
+    public void suspicionShowCard(){
+        LinkedList<Card>suspicion = new LinkedList<>();
+        suspicion.add(game.getLocalPlayer().getPlayerCards().get(0));
+        suspicion.add(game.getLocalPlayer().getPlayerCards().get(1));
+        suspicion.add(game.getLocalPlayer().getPlayerCards().get(2));
+        if(checkSuspicionCard(suspicion).size()>0){
+            SuspicionShowCard dialog = new SuspicionShowCard();
+            dialog.show(manager, mesaggeDialogTag);
         }
-    }*/
+        else{
+            String text = "Du wurdest verdächtigt, hast aber keine der Karten, die Teil deines Verdachts sind, auf deiner Hand.";
+            Toast toast = Toast.makeText(getApplicationContext(), text, Toast.LENGTH_SHORT);
+            toast.show();
+        }
+    }
+
+    //Prüft ob Eine der Verdachtskarten sich auf der Spielerhand befindet
+    public List<Card> checkSuspicionCard(List<Card> cards){
+        LinkedList<Card>localPlayerSuspCards = new LinkedList<>();
+        for(Card cardSusp: cards){
+            for(Card cardLocal: game.getLocalPlayer().getPlayerCards()){
+                if(cardSusp.getDesignation().equals(cardLocal.getDesignation())){
+                    localPlayerSuspCards.add(cardSusp);
+                }
+            }
+        }
+        suspicionCards = localPlayerSuspCards;
+        return localPlayerSuspCards;
+    }
+
+    public LinkedList<Card> getSuspicionCards() {
+        return suspicionCards;
+    }
 
     public void updateGame(Game gameUpdate){
         game = gameUpdate;
     }
 
+    //TODO Methoden zum Aufrufen der Netzwerkfunktionen : GameObjekt versenden, Verdachtskarte schicken
+
+
     //EventListener für Swipe-Event
     @Override
-    public boolean dispatchTouchEvent (MotionEvent touchEvent){
+    public boolean onTouchEvent (MotionEvent touchEvent){
         switch(touchEvent.getAction()){
             case MotionEvent.ACTION_DOWN:
                 x1 = touchEvent.getX();
@@ -367,8 +501,6 @@ public class GameboardScreen extends AppCompatActivity  {
         }
         return false;
     }
-
-
 
 }
 

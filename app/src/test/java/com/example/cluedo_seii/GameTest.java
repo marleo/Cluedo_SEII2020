@@ -1,5 +1,6 @@
-/*package com.example.cluedo_seii;
+package com.example.cluedo_seii;
 
+import android.graphics.Point;
 import android.util.Log;
 
 import com.example.cluedo_seii.spielbrett.Gameboard;
@@ -31,14 +32,14 @@ public class GameTest {
     private DeckOfCards deckOfCards;
     private Gameboard gameboard;
 
-    private StartingpointElement oberstVonGatovStart;
-    private StartingpointElement profBloomStart;
-    private StartingpointElement reverendGruenStart;
-    private StartingpointElement baroninVonPorzStart;
-    private StartingpointElement fraeuleinGloriaStart;
-    private StartingpointElement frauWeissStart;
-    private StartingpointElement deckOfCardsStart;
-    private StartingpointElement gameboardStart;
+    private Point oberstVonGatovStart;
+    private Point profBloomStart;
+    private Point reverendGruenStart;
+    private Point baroninVonPorzStart;
+    private Point fraeuleinGloriaStart;
+    private Point frauWeissStart;
+    private Point deckOfCardsStart;
+    private Point gameboardStart;
 
     private LinkedList<Player>players;
 
@@ -219,4 +220,4 @@ public class GameTest {
 
 
 
-}*/
+}

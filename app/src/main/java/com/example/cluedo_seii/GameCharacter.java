@@ -12,7 +12,7 @@ public class GameCharacter implements Serializable {
     private Point startingPoint;
 
 
-    public GameCharacter() {
+    private GameCharacter() {
         //no arg constructor for deserialization
     }
 

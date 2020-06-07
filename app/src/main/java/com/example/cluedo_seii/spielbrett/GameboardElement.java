@@ -1,12 +1,15 @@
 package com.example.cluedo_seii.spielbrett;
 
+import android.content.Intent;
 import android.graphics.Point;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 
 import com.example.cluedo_seii.Player;
 import com.example.cluedo_seii.activities.GameboardScreen;
+import com.example.cluedo_seii.activities.SettingScreen;
 
 public abstract class GameboardElement {
     private int xKoordinate;
@@ -28,10 +31,12 @@ public abstract class GameboardElement {
         gameBoardElement.setPadding(0,0,0,0);
         gameBoardElement.setTag(yKoordinate + 1 + (xKoordinate * 4));
         gameBoardElement.setId(yKoordinate + 1 + (xKoordinate* 4));
+        gameBoardElement.setClickable(true);
 
         gameBoardElement.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Log.i("Test", "Testing");
                 movePlayer();
             }
         });
@@ -49,7 +54,7 @@ public abstract class GameboardElement {
                             player.getPosition().y == gameboardElementTemp.getyKoordinate()){
                         oldPosition = player.getPosition();
                         // Lösche den Spieler von der alten Positon
-                        positionPlayer(gameboardElementTemp, false);
+                        positionPlayer(gameboardElementTemp, false, player);
                     }
                 }
 
@@ -58,20 +63,39 @@ public abstract class GameboardElement {
                     if (xKoordinate == gameboardElementTemp.getxKoordinate() &&
                             yKoordinate == gameboardElementTemp.getyKoordinate()) {
                         player.setPosition(new Point(xKoordinate, yKoordinate));
-                        positionPlayer(gameboardElementTemp, true);
+                        positionPlayer(gameboardElementTemp, true, player);
                     }
                 }
             }
         }
+
+        //gameboardScreen.getGameboard().updateGameboardScreen(gameboardScreen);
     }
 
-    private void positionPlayer(GameboardElement gameboardElementTemp, boolean isPlayer) {
+    private void positionPlayer(GameboardElement gameboardElementTemp, boolean isPlayer, Player currentplayer) {
         if(gameboardElementTemp instanceof GameFieldElement) {
             ((GameFieldElement) gameboardElementTemp).positionPlayer(isPlayer);
+            if(isPlayer){
+                // Update Spieler Position temporär bis der Spieler seinen Zug beendet hat => Server muss das irgendwie verspeichern
+            }
         } else if(gameboardElementTemp instanceof RoomElement) {
             ((RoomElement) gameboardElementTemp).positionPlayer(isPlayer);
+            if(isPlayer) {
+                // Update Spieler Position temporär bis der Spieler seinen Zug beendet hat => Server muss das irgendwie verspeichern
+                gameboardScreen.setCurrentPlayerInDoor(currentplayer);
+                // TODO: Lock alle anderen Spieler + Öffne Activity
+                //if(((RoomElement) gameboardElementTemp).getRoomElementId() == 0) {
+                // ODER
+                //if(gameboardElementTemp.getxKoordinate() == 0 && gameboardElementTemp.getyKoordinate() == 0) {
+                    //Intent intent = new Intent(gameboardScreen, KitchenScreen.class);
+                    //gameboardScreen.startActivity(intent);
+                //}
+            }
         } else if(gameboardElementTemp instanceof StartingpointElement) {
             ((StartingpointElement) gameboardElementTemp).positionPlayer(isPlayer);
+            if(isPlayer){
+                // Update Spieler Position temporär bis der Spieler seinen Zug beendet hat => Server muss das irgendwie verspeichern
+            }
         }
     }
 

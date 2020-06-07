@@ -18,7 +18,7 @@ public class Player implements Serializable {
     private Notepad notepad;
 
 
-    public Player() {
+    private Player() {
         //no arg constructor for deserialization
     }
 
@@ -71,6 +71,8 @@ public class Player implements Serializable {
     public void addCard(Card card){
         playerCards.add(card);
     }
+
+
 
 
     //Verdächtigungsfunktion
