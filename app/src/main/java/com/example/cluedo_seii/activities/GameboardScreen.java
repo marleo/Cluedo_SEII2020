@@ -21,6 +21,7 @@ import com.example.cluedo_seii.Player;
 import com.example.cluedo_seii.R;
 import com.example.cluedo_seii.activities.playerGameInteraction.AccuseSomeone;
 import com.example.cluedo_seii.activities.playerGameInteraction.MakeSuspicion;
+import com.example.cluedo_seii.activities.playerGameInteraction.PlayerTurnNotification;
 import com.example.cluedo_seii.activities.playerGameInteraction.SuspectOrAccuse;
 import com.example.cluedo_seii.activities.playerGameInteraction.SuspicionShowCard;
 import com.example.cluedo_seii.activities.playerGameInteraction.ThrowDice;
@@ -292,88 +293,89 @@ public class GameboardScreen extends AppCompatActivity  {
                 //Ausgeführt bei GameState.PLAYERTURNBEGIN)
                 if(game.getGameState().equals(GameState.PLAYERTURNBEGIN)){
                     if(game.getCurrentPlayer().getId()==game.getLocalPlayer().getId()){
-                        if (//Prüfe ob Spieler sich in einen Raum befindet
-                            game.getCurrentPlayer().getPosition().x == 3 && game.getCurrentPlayer().getPosition().y==2  ||
-                            game.getCurrentPlayer().getPosition().x == 6 && game.getCurrentPlayer().getPosition().y==2  ||
-                            game.getCurrentPlayer().getPosition().x == 9 && game.getCurrentPlayer().getPosition().y==2  ||
-                            game.getCurrentPlayer().getPosition().x == 3 && game.getCurrentPlayer().getPosition().y==5  ||
-                            game.getCurrentPlayer().getPosition().x == 1 && game.getCurrentPlayer().getPosition().y==6  ||
-                            game.getCurrentPlayer().getPosition().x == 3 && game.getCurrentPlayer().getPosition().y==13 ||
-                            game.getCurrentPlayer().getPosition().x == 4 && game.getCurrentPlayer().getPosition().y==17 ||
-                            game.getCurrentPlayer().getPosition().x == 7 && game.getCurrentPlayer().getPosition().y==17 ||
-                            game.getCurrentPlayer().getPosition().x == 9 && game.getCurrentPlayer().getPosition().y==13 ||
-                            game.getCurrentPlayer().getPosition().x == 8 && game.getCurrentPlayer().getPosition().y==9  ||
-                            game.getCurrentPlayer().getPosition().x == 8 && game.getCurrentPlayer().getPosition().y==8){
-                            throwDiceOrUseSecretPassage();
-                        }
-                        else{
-                            throwDice();
-                        }
-                        }
+                        turnBegin();
+                    }
                     else{//Spieler localPlayer ist nicht am Zug
-
+                        String text = "Spieler " + game.getCurrentPlayer().getId() + " ist am Zug" ;
+                        Toast toast = Toast.makeText(getApplicationContext(), text, Toast.LENGTH_SHORT);
+                        toast.show();
                     }
                 }
 
                 //Ausgefürt bei GameState.PLAVERMOVEMENT
                 else if(game.getGameState().equals(GameState.PLAVERMOVEMENT)){
-                    if(game.getCurrentPlayer().getId()==game.getLocalPlayer().getId()) {
-                    }
-                    else{//Spieler localPlayer ist nicht am Zug
+                    if(game.getCurrentPlayer().getId()==game.getLocalPlayer().getId()){
+                        if (//Prüfe ob Spieler sich in einen Raum befindet
+                                game.getCurrentPlayer().getPosition().x == 3 && game.getCurrentPlayer().getPosition().y==2  ||
+                                        game.getCurrentPlayer().getPosition().x == 6 && game.getCurrentPlayer().getPosition().y==2  ||
+                                        game.getCurrentPlayer().getPosition().x == 9 && game.getCurrentPlayer().getPosition().y==2  ||
+                                        game.getCurrentPlayer().getPosition().x == 3 && game.getCurrentPlayer().getPosition().y==5  ||
+                                        game.getCurrentPlayer().getPosition().x == 1 && game.getCurrentPlayer().getPosition().y==6  ||
+                                        game.getCurrentPlayer().getPosition().x == 3 && game.getCurrentPlayer().getPosition().y==13 ||
+                                        game.getCurrentPlayer().getPosition().x == 4 && game.getCurrentPlayer().getPosition().y==17 ||
+                                        game.getCurrentPlayer().getPosition().x == 7 && game.getCurrentPlayer().getPosition().y==17 ||
+                                        game.getCurrentPlayer().getPosition().x == 9 && game.getCurrentPlayer().getPosition().y==13 ||
+                                        game.getCurrentPlayer().getPosition().x == 8 && game.getCurrentPlayer().getPosition().y==9  ||
+                                        game.getCurrentPlayer().getPosition().x == 8 && game.getCurrentPlayer().getPosition().y==8){
+                            throwDiceOrUseSecretPassage();
+                        }
+                        else{
+                            throwDice();
+                        }
                     }
                 }
 
                 //Ausgeführt bei GameState.PLAYERACCUSATION
                 else if(game.getGameState().equals(GameState.PLAYERACCUSATION)){
-                   if(game.getCurrentPlayer().getId()==game.getLocalPlayer().getId()){
-                     if(//Prüfe ob Spieler sich in einen Raum befindet
-                             game.getCurrentPlayer().getPosition().x == 3 && game.getCurrentPlayer().getPosition().y==2  ||
-                             game.getCurrentPlayer().getPosition().x == 6 && game.getCurrentPlayer().getPosition().y==2  ||
-                             game.getCurrentPlayer().getPosition().x == 9 && game.getCurrentPlayer().getPosition().y==2  ||
-                             game.getCurrentPlayer().getPosition().x == 3 && game.getCurrentPlayer().getPosition().y==5  ||
-                             game.getCurrentPlayer().getPosition().x == 1 && game.getCurrentPlayer().getPosition().y==6  ||
-                             game.getCurrentPlayer().getPosition().x == 3 && game.getCurrentPlayer().getPosition().y==13 ||
-                             game.getCurrentPlayer().getPosition().x == 4 && game.getCurrentPlayer().getPosition().y==17 ||
-                             game.getCurrentPlayer().getPosition().x == 7 && game.getCurrentPlayer().getPosition().y==17 ||
-                             game.getCurrentPlayer().getPosition().x == 9 && game.getCurrentPlayer().getPosition().y==13 ||
-                             game.getCurrentPlayer().getPosition().x == 8 && game.getCurrentPlayer().getPosition().y==9  ||
-                             game.getCurrentPlayer().getPosition().x == 8 && game.getCurrentPlayer().getPosition().y==8){
-                       suspectOrAccuse();}
-                     else{game.changeGameState(GameState.PLAYERTURNEND);}
-                   }
-                   else{//Spieler localPlayer ist nicht am Zug
-                   }
+                    if(game.getCurrentPlayer().getId()==game.getLocalPlayer().getId()){
+                        if(//Prüfe ob Spieler sich in einen Raum befindet
+                                game.getCurrentPlayer().getPosition().x == 3 && game.getCurrentPlayer().getPosition().y==2  ||
+                                game.getCurrentPlayer().getPosition().x == 6 && game.getCurrentPlayer().getPosition().y==2  ||
+                                game.getCurrentPlayer().getPosition().x == 9 && game.getCurrentPlayer().getPosition().y==2  ||
+                                game.getCurrentPlayer().getPosition().x == 3 && game.getCurrentPlayer().getPosition().y==5  ||
+                                game.getCurrentPlayer().getPosition().x == 1 && game.getCurrentPlayer().getPosition().y==6  ||
+                                game.getCurrentPlayer().getPosition().x == 3 && game.getCurrentPlayer().getPosition().y==13 ||
+                                game.getCurrentPlayer().getPosition().x == 4 && game.getCurrentPlayer().getPosition().y==17 ||
+                                game.getCurrentPlayer().getPosition().x == 7 && game.getCurrentPlayer().getPosition().y==17 ||
+                                game.getCurrentPlayer().getPosition().x == 9 && game.getCurrentPlayer().getPosition().y==13 ||
+                                game.getCurrentPlayer().getPosition().x == 8 && game.getCurrentPlayer().getPosition().y==9  ||
+                                game.getCurrentPlayer().getPosition().x == 8 && game.getCurrentPlayer().getPosition().y==8){
+                            suspectOrAccuse();}
+                        else{ //Wenn der sich am Zug befindende sich Spieler nicht in einen Raum befindet
+                            game.changeGameState(GameState.PLAYERTURNEND);
+                          }
+                    }
                 }
 
                 //Ausgeführt bei GameState.PLAYERTURNEND
-                else if(game.getGameState().equals(GameState.PLAYERTURNEND)){
-                    int wrongAccusers = 0;
+                else if(game.getGameState().equals(GameState.PLAYERTURNEND)) {
+                    if (game.getCurrentPlayer().getId() == game.getLocalPlayer().getId()) {
+                        int wrongAccusers = 0;
 
-                    //prüfe Spielbeendigungsbedingungen
-                   for(Player player: game.getPlayers()){
-                        if(player.getMadeFalseAccusation()==true){
-                            wrongAccusers++;
+                        //prüfe Spielbeendigungsbedingungen
+                        for (Player player : game.getPlayers()) {
+                            if (player.getMadeFalseAccusation() == true) {
+                                wrongAccusers++;
+                            }
+                        }
+                        if (wrongAccusers == game.getPlayers().size()) {
+                            game.setGameOver(true);
+                            game.changeGameState(GameState.END);
+                        } else if (game.getGameOver() == true) {
+                            game.changeGameState(GameState.END);
+                        }
+
+                        //wenn Abbruchbedingungen nicht zutreffen
+                        else {//nächster Spieler
+                            game.nextPlayer();
+                            game.changeGameState(GameState.PLAYERTURNBEGIN);
                         }
                     }
-                    if(wrongAccusers==game.getPlayers().size()){
-                        game.setGameOver(true);
-                        game.changeGameState(GameState.END);
-                    }
-                    else if(game.getGameOver()==true){
-                        game.changeGameState(GameState.END);
-                    }
-
-                    //wenn Abbruchbedingungen nicht zutreffen
-                    else{//nächster Spieler
-                    }
                 }
-
-
                 //Ausgeführt bei GameState.END
                 else if(game.getGameState().equals(GameState.END)){
                     finish();
                 }
-
             }
         });
 
@@ -464,6 +466,12 @@ public class GameboardScreen extends AppCompatActivity  {
         return suspicionCards;
     }
 
+    //Dialog für SpielerBenachrichtigung bei Rundenbeginn
+    public void turnBegin() {
+        PlayerTurnNotification dialog = new PlayerTurnNotification();
+        dialog.show(manager, mesaggeDialogTag);
+    }
+
     public void updateGame(Game gameUpdate){
         game = gameUpdate;
     }
@@ -503,8 +511,3 @@ public class GameboardScreen extends AppCompatActivity  {
     }
 
 }
-
-
-
-
-
