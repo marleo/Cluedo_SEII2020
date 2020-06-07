@@ -143,7 +143,7 @@ public class ChoosePlayerScreen extends AppCompatActivity {
     }
 
     private void updateCharacterList(final HashMap<String,GameCharacter> gameCharacters) {
-        waitingForHost.setVisibility(View.INVISIBLE);
+        findViewById(R.id.waitingForHostText).setVisibility(View.INVISIBLE);
         
         final LinkedList<String> characterNameList = new LinkedList<>(gameCharacters.keySet());
 

@@ -14,6 +14,7 @@ import com.example.cluedo_seii.network.dto.PlayerDTO;
 import com.example.cluedo_seii.network.dto.QuitGameDTO;
 import com.example.cluedo_seii.network.dto.RegisterClassDTO;
 import com.example.cluedo_seii.network.dto.RequestDTO;
+import com.example.cluedo_seii.network.dto.SerializedDTO;
 import com.example.cluedo_seii.network.dto.TextMessage;
 import com.example.cluedo_seii.network.dto.UserNameRequestDTO;
 
@@ -49,5 +50,6 @@ public class KryoHelper {
         kryoNetComponent.registerClass(RegisterClassDTO.class);
         kryoNetComponent.registerClass(Class.class);
         kryoNetComponent.registerClass(Object.class);
+        kryoNetComponent.registerClass(SerializedDTO.class);
     }
 }
