@@ -16,6 +16,7 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.esotericsoftware.kryonet.Client;
 import com.example.cluedo_seii.Card;
 import com.example.cluedo_seii.Game;
 import com.example.cluedo_seii.InvestigationFile;
@@ -23,6 +24,8 @@ import com.example.cluedo_seii.Notepad;
 import com.example.cluedo_seii.Player;
 import com.example.cluedo_seii.R;
 import com.example.cluedo_seii.activities.playerGameInteraction.ExposeCheater;
+import com.example.cluedo_seii.network.ClientData;
+
 import java.util.Random;
 
 public class NotepadScreen extends AppCompatActivity {
@@ -56,6 +59,7 @@ public class NotepadScreen extends AppCompatActivity {
     private TextView textView;
     private Notepad notepad;
     private Game game;
+    private ClientData clientData;
     private Player player;
     private Intent intent;
 
@@ -76,11 +80,12 @@ public class NotepadScreen extends AppCompatActivity {
 
         //game = (Game)intent.getSerializableExtra("game");
         game = Game.getInstance();
-        final SharedPreferences preferences = getSharedPreferences("com.example.cluedo_seii", MODE_PRIVATE);
-        final SharedPreferences.Editor editor = getSharedPreferences("com.example.cluedo_seii", MODE_PRIVATE).edit();
+        final SharedPreferences preferences = getSharedPreferences("notizblock", MODE_PRIVATE);
+        final SharedPreferences.Editor editor = getSharedPreferences("notizblock", MODE_PRIVATE).edit();
         setContentView(R.layout.activity_notepad);
 
-        player = game.getCurrentPlayer();
+        player=game.getCurrentPlayer();
+       // player = clientData.getPlayer();
         notepad = player.getNotepad();
 
 
@@ -274,8 +279,8 @@ public class NotepadScreen extends AppCompatActivity {
         public void onStart () {
 
             super.onStart();
-            SharedPreferences preferences = getSharedPreferences("com.example.cluedo_seii", MODE_PRIVATE);
-            final SharedPreferences.Editor editor = getSharedPreferences("com.example.cluedo_seii", MODE_PRIVATE).edit();
+            SharedPreferences preferences = getSharedPreferences("notizblock", MODE_PRIVATE);
+            final SharedPreferences.Editor editor = getSharedPreferences("notizblock", MODE_PRIVATE).edit();
             textView.append(preferences.getString("notes", " "));
 
 
@@ -285,7 +290,7 @@ public class NotepadScreen extends AppCompatActivity {
 
             public void onDestroy() {
                 super.onDestroy();
-                getSharedPreferences("com.example.cluedo_seii", MODE_PRIVATE).edit().clear().commit();
+                getSharedPreferences("notizblock", MODE_PRIVATE).edit().clear().commit();
             }
 
 
@@ -311,6 +316,7 @@ public class NotepadScreen extends AppCompatActivity {
                 randomTextView= notepad.getTextViews()[random];
                 randomString=randomTextView.getText().toString();}
             while (randomString.equals(culpritString)||randomString.equals(roomString)||randomString.equals(weaponString)||randomTextView.getTag()=="grayed");
+
             grayOut(randomTextView);
         }
 
@@ -318,7 +324,7 @@ public class NotepadScreen extends AppCompatActivity {
 
 
         public void grayOut (View view){
-            SharedPreferences.Editor editor = getSharedPreferences("com.example.cluedo_seii",MODE_PRIVATE).edit();
+            SharedPreferences.Editor editor = getSharedPreferences("notizblock",MODE_PRIVATE).edit();
 
             if (view.getTag() != "grayed") {
                 view.setBackgroundColor(Color.argb(150, 200, 200, 200));
