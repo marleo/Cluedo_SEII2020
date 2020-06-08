@@ -71,6 +71,8 @@ public class Player implements Serializable {
     }
 
 
+
+
     //Verdächtigungsfunktion
     public LinkedList<String> suspect(String suspectedCulprit, String suspectedWeapon, String suspectedLocation, LinkedList<Player> players){
 

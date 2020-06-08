@@ -84,6 +84,7 @@ public class AccuseSomeone extends AppCompatActivity implements AdapterView.OnIt
                     toast = Toast.makeText(getApplicationContext(), text, Toast.LENGTH_SHORT);
                     toast.show();
                     game.setGameOver(true);
+                    //TODO Nachricht an andere Mitspieler verschicken
                     finish();
                 }
 
@@ -93,6 +94,7 @@ public class AccuseSomeone extends AppCompatActivity implements AdapterView.OnIt
                     text = "Du hast eine falsche Anklage erhoben und kannst das Spiel nicht mehr gewinnen";
                     toast = Toast.makeText(getApplicationContext(), text , Toast.LENGTH_SHORT);
                     toast.show();
+                    //TODO Nachricht an andere Mitspieler verschicken
                     finish();
                 }
             }
