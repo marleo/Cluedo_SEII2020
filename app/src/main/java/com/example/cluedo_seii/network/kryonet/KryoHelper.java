@@ -1,5 +1,7 @@
 package com.example.cluedo_seii.network.kryonet;
 
+import android.graphics.Point;
+
 import com.example.cluedo_seii.Card;
 import com.example.cluedo_seii.CardType;
 import com.example.cluedo_seii.Game;
@@ -18,9 +20,11 @@ import com.example.cluedo_seii.network.dto.RequestDTO;
 import com.example.cluedo_seii.network.dto.SerializedDTO;
 import com.example.cluedo_seii.network.dto.TextMessage;
 import com.example.cluedo_seii.network.dto.UserNameRequestDTO;
+import com.example.cluedo_seii.spielbrett.Gameboard;
 
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.Random;
 
 public class KryoHelper {
 
@@ -53,8 +57,9 @@ public class KryoHelper {
         kryoNetComponent.registerClass(InvestigationFile.class);
         kryoNetComponent.registerClass(Card.class);
         kryoNetComponent.registerClass(CardType.class);
-
-
+        kryoNetComponent.registerClass(Point.class);
+        kryoNetComponent.registerClass(Gameboard.class);
+        kryoNetComponent.registerClass(Random.class);
         kryoNetComponent.registerClass(RegisterClassDTO.class,2);
         kryoNetComponent.registerClass(Class.class);
         kryoNetComponent.registerClass(Object.class);

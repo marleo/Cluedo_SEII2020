@@ -66,7 +66,10 @@ public class GameboardScreen extends AppCompatActivity  {
         initializeGameboard();
         initializeNetwork();
         setChangeGameStateChangeListener();
-        
+
+        if(conType==connectionType.HOST){
+            game.changeGameState(GameState.PLAYERTURNBEGIN);
+        }
 
     }
 
@@ -214,7 +217,7 @@ public class GameboardScreen extends AppCompatActivity  {
         manager = getSupportFragmentManager();
 
         //TODO delete
-        startGame();
+       //startGame();
 
         gameboard.spawnPlayer(startingPoints, this);
 
@@ -382,6 +385,7 @@ public class GameboardScreen extends AppCompatActivity  {
                         else {//nächster Spieler
                             game.nextPlayer();
                             game.changeGameState(GameState.PLAYERTURNBEGIN);
+                            updateGame();
                         }
                     }
                 }
@@ -485,16 +489,22 @@ public class GameboardScreen extends AppCompatActivity  {
         dialog.show(manager, mesaggeDialogTag);
     }
 
-    public void updateGame(Game gameUpdate){
-        game = gameUpdate;
+    public void updateGame( ){
+        if(conType==connectionType.HOST) {
+            server.sendGame(game);
+        }
+        else if(conType==connectionType.CLIENT){
+            client.sendGame(game);
+        }
     }
 
     public void initializeNetwork(){
+        conType = StartGameScreen.conType;
         if(conType==connectionType.HOST) {
-            client = NetworkClientKryo.getInstance();
+            server = NetworkServerKryo.getInstance();
         }
         else if(conType==connectionType.CLIENT){
-            server = NetworkServerKryo.getInstance();
+            client = NetworkClientKryo.getInstance();
         }
     }
 
