@@ -45,7 +45,6 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
         if (INSTANCE == null) {
             INSTANCE = new NetworkClientKryo();
         }
-
         return INSTANCE;
     }
 
