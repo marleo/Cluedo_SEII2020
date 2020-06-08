@@ -4,7 +4,10 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -14,13 +17,21 @@ import com.example.cluedo_seii.Game;
 import com.example.cluedo_seii.R;
 import com.example.cluedo_seii.network.Callback;
 import com.example.cluedo_seii.network.connectionType;
+import com.example.cluedo_seii.network.dto.ConnectedDTO;
 import com.example.cluedo_seii.network.dto.NewGameRoomRequestDTO;
+import com.example.cluedo_seii.network.dto.RoomsDTO;
 import com.example.cluedo_seii.network.kryonet.GlobalNetworkHostKryo;
 import com.example.cluedo_seii.network.kryonet.KryoHelper;
 import com.example.cluedo_seii.network.kryonet.NetworkClientKryo;
+import com.example.cluedo_seii.network.kryonet.SelectedConType;
+
+import java.util.LinkedList;
 
 public class StartGlobalGameActivity extends AppCompatActivity {
-    public static connectionType conType;
+    //TODO change to server Ip
+    private String serverIP = "192.168.178.20";
+
+    //public static connectionType conType;
     private GlobalNetworkHostKryo globalHost;
     private NetworkClientKryo client;
 
@@ -47,7 +58,16 @@ public class StartGlobalGameActivity extends AppCompatActivity {
         selectClientButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                SelectedConType.setConnectionType(connectionType.GLOBALCLIENT);
 
+                client = NetworkClientKryo.getInstance();
+                KryoHelper.registerClasses(client);
+
+                try {
+                    client.connect(serverIP);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         });
 
@@ -55,13 +75,12 @@ public class StartGlobalGameActivity extends AppCompatActivity {
         selectHostButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                conType = connectionType.GLOBALHOST;
+                SelectedConType.setConnectionType(connectionType.GLOBALHOST);
                 globalHost = GlobalNetworkHostKryo.getInstance();
                 KryoHelper.registerClasses(globalHost);
 
                 try {
-                    //TODO change to server ip address
-                    globalHost.connect("192.168.178.20");
+                    globalHost.connect(serverIP);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -81,8 +100,10 @@ public class StartGlobalGameActivity extends AppCompatActivity {
 
 
     private void connect() {
-        if (conType == connectionType.GLOBALHOST) {
+        if (SelectedConType.getConnectionType() == connectionType.GLOBALHOST) {
             selectHost();
+        } else if (SelectedConType.getConnectionType() == connectionType.GLOBALCLIENT) {
+            selectClient();
         }
     }
 
@@ -115,5 +136,43 @@ public class StartGlobalGameActivity extends AppCompatActivity {
 
     }
 
-    
+    private void selectClient() {
+        final ListView clientList = findViewById(R.id.clientList);
+
+        client.registerRoomCallback(new Callback<RoomsDTO>() {
+            @Override
+            public void callback(RoomsDTO argument) {
+                Log.d("Available Rooms:", argument.getGameRooms().toString());
+                updateRoomsList(argument.getGameRooms());
+            }
+        });
+
+        //the client gets the available rooms after sending an empty rooms dto object
+        client.sendMessage(new RoomsDTO());
+    }
+
+    private void updateRoomsList(final LinkedList<String> roomList) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                ListView roomListView = findViewById(R.id.globalClientList);
+                roomListView.setVisibility(View.VISIBLE);
+                ArrayAdapter<String> roomListAdapter = new ArrayAdapter<>(StartGlobalGameActivity.this, android.R.layout.simple_list_item_1, roomList);
+                roomListView.setAdapter(roomListAdapter);
+
+                roomListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        String selectedItem = (String) parent.getItemAtPosition(position);
+                        Log.d("Selected Room: ", selectedItem);
+
+                        int roomID = Integer.parseInt(selectedItem.split(" ")[1]);
+                        Log.d("RoomID: ", Integer.toString(roomID));
+
+
+                    }
+                });
+            }
+        });
+    }
 }
