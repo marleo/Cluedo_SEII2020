@@ -26,6 +26,9 @@ import com.example.cluedo_seii.activities.playerGameInteraction.SuspectOrAccuse;
 import com.example.cluedo_seii.activities.playerGameInteraction.SuspicionShowCard;
 import com.example.cluedo_seii.activities.playerGameInteraction.ThrowDice;
 import com.example.cluedo_seii.activities.playerGameInteraction.ThrowDiceOrUseSecretPassage;
+import com.example.cluedo_seii.network.connectionType;
+import com.example.cluedo_seii.network.kryonet.NetworkClientKryo;
+import com.example.cluedo_seii.network.kryonet.NetworkServerKryo;
 import com.example.cluedo_seii.spielbrett.Gameboard;
 import com.example.cluedo_seii.spielbrett.StartingPoint;
 
@@ -47,18 +50,27 @@ public class GameboardScreen extends AppCompatActivity  {
     private List<StartingPoint> startingPoints;
     private List<Player> playerMove;
     private LinkedList<Card> suspicionCards;
-
+    private connectionType conType;
+    private NetworkServerKryo server;
+    private NetworkClientKryo client;
     private Player currentPlayerInDoor;// TODO: Aufräumen und vielleicht nur mehr das Player Objekt anstatt id und Player Objekt
     private int playerCurrentlyPlayingId;
-
     static final int MIN_SWIPE_DISTANCE = 150;
-
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_spielbrett_screen);
+        game = Game.getInstance();
+        initializeGameboard();
+        initializeNetwork();
+        setChangeGameStateChangeListener();
+        
+
+    }
+
+    public void initializeGameboard(){
 
         /*
             0 = GameField
@@ -262,27 +274,28 @@ public class GameboardScreen extends AppCompatActivity  {
         this.currentPlayerInDoor = currentPlayerInDoor;
     }
 
-    private void startGame(){
-            //TODO initialize Game according to GameLobby Settings
-            //Instanz eines Game-objektes Zu Demonstrationszwecken
-            deckOfCards = new DeckOfCards();
-            players = new LinkedList<>();
+    private void startGame() {
+        //TODO initialize Game according to GameLobby Settings
+        //Instanz eines Game-objektes Zu Demonstrationszwecken
+        deckOfCards = new DeckOfCards();
+        players = new LinkedList<>();
 
-            GameCharacter gameCharacter = new GameCharacter("Prof. Bloom", new Point(0,0));
-            GameCharacter gameCharacterAlt = new GameCharacter("Fräulein Weiss", new Point(0,0));
-            Player player1 = new Player(1, gameCharacterAlt);
-            Player player2 = new Player(2,  gameCharacter);
-            Player player3 = new Player(3,  gameCharacterAlt);
-            players.add(player1);
-            players.add(player2);
-            players.add(player3);
-            game = Game.getInstance();
-            game.setGameboard(gameboard);
-            game.setPlayers(players);
-            game.setLocalPlayer(player1);
-            game.distributeCards(); //um Notepad cheatFunction zu demonstrieren
+        GameCharacter gameCharacter = new GameCharacter("Prof. Bloom", new Point(0, 0));
+        GameCharacter gameCharacterAlt = new GameCharacter("Fräulein Weiss", new Point(0, 0));
+        Player player1 = new Player(1, gameCharacterAlt);
+        Player player2 = new Player(2, gameCharacter);
+        Player player3 = new Player(3, gameCharacterAlt);
+        players.add(player1);
+        players.add(player2);
+        players.add(player3);
+        game = Game.getInstance();
+        game.setGameboard(gameboard);
+        game.setPlayers(players);
+        game.setLocalPlayer(player1);
+        game.distributeCards(); //um Notepad cheatFunction zu demonstrieren
+    }
 
-
+        public void setChangeGameStateChangeListener(){
         //Ausführung erfolgt wenn Methode changeGameState der Instanz game aufgerufen wird
         game.setListener(new Game.ChangeListener() {
             @Override
@@ -475,6 +488,16 @@ public class GameboardScreen extends AppCompatActivity  {
     public void updateGame(Game gameUpdate){
         game = gameUpdate;
     }
+
+    public void initializeNetwork(){
+        if(conType==connectionType.HOST) {
+            client = NetworkClientKryo.getInstance();
+        }
+        else if(conType==connectionType.CLIENT){
+            server = NetworkServerKryo.getInstance();
+        }
+    }
+
 
     //TODO Methoden zum Aufrufen der Netzwerkfunktionen : GameObjekt versenden, Verdachtskarte schicken
 
