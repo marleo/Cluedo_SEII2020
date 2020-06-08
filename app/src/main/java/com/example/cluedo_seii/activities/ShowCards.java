@@ -13,6 +13,7 @@ import android.widget.ListView;
 import com.example.cluedo_seii.Card;
 import com.example.cluedo_seii.DeckOfCards;
 import com.example.cluedo_seii.Game;
+import com.example.cluedo_seii.GameState;
 import com.example.cluedo_seii.Player;
 import com.example.cluedo_seii.R;
 import com.example.cluedo_seii.spielbrett.Gameboard;
@@ -30,39 +31,41 @@ public class ShowCards extends AppCompatActivity {
     private ListView listView;
 
 
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-       super.onCreate(savedInstanceState);
+        super.onCreate(savedInstanceState);
 
-       game = Game.getInstance();
+        game = Game.getInstance();
 
-       setContentView(R.layout.activity_show_cards);
+        setContentView(R.layout.activity_show_cards);
 
-       playerHand = new LinkedList<>();
+        playerHand = new LinkedList<>();
 
-       playerHand.add("YOUR CARDS");
+        playerHand.add("YOUR CARDS");
 
-       for(Card card: game.getLocalPlayer().getPlayerCards()){
+        for (Card card : game.getLocalPlayer().getPlayerCards()) {
 
-                    playerHand.add(card.getDesignation());
+            playerHand.add(card.getDesignation());
 
-                }
-
-
-
-
+        }
 
         ArrayAdapter<String> cardListViewAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, playerHand);
         listView = findViewById(R.id.playerHandDisplay);
         listView.setAdapter(cardListViewAdapter);
 
+        game.setListener(new Game.ChangeListener() {
+                             @Override
+                             //Wird ausgeführt wenn Methode changeGameState aufgerufen wird
+                             public void onChange() {
+                                 finish();
+                             }
+                         }
+        );
     }
 
     @Override
-    public boolean onTouchEvent (MotionEvent touchEvent){
-        switch(touchEvent.getAction()){
+    public boolean onTouchEvent(MotionEvent touchEvent) {
+        switch (touchEvent.getAction()) {
 
             case MotionEvent.ACTION_DOWN:
                 x1 = touchEvent.getX();
@@ -70,9 +73,9 @@ public class ShowCards extends AppCompatActivity {
             case MotionEvent.ACTION_UP:
                 x2 = touchEvent.getX();
 
-                float swipeRight = x2-x1;
+                float swipeRight = x2 - x1;
 
-                if(swipeRight > MIN_SWIPE_DISTANCE){
+                if (swipeRight > MIN_SWIPE_DISTANCE) {
                     finish();
                     overridePendingTransition(R.anim.slide_right_in, R.anim.slide_right_out);
                 }
