@@ -137,13 +137,14 @@ public class ChoosePlayerScreen extends AppCompatActivity {
                     Log.d("Callback", "callback: nice");
                 }
                 startActivity(new Intent(ChoosePlayerScreen.this, GameboardScreen.class));
+                client.registerGameCallback(null);
             }
         });
 
     }
 
     private void updateCharacterList(final HashMap<String,GameCharacter> gameCharacters) {
-        waitingForHost.setVisibility(View.INVISIBLE);
+        findViewById(R.id.waitingForHostText).setVisibility(View.INVISIBLE);
         
         final LinkedList<String> characterNameList = new LinkedList<>(gameCharacters.keySet());
 

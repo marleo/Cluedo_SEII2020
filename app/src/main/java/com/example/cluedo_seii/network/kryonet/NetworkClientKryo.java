@@ -188,6 +188,11 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
         client.getKryo().register(c);
     }
 
+    //TODO delete if it doesn't work
+    public void registerClass(Class c, int id) {
+        client.getKryo().register(c,id);
+    }
+
     public void sendUsernameRequest(final UserNameRequestDTO userNameRequestDTO) {
         Log.d("UserNameRequest", userNameRequestDTO.getUsername());
         sendMessage(userNameRequestDTO);

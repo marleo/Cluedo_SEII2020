@@ -19,6 +19,7 @@ import com.example.cluedo_seii.network.dto.GameDTO;
 import com.example.cluedo_seii.network.dto.PlayerDTO;
 import com.example.cluedo_seii.network.dto.RegisterClassDTO;
 import com.example.cluedo_seii.network.dto.RequestDTO;
+import com.example.cluedo_seii.network.dto.SerializedDTO;
 import com.example.cluedo_seii.network.dto.TextMessage;
 
 import java.io.ByteArrayInputStream;
@@ -81,8 +82,8 @@ public class GlobalNetworkHostKryo implements NetworkGlobalHost, KryoNetComponen
 
                     RegisterClassDTO playerRegister = new RegisterClassDTO();
                     playerRegister.setClassToRegister(SerializationHelper.toString(DeckOfCards.class));
-                    //sendMessage(playerRegister);
-                    sendMessage(new TextMessage(SerializationHelper.toString(DeckOfCards.class)));
+                    sendMessage(playerRegister);
+                    //sendMessage(new TextMessage(SerializationHelper.toString(DeckOfCards.class)));
 
                     /*
                     RegisterClassDTO playerDTORegister = new RegisterClassDTO();
@@ -105,6 +106,7 @@ public class GlobalNetworkHostKryo implements NetworkGlobalHost, KryoNetComponen
         }.start();
 
         client.addListener(new Listener() {
+            @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void received(Connection connection, Object object) {
                 if (object instanceof RequestDTO) {
@@ -116,10 +118,18 @@ public class GlobalNetworkHostKryo implements NetworkGlobalHost, KryoNetComponen
         });
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     private void handleRequest(Connection connection, Object object) {
         if (object instanceof TextMessage) {
             //TODO delete
             textMessageCallback.callback((TextMessage) object );
+        } else if (object instanceof SerializedDTO) {
+            try {
+                Log.d("Received Object: ", ((SerializedDTO) object).getSerializedObject());
+                Log.d("Deserialized Object:", SerializationHelper.fromString(((SerializedDTO) object).getSerializedObject()).toString());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -157,6 +167,11 @@ public class GlobalNetworkHostKryo implements NetworkGlobalHost, KryoNetComponen
     @Override
     public void registerClass(Class c) {
         client.getKryo().register(c);
+    }
+
+    //TODO delete if it doesn't work
+    public void registerClass(Class c, int id) {
+        client.getKryo().register(c,id);
     }
 
     @Override
