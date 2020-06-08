@@ -137,6 +137,7 @@ public class ChoosePlayerScreen extends AppCompatActivity {
                     Log.d("Callback", "callback: nice");
                 }
                 startActivity(new Intent(ChoosePlayerScreen.this, GameboardScreen.class));
+                client.registerGameCallback(null);
             }
         });
 

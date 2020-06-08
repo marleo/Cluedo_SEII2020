@@ -82,8 +82,8 @@ public class GlobalNetworkHostKryo implements NetworkGlobalHost, KryoNetComponen
 
                     RegisterClassDTO playerRegister = new RegisterClassDTO();
                     playerRegister.setClassToRegister(SerializationHelper.toString(DeckOfCards.class));
-                    //sendMessage(playerRegister);
-                    sendMessage(new TextMessage(SerializationHelper.toString(DeckOfCards.class)));
+                    sendMessage(playerRegister);
+                    //sendMessage(new TextMessage(SerializationHelper.toString(DeckOfCards.class)));
 
                     /*
                     RegisterClassDTO playerDTORegister = new RegisterClassDTO();
@@ -167,6 +167,11 @@ public class GlobalNetworkHostKryo implements NetworkGlobalHost, KryoNetComponen
     @Override
     public void registerClass(Class c) {
         client.getKryo().register(c);
+    }
+
+    //TODO delete if it doesn't work
+    public void registerClass(Class c, int id) {
+        client.getKryo().register(c,id);
     }
 
     @Override
