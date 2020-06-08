@@ -60,7 +60,7 @@ public class NetworkScreen extends AppCompatActivity {
 
         try {
             //TODO change to server IP address
-            globalHost.connect("192.168.178.219");
+            globalHost.connect("192.168.178.20");
         } catch (IOException e) {
             e.printStackTrace();
         }
