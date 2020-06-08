@@ -4,6 +4,8 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Point;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.widget.Toast;
@@ -66,12 +68,12 @@ public class GameboardScreen extends AppCompatActivity  {
         initializeGameboard();
         initializeNetwork();
         setChangeGameStateChangeListener();
+        kickOffGame();
+        Log.i("gameStarted", "gameCreated");
 
-        if(conType==connectionType.HOST){
-            game.changeGameState(GameState.PLAYERTURNBEGIN);
-        }
 
-    }
+
+            }
 
     public void initializeGameboard(){
 
@@ -302,19 +304,22 @@ public class GameboardScreen extends AppCompatActivity  {
         //Ausführung erfolgt wenn Methode changeGameState der Instanz game aufgerufen wird
         game.setListener(new Game.ChangeListener() {
             @Override
-
             //Wird ausgeführt wenn Methode changeGameState aufgerufen wird
             public void onChange() {
 
                 //Ausgeführt bei GameState.PLAYERTURNBEGIN)
-                if(game.getGameState().equals(GameState.PLAYERTURNBEGIN)){
+                if(game.getGameState().equals(GameState.PLAYERTURNBEGIN) ){
+
+
                     if(game.getCurrentPlayer().getId()==game.getLocalPlayer().getId()){
                         turnBegin();
+
                     }
+
                     else{//Spieler localPlayer ist nicht am Zug
-                        String text = "Spieler " + game.getCurrentPlayer().getId() + " ist am Zug" ;
+                /*        String text = "Spieler " + game.getCurrentPlayer().getId() + " ist am Zug" ;
                         Toast toast = Toast.makeText(getApplicationContext(), text, Toast.LENGTH_SHORT);
-                        toast.show();
+                        toast.show();*/
                     }
                 }
 
@@ -365,9 +370,9 @@ public class GameboardScreen extends AppCompatActivity  {
 
                 //Ausgeführt bei GameState.PLAYERTURNEND
                 else if(game.getGameState().equals(GameState.PLAYERTURNEND)) {
+
                     if (game.getCurrentPlayer().getId() == game.getLocalPlayer().getId()) {
                         int wrongAccusers = 0;
-
                         //prüfe Spielbeendigungsbedingungen
                         for (Player player : game.getPlayers()) {
                             if (player.getMadeFalseAccusation() == true) {
@@ -386,16 +391,17 @@ public class GameboardScreen extends AppCompatActivity  {
                             game.nextPlayer();
                             game.changeGameState(GameState.PLAYERTURNBEGIN);
                             updateGame();
-                        }
+                       }
                     }
                 }
+
                 //Ausgeführt bei GameState.END
                 else if(game.getGameState().equals(GameState.END)){
+                    updateGame();
                     finish();
                 }
             }
         });
-
     }
 
     //Aufruf von DialogOptionen
@@ -489,6 +495,7 @@ public class GameboardScreen extends AppCompatActivity  {
         dialog.show(manager, mesaggeDialogTag);
     }
 
+    //Spielverschicken über Netzwerk
     public void updateGame( ){
         if(conType==connectionType.HOST) {
             server.sendGame(game);
@@ -498,16 +505,33 @@ public class GameboardScreen extends AppCompatActivity  {
         }
     }
 
+    //Netzwerkinitialisierung
     public void initializeNetwork(){
         conType = StartGameScreen.conType;
         if(conType==connectionType.HOST) {
             server = NetworkServerKryo.getInstance();
         }
+
+
         else if(conType==connectionType.CLIENT){
             client = NetworkClientKryo.getInstance();
-        }
+            }
     }
 
+    public void kickOffGame(){
+        if(conType==connectionType.HOST){
+            game.changeGameState(GameState.PLAYERTURNBEGIN);
+        }
+        if(conType==connectionType.CLIENT){
+            for(Player player: game.getPlayers()){
+                if(player.getId() == game.getLocalPlayer().getId()){
+                    for(Card card: player.getPlayerCards()){
+                        game.getLocalPlayer().addCard(card);
+                    }
+                }
+            }
+        }
+    }
 
     //TODO Methoden zum Aufrufen der Netzwerkfunktionen : GameObjekt versenden, Verdachtskarte schicken
 
