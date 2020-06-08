@@ -13,8 +13,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activities.ChoosePlayerScreen"></activity>
-        <activity android:name=".activities.helpSettings"></activity>
+        <activity android:name=".activities.playerGameInteraction.accuseAndSuspect"></activity>
+        <activity android:name=".activities.ChoosePlayerScreen" />
+        <activity android:name=".activities.helpSettings" />
         <activity android:name=".activities.StartGameScreen" />
         <activity android:name=".activities.ShowCards" />
         <activity android:name=".activities.playerGameInteraction.MakeSuspicion" />
@@ -23,7 +24,7 @@
             android:label="@string/app_name" />
         <activity
             android:name=".activities.GameboardScreen"
-            android:label="Cluedo"></activity>
+            android:label="Cluedo" />
         <activity
             android:name=".activities.MainActivity"
             android:label="@string/app_name">
@@ -36,7 +37,7 @@
         <activity android:name=".activities.NetworkScreen" />
         <activity
             android:name=".activities.NotepadScreen"
-            android:label="Cluedo"></activity>
+            android:label="Cluedo" />
         <activity
             android:name=".activities.RollDiceScreen"
             android:exported="true"
@@ -44,11 +45,10 @@
         <activity
             android:name=".activities.PlayerSelectionScreen"
             android:exported="true"
-
-            android:label="Cluedo"> </activity>
+            android:label="Cluedo"></activity>
         <activity
             android:name=".activities.playerGameInteraction.AccuseSomeone"
-            android:label="Cluedo"></activity>
+            android:label="Cluedo" />
     </application>
 
 </manifest>

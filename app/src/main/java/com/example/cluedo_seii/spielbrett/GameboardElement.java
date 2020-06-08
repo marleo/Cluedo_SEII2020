@@ -7,11 +7,14 @@ import android.view.View;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 
+import com.example.cluedo_seii.Game;
+import com.example.cluedo_seii.GameState;
 import com.example.cluedo_seii.Player;
 import com.example.cluedo_seii.activities.GameboardScreen;
 import com.example.cluedo_seii.activities.SettingScreen;
 
 public abstract class GameboardElement {
+    private Game game;
     private int xKoordinate;
     private int yKoordinate;
     private ImageButton gameBoardElement;
@@ -73,6 +76,7 @@ public abstract class GameboardElement {
     }
 
     private void positionPlayer(GameboardElement gameboardElementTemp, boolean isPlayer, Player currentplayer) {
+        game = Game.getInstance();
         if(gameboardElementTemp instanceof GameFieldElement) {
             ((GameFieldElement) gameboardElementTemp).positionPlayer(isPlayer);
             if(isPlayer){
@@ -81,8 +85,10 @@ public abstract class GameboardElement {
         } else if(gameboardElementTemp instanceof RoomElement) {
             ((RoomElement) gameboardElementTemp).positionPlayer(isPlayer);
             if(isPlayer) {
-                // Update Spieler Position temporär bis der Spieler seinen Zug beendet hat => Server muss das irgendwie verspeichern
+
                 gameboardScreen.setCurrentPlayerInDoor(currentplayer);
+                game.changeGameState(GameState.PLAYERACCUSATION);
+
                 // TODO: Lock alle anderen Spieler + Öffne Activity
                 //if(((RoomElement) gameboardElementTemp).getRoomElementId() == 0) {
                 // ODER
