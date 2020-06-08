@@ -17,10 +17,12 @@ public abstract class GameboardElement {
     private ImageButton gameBoardElement;
 
     private GameboardScreen gameboardScreen;
+
     private Point oldPosition;
     private GameFieldElement oldGameFieldElement;
     private RoomElement oldRoomElement;
     private StartingpointElement oldStartingpointElement;
+    private Geheimgang oldGeheimgang;
 
     public GameboardElement(GameboardScreen gameboardScreen,
                             int xKoordinate, int yKoordinate,
@@ -57,13 +59,18 @@ public abstract class GameboardElement {
                     if(player.getPosition().x == gameboardElementTemp.getxKoordinate() &&
                             player.getPosition().y == gameboardElementTemp.getyKoordinate()){
                         oldPosition = player.getPosition();
-                        if(gameboardElementTemp instanceof GameFieldElement) {
-                            oldGameFieldElement = (GameFieldElement) gameboardElementTemp;
-                        } else if(gameboardElementTemp instanceof StartingpointElement) {
-                            oldStartingpointElement = (StartingpointElement) gameboardElementTemp;
-                        } else if(gameboardElementTemp instanceof RoomElement) {
-                            oldRoomElement = (RoomElement) gameboardElementTemp;
+                        /*
+                        if(gameboardScreen.getDecision()){
+                            int geheimgangId = (RoomElement) gameboardElementTemp.getRoomElementId();
+                            for(GameboardElement gameboardElementTemp: gameboardScreen.getGameboard().getListeGameboardElemente()) {
+                                if(gameboardElementTemp instanceof Geheimgang) {
+                                    if(geheimgangId == ((Geheimgang) gameboardElementTemp).getGeheimgangId()){
+                                        // Setze auf Geheimgang und springe zu irgend einem anderen Geheimgang => direkt auf anderen Geheimgang setzen
+                                    }
+                                }
+                            }
                         }
+                        */
                         // Lösche den Spieler von der alten Positon
                         positionPlayerForOldPosition(gameboardElementTemp, player);
                     }
@@ -83,6 +90,7 @@ public abstract class GameboardElement {
         oldGameFieldElement = null;
         oldStartingpointElement = null;
         oldRoomElement = null;
+        oldGeheimgang = null;
         //gameboardScreen.getGameboard().updateGameboardScreen(gameboardScreen);
     }
 
@@ -125,6 +133,7 @@ public abstract class GameboardElement {
                 currentPlayer.setPosition(oldPosition);
                 setPlayerToOldPositon();
                 showAlertDialog(diceValueTotal, playerStepsTotal, currentPlayer, false);
+
             } else if (diceValueTotal == playerStepsTotal) {
                 // Gegangener Wert stimmt mit gewürfeltem Wert überein => Spieler Bewegung abgeschlossen
                 ((RoomElement) newGameboardElement).positionPlayer(true);
@@ -156,6 +165,36 @@ public abstract class GameboardElement {
                 // Gegangener Wert stimmt mit gewürfeltem Wert überein => Spieler Bewegung abgeschlossen
                 ((StartingpointElement) newGameboardElement).positionPlayer(true);
             }
+        } else if(newGameboardElement instanceof Geheimgang) {
+            // Update Spieler Position temporär bis der Spieler seinen Zug beendet hat => Server muss das irgendwie verspeichern
+            int diceValueTotal = gameboardScreen.getDiceValueOne() + gameboardScreen.getDiceValueTwo();
+            int playerStepsTotal = calculatePlayerStepsTotal(currentPlayer);
+            //Vergleich mit dem gewürfeltem
+            if(diceValueTotal < playerStepsTotal) {
+                // Der Spieler hat zu viele Schritte gemacht => Position wird zurückgesetzt
+                currentPlayer.setPosition(oldPosition);
+                setPlayerToOldPositon();
+                showAlertDialog(playerStepsTotal, diceValueTotal, currentPlayer, true);
+            } else if (diceValueTotal > playerStepsTotal) {
+                // Der Spieler hat zu wenig Schritte gemacht => Position wir zurückgesetzt
+                currentPlayer.setPosition(oldPosition);
+                setPlayerToOldPositon();
+                showAlertDialog(diceValueTotal, playerStepsTotal, currentPlayer, false);
+            } else if (diceValueTotal == playerStepsTotal) {
+                // Gegangener Wert stimmt mit gewürfeltem Wert überein => Spieler Bewegung abgeschlossen
+                ListLoop:
+                for(GameboardElement gameboardElementTemp: gameboardScreen.getGameboard().getListeGameboardElemente()) {
+                    if(gameboardElementTemp instanceof Geheimgang) {
+                        if (newGameboardElement.getxKoordinate() != gameboardElementTemp.getxKoordinate() &&
+                                newGameboardElement.getyKoordinate() != gameboardElementTemp.getyKoordinate()) {
+                            // Setzte Spieler auf irgend einen anderen Geheimgang
+                            currentPlayer.setPosition(new Point(gameboardElementTemp.getxKoordinate(), gameboardElementTemp.getyKoordinate()));
+                            ((Geheimgang) gameboardElementTemp).positionPlayer(true);
+                            break ListLoop;
+                        }
+                    }
+                }
+            }
         }
     }
 
@@ -166,16 +205,24 @@ public abstract class GameboardElement {
             ((StartingpointElement) oldStartingpointElement).positionPlayer(true);
         } else if (oldRoomElement != null) {
             ((RoomElement) oldRoomElement).positionPlayer(true);
+        } else if (oldGeheimgang != null) {
+            ((Geheimgang) oldGeheimgang).positionPlayer(true);
         }
     }
 
     private void positionPlayerForOldPosition(GameboardElement gameboardElementTemp, Player currentPlayer) {
         if(gameboardElementTemp instanceof GameFieldElement) {
+            oldGameFieldElement = (GameFieldElement) gameboardElementTemp;
             ((GameFieldElement) gameboardElementTemp).positionPlayer(false);
         } else if(gameboardElementTemp instanceof RoomElement) {
+            oldRoomElement = (RoomElement) gameboardElementTemp;
             ((RoomElement) gameboardElementTemp).positionPlayer(false);
         } else if(gameboardElementTemp instanceof StartingpointElement) {
+            oldStartingpointElement = (StartingpointElement) gameboardElementTemp;
             ((StartingpointElement) gameboardElementTemp).positionPlayer(false);
+        } else if(gameboardElementTemp instanceof Geheimgang) {
+            oldGeheimgang = (Geheimgang) gameboardElementTemp;
+            ((Geheimgang) gameboardElementTemp).positionPlayer(false);
         }
     }
 
