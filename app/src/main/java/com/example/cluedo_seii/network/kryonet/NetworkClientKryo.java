@@ -49,7 +49,6 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
         if (INSTANCE == null) {
             INSTANCE = new NetworkClientKryo();
         }
-
         return INSTANCE;
     }
 
@@ -139,7 +138,10 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
 
     private void handleGameResponse(Connection connection, GameDTO gameDTO) {
         //TODO delete
-        gameCallback.callback(gameDTO);
+        if(gameCallback!=null)
+        {
+        gameCallback.callback(gameDTO);}
+
         Game inGame = gameDTO.getGame();
 
         Game game = Game.getInstance();
@@ -149,7 +151,7 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
         game.setRound(inGame.getRound());
         game.setGameOver(inGame.getGameOver());
 
-        game.setGameState(inGame.getGameState());
+        game.changeGameState(inGame.getGameState());
         // TODO set game attributes
 
     }
