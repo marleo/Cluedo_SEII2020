@@ -16,6 +16,7 @@ import com.example.cluedo_seii.network.NetworkGlobalHost;
 import com.example.cluedo_seii.network.dto.ConnectedDTO;
 import com.example.cluedo_seii.network.dto.GameCharacterDTO;
 import com.example.cluedo_seii.network.dto.GameDTO;
+import com.example.cluedo_seii.network.dto.NewGameRoomRequestDTO;
 import com.example.cluedo_seii.network.dto.PlayerDTO;
 import com.example.cluedo_seii.network.dto.RegisterClassDTO;
 import com.example.cluedo_seii.network.dto.RequestDTO;
@@ -44,6 +45,7 @@ public class GlobalNetworkHostKryo implements NetworkGlobalHost, KryoNetComponen
     private Callback<GameCharacterDTO> characterCallback;
     private Callback<PlayerDTO> playerCallback;
     private Callback<GameDTO> gameCallback;
+    private Callback<NewGameRoomRequestDTO> newGameRoomCallback;
 
     private boolean isConnected;
 
@@ -79,10 +81,12 @@ public class GlobalNetworkHostKryo implements NetworkGlobalHost, KryoNetComponen
                 try {
                     client.connect(5000,host,NetworkConstants.TCP_PORT,NetworkConstants.UDP_PORT);
 
-
+                    /*
                     RegisterClassDTO playerRegister = new RegisterClassDTO();
                     playerRegister.setClassToRegister(SerializationHelper.toString(DeckOfCards.class));
                     sendMessage(playerRegister);
+
+                     */
                     //sendMessage(new TextMessage(SerializationHelper.toString(DeckOfCards.class)));
 
                     /*
@@ -123,7 +127,13 @@ public class GlobalNetworkHostKryo implements NetworkGlobalHost, KryoNetComponen
         if (object instanceof TextMessage) {
             //TODO delete
             textMessageCallback.callback((TextMessage) object );
-        } else if (object instanceof SerializedDTO) {
+        } else if (object instanceof NewGameRoomRequestDTO) {
+            handleGameRoomResponse(connection, (NewGameRoomRequestDTO) object);
+        }
+
+
+
+        else if (object instanceof SerializedDTO) {
             try {
                 Log.d("Received Object: ", ((SerializedDTO) object).getSerializedObject());
                 Log.d("Deserialized Object:", SerializationHelper.fromString(((SerializedDTO) object).getSerializedObject()).toString());
@@ -133,6 +143,10 @@ public class GlobalNetworkHostKryo implements NetworkGlobalHost, KryoNetComponen
         }
     }
 
+    private void handleGameRoomResponse(Connection connection, NewGameRoomRequestDTO newGameRoomRequestDTO) {
+        newGameRoomCallback.callback(newGameRoomRequestDTO);
+    }
+
     @Override
     public void registerCallback(Callback<RequestDTO> callback) {
         //TODO implement
@@ -140,6 +154,10 @@ public class GlobalNetworkHostKryo implements NetworkGlobalHost, KryoNetComponen
 
     public void registerTextMessageCallback(Callback<TextMessage> callback) {
         this.textMessageCallback = callback;
+    }
+
+    public void registerReceivedGameRoomCallback(Callback<NewGameRoomRequestDTO> callback) {
+        this.newGameRoomCallback = callback;
     }
 
     public void sendMessage(final RequestDTO requestDTO) {
