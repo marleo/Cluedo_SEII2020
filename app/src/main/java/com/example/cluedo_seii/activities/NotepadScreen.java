@@ -77,15 +77,14 @@ public class NotepadScreen extends AppCompatActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         intent = getIntent();
-
-        //game = (Game)intent.getSerializableExtra("game");
         game = Game.getInstance();
         final SharedPreferences preferences = getSharedPreferences("notizblock", MODE_PRIVATE);
         final SharedPreferences.Editor editor = getSharedPreferences("notizblock", MODE_PRIVATE).edit();
         setContentView(R.layout.activity_notepad);
 
-        player=game.getCurrentPlayer();
-       // player = clientData.getPlayer();
+       // player=game.getCurrentPlayer();
+        player=game.getLocalPlayer();
+        //player = clientData.getPlayer();
         notepad = player.getNotepad();
 
 
@@ -318,6 +317,8 @@ public class NotepadScreen extends AppCompatActivity {
             while (randomString.equals(culpritString)||randomString.equals(roomString)||randomString.equals(weaponString)||randomTextView.getTag()=="grayed");
 
             grayOut(randomTextView);
+            player.setCheated(1);
+
         }
 
 
@@ -431,7 +432,7 @@ public class NotepadScreen extends AppCompatActivity {
                     if (event.values[0] < 10) {
                         cheatFunction(game.getInvestigationFile());
                         int value = 1;
-                        player.setCheated(value);
+                        //player.setCheated(value);
 
                     }
                 }
