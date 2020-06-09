@@ -4,6 +4,8 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Point;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.widget.Toast;
@@ -26,6 +28,9 @@ import com.example.cluedo_seii.activities.playerGameInteraction.accuseAndSuspect
 import com.example.cluedo_seii.activities.playerGameInteraction.SuspicionShowCard;
 import com.example.cluedo_seii.activities.playerGameInteraction.ThrowDice;
 import com.example.cluedo_seii.activities.playerGameInteraction.ThrowDiceOrUseSecretPassage;
+import com.example.cluedo_seii.network.connectionType;
+import com.example.cluedo_seii.network.kryonet.NetworkClientKryo;
+import com.example.cluedo_seii.network.kryonet.NetworkServerKryo;
 import com.example.cluedo_seii.spielbrett.Gameboard;
 import com.example.cluedo_seii.spielbrett.StartingPoint;
 
@@ -47,11 +52,13 @@ public class GameboardScreen extends AppCompatActivity  {
     private List<StartingPoint> startingPoints;
     private List<Player> playerMove;
     private LinkedList<Card> suspicionCards;
-
+    private connectionType conType;
+    private NetworkServerKryo server;
+    private NetworkClientKryo client;
     private Player currentPlayerInDoor;// TODO: Aufräumen und vielleicht nur mehr das Player Objekt anstatt id und Player Objekt
     private int playerCurrentlyPlayingId;
-
     static final int MIN_SWIPE_DISTANCE = 150;
+    private int diceValueOne = 2, diceValueTwo = 2;
 
 
     @SuppressLint("ClickableViewAccessibility")
@@ -59,6 +66,18 @@ public class GameboardScreen extends AppCompatActivity  {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_spielbrett_screen);
+        game = Game.getInstance();
+        initializeGameboard();
+        initializeNetwork();
+        setChangeGameStateChangeListener();
+        kickOffGame();
+        Log.i("gameStarted", "gameCreated");
+
+
+
+            }
+
+    public void initializeGameboard(){
 
         /*
             0 = GameField
@@ -202,7 +221,7 @@ public class GameboardScreen extends AppCompatActivity  {
         manager = getSupportFragmentManager();
 
         //TODO delete
-        startGame();
+       //startGame();
 
         gameboard.spawnPlayer(startingPoints, this);
 
@@ -262,43 +281,47 @@ public class GameboardScreen extends AppCompatActivity  {
         this.currentPlayerInDoor = currentPlayerInDoor;
     }
 
-    private void startGame(){
-            //TODO initialize Game according to GameLobby Settings
-            //Instanz eines Game-objektes Zu Demonstrationszwecken
-            deckOfCards = new DeckOfCards();
-            players = new LinkedList<>();
+    private void startGame() {
+        //TODO initialize Game according to GameLobby Settings
+        //Instanz eines Game-objektes Zu Demonstrationszwecken
+        deckOfCards = new DeckOfCards();
+        players = new LinkedList<>();
 
-            GameCharacter gameCharacter = new GameCharacter("Prof. Bloom", new Point(0,0));
-            GameCharacter gameCharacterAlt = new GameCharacter("Fräulein Weiss", new Point(0,0));
-            Player player1 = new Player(1, gameCharacterAlt);
-            Player player2 = new Player(2,  gameCharacter);
-            Player player3 = new Player(3,  gameCharacterAlt);
-            players.add(player1);
-            players.add(player2);
-            players.add(player3);
-            game = Game.getInstance();
-            game.setGameboard(gameboard);
-            game.setPlayers(players);
-            game.setLocalPlayer(player1);
-            game.distributeCards(); //um Notepad cheatFunction zu demonstrieren
+        GameCharacter gameCharacter = new GameCharacter("Prof. Bloom", new Point(0, 0));
+        GameCharacter gameCharacterAlt = new GameCharacter("Fräulein Weiss", new Point(0, 0));
+        Player player1 = new Player(1, gameCharacterAlt);
+        Player player2 = new Player(2, gameCharacter);
+        Player player3 = new Player(3, gameCharacterAlt);
+        players.add(player1);
+        players.add(player2);
+        players.add(player3);
+        game = Game.getInstance();
+        game.setGameboard(gameboard);
+        game.setPlayers(players);
+        game.setLocalPlayer(player1);
+        game.distributeCards(); //um Notepad cheatFunction zu demonstrieren
+    }
 
-
+        public void setChangeGameStateChangeListener(){
         //Ausführung erfolgt wenn Methode changeGameState der Instanz game aufgerufen wird
         game.setListener(new Game.ChangeListener() {
             @Override
-
             //Wird ausgeführt wenn Methode changeGameState aufgerufen wird
             public void onChange() {
 
                 //Ausgeführt bei GameState.PLAYERTURNBEGIN)
-                if(game.getGameState().equals(GameState.PLAYERTURNBEGIN)){
+                if(game.getGameState().equals(GameState.PLAYERTURNBEGIN) ){
+
+
                     if(game.getCurrentPlayer().getId()==game.getLocalPlayer().getId()){
                         turnBegin();
+
                     }
+
                     else{//Spieler localPlayer ist nicht am Zug
-                        String text = "Spieler " + game.getCurrentPlayer().getId() + " ist am Zug" ;
+                /*        String text = "Spieler " + game.getCurrentPlayer().getId() + " ist am Zug" ;
                         Toast toast = Toast.makeText(getApplicationContext(), text, Toast.LENGTH_SHORT);
-                        toast.show();
+                        toast.show();*/
                     }
                 }
 
@@ -360,9 +383,9 @@ public class GameboardScreen extends AppCompatActivity  {
 
                 //Ausgeführt bei GameState.PLAYERTURNEND
                 else if(game.getGameState().equals(GameState.PLAYERTURNEND)) {
+
                     if (game.getCurrentPlayer().getId() == game.getLocalPlayer().getId()) {
                         int wrongAccusers = 0;
-
                         //prüfe Spielbeendigungsbedingungen
                         for (Player player : game.getPlayers()) {
                             if (player.getMadeFalseAccusation() == true) {
@@ -380,16 +403,18 @@ public class GameboardScreen extends AppCompatActivity  {
                         else {//nächster Spieler
                             game.nextPlayer();
                             game.changeGameState(GameState.PLAYERTURNBEGIN);
-                        }
+                            updateGame();
+                       }
                     }
                 }
+
                 //Ausgeführt bei GameState.END
                 else if(game.getGameState().equals(GameState.END)){
+                    updateGame();
                     finish();
                 }
             }
         });
-
     }
 
     //Aufruf von DialogOptionen
@@ -483,8 +508,42 @@ public class GameboardScreen extends AppCompatActivity  {
         dialog.show(manager, mesaggeDialogTag);
     }
 
-    public void updateGame(Game gameUpdate){
-        game = gameUpdate;
+    //Spielverschicken über Netzwerk
+    public void updateGame( ){
+        if(conType==connectionType.HOST) {
+            server.sendGame(game);
+        }
+        else if(conType==connectionType.CLIENT){
+            client.sendGame(game);
+        }
+    }
+
+    //Netzwerkinitialisierung
+    public void initializeNetwork(){
+        conType = StartGameScreen.conType;
+        if(conType==connectionType.HOST) {
+            server = NetworkServerKryo.getInstance();
+        }
+
+
+        else if(conType==connectionType.CLIENT){
+            client = NetworkClientKryo.getInstance();
+            }
+    }
+
+    public void kickOffGame(){
+        if(conType==connectionType.HOST){
+            game.changeGameState(GameState.PLAYERTURNBEGIN);
+        }
+        if(conType==connectionType.CLIENT){
+            for(Player player: game.getPlayers()){
+                if(player.getId() == game.getLocalPlayer().getId()){
+                    for(Card card: player.getPlayerCards()){
+                        game.getLocalPlayer().addCard(card);
+                    }
+                }
+            }
+        }
     }
 
     //TODO Methoden zum Aufrufen der Netzwerkfunktionen : GameObjekt versenden, Verdachtskarte schicken
@@ -521,4 +580,20 @@ public class GameboardScreen extends AppCompatActivity  {
         return false;
     }
 
+    public int getDiceValueOne() {
+        return diceValueOne;
+    }
+
+    public void setDiceValueOne(int diceValueOne) {
+        this.diceValueOne = diceValueOne;
+    }
+
+    public int getDiceValueTwo() {
+        return diceValueTwo;
+    }
+
+    public void setDiceValueTwo(int diceValueTwo) {
+        this.diceValueTwo = diceValueTwo;
+    }
 }
+

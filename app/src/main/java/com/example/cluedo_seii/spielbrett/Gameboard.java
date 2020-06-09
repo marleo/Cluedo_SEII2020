@@ -697,6 +697,9 @@ public class Gameboard {
             layout.addView(row);
         }
 
+        // Berechne kürzester Geheimgang
+        // listeGameboardElement
+
         this.startingPointTotal = startingPointCounter-1;
     }
 

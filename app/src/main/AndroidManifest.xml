@@ -16,6 +16,7 @@
         <activity android:name=".activities.playerGameInteraction.accuseAndSuspect"></activity>
         <activity android:name=".activities.ChoosePlayerScreen" />
         <activity android:name=".activities.helpSettings" />
+        <activity android:name=".activities.StartGlobalGameActivity"></activity>
         <activity android:name=".activities.StartGameScreen" />
         <activity android:name=".activities.ShowCards" />
         <activity android:name=".activities.playerGameInteraction.MakeSuspicion" />

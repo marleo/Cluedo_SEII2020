@@ -114,6 +114,7 @@ public class NetworkServerKryo implements KryoNetComponent, NetworkServer {
         for (ClientData clientData: clientList.values()) {
             if (clientData.getConnection().equals(connection)) {
                 Player player = new Player(clientData.getId(), chosenCharacter);
+                player.setUsername(clientData.getUsername());
                 clientData.setPlayer(player);
 
                 //add Players to local Game Object

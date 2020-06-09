@@ -24,7 +24,7 @@ public class RollDiceScreen extends Activity {
     private TextView textView;
     private ImageView imageViewLeftDice, imageViewRightDice;
 
-
+    private int diceValueOne, diceValueTwo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,8 +70,8 @@ public class RollDiceScreen extends Activity {
                         imageViewRightDice.setImageResource(res2);
 
                         textView.setText("You rolled " + value1 + " + " + value2 + " = "+sum+"!");
-
-
+                        diceValueOne = value1;
+                        diceValueTwo = value2;
                     }
 
                     @Override
@@ -134,4 +134,19 @@ public class RollDiceScreen extends Activity {
         return false;
     }
 
+    public int getDiceValueOne() {
+        return diceValueOne;
+    }
+
+    public void setDiceValueOne(int diceValueOne) {
+        this.diceValueOne = diceValueOne;
+    }
+
+    public int getDiceValueTwo() {
+        return diceValueTwo;
+    }
+
+    public void setDiceValueTwo(int diceValueTwo) {
+        this.diceValueTwo = diceValueTwo;
+    }
 }

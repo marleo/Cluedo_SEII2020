@@ -10,6 +10,7 @@ import java.util.LinkedList;
 public class Player implements Serializable {
 
     private int id;
+    private String username;
     private LinkedList<Card> playerCards;
     private Point position;
     private GameCharacter playerCharacter;
@@ -125,5 +126,11 @@ public class Player implements Serializable {
         }
     }
 
+    public String getUsername() {
+        return username;
+    }
 
+    public void setUsername(String username) {
+        this.username = username;
+    }
 }
