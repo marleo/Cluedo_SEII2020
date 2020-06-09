@@ -21,8 +21,8 @@ import com.example.cluedo_seii.GameCharacter;
 import com.example.cluedo_seii.GameState;
 import com.example.cluedo_seii.Player;
 import com.example.cluedo_seii.R;
-import com.example.cluedo_seii.activities.playerGameInteraction.AccuseSomeone;
-import com.example.cluedo_seii.activities.playerGameInteraction.MakeSuspicion;
+//import com.example.cluedo_seii.activities.playerGameInteraction.AccuseSomeone;
+//import com.example.cluedo_seii.activities.playerGameInteraction.MakeSuspicion;
 import com.example.cluedo_seii.activities.playerGameInteraction.PlayerTurnNotification;
 import com.example.cluedo_seii.activities.playerGameInteraction.accuseAndSuspect;
 import com.example.cluedo_seii.activities.playerGameInteraction.SuspicionShowCard;
@@ -308,7 +308,6 @@ public class GameboardScreen extends AppCompatActivity  {
             @Override
             //Wird ausgeführt wenn Methode changeGameState aufgerufen wird
             public void onChange() {
-
                 //Ausgeführt bei GameState.PLAYERTURNBEGIN)
                 if(game.getGameState().equals(GameState.PLAYERTURNBEGIN) ){
 
@@ -326,6 +325,7 @@ public class GameboardScreen extends AppCompatActivity  {
                 }
 
                 //Ausgefürt bei GameState.PLAVERMOVEMENT
+
                 else if(game.getGameState().equals(GameState.PLAVERMOVEMENT)){
                     if(game.getCurrentPlayer().getId()==game.getLocalPlayer().getId()){
                         int playerX = game.getCurrentPlayer().getPosition().x;
@@ -374,8 +374,8 @@ public class GameboardScreen extends AppCompatActivity  {
                                 playerX == 9 && playerY==13 ||
                                 playerX == 8 && playerY==9  ||
                                 playerX == 8 && playerY==8){
-                            suspectOrAccuse();}
-                        else{ //Wenn der sich am Zug befindende sich Spieler nicht in einen Raum befindet
+                            suspectOrAccuse();
+                        } else{ //Wenn der sich am Zug befindende sich Spieler nicht in einen Raum befindet
                             game.changeGameState(GameState.PLAYERTURNEND);
                           }
                     }
@@ -383,7 +383,7 @@ public class GameboardScreen extends AppCompatActivity  {
 
                 //Ausgeführt bei GameState.PLAYERTURNEND
                 else if(game.getGameState().equals(GameState.PLAYERTURNEND)) {
-
+                    System.out.println("####### PLAYER TURNED");
                     if (game.getCurrentPlayer().getId() == game.getLocalPlayer().getId()) {
                         int wrongAccusers = 0;
                         //prüfe Spielbeendigungsbedingungen
@@ -443,22 +443,12 @@ public class GameboardScreen extends AppCompatActivity  {
         startActivity(new Intent(this, RollDiceScreen.class));
     }
 
-    //Aufruf von Verdächtigung
-    public void makeSuspicion(){
-        startActivity(new Intent(this, MakeSuspicion.class));
-    }
-
     //Aufruf Detektivnotizblock
     public void startNotepad(){
         intent = new Intent(this, NotepadScreen.class);
         //intent.putExtra("game",game);
         startActivity(intent);
         overridePendingTransition(R.anim.slide_right_in, R.anim.slide_right_out);
-    }
-
-    //Aufruf Anklage
-    public void accuseSomeone(){
-        startActivity(new Intent(this, AccuseSomeone.class));
     }
 
     //Zeigt Karten auf Spielerhand

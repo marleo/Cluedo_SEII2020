@@ -3,12 +3,12 @@ package com.example.cluedo_seii.activities.playerGameInteraction;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -24,10 +24,8 @@ public class accuseAndSuspect extends AppCompatActivity implements AdapterView.O
 
     private Spinner spinnerCulprit;
     private Spinner spinnerWeapon;
-    private Spinner spinnerRoom;
     private ArrayAdapter<CharSequence> adapterCulprit;
     private ArrayAdapter<CharSequence>adapterWeapon;
-    private ArrayAdapter<CharSequence>adapterRoom;
     private String selectedCulprit;
     private String selectedWeapon;
     private String selectedRoom;
@@ -35,7 +33,8 @@ public class accuseAndSuspect extends AppCompatActivity implements AdapterView.O
     private String[]possibleWeapons;
     private String[] possibleRooms;
     private Button suspectButton;
-    private Intent intent;
+    private ImageView weaponChoice;
+    private ImageView characterChoice;
     private Game game;
     private LinkedList<String> suspectedPlayerHand;
     private Toast toast;
@@ -65,13 +64,12 @@ public class accuseAndSuspect extends AppCompatActivity implements AdapterView.O
         TextView currentRoom = findViewById(R.id.currentRoomText);
         currentRoom.setText("Tatort: " + getCurrentRoom());
 
+        weaponChoice = findViewById(R.id.weaponImage);
+        characterChoice = findViewById(R.id.suspectImage);
+
         possibleCulprits = getResources().getStringArray(R.array.culprits);
         possibleWeapons = getResources().getStringArray(R.array.weapons);
         possibleRooms = getResources().getStringArray(R.array.rooms);
-
-        intent = getIntent();
-
-
 
         selectedRoom = getCurrentRoom();
 
@@ -182,12 +180,38 @@ public class accuseAndSuspect extends AppCompatActivity implements AdapterView.O
         for (String possibleCulprit : possibleCulprits) {
             if (parent.getItemAtPosition(position).equals(possibleCulprit)) {
                 selectedCulprit = (String) parent.getItemAtPosition(position);
+                if(selectedCulprit.equals(possibleCulprits[0])){
+                    characterChoice.setImageResource(R.drawable.gatov);
+                } else if(selectedCulprit.equals(possibleCulprits[1])){
+                    characterChoice.setImageResource(R.drawable.bloom);
+                } else if(selectedCulprit.equals(possibleCulprits[2])){
+                    characterChoice.setImageResource(R.drawable.green);
+                } else if(selectedCulprit.equals(possibleCulprits[3])){
+                    characterChoice.setImageResource(R.drawable.porz);
+                } else if(selectedCulprit.equals(possibleCulprits[4])){
+                    characterChoice.setImageResource(R.drawable.gloria);
+                } else if(selectedCulprit.equals(possibleCulprits[5])){
+                    characterChoice.setImageResource(R.drawable.weiss);
+                }
             }
         }
 
         for (String possibleWeapon : possibleWeapons) {
             if (parent.getItemAtPosition(position).equals(possibleWeapon)) {
                 selectedWeapon = (String) parent.getItemAtPosition(position);
+                if(selectedWeapon.equals(possibleWeapons[0])){
+                    weaponChoice.setImageResource(R.drawable.dolch);
+                } else if(selectedWeapon.equals(possibleWeapons[1])){
+                    weaponChoice.setImageResource(R.drawable.leuchter);
+                } else if(selectedWeapon.equals(possibleWeapons[2])){
+                    weaponChoice.setImageResource(R.drawable.pistol);
+                } else if(selectedWeapon.equals(possibleWeapons[3])){
+                    weaponChoice.setImageResource(R.drawable.seil);
+                } else if(selectedWeapon.equals(possibleWeapons[4])){
+                    weaponChoice.setImageResource(R.drawable.heizungsrohr);
+                } else if(selectedWeapon.equals(possibleWeapons[5])){
+                    weaponChoice.setImageResource(R.drawable.rohrzange);
+                }
             }
         }
 
