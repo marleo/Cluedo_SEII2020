@@ -56,14 +56,6 @@ public class SettingScreen extends AppCompatActivity {
             }
         });
 
-        final Button startGameNetwork = findViewById(R.id.start_game_network);
-        startGameNetwork.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v){
-                startActivity(new Intent(SettingScreen.this, StartGameScreen.class));
-            }
-        });
-
         final Button helpButton = findViewById(R.id.helpButton);
         helpButton.setOnClickListener(new View.OnClickListener(){
             @Override
