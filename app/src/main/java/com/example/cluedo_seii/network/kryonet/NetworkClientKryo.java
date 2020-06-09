@@ -45,7 +45,6 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
         if (INSTANCE == null) {
             INSTANCE = new NetworkClientKryo();
         }
-
         return INSTANCE;
     }
 
@@ -65,7 +64,6 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
                 try {
                     client.connect(5000,host,NetworkConstants.TCP_PORT,NetworkConstants.UDP_PORT);
 
-                    Log.d("WTF", "WTF");
                     ConnectedDTO connectedDTO = new ConnectedDTO();
                     connectedDTO.setConnected(true);
                     sendMessage(connectedDTO);
@@ -131,7 +129,10 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
 
     private void handleGameResponse(Connection connection, GameDTO gameDTO) {
         //TODO delete
-        gameCallback.callback(gameDTO);
+        if(gameCallback!=null)
+        {
+        gameCallback.callback(gameDTO);}
+
         Game inGame = gameDTO.getGame();
 
         Game game = Game.getInstance();
@@ -141,7 +142,7 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
         game.setRound(inGame.getRound());
         game.setGameOver(inGame.getGameOver());
 
-        game.setGameState(inGame.getGameState());
+        game.changeGameState(inGame.getGameState());
         // TODO set game attributes
 
     }
@@ -187,6 +188,11 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
     @Override
     public void registerClass(Class c) {
         client.getKryo().register(c);
+    }
+
+    //TODO delete if it doesn't work
+    public void registerClass(Class c, int id) {
+        client.getKryo().register(c,id);
     }
 
     public void sendUsernameRequest(final UserNameRequestDTO userNameRequestDTO) {

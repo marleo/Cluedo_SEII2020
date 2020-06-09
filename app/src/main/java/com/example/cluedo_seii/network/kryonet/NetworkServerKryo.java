@@ -151,7 +151,8 @@ public class NetworkServerKryo implements KryoNetComponent, NetworkServer {
         game.setRound(inGame.getRound());
         game.setGameOver(inGame.getGameOver());
 
-        game.setGameState(inGame.getGameState());
+        //game.setGameState(inGame.getGameState());
+        game.changeGameState(inGame.getGameState());
         // TODO set game attributes
     }
 
@@ -196,6 +197,11 @@ public class NetworkServerKryo implements KryoNetComponent, NetworkServer {
     @Override
     public void registerClass(Class c) {
         server.getKryo().register(c);
+    }
+
+    //TODO delete if it doesn't work
+    public void registerClass(Class c, int id) {
+        server.getKryo().register(c,id);
     }
 
     public String getAddress() {
