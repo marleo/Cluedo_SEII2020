@@ -1,5 +1,6 @@
 package com.example.cluedo_seii.network.kryonet;
 
+import android.telecom.Call;
 import android.util.Log;
 
 import com.esotericsoftware.kryonet.Client;
@@ -8,11 +9,13 @@ import com.esotericsoftware.kryonet.Listener;
 import com.example.cluedo_seii.Game;
 import com.example.cluedo_seii.network.Callback;
 import com.example.cluedo_seii.network.NetworkClient;
+import com.example.cluedo_seii.network.connectionType;
 import com.example.cluedo_seii.network.dto.ConnectedDTO;
 import com.example.cluedo_seii.network.dto.GameCharacterDTO;
 import com.example.cluedo_seii.network.dto.GameDTO;
 import com.example.cluedo_seii.network.dto.PlayerDTO;
 import com.example.cluedo_seii.network.dto.RequestDTO;
+import com.example.cluedo_seii.network.dto.RoomsDTO;
 import com.example.cluedo_seii.network.dto.TextMessage;
 import com.example.cluedo_seii.network.dto.UserNameRequestDTO;
 
@@ -33,6 +36,7 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
     private Callback<GameCharacterDTO> characterCallback;
     private Callback<PlayerDTO> playerCallback;
     private Callback<GameDTO> gameCallback;
+    private Callback<RoomsDTO> roomCallback;
 
     private boolean isConnected;
 
@@ -52,6 +56,12 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
         INSTANCE = null;
     }
 
+
+    /**
+     * beim Aufruf dieser Methode verbindet sich der Client mit dem Host
+     * @param host hostIP address
+     * @throws IOException
+     */
     @Override
     public void connect(final String host) throws IOException {
         client.start();
@@ -64,9 +74,16 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
                 try {
                     client.connect(5000,host,NetworkConstants.TCP_PORT,NetworkConstants.UDP_PORT);
 
-                    ConnectedDTO connectedDTO = new ConnectedDTO();
-                    connectedDTO.setConnected(true);
-                    sendMessage(connectedDTO);
+
+                    //ConnectedDDTO wird nur gesendet wann es sich um ein locales Spiel handelt
+                    //TODO change to == Client
+                    if  (SelectedConType.getConnectionType() != connectionType.GLOBALCLIENT) {
+                        Log.d("Connecting: ", "test");
+                        ConnectedDTO connectedDTO = new ConnectedDTO();
+                        connectedDTO.setConnected(true);
+                        sendMessage(connectedDTO);
+                    }
+
 
                     isConnected = true;
                 } catch (IOException e) {
@@ -99,6 +116,8 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
             handlePlayerResponse(connection, (PlayerDTO) object);
         } else if (object instanceof GameDTO) {
             handleGameResponse(connection, (GameDTO) object);
+        } else if (object instanceof RoomsDTO) {
+            handleRoomsResponse(connection, (RoomsDTO) object);
         }
     }
 
@@ -147,6 +166,10 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
 
     }
 
+    private void handleRoomsResponse(Connection connection, RoomsDTO roomsDTO) {
+        roomCallback.callback(roomsDTO);
+    }
+
     @Override
     public void registerCallback(Callback<RequestDTO> callback) {
         this.callback = callback;
@@ -165,6 +188,11 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
 
     public void registerGameCallback(Callback<GameDTO> callback) {
         this.gameCallback = callback;
+    }
+
+    public void registerRoomCallback(Callback<RoomsDTO> callback) {
+        this.roomCallback = null;
+        this.roomCallback = callback;
     }
 
     public void sendGame(Game game) {

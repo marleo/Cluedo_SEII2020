@@ -160,8 +160,6 @@ public class ChoosePlayerScreen extends AppCompatActivity {
                         @Override
                         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                             String selectedItem = (String) parent.getItemAtPosition(position);
-                            Log.d("Selected shit:", selectedItem);
-
                             GameCharacter selectedCharacter = gameCharacters.get(selectedItem);
                             Log.d("Selected Character", selectedCharacter.toString());
 
