@@ -58,6 +58,8 @@ public class GameboardScreen extends AppCompatActivity  {
     private Player currentPlayerInDoor;// TODO: Aufräumen und vielleicht nur mehr das Player Objekt anstatt id und Player Objekt
     private int playerCurrentlyPlayingId;
     static final int MIN_SWIPE_DISTANCE = 150;
+    private int diceValueOne = 2, diceValueTwo = 2;
+
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
@@ -567,4 +569,20 @@ public class GameboardScreen extends AppCompatActivity  {
         return false;
     }
 
+    public int getDiceValueOne() {
+        return diceValueOne;
+    }
+
+    public void setDiceValueOne(int diceValueOne) {
+        this.diceValueOne = diceValueOne;
+    }
+
+    public int getDiceValueTwo() {
+        return diceValueTwo;
+    }
+
+    public void setDiceValueTwo(int diceValueTwo) {
+        this.diceValueTwo = diceValueTwo;
+    }
 }
+
