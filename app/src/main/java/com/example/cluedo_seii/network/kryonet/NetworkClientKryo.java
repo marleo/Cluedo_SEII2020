@@ -56,6 +56,12 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
         INSTANCE = null;
     }
 
+
+    /**
+     * beim Aufruf dieser Methode verbindet sich der Client mit dem Host
+     * @param host hostIP address
+     * @throws IOException
+     */
     @Override
     public void connect(final String host) throws IOException {
         client.start();
@@ -68,6 +74,7 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
                 try {
                     client.connect(5000,host,NetworkConstants.TCP_PORT,NetworkConstants.UDP_PORT);
 
+                    //ConnectedDDTO wird nur gesendet wann es sich um ein locales Spiel handelt
                     if  (SelectedConType.getConnectionType() == connectionType.CLIENT) {
                         ConnectedDTO connectedDTO = new ConnectedDTO();
                         connectedDTO.setConnected(true);

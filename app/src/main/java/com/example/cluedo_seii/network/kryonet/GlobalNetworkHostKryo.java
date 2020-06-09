@@ -38,6 +38,8 @@ public class GlobalNetworkHostKryo implements NetworkGlobalHost, KryoNetComponen
     //INSTANCE
     private static GlobalNetworkHostKryo INSTANCE = null;
 
+    private int room;
+
     private Client client;
     private Callback<TextMessage> textMessageCallback;
     private Callback<RequestDTO> callback;
@@ -144,6 +146,7 @@ public class GlobalNetworkHostKryo implements NetworkGlobalHost, KryoNetComponen
     }
 
     private void handleGameRoomResponse(Connection connection, NewGameRoomRequestDTO newGameRoomRequestDTO) {
+        //this.room = newGameRoomRequestDTO.
         newGameRoomCallback.callback(newGameRoomRequestDTO);
     }
 

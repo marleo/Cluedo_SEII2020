@@ -169,6 +169,13 @@ public class StartGlobalGameActivity extends AppCompatActivity {
                         int roomID = Integer.parseInt(selectedItem.split(" ")[1]);
                         Log.d("RoomID: ", Integer.toString(roomID));
 
+                        RoomsDTO selectedRoom = new RoomsDTO();
+                        selectedRoom.setSelectedRoom(roomID);
+
+                        EditText usernameInput = findViewById(R.id.global_username_input);
+                        selectedRoom.setUsername(usernameInput.getText().toString());
+
+                        client.sendMessage(selectedRoom);
 
                     }
                 });
