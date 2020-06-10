@@ -500,6 +500,7 @@ public class GameboardScreen extends AppCompatActivity  {
 
     //Spielverschicken über Netzwerk
     public void updateGame( ){
+        //TODO add if for globalhost and global Client
         if(conType==connectionType.HOST) {
             server.sendGame(game);
         }

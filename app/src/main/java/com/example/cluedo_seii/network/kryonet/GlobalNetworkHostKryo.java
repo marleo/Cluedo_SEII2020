@@ -12,6 +12,7 @@ import com.example.cluedo_seii.DeckOfCards;
 import com.example.cluedo_seii.Game;
 import com.example.cluedo_seii.Player;
 import com.example.cluedo_seii.network.Callback;
+import com.example.cluedo_seii.network.ClientData;
 import com.example.cluedo_seii.network.NetworkGlobalHost;
 import com.example.cluedo_seii.network.dto.ConnectedDTO;
 import com.example.cluedo_seii.network.dto.GameCharacterDTO;
@@ -22,6 +23,7 @@ import com.example.cluedo_seii.network.dto.RegisterClassDTO;
 import com.example.cluedo_seii.network.dto.RequestDTO;
 import com.example.cluedo_seii.network.dto.SerializedDTO;
 import com.example.cluedo_seii.network.dto.TextMessage;
+import com.example.cluedo_seii.network.dto.UserNameRequestDTO;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -30,6 +32,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.Base64;
+import java.util.LinkedHashMap;
 
 import static android.content.ContentValues.TAG;
 
@@ -48,6 +51,9 @@ public class GlobalNetworkHostKryo implements NetworkGlobalHost, KryoNetComponen
     private Callback<PlayerDTO> playerCallback;
     private Callback<GameDTO> gameCallback;
     private Callback<NewGameRoomRequestDTO> newGameRoomCallback;
+    private Callback<LinkedHashMap<Integer,ClientData>> newClientCallback;
+
+    private LinkedHashMap<Integer, ClientData> clientList;
 
     private boolean isConnected;
 
@@ -131,6 +137,8 @@ public class GlobalNetworkHostKryo implements NetworkGlobalHost, KryoNetComponen
             textMessageCallback.callback((TextMessage) object );
         } else if (object instanceof NewGameRoomRequestDTO) {
             handleGameRoomResponse(connection, (NewGameRoomRequestDTO) object);
+        } else if (object instanceof UserNameRequestDTO) {
+            handleUsernameRequest(connection, (UserNameRequestDTO) object);
         }
 
 
@@ -147,7 +155,19 @@ public class GlobalNetworkHostKryo implements NetworkGlobalHost, KryoNetComponen
 
     private void handleGameRoomResponse(Connection connection, NewGameRoomRequestDTO newGameRoomRequestDTO) {
         //this.room = newGameRoomRequestDTO.
+        Log.d(TAG,"new Room created:" + newGameRoomRequestDTO.getCreatedRoom());
         newGameRoomCallback.callback(newGameRoomRequestDTO);
+    }
+
+    private void handleUsernameRequest(Connection connection, UserNameRequestDTO userNameRequestDTO) {
+        Log.d(TAG, "New User joined: " + userNameRequestDTO.getUsername());
+        ClientData client = new ClientData();
+        client.setId(userNameRequestDTO.getId());
+        client.setUsername(userNameRequestDTO.getUsername());
+
+        clientList.put(client.getId(),client);
+
+        newClientCallback.callback(clientList);
     }
 
     @Override
@@ -161,6 +181,10 @@ public class GlobalNetworkHostKryo implements NetworkGlobalHost, KryoNetComponen
 
     public void registerReceivedGameRoomCallback(Callback<NewGameRoomRequestDTO> callback) {
         this.newGameRoomCallback = callback;
+    }
+
+    public void registerNewClientCallback(Callback<LinkedHashMap<Integer, ClientData>> callback) {
+        this.newClientCallback = callback;
     }
 
     public void sendMessage(final RequestDTO requestDTO) {

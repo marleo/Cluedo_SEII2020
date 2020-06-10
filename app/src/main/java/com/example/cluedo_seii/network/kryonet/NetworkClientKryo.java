@@ -148,9 +148,9 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
 
     private void handleGameResponse(Connection connection, GameDTO gameDTO) {
         //TODO delete
-        if(gameCallback!=null)
-        {
-        gameCallback.callback(gameDTO);}
+        if(gameCallback!=null) {
+            gameCallback.callback(gameDTO);
+        }
 
         Game inGame = gameDTO.getGame();
 
