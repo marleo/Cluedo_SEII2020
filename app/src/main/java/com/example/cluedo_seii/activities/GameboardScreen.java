@@ -21,10 +21,10 @@ import com.example.cluedo_seii.GameCharacter;
 import com.example.cluedo_seii.GameState;
 import com.example.cluedo_seii.Player;
 import com.example.cluedo_seii.R;
-import com.example.cluedo_seii.activities.playerGameInteraction.AccuseSomeone;
-import com.example.cluedo_seii.activities.playerGameInteraction.MakeSuspicion;
+//import com.example.cluedo_seii.activities.playerGameInteraction.AccuseSomeone;
+//import com.example.cluedo_seii.activities.playerGameInteraction.MakeSuspicion;
 import com.example.cluedo_seii.activities.playerGameInteraction.PlayerTurnNotification;
-import com.example.cluedo_seii.activities.playerGameInteraction.SuspectOrAccuse;
+import com.example.cluedo_seii.activities.playerGameInteraction.accuseAndSuspect;
 import com.example.cluedo_seii.activities.playerGameInteraction.SuspicionShowCard;
 import com.example.cluedo_seii.activities.playerGameInteraction.ThrowDice;
 import com.example.cluedo_seii.activities.playerGameInteraction.ThrowDiceOrUseSecretPassage;
@@ -58,6 +58,8 @@ public class GameboardScreen extends AppCompatActivity  {
     private Player currentPlayerInDoor;// TODO: Aufräumen und vielleicht nur mehr das Player Objekt anstatt id und Player Objekt
     private int playerCurrentlyPlayingId;
     static final int MIN_SWIPE_DISTANCE = 150;
+    private int diceValueOne = 2, diceValueTwo = 2;
+
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
@@ -306,7 +308,6 @@ public class GameboardScreen extends AppCompatActivity  {
             @Override
             //Wird ausgeführt wenn Methode changeGameState aufgerufen wird
             public void onChange() {
-
                 //Ausgeführt bei GameState.PLAYERTURNBEGIN)
                 if(game.getGameState().equals(GameState.PLAYERTURNBEGIN) ){
 
@@ -324,20 +325,26 @@ public class GameboardScreen extends AppCompatActivity  {
                 }
 
                 //Ausgefürt bei GameState.PLAVERMOVEMENT
+
                 else if(game.getGameState().equals(GameState.PLAVERMOVEMENT)){
                     if(game.getCurrentPlayer().getId()==game.getLocalPlayer().getId()){
-                        if (//Prüfe ob Spieler sich in einen Raum befindet
-                                game.getCurrentPlayer().getPosition().x == 3 && game.getCurrentPlayer().getPosition().y==2  ||
-                                        game.getCurrentPlayer().getPosition().x == 6 && game.getCurrentPlayer().getPosition().y==2  ||
-                                        game.getCurrentPlayer().getPosition().x == 9 && game.getCurrentPlayer().getPosition().y==2  ||
-                                        game.getCurrentPlayer().getPosition().x == 3 && game.getCurrentPlayer().getPosition().y==5  ||
-                                        game.getCurrentPlayer().getPosition().x == 1 && game.getCurrentPlayer().getPosition().y==6  ||
-                                        game.getCurrentPlayer().getPosition().x == 3 && game.getCurrentPlayer().getPosition().y==13 ||
-                                        game.getCurrentPlayer().getPosition().x == 4 && game.getCurrentPlayer().getPosition().y==17 ||
-                                        game.getCurrentPlayer().getPosition().x == 7 && game.getCurrentPlayer().getPosition().y==17 ||
-                                        game.getCurrentPlayer().getPosition().x == 9 && game.getCurrentPlayer().getPosition().y==13 ||
-                                        game.getCurrentPlayer().getPosition().x == 8 && game.getCurrentPlayer().getPosition().y==9  ||
-                                        game.getCurrentPlayer().getPosition().x == 8 && game.getCurrentPlayer().getPosition().y==8){
+                        int playerX = game.getCurrentPlayer().getPosition().x;
+                        int playerY = game.getCurrentPlayer().getPosition().y;
+
+                        //Prüfe ob Spieler sich in einen Raum befindet
+                        if (playerX == 3 && playerY==2  ||
+                                playerX == 6 && playerY==2  ||
+                                playerX == 9 && playerY==2  ||
+                                playerX == 3 && playerY==5  ||
+                                playerX == 1 && playerY==6  ||
+                                playerX == 1 && playerY==9  ||
+                                playerX == 4 && playerY==10 ||
+                                playerX == 3 && playerY==13 ||
+                                playerX == 4 && playerY==17 ||
+                                playerX == 7 && playerY==17 ||
+                                playerX == 9 && playerY==13 ||
+                                playerX == 8 && playerY==9  ||
+                                playerX == 8 && playerY==8){
                             throwDiceOrUseSecretPassage();
                         }
                         else{
@@ -348,21 +355,27 @@ public class GameboardScreen extends AppCompatActivity  {
 
                 //Ausgeführt bei GameState.PLAYERACCUSATION
                 else if(game.getGameState().equals(GameState.PLAYERACCUSATION)){
+                    //suspectOrAccuse();
                     if(game.getCurrentPlayer().getId()==game.getLocalPlayer().getId()){
-                        if(//Prüfe ob Spieler sich in einen Raum befindet
-                                game.getCurrentPlayer().getPosition().x == 3 && game.getCurrentPlayer().getPosition().y==2  ||
-                                game.getCurrentPlayer().getPosition().x == 6 && game.getCurrentPlayer().getPosition().y==2  ||
-                                game.getCurrentPlayer().getPosition().x == 9 && game.getCurrentPlayer().getPosition().y==2  ||
-                                game.getCurrentPlayer().getPosition().x == 3 && game.getCurrentPlayer().getPosition().y==5  ||
-                                game.getCurrentPlayer().getPosition().x == 1 && game.getCurrentPlayer().getPosition().y==6  ||
-                                game.getCurrentPlayer().getPosition().x == 3 && game.getCurrentPlayer().getPosition().y==13 ||
-                                game.getCurrentPlayer().getPosition().x == 4 && game.getCurrentPlayer().getPosition().y==17 ||
-                                game.getCurrentPlayer().getPosition().x == 7 && game.getCurrentPlayer().getPosition().y==17 ||
-                                game.getCurrentPlayer().getPosition().x == 9 && game.getCurrentPlayer().getPosition().y==13 ||
-                                game.getCurrentPlayer().getPosition().x == 8 && game.getCurrentPlayer().getPosition().y==9  ||
-                                game.getCurrentPlayer().getPosition().x == 8 && game.getCurrentPlayer().getPosition().y==8){
-                            suspectOrAccuse();}
-                        else{ //Wenn der sich am Zug befindende sich Spieler nicht in einen Raum befindet
+                        int playerX = game.getCurrentPlayer().getPosition().x;
+                        int playerY = game.getCurrentPlayer().getPosition().y;
+
+                        //Prüfe ob Spieler sich in einen Raum befindet
+                        if(playerX == 3 && playerY==2  ||
+                                playerX == 6 && playerY==2  ||
+                                playerX == 9 && playerY==2  ||
+                                playerX == 3 && playerY==5  ||
+                                playerX == 1 && playerY==6  ||
+                                playerX == 1 && playerY==9  ||
+                                playerX == 4 && playerY==10 ||
+                                playerX == 3 && playerY==13 ||
+                                playerX == 4 && playerY==17 ||
+                                playerX == 7 && playerY==17 ||
+                                playerX == 9 && playerY==13 ||
+                                playerX == 8 && playerY==9  ||
+                                playerX == 8 && playerY==8){
+                            suspectOrAccuse();
+                        } else{ //Wenn der sich am Zug befindende sich Spieler nicht in einen Raum befindet
                             game.changeGameState(GameState.PLAYERTURNEND);
                           }
                     }
@@ -370,7 +383,7 @@ public class GameboardScreen extends AppCompatActivity  {
 
                 //Ausgeführt bei GameState.PLAYERTURNEND
                 else if(game.getGameState().equals(GameState.PLAYERTURNEND)) {
-
+                    System.out.println("####### PLAYER TURNED");
                     if (game.getCurrentPlayer().getId() == game.getLocalPlayer().getId()) {
                         int wrongAccusers = 0;
                         //prüfe Spielbeendigungsbedingungen
@@ -420,8 +433,8 @@ public class GameboardScreen extends AppCompatActivity  {
 
     //Dialog Anklagen oder Verdächtigen
     public void suspectOrAccuse(){
-        SuspectOrAccuse dialog = new SuspectOrAccuse();
-        dialog.show(manager, mesaggeDialogTag);
+        intent = new Intent(this, accuseAndSuspect.class);
+        startActivity(intent);
     }
 
     //UI Aufruf von Würfeln, Verdächtigung, Anklage, Spielerhand, Kartenauswahl bei Verdacht
@@ -430,22 +443,12 @@ public class GameboardScreen extends AppCompatActivity  {
         startActivity(new Intent(this, RollDiceScreen.class));
     }
 
-    //Aufruf von Verdächtigung
-    public void makeSuspicion(){
-        startActivity(new Intent(this, MakeSuspicion.class));
-    }
-
     //Aufruf Detektivnotizblock
     public void startNotepad(){
         intent = new Intent(this, NotepadScreen.class);
         //intent.putExtra("game",game);
         startActivity(intent);
         overridePendingTransition(R.anim.slide_right_in, R.anim.slide_right_out);
-    }
-
-    //Aufruf Anklage
-    public void accuseSomeone(){
-        startActivity(new Intent(this, AccuseSomeone.class));
     }
 
     //Zeigt Karten auf Spielerhand
@@ -567,4 +570,20 @@ public class GameboardScreen extends AppCompatActivity  {
         return false;
     }
 
+    public int getDiceValueOne() {
+        return diceValueOne;
+    }
+
+    public void setDiceValueOne(int diceValueOne) {
+        this.diceValueOne = diceValueOne;
+    }
+
+    public int getDiceValueTwo() {
+        return diceValueTwo;
+    }
+
+    public void setDiceValueTwo(int diceValueTwo) {
+        this.diceValueTwo = diceValueTwo;
+    }
 }
+

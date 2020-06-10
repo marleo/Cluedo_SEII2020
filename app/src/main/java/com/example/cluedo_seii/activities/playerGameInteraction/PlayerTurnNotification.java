@@ -29,7 +29,7 @@ public class PlayerTurnNotification extends DialogFragment {
         DialogInterface.OnClickListener startTurn = new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                game.changeGameState(GameState.PLAYERTURNEND);
+               game.changeGameState(GameState.PLAYERTURNEND);
 
             }
         };
