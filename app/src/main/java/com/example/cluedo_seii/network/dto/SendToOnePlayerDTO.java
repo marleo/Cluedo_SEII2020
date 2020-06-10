@@ -1,15 +1,25 @@
 package com.example.cluedo_seii.network.dto;
 
 public class SendToOnePlayerDTO extends RequestDTO {
-    private int playerID;
+    private int receivingPlayerID;
+    private int sendingPlayerID;
+    private boolean toHost;
     private String serializedObject;
 
-    public int getPlayerID() {
-        return playerID;
+    public int getReceivingPlayerID() {
+        return receivingPlayerID;
     }
 
-    public void setPlayerID(int playerID) {
-        this.playerID = playerID;
+    public void setReceivingPlayerID(int receivingPlayerID) {
+        this.receivingPlayerID = receivingPlayerID;
+    }
+
+    public int getSendingPlayerID() {
+        return sendingPlayerID;
+    }
+
+    public void setSendingPlayerID(int sendingPlayerID) {
+        this.sendingPlayerID = sendingPlayerID;
     }
 
     public String getSerializedObject() {
@@ -18,5 +28,13 @@ public class SendToOnePlayerDTO extends RequestDTO {
 
     public void setSerializedObject(String serializedObject) {
         this.serializedObject = serializedObject;
+    }
+
+    public void setToHost(boolean toHost) {
+        this.toHost = toHost;
+    }
+
+    public boolean isToHost() {
+        return toHost;
     }
 }

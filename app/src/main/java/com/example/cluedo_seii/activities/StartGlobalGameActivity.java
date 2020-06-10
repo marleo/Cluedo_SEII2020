@@ -113,6 +113,8 @@ public class StartGlobalGameActivity extends AppCompatActivity {
         final ListView clientList = findViewById(R.id.globalClientList);
         clientList.setVisibility(View.VISIBLE);
 
+
+
         globalHost.registerReceivedGameRoomCallback(new Callback<NewGameRoomRequestDTO>() {
             @Override
             public void callback(final NewGameRoomRequestDTO argument) {
@@ -198,6 +200,8 @@ public class StartGlobalGameActivity extends AppCompatActivity {
                         selectedRoom.setUsername(usernameInput.getText().toString());
 
                         client.sendMessage(selectedRoom);
+                        startActivity(new Intent(StartGlobalGameActivity.this, ChoosePlayerScreen.class));
+
 
                     }
                 });

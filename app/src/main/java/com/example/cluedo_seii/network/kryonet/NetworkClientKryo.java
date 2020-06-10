@@ -1,7 +1,10 @@
 package com.example.cluedo_seii.network.kryonet;
 
+import android.os.Build;
 import android.telecom.Call;
 import android.util.Log;
+
+import androidx.annotation.RequiresApi;
 
 import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Connection;
@@ -10,6 +13,7 @@ import com.example.cluedo_seii.Game;
 import com.example.cluedo_seii.network.Callback;
 import com.example.cluedo_seii.network.NetworkClient;
 import com.example.cluedo_seii.network.connectionType;
+import com.example.cluedo_seii.network.dto.BroadcastDTO;
 import com.example.cluedo_seii.network.dto.ConnectedDTO;
 import com.example.cluedo_seii.network.dto.GameCharacterDTO;
 import com.example.cluedo_seii.network.dto.GameDTO;
@@ -118,6 +122,11 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
             handleGameResponse(connection, (GameDTO) object);
         } else if (object instanceof RoomsDTO) {
             handleRoomsResponse(connection, (RoomsDTO) object);
+        } else if (object instanceof BroadcastDTO) {
+            // Server Version only works, if the API Version is higher than 26
+            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                handleBroadcastResponse(connection, (BroadcastDTO) object);
+            }
         }
     }
 
@@ -168,6 +177,17 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
 
     private void handleRoomsResponse(Connection connection, RoomsDTO roomsDTO) {
         roomCallback.callback(roomsDTO);
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    private void handleBroadcastResponse(Connection connection, BroadcastDTO broadcastDTO) {
+        try {
+            Object object = SerializationHelper.fromString(broadcastDTO.getSerializedObject());
+            handleRequest(connection,object);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
     }
 
     @Override

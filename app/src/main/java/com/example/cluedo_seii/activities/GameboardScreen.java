@@ -31,6 +31,7 @@ import com.example.cluedo_seii.activities.playerGameInteraction.ThrowDiceOrUseSe
 import com.example.cluedo_seii.network.connectionType;
 import com.example.cluedo_seii.network.kryonet.NetworkClientKryo;
 import com.example.cluedo_seii.network.kryonet.NetworkServerKryo;
+import com.example.cluedo_seii.network.kryonet.SelectedConType;
 import com.example.cluedo_seii.spielbrett.Gameboard;
 import com.example.cluedo_seii.spielbrett.StartingPoint;
 
@@ -511,7 +512,7 @@ public class GameboardScreen extends AppCompatActivity  {
 
     //Netzwerkinitialisierung
     public void initializeNetwork(){
-        conType = StartGameScreen.conType;
+        conType = SelectedConType.getConnectionType();
         if(conType==connectionType.HOST) {
             server = NetworkServerKryo.getInstance();
         }

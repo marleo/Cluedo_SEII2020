@@ -10,10 +10,12 @@ import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.example.cluedo_seii.DeckOfCards;
 import com.example.cluedo_seii.Game;
+import com.example.cluedo_seii.GameCharacter;
 import com.example.cluedo_seii.Player;
 import com.example.cluedo_seii.network.Callback;
 import com.example.cluedo_seii.network.ClientData;
 import com.example.cluedo_seii.network.NetworkGlobalHost;
+import com.example.cluedo_seii.network.dto.BroadcastDTO;
 import com.example.cluedo_seii.network.dto.ConnectedDTO;
 import com.example.cluedo_seii.network.dto.GameCharacterDTO;
 import com.example.cluedo_seii.network.dto.GameDTO;
@@ -21,6 +23,7 @@ import com.example.cluedo_seii.network.dto.NewGameRoomRequestDTO;
 import com.example.cluedo_seii.network.dto.PlayerDTO;
 import com.example.cluedo_seii.network.dto.RegisterClassDTO;
 import com.example.cluedo_seii.network.dto.RequestDTO;
+import com.example.cluedo_seii.network.dto.SendToOnePlayerDTO;
 import com.example.cluedo_seii.network.dto.SerializedDTO;
 import com.example.cluedo_seii.network.dto.TextMessage;
 import com.example.cluedo_seii.network.dto.UserNameRequestDTO;
@@ -33,6 +36,7 @@ import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.Base64;
 import java.util.LinkedHashMap;
+import java.util.LinkedList;
 
 import static android.content.ContentValues.TAG;
 
@@ -52,6 +56,7 @@ public class GlobalNetworkHostKryo implements NetworkGlobalHost, KryoNetComponen
     private Callback<GameDTO> gameCallback;
     private Callback<NewGameRoomRequestDTO> newGameRoomCallback;
     private Callback<LinkedHashMap<Integer,ClientData>> newClientCallback;
+    private Callback<GameCharacterDTO> gameCharacterDTOCallback;
 
     private LinkedHashMap<Integer, ClientData> clientList;
 
@@ -140,6 +145,8 @@ public class GlobalNetworkHostKryo implements NetworkGlobalHost, KryoNetComponen
             handleGameRoomResponse(connection, (NewGameRoomRequestDTO) object);
         } else if (object instanceof UserNameRequestDTO) {
             handleUsernameRequest(connection, (UserNameRequestDTO) object);
+        } else if (object instanceof SendToOnePlayerDTO) {
+            handleSendToOnePlayeDTO(connection, (SendToOnePlayerDTO) object);
         }
 
 
@@ -151,6 +158,19 @@ public class GlobalNetworkHostKryo implements NetworkGlobalHost, KryoNetComponen
             } catch (Exception e) {
                 e.printStackTrace();
             }
+        }
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    private void handleSendToOnePlayeDTO(Connection connection, SendToOnePlayerDTO sendToOnePlayerDTO) {
+        try {
+            Object object = SerializationHelper.fromString(sendToOnePlayerDTO.getSerializedObject());
+
+            if (object instanceof GameCharacterDTO) {
+                handleGameCharacterRequest(connection, (GameCharacterDTO) object, sendToOnePlayerDTO.getSendingPlayerID());
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
@@ -174,8 +194,38 @@ public class GlobalNetworkHostKryo implements NetworkGlobalHost, KryoNetComponen
         if (newClientCallback != null) {
             newClientCallback.callback(clientList);
         }
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    private void handleGameCharacterRequest(Connection connection, GameCharacterDTO gameCharacterDTO, int playerID) {
+        // remove the chosen Player from the list
+        GameCharacter chosenCharacter = gameCharacterDTO.getChoosenPlayer();
+        gameCharacterDTO.getAvailablePlayers().remove(chosenCharacter.getName());
+
+        ClientData chosenClient = clientList.get(playerID);
+        Player player = new Player(chosenClient.getId(),chosenCharacter);
+        player.setUsername(chosenClient.getUsername());
+        chosenClient.setPlayer(player);
+
+        LinkedList<Player> playerLinkedList = Game.getInstance().getPlayers();
+        if (playerLinkedList == null) playerLinkedList = new LinkedList<>();
+        playerLinkedList.add(player);
+        Game.getInstance().setPlayers(playerLinkedList);
+
+        //TODO send Player to the Client
+        PlayerDTO playerDTO = new PlayerDTO();
+        playerDTO.setPlayer(player);
+        //sendMessageToClient(playerDTO, connection);
 
 
+        //broadcast remaining Characters to the other clients
+        gameCharacterDTO.setChoosenPlayer(null);
+        broadcastToClients(gameCharacterDTO);
+
+        // fire callback
+        if (gameCharacterDTOCallback != null) {
+            gameCharacterDTOCallback.callback(gameCharacterDTO);
+        }
     }
 
     @Override
@@ -195,23 +245,29 @@ public class GlobalNetworkHostKryo implements NetworkGlobalHost, KryoNetComponen
         this.newClientCallback = callback;
     }
 
+    public void registerCharacterDTOCallback(Callback<GameCharacterDTO> gameCharacterDTOCallback) {
+        this.gameCharacterDTOCallback = gameCharacterDTOCallback;
+    }
+
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public void broadcastToClients(RequestDTO requestDTO) {
+        BroadcastDTO broadcast = new BroadcastDTO();
+        try {
+            broadcast.setSerializedObject(SerializationHelper.toString(requestDTO));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        sendMessage(broadcast);
+    }
+
     public void sendMessage(final RequestDTO requestDTO) {
         new Thread("send") {
             @Override
             public void run() {
                 Log.d("Sending Object:", requestDTO.getClass().toString());
                 client.sendTCP(requestDTO);
-            }
-        }.start();
-
-    }
-
-    public void sendObject(final Object object) {
-        new Thread("send") {
-            @Override
-            public void run() {
-                Log.d("Sending Object:", object.getClass().toString());
-                client.sendTCP(object);
             }
         }.start();
 
