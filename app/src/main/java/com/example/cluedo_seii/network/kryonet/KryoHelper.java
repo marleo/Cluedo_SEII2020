@@ -1,12 +1,19 @@
 package com.example.cluedo_seii.network.kryonet;
 
+import android.widget.TextView;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.AppCompatTextView;
+
 import com.example.cluedo_seii.Card;
 import com.example.cluedo_seii.CardType;
 import com.example.cluedo_seii.Game;
 import com.example.cluedo_seii.GameCharacter;
 import com.example.cluedo_seii.GameState;
 import com.example.cluedo_seii.InvestigationFile;
+import com.example.cluedo_seii.Notepad;
 import com.example.cluedo_seii.Player;
+import com.example.cluedo_seii.network.dto.CheatDTO;
 import com.example.cluedo_seii.network.dto.ConnectedDTO;
 import com.example.cluedo_seii.network.dto.GameCharacterDTO;
 import com.example.cluedo_seii.network.dto.GameDTO;
@@ -53,6 +60,11 @@ public class KryoHelper {
         kryoNetComponent.registerClass(InvestigationFile.class);
         kryoNetComponent.registerClass(Card.class);
         kryoNetComponent.registerClass(CardType.class);
+        kryoNetComponent.registerClass(Notepad.class);
+        kryoNetComponent.registerClass(Card[].class);
+        kryoNetComponent.registerClass(TextView[].class);
+        kryoNetComponent.registerClass(CheatDTO.class);
+        kryoNetComponent.registerClass(AppCompatTextView.class);
 
 
         kryoNetComponent.registerClass(RegisterClassDTO.class,2);

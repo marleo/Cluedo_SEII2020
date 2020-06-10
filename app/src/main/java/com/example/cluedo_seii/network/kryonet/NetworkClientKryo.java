@@ -8,6 +8,7 @@ import com.esotericsoftware.kryonet.Listener;
 import com.example.cluedo_seii.Game;
 import com.example.cluedo_seii.network.Callback;
 import com.example.cluedo_seii.network.NetworkClient;
+import com.example.cluedo_seii.network.dto.CheatDTO;
 import com.example.cluedo_seii.network.dto.ConnectedDTO;
 import com.example.cluedo_seii.network.dto.GameCharacterDTO;
 import com.example.cluedo_seii.network.dto.GameDTO;
@@ -33,6 +34,7 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
     private Callback<GameCharacterDTO> characterCallback;
     private Callback<PlayerDTO> playerCallback;
     private Callback<GameDTO> gameCallback;
+    private Callback<CheatDTO> cheatCallback;
 
     private boolean isConnected;
 
@@ -100,6 +102,8 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
             handlePlayerResponse(connection, (PlayerDTO) object);
         } else if (object instanceof GameDTO) {
             handleGameResponse(connection, (GameDTO) object);
+        } else if (object instanceof CheatDTO) {
+            handleCheatResponse(connection, (CheatDTO) object);
         }
     }
 
@@ -109,6 +113,13 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
             // reset connection Callback
             connectionCallback = null;
         }
+    }
+
+    private void handleCheatResponse(Connection connection, CheatDTO cheatDTO) {
+        sendCheat();
+        Log.d("Player response","cheater entdeckt");
+        cheatCallback.callback(cheatDTO);
+
     }
 
     private void handleGameCharacterResponse(Connection connection,  GameCharacterDTO gameCharacterDTO) {
@@ -165,10 +176,18 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
         this.gameCallback = callback;
     }
 
+    public void registerCheatCallback(Callback<CheatDTO> callback){this.cheatCallback = callback;}
+
     public void sendGame(Game game) {
         GameDTO gameDTO = new GameDTO();
         gameDTO.setGame(game);
         sendMessage(gameDTO);
+    }
+
+    public void sendCheat() {
+        CheatDTO cheatDTO = new CheatDTO();
+        sendMessage(cheatDTO);
+
     }
 
     @Override

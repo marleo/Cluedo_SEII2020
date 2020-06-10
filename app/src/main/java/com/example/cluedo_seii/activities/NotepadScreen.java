@@ -8,11 +8,13 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -24,7 +26,14 @@ import com.example.cluedo_seii.Notepad;
 import com.example.cluedo_seii.Player;
 import com.example.cluedo_seii.R;
 import com.example.cluedo_seii.activities.playerGameInteraction.ExposeCheater;
+import com.example.cluedo_seii.network.Callback;
 import com.example.cluedo_seii.network.ClientData;
+import com.example.cluedo_seii.network.NetworkClient;
+import com.example.cluedo_seii.network.connectionType;
+import com.example.cluedo_seii.network.dto.CheatDTO;
+import com.example.cluedo_seii.network.kryonet.KryoHelper;
+import com.example.cluedo_seii.network.kryonet.NetworkClientKryo;
+import com.example.cluedo_seii.network.kryonet.NetworkServerKryo;
 
 import java.util.Random;
 
@@ -62,6 +71,9 @@ public class NotepadScreen extends AppCompatActivity {
     private ClientData clientData;
     private Player player;
     private Intent intent;
+    private connectionType conType;
+    private NetworkServerKryo server;
+    private NetworkClientKryo client;
 
 
     private SensorManager sensorManager;
@@ -78,6 +90,7 @@ public class NotepadScreen extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         intent = getIntent();
         game = Game.getInstance();
+        this.conType=StartGameScreen.conType;
         final SharedPreferences preferences = getSharedPreferences("notizblock", MODE_PRIVATE);
         final SharedPreferences.Editor editor = getSharedPreferences("notizblock", MODE_PRIVATE).edit();
         setContentView(R.layout.activity_notepad);
@@ -297,6 +310,51 @@ public class NotepadScreen extends AppCompatActivity {
 
 
         public void cheatFunction (InvestigationFile investigationFile){
+            server = NetworkServerKryo.getInstance();
+            client=NetworkClientKryo.getInstance();
+
+            if(conType==connectionType.CLIENT){
+
+                client.sendCheat();
+
+
+
+            }
+            else if(conType==connectionType.HOST){
+
+                server.sendCheat();
+
+
+                    }
+            client.registerCheatCallback(new Callback<CheatDTO>() {
+                @Override
+                public void callback(CheatDTO argument) {
+                    runOnUiThread(new Runnable() {
+                        public void run() {
+                            Toast toast;
+                            toast = Toast.makeText(getApplicationContext(),"Jemand hat geschummelt", Toast.LENGTH_LONG);
+                            toast.show();
+
+                        }
+                    });
+
+                }
+            });
+            server.registerCheatDTOCallback(new Callback<CheatDTO>() {
+                @Override
+                public void callback(CheatDTO argument) {
+                    runOnUiThread(new Runnable() {
+                        public void run() {
+                            Toast toast;
+                            toast = Toast.makeText(getApplicationContext(),"Jemand hat geschummelt", Toast.LENGTH_LONG);
+                            toast.show();
+
+                        }
+                    });
+
+                }
+            });
+
 
             Card culprit = investigationFile.getCulprit();
             String culpritString = culprit.getDesignation();

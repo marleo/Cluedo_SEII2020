@@ -2,6 +2,7 @@ package com.example.cluedo_seii.network.kryonet;
 
 import android.os.Handler;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
@@ -12,6 +13,7 @@ import com.example.cluedo_seii.Player;
 import com.example.cluedo_seii.network.Callback;
 import com.example.cluedo_seii.network.ClientData;
 import com.example.cluedo_seii.network.NetworkServer;
+import com.example.cluedo_seii.network.dto.CheatDTO;
 import com.example.cluedo_seii.network.dto.ConnectedDTO;
 import com.example.cluedo_seii.network.dto.GameCharacterDTO;
 import com.example.cluedo_seii.network.dto.GameDTO;
@@ -35,6 +37,7 @@ public class NetworkServerKryo implements KryoNetComponent, NetworkServer {
     private Callback<RequestDTO> messageCallback;
     private Callback<LinkedHashMap<Integer, ClientData>> newClientCallback;
     private Callback<GameCharacterDTO> gameCharacterDTOCallback;
+    private Callback<CheatDTO> cheatDTOCallback;
 
     private LinkedHashMap<Integer, ClientData> clientList;
 
@@ -84,12 +87,23 @@ public class NetworkServerKryo implements KryoNetComponent, NetworkServer {
             handleGameCharacterRequest(connection, (GameCharacterDTO) object);
         } else if (object instanceof GameDTO) {
             handleGameRequest(connection, (GameDTO) object);
+        } else if(object instanceof CheatDTO) {
+            handleCheaterRequest(connection, (CheatDTO) object);
         }
     }
 
     private void handleConnectedRequest(Connection connection, ConnectedDTO connectedDTO) {
         Log.d("network-Server:", "Received Connected Request");
         sendMessageToClient(connectedDTO, connection);
+    }
+
+    private void handleCheaterRequest(Connection connection, CheatDTO cheatDTO){
+        Log.d("network-Server:","Received a cheater");
+        sendCheat();
+        cheatDTOCallback.callback(cheatDTO);
+
+
+
     }
 
     private void handleUsernameRequest(Connection connection, UserNameRequestDTO userNameRequestDTO) {
@@ -169,11 +183,19 @@ public class NetworkServerKryo implements KryoNetComponent, NetworkServer {
     public void registerCharacterDTOCallback(Callback<GameCharacterDTO> gameCharacterDTOCallback) {
         this.gameCharacterDTOCallback = gameCharacterDTOCallback;
     }
+    public void registerCheatDTOCallback(Callback<CheatDTO> cheatDTOCallback){
+        this.cheatDTOCallback = cheatDTOCallback;
+    }
 
     public void sendGame(Game game) {
         GameDTO gameDTO = new GameDTO();
         gameDTO.setGame(game);
         broadcastMessage(gameDTO);
+    }
+
+    public void sendCheat(){
+        CheatDTO cheatDTO = new CheatDTO();
+        broadcastMessage(cheatDTO);
     }
 
     @Override
