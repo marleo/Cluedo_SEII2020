@@ -59,6 +59,7 @@ public class GlobalNetworkHostKryo implements NetworkGlobalHost, KryoNetComponen
 
     private GlobalNetworkHostKryo() {
         client = new Client();
+        clientList = new LinkedHashMap<>();
     }
 
 
@@ -156,7 +157,10 @@ public class GlobalNetworkHostKryo implements NetworkGlobalHost, KryoNetComponen
     private void handleGameRoomResponse(Connection connection, NewGameRoomRequestDTO newGameRoomRequestDTO) {
         //this.room = newGameRoomRequestDTO.
         Log.d(TAG,"new Room created:" + newGameRoomRequestDTO.getCreatedRoom());
-        newGameRoomCallback.callback(newGameRoomRequestDTO);
+        if (newGameRoomCallback != null) {
+            newGameRoomCallback.callback(newGameRoomRequestDTO);
+        }
+
     }
 
     private void handleUsernameRequest(Connection connection, UserNameRequestDTO userNameRequestDTO) {
@@ -167,7 +171,11 @@ public class GlobalNetworkHostKryo implements NetworkGlobalHost, KryoNetComponen
 
         clientList.put(client.getId(),client);
 
-        newClientCallback.callback(clientList);
+        if (newClientCallback != null) {
+            newClientCallback.callback(clientList);
+        }
+
+
     }
 
     @Override
