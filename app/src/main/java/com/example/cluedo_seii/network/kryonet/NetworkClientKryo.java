@@ -169,6 +169,7 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
         game.setCurrentPlayer(inGame.getCurrentPlayer());
         game.setRound(inGame.getRound());
         game.setGameOver(inGame.getGameOver());
+        game.setPlayerIterator(inGame.getPlayerIterator());
 
         game.changeGameState(inGame.getGameState());
         // TODO set game attributes

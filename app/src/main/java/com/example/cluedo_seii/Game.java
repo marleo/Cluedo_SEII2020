@@ -103,6 +103,14 @@ public class Game implements Serializable {
         this.currentPlayer = currentPlayer;
     }
 
+    public void setPlayerIterator(int playerIterator) {
+        this.playerIterator = playerIterator;
+    }
+
+    public int getPlayerIterator() {
+        return playerIterator;
+    }
+
     // set for Network end
 
 
