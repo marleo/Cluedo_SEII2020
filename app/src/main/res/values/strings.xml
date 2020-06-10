@@ -37,15 +37,15 @@
     </string-array>
 
     <string-array name="rooms">
-        <item>Halle</item>
-        <item>Salon</item>
-        <item>Speisezimmer</item>
-        <item>Küche</item>
-        <item>Musikzimmer</item>
-        <item>Winterzimmer</item>
-        <item>Biliardzimmer</item>
-        <item>Bibliothek</item>
         <item>Arbeitszimmer</item>
+        <item>Eingangshalle</item>
+        <item>Veranda</item>
+        <item>Bibliothek</item>
+        <item>Speisezimmer</item>
+        <item>Billardzimmer</item>
+        <item>Musikzimmer</item>
+        <item>Küche</item>
+        <item>Salon</item>
     </string-array>
 
     <string name="fragmentControlTab">
@@ -152,5 +152,6 @@
     <string name="Player2">Character2</string>
     <string name="Player3">Character3</string>
     <string name="playerSelected">Start</string>
+    <string name="anklagenSpielendeButton">anklagen (Spielende)</string>
 
 </resources>

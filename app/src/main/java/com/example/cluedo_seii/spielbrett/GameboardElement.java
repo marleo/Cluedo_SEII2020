@@ -8,10 +8,13 @@ import android.view.View;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 
+import com.example.cluedo_seii.Game;
+import com.example.cluedo_seii.GameState;
 import com.example.cluedo_seii.Player;
 import com.example.cluedo_seii.activities.GameboardScreen;
 
 public abstract class GameboardElement {
+    private Game game;
     private int xKoordinate;
     private int yKoordinate;
     private ImageButton gameBoardElement;
@@ -99,6 +102,7 @@ public abstract class GameboardElement {
     }
 
     private void positionPlayerForNewPosition(GameboardElement newGameboardElement, Player currentPlayer) {
+        game = Game.getInstance();
         if(newGameboardElement instanceof GameFieldElement) {
             // Update Spieler Position temporär bis der Spieler seinen Zug beendet hat => Server muss das irgendwie verspeichern
             int diceValueTotal = gameboardScreen.getDiceValueOne() + gameboardScreen.getDiceValueTwo();
@@ -138,6 +142,7 @@ public abstract class GameboardElement {
                 // Gegangener Wert stimmt mit gewürfeltem Wert überein => Spieler Bewegung abgeschlossen
                 ((RoomElement) newGameboardElement).positionPlayer(true);
                 gameboardScreen.setCurrentPlayerInDoor(currentPlayer);
+                game.changeGameState(GameState.PLAYERACCUSATION);
                 // TODO: Lock alle anderen Spieler + Öffne Activity
                 //if(((RoomElement) gameboardElementTemp).getRoomElementId() == 0) {
                 // ODER

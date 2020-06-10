@@ -1,6 +1,5 @@
 package com.example.cluedo_seii;
 
-import java.io.Serializable;
 import java.util.LinkedList;
 
 
@@ -21,13 +20,13 @@ public class DeckOfCards  {
     public  Card heizungsrohr = new Card(10, "Heizungsrohr", CardType.WEAPON);
     public Card rohrzange = new Card(11, "Rohrzange", CardType.WEAPON);
 
-    public Card halle = new Card(12, "Halle", CardType.ROOM);
+    public Card eingangshalle = new Card(12, "Eingangshalle", CardType.ROOM);
     public Card salon = new Card(13, "Salon", CardType.ROOM);
     public Card speisezimmer = new Card(14, "Speisezimmer", CardType.ROOM);
     public Card kueche = new Card(15, "Kueche", CardType.ROOM);
     public Card musikzimmer = new Card(16, "Musikzimmer", CardType.ROOM);
-    public Card winterzimmer = new Card(17, "Winterzimmer", CardType.ROOM);
-    public Card biliardzimmer = new Card(18, "Biliardzimmer", CardType.ROOM);
+    public Card veranda = new Card(17, "Veranda", CardType.ROOM);
+    public Card billardzimmer = new Card(18, "Billardzimmer", CardType.ROOM);
     public Card bibliothek = new Card(19, "Bibliothek", CardType.ROOM);
     public Card arbeitszimmer = new Card(20, "Arbeitszimmer", CardType.ROOM);
 
@@ -39,7 +38,7 @@ public class DeckOfCards  {
 
         gameCardsStandard.add(dolch); gameCardsStandard.add(leuchter); gameCardsStandard.add(pistole); gameCardsStandard.add(seil); gameCardsStandard.add(heizungsrohr); gameCardsStandard.add(rohrzange);
 
-        gameCardsStandard.add(halle); gameCardsStandard.add(salon); gameCardsStandard.add(speisezimmer); gameCardsStandard.add(kueche); gameCardsStandard.add(musikzimmer); gameCardsStandard.add(winterzimmer); gameCardsStandard.add(biliardzimmer); gameCardsStandard.add(bibliothek); gameCardsStandard.add(arbeitszimmer);
+        gameCardsStandard.add(eingangshalle); gameCardsStandard.add(salon); gameCardsStandard.add(speisezimmer); gameCardsStandard.add(kueche); gameCardsStandard.add(musikzimmer); gameCardsStandard.add(veranda); gameCardsStandard.add(billardzimmer); gameCardsStandard.add(bibliothek); gameCardsStandard.add(arbeitszimmer);
 
         return gameCardsStandard;
     }
