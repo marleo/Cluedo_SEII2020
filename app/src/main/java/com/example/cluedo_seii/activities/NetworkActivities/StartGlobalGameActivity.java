@@ -1,4 +1,4 @@
-package com.example.cluedo_seii.activities;
+package com.example.cluedo_seii.activities.NetworkActivities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -18,7 +18,6 @@ import com.example.cluedo_seii.R;
 import com.example.cluedo_seii.network.Callback;
 import com.example.cluedo_seii.network.ClientData;
 import com.example.cluedo_seii.network.connectionType;
-import com.example.cluedo_seii.network.dto.ConnectedDTO;
 import com.example.cluedo_seii.network.dto.NewGameRoomRequestDTO;
 import com.example.cluedo_seii.network.dto.RoomsDTO;
 import com.example.cluedo_seii.network.kryonet.GlobalNetworkHostKryo;

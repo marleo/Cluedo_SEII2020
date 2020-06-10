@@ -13,11 +13,12 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activities.playerGameInteraction.accuseAndSuspect"></activity>
-        <activity android:name=".activities.ChoosePlayerScreen" />
+        <activity android:name=".activities.NetworkActivities.ChooseGameTypeActivity"></activity>
+        <activity android:name=".activities.playerGameInteraction.accuseAndSuspect" />
+        <activity android:name=".activities.NetworkActivities.ChoosePlayerScreen" />
         <activity android:name=".activities.helpSettings" />
-        <activity android:name=".activities.StartGlobalGameActivity"></activity>
-        <activity android:name=".activities.StartGameScreen" />
+        <activity android:name=".activities.NetworkActivities.StartGlobalGameActivity" />
+        <activity android:name=".activities.NetworkActivities.StartGameScreen" />
         <activity android:name=".activities.ShowCards" />
         <activity android:name=".activities.playerGameInteraction.MakeSuspicion" />
         <activity
@@ -35,7 +36,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activities.NetworkScreen" />
+        <activity android:name=".activities.NetworkActivities.NetworkScreen" />
         <activity
             android:name=".activities.NotepadScreen"
             android:label="Cluedo" />
@@ -46,7 +47,7 @@
         <activity
             android:name=".activities.PlayerSelectionScreen"
             android:exported="true"
-            android:label="Cluedo"></activity>
+            android:label="Cluedo" />
         <activity
             android:name=".activities.playerGameInteraction.AccuseSomeone"
             android:label="Cluedo" />

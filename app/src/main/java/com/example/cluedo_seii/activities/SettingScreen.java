@@ -12,6 +12,7 @@ import android.widget.ImageButton;
 import android.widget.Switch;
 
 import com.example.cluedo_seii.R;
+import com.example.cluedo_seii.activities.NetworkActivities.NetworkScreen;
 
 
 public class SettingScreen extends AppCompatActivity {

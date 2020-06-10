@@ -1,10 +1,11 @@
-package com.example.cluedo_seii.activities;
+package com.example.cluedo_seii.activities.NetworkActivities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.cluedo_seii.Game;
 import com.example.cluedo_seii.GameCharacter;
 import com.example.cluedo_seii.Player;
+import com.example.cluedo_seii.activities.GameboardScreen;
 import com.example.cluedo_seii.network.Callback;
 import com.example.cluedo_seii.network.connectionType;
 
@@ -22,7 +23,6 @@ import android.widget.TextView;
 import com.example.cluedo_seii.network.kryonet.SerializationHelper;
 
 import com.example.cluedo_seii.R;
-import com.example.cluedo_seii.network.dto.BroadcastDTO;
 import com.example.cluedo_seii.network.dto.GameCharacterDTO;
 import com.example.cluedo_seii.network.dto.GameDTO;
 import com.example.cluedo_seii.network.dto.SendToOnePlayerDTO;
@@ -30,8 +30,6 @@ import com.example.cluedo_seii.network.kryonet.GlobalNetworkHostKryo;
 import com.example.cluedo_seii.network.kryonet.NetworkClientKryo;
 import com.example.cluedo_seii.network.kryonet.NetworkServerKryo;
 import com.example.cluedo_seii.network.kryonet.SelectedConType;
-
-import org.objenesis.instantiator.SerializationInstantiatorHelper;
 
 import java.util.HashMap;
 import java.util.LinkedList;
