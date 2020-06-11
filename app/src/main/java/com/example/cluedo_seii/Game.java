@@ -22,6 +22,7 @@ public class Game implements Serializable {
     private Gameboard gameboard;
     private transient ChangeListener changeListener;
     private Player localPlayer;
+    private int wrongAccusers;
 
 
     private Game(){
@@ -33,6 +34,7 @@ public class Game implements Serializable {
         playerIterator = 0;
         gameState = GameState.START;
         players = new LinkedList<>();
+        wrongAccusers=0;
     }
 
     //Getter und Setter
@@ -79,6 +81,10 @@ public class Game implements Serializable {
         currentPlayer = players.get(playerIterator);
     }
 
+    public void setInvestigationFile(InvestigationFile investigationFile) {
+        this.investigationFile = investigationFile;
+    }
+
     public void setLocalPlayer(Player localPlayer) {
         this.localPlayer = localPlayer;
     }
@@ -112,6 +118,17 @@ public class Game implements Serializable {
         return playerIterator;
     }
 
+    public void setWrongAccusers(int wrongAccusers) {
+        this.wrongAccusers = wrongAccusers;
+    }
+
+    public int getWrongAccusers() {
+        return wrongAccusers;
+    }
+
+    public void incrWrongAccusers(){wrongAccusers++;}
+
+
     // set for Network end
 
 
@@ -132,6 +149,8 @@ public class Game implements Serializable {
     public interface ChangeListener {
         void onChange();
     }
+
+
 
     //Methode zur Kartenverteilung
     public void distributeCards(){
@@ -202,4 +221,14 @@ public class Game implements Serializable {
         }
         currentPlayer = players.get(playerIterator);
     }
+
+
+
+
+    //Methode zur Überprüfung der Spielbeendigungsbedingungen
+    public boolean checkGameEnd(){
+        if(wrongAccusers==game.getPlayers().size())
+        {gameOver=true;}
+        return gameOver;
+        }
 }

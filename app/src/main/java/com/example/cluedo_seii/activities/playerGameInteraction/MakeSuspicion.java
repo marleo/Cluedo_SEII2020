@@ -20,7 +20,7 @@ import com.example.cluedo_seii.R;
 
 import java.util.LinkedList;
 
-public class accuseAndSuspect extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
+public class MakeSuspicion extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
     private Spinner spinnerCulprit;
     private Spinner spinnerWeapon;
@@ -62,7 +62,7 @@ public class accuseAndSuspect extends AppCompatActivity implements AdapterView.O
         spinnerWeapon.setAdapter(adapterWeapon);
 
         TextView currentRoom = findViewById(R.id.currentRoomText);
-        currentRoom.setText("Tatort: " + getCurrentRoom());
+        //currentRoom.setText("Tatort: " + getCurrentRoom());
 
         weaponChoice = findViewById(R.id.weaponImage);
         characterChoice = findViewById(R.id.suspectImage);
@@ -71,7 +71,7 @@ public class accuseAndSuspect extends AppCompatActivity implements AdapterView.O
         possibleWeapons = getResources().getStringArray(R.array.weapons);
         possibleRooms = getResources().getStringArray(R.array.rooms);
 
-        selectedRoom = getCurrentRoom();
+        //selectedRoom = getCurrentRoom();
 
         suspectButton = findViewById(R.id.makeSuspicionButton);
         suspectButton.setOnClickListener(new View.OnClickListener() {
@@ -111,7 +111,7 @@ public class accuseAndSuspect extends AppCompatActivity implements AdapterView.O
             }
         });
 
-        suspectButton = findViewById(R.id.makeAccusationButton);
+        /*suspectButton = findViewById(R.id.makeAccusationButton);
         suspectButton.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View v) {
@@ -138,10 +138,10 @@ public class accuseAndSuspect extends AppCompatActivity implements AdapterView.O
                     finish();
                 }
             }
-        });
+        });*/
     }
 
-    public String getCurrentRoom() {
+   /* public String getCurrentRoom() {
         int playerX = game.getCurrentPlayer().getPosition().x;
         int playerY = game.getCurrentPlayer().getPosition().y;
 
@@ -166,7 +166,7 @@ public class accuseAndSuspect extends AppCompatActivity implements AdapterView.O
         }
 
         return "";
-    }
+    }*/
 
 
     public void onStop(){

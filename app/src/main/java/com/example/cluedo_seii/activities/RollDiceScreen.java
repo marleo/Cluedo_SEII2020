@@ -10,6 +10,9 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.example.cluedo_seii.Game;
+import com.example.cluedo_seii.GameState;
 import com.example.cluedo_seii.R;
 import com.example.cluedo_seii.sensorik.ShakeDetector;
 import java.util.Random;
@@ -25,6 +28,7 @@ public class RollDiceScreen extends Activity {
     private ImageView imageViewLeftDice, imageViewRightDice;
 
     private int diceValueOne, diceValueTwo;
+    private Game game;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,7 +36,7 @@ public class RollDiceScreen extends Activity {
         setContentView(R.layout.activity_roll_dices_screen);
         imageViewLeftDice = findViewById(R.id.diceView1);
         imageViewRightDice = findViewById(R.id.diceView2);
-
+        game = Game.getInstance();
 
         //shakeEvent
         textView = findViewById(R.id.tvShake);
@@ -72,6 +76,9 @@ public class RollDiceScreen extends Activity {
                         textView.setText("You rolled " + value1 + " + " + value2 + " = "+sum+"!");
                         diceValueOne = value1;
                         diceValueTwo = value2;
+
+                        finish();
+
                     }
 
                     @Override
@@ -103,6 +110,13 @@ public class RollDiceScreen extends Activity {
         sensorManager.unregisterListener(shakeDetector);
         super.onPause();
         textView.setText(R.string.NoShakeAction);
+    }
+
+    @Override
+    public void onStop(){
+        super.onStop();
+        game.changeGameState(GameState.PLAYERTURNEND);
+
     }
 
     //dices

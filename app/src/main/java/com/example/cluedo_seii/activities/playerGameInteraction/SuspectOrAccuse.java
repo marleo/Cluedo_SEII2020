@@ -9,14 +9,13 @@ import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.fragment.app.DialogFragment;
+import androidx.appcompat.app.AppCompatDialogFragment;
 
 import com.example.cluedo_seii.Game;
-import com.example.cluedo_seii.GameState;
 import com.example.cluedo_seii.R;
 import com.example.cluedo_seii.activities.GameboardScreen;
 
-public class PlayerTurnNotification extends DialogFragment {
+public class SuspectOrAccuse extends AppCompatDialogFragment {
     Game game;
 
     @NonNull
@@ -26,18 +25,25 @@ public class PlayerTurnNotification extends DialogFragment {
         game = Game.getInstance();
         setCancelable(false);
 
-        DialogInterface.OnClickListener startTurn = new DialogInterface.OnClickListener() {
+        DialogInterface.OnClickListener listenerSuspect = new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-               game.changeGameState(GameState.PLAVERMOVEMENT);
+                ((GameboardScreen)getActivity()).makeSuspicion();
 
+            }
+        };
+        DialogInterface.OnClickListener  listenerAccuse = new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                ((GameboardScreen)getActivity()).accuseSomeone();
             }
         };
 
         return new AlertDialog.Builder(getActivity())
-                .setTitle("Du bist am Zug")
+                .setTitle("Was willst du tun?")
                 .setView(view)
-                .setPositiveButton("Ok", startTurn)
+                .setPositiveButton("Verdächtigen", listenerSuspect)
+                .setNegativeButton("Anklagen", listenerAccuse)
                 .create();
     }
 

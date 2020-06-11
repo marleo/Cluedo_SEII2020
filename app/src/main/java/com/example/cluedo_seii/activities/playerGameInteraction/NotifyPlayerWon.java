@@ -12,11 +12,9 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
 import com.example.cluedo_seii.Game;
-import com.example.cluedo_seii.GameState;
 import com.example.cluedo_seii.R;
-import com.example.cluedo_seii.activities.GameboardScreen;
 
-public class PlayerTurnNotification extends DialogFragment {
+public class NotifyPlayerWon extends DialogFragment {
     Game game;
 
     @NonNull
@@ -26,18 +24,17 @@ public class PlayerTurnNotification extends DialogFragment {
         game = Game.getInstance();
         setCancelable(false);
 
-        DialogInterface.OnClickListener startTurn = new DialogInterface.OnClickListener() {
+        DialogInterface.OnClickListener endGame = new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-               game.changeGameState(GameState.PLAVERMOVEMENT);
-
+                Game.reset();
             }
         };
 
         return new AlertDialog.Builder(getActivity())
-                .setTitle("Du bist am Zug")
+                .setTitle("Player " + game.getCurrentPlayer().getId() + " won the Game!")
                 .setView(view)
-                .setPositiveButton("Ok", startTurn)
+                .setPositiveButton("Close", endGame)
                 .create();
     }
 

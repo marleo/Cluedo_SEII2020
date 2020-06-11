@@ -4,8 +4,6 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Point;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.widget.Toast;
@@ -23,8 +21,11 @@ import com.example.cluedo_seii.Player;
 import com.example.cluedo_seii.R;
 //import com.example.cluedo_seii.activities.playerGameInteraction.AccuseSomeone;
 //import com.example.cluedo_seii.activities.playerGameInteraction.MakeSuspicion;
+import com.example.cluedo_seii.activities.playerGameInteraction.AccuseSomeone;
+import com.example.cluedo_seii.activities.playerGameInteraction.NotifyPlayerWon;
 import com.example.cluedo_seii.activities.playerGameInteraction.PlayerTurnNotification;
-import com.example.cluedo_seii.activities.playerGameInteraction.accuseAndSuspect;
+import com.example.cluedo_seii.activities.playerGameInteraction.SuspectOrAccuse;
+import com.example.cluedo_seii.activities.playerGameInteraction.MakeSuspicion;
 import com.example.cluedo_seii.activities.playerGameInteraction.SuspicionShowCard;
 import com.example.cluedo_seii.activities.playerGameInteraction.ThrowDice;
 import com.example.cluedo_seii.activities.playerGameInteraction.ThrowDiceOrUseSecretPassage;
@@ -71,11 +72,12 @@ public class GameboardScreen extends AppCompatActivity  {
         initializeGameboard();
         initializeNetwork();
         setChangeGameStateChangeListener();
-        kickOffGame();
-        Log.i("gameStarted", "gameCreated");
 
-
-
+        //zu Demonstrationszwecken SpielerPosition wird gesetzt auf Raum
+        for(Player player: game.getPlayers()){
+         player.setPosition(new Point(6,2));}
+         kickOffGame();
+         Log.i("gameStarted", "gameCreated");
             }
 
     public void initializeGameboard(){
@@ -360,7 +362,7 @@ public class GameboardScreen extends AppCompatActivity  {
                     if(game.getCurrentPlayer().getId()==game.getLocalPlayer().getId()){
                         int playerX = game.getCurrentPlayer().getPosition().x;
                         int playerY = game.getCurrentPlayer().getPosition().y;
-
+                        if(game.getLocalPlayer().getMadeFalseAccusation()==false){
                         //Prüfe ob Spieler sich in einen Raum befindet
                         if(playerX == 3 && playerY==2  ||
                                 playerX == 6 && playerY==2  ||
@@ -375,7 +377,8 @@ public class GameboardScreen extends AppCompatActivity  {
                                 playerX == 9 && playerY==13 ||
                                 playerX == 8 && playerY==9  ||
                                 playerX == 8 && playerY==8){
-                            suspectOrAccuse();
+
+                            suspectOrAccuse();}
                         } else{ //Wenn der sich am Zug befindende sich Spieler nicht in einen Raum befindet
                             game.changeGameState(GameState.PLAYERTURNEND);
                           }
@@ -386,26 +389,18 @@ public class GameboardScreen extends AppCompatActivity  {
                 else if(game.getGameState().equals(GameState.PLAYERTURNEND)) {
                     System.out.println("####### PLAYER TURNED");
                     if (game.getCurrentPlayer().getId() == game.getLocalPlayer().getId()) {
-                        int wrongAccusers = 0;
-                        //prüfe Spielbeendigungsbedingungen
-                        for (Player player : game.getPlayers()) {
-                            if (player.getMadeFalseAccusation() == true) {
-                                wrongAccusers++;
-                            }
-                        }
-                        if (wrongAccusers == game.getPlayers().size()) {
-                            game.setGameOver(true);
-                            game.changeGameState(GameState.END);
-                        } else if (game.getGameOver() == true) {
+                        Log.i("GameOver", "" + game.getGameOver());
+                        Log.i("GameOver", "" + game.checkGameEnd());
+                        if(game.checkGameEnd()==true){
                             game.changeGameState(GameState.END);
                         }
 
                         //wenn Abbruchbedingungen nicht zutreffen
-                        else {//nächster Spieler
+                        else{//nächster Spieler
                             game.nextPlayer();
                             game.changeGameState(GameState.PLAYERTURNBEGIN);
                             updateGame();
-                       }
+                        }
                     }
                 }
 
@@ -413,9 +408,17 @@ public class GameboardScreen extends AppCompatActivity  {
                 else if(game.getGameState().equals(GameState.END)){
                     updateGame();
                     finish();
+                   // notifyPlayersWon();
+                   // Intent intent = new Intent(GameboardScreen.this, MainActivity.class);
+                  //  startActivity(intent);
                 }
             }
         });
+    }
+
+    public void notifyPlayersWon(){
+        NotifyPlayerWon playerWon = new NotifyPlayerWon();
+        playerWon.show(manager, mesaggeDialogTag);
     }
 
     //Aufruf von DialogOptionen
@@ -434,9 +437,17 @@ public class GameboardScreen extends AppCompatActivity  {
 
     //Dialog Anklagen oder Verdächtigen
     public void suspectOrAccuse(){
-        intent = new Intent(this, accuseAndSuspect.class);
-        startActivity(intent);
+        SuspectOrAccuse dialog = new SuspectOrAccuse();
+        dialog.show(manager, mesaggeDialogTag);
     }
+
+    //Aufruf von Verdächtigung
+    public void makeSuspicion(){
+        startActivity(new Intent(this, MakeSuspicion.class));
+    }
+
+    //Aufruf von Anklage
+    public void accuseSomeone(){startActivity(new Intent(this, AccuseSomeone.class));}
 
     //UI Aufruf von Würfeln, Verdächtigung, Anklage, Spielerhand, Kartenauswahl bei Verdacht
     //Aufruf von Würfeln
@@ -457,6 +468,7 @@ public class GameboardScreen extends AppCompatActivity  {
         startActivity(new Intent(this, ShowCards.class));
         overridePendingTransition(R.anim.slide_left_in, R.anim.slide_left_out);
     }
+
 
     //Zeigt Kartenauswahl auf Spielerhand bei Verdacht
     public void suspicionShowCard(){
@@ -516,7 +528,6 @@ public class GameboardScreen extends AppCompatActivity  {
         if(conType==connectionType.HOST) {
             server = NetworkServerKryo.getInstance();
         }
-
 
         else if(conType==connectionType.CLIENT){
             client = NetworkClientKryo.getInstance();
