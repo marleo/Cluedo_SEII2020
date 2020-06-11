@@ -177,5 +177,7 @@
     <string name="Player3">Character3</string>
     <string name="playerSelected">Start</string>
     <string name="anklagenSpielendeButton">anklagen (Spielende)</string>
+    <string name="localString">local</string>
+    <string name="globalString">global</string>
 
 </resources>

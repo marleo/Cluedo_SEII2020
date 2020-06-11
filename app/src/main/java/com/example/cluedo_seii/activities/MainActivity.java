@@ -10,6 +10,8 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.cluedo_seii.R;
+import com.example.cluedo_seii.activities.NetworkActivities.ChooseGameTypeActivity;
+import com.example.cluedo_seii.activities.NetworkActivities.StartGameScreen;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -24,7 +26,7 @@ public class MainActivity extends AppCompatActivity {
         startGame.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-                startActivity(new Intent(MainActivity.this, StartGameScreen.class));
+                startActivity(new Intent(MainActivity.this, ChooseGameTypeActivity.class));
 
             }
         });

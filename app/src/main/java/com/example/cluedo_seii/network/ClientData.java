@@ -19,6 +19,10 @@ public class ClientData {
         this.id = currentID++;
     }
 
+    public void setId(int id){
+        this.id = id;
+    }
+
     public Player getPlayer() {
         return player;
     }

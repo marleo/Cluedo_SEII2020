@@ -1,4 +1,4 @@
-package com.example.cluedo_seii.activities;
+package com.example.cluedo_seii.activities.NetworkActivities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -16,8 +16,8 @@ import android.widget.TextView;
 import com.example.cluedo_seii.Game;
 import com.example.cluedo_seii.R;
 import com.example.cluedo_seii.network.Callback;
+import com.example.cluedo_seii.network.ClientData;
 import com.example.cluedo_seii.network.connectionType;
-import com.example.cluedo_seii.network.dto.ConnectedDTO;
 import com.example.cluedo_seii.network.dto.NewGameRoomRequestDTO;
 import com.example.cluedo_seii.network.dto.RoomsDTO;
 import com.example.cluedo_seii.network.kryonet.GlobalNetworkHostKryo;
@@ -25,6 +25,7 @@ import com.example.cluedo_seii.network.kryonet.KryoHelper;
 import com.example.cluedo_seii.network.kryonet.NetworkClientKryo;
 import com.example.cluedo_seii.network.kryonet.SelectedConType;
 
+import java.util.LinkedHashMap;
 import java.util.LinkedList;
 
 public class StartGlobalGameActivity extends AppCompatActivity {
@@ -111,6 +112,8 @@ public class StartGlobalGameActivity extends AppCompatActivity {
         final ListView clientList = findViewById(R.id.globalClientList);
         clientList.setVisibility(View.VISIBLE);
 
+
+
         globalHost.registerReceivedGameRoomCallback(new Callback<NewGameRoomRequestDTO>() {
             @Override
             public void callback(final NewGameRoomRequestDTO argument) {
@@ -119,6 +122,26 @@ public class StartGlobalGameActivity extends AppCompatActivity {
                     public void run() {
                         TextView userNameInput = findViewById(R.id.global_username_input);
                         userNameInput.setText(argument.getCreatedRoom());
+                    }
+                });
+            }
+        });
+
+        globalHost.registerNewClientCallback(new Callback<LinkedHashMap<Integer, ClientData>>() {
+            @Override
+            public void callback(LinkedHashMap<Integer, ClientData> argument) {
+                final LinkedList<String> usernameList = new LinkedList<>();
+                for (ClientData clientData : argument.values()) {
+                    usernameList.add(clientData.getUsername());
+                }
+
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        ListView roomListView = findViewById(R.id.globalClientList);
+                        roomListView.setVisibility(View.VISIBLE);
+                        ArrayAdapter<String> roomListAdapter = new ArrayAdapter<>(StartGlobalGameActivity.this, android.R.layout.simple_list_item_1, usernameList);
+                        roomListView.setAdapter(roomListAdapter);
                     }
                 });
             }
@@ -176,6 +199,8 @@ public class StartGlobalGameActivity extends AppCompatActivity {
                         selectedRoom.setUsername(usernameInput.getText().toString());
 
                         client.sendMessage(selectedRoom);
+                        startActivity(new Intent(StartGlobalGameActivity.this, ChoosePlayerScreen.class));
+
 
                     }
                 });
