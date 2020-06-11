@@ -20,7 +20,7 @@ import com.example.cluedo_seii.R;
 
 import java.util.LinkedList;
 
-public class accuseAndSuspect extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
+public class MakeSuspicion extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
     private Spinner spinnerCulprit;
     private Spinner spinnerWeapon;

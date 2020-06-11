@@ -15,7 +15,7 @@
         android:theme="@style/AppTheme">
         <activity android:name=".activities.playerGameInteraction.AccuseSomeone"></activity>
         <activity android:name=".activities.NetworkActivities.ChooseGameTypeActivity" />
-        <activity android:name=".activities.playerGameInteraction.accuseAndSuspect" />
+        <activity android:name=".activities.playerGameInteraction.MakeSuspicion" />
         <activity android:name=".activities.NetworkActivities.ChoosePlayerScreen" />
         <activity android:name=".activities.helpSettings" />
         <activity android:name=".activities.NetworkActivities.StartGlobalGameActivity" />

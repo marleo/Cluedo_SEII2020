@@ -91,9 +91,13 @@ public class AccuseSomeone extends AppCompatActivity implements AdapterView.OnIt
                 //Im Fall einer falschen Anklage
 
                 else {
+                    game.getCurrentPlayer().setMadeFalseAccusation(true);
                     text = "Du hast eine falsche Anklage erhoben und kannst das Spiel nicht mehr gewinnen";
                     toast = Toast.makeText(getApplicationContext(), text , Toast.LENGTH_SHORT);
                     toast.show();
+                    game.incrWrongAccusers();
+                    game.getCurrentPlayer().setMadeFalseAccusation(true);
+                    game.getLocalPlayer().setMadeFalseAccusation(true);
                     //TODO Nachricht an andere Mitspieler verschicken
                     finish();
                 }
