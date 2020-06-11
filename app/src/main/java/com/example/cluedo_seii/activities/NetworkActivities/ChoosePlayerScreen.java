@@ -220,27 +220,33 @@ public class ChoosePlayerScreen extends AppCompatActivity {
 
                                 client.sendMessage(gameCharacterDTO);
                             } else if (conType == connectionType.GLOBALCLIENT) {
-                                // TODO implement
-                            } else if (conType == connectionType.GLOBALHOST) {
-                                //TODO implement and refactor
+                                // TODO implement and refactor
                                 GameCharacterDTO gameCharacterDTO = new GameCharacterDTO();
                                 gameCharacterDTO.setChoosenPlayer(selectedCharacter);
                                 gameCharacterDTO.setAvailablePlayers(gameCharacters);
 
-                                SendToOnePlayerDTO sendToOnePlayerDTO = new SendToOnePlayerDTO();
+                                client.sendMessageToRoomHost(gameCharacterDTO);
 
+                            } else if (conType == connectionType.GLOBALHOST) {
+                                //TODO implement and refactor
+                                gameCharacters.remove(selectedItem);
 
+                                GameCharacterDTO gameCharacterDTO = new GameCharacterDTO();
+                                gameCharacterDTO.setAvailablePlayers(gameCharacters);
 
-                                if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                                    try {
-                                        sendToOnePlayerDTO.setSerializedObject(SerializationHelper.toString(gameCharacterDTO));
-                                        sendToOnePlayerDTO.setToHost(true);
-
-                                        client.sendMessage(sendToOnePlayerDTO);
-                                    } catch (Exception e) {
-                                        e.printStackTrace();
-                                    }
+                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                                    globalHost.broadcastToClients(gameCharacterDTO);
                                 }
+
+                                Player player = new Player(globalHost.getRoomHost().getId(), selectedCharacter);
+                                game.setLocalPlayer(player);
+
+                                LinkedList<Player> playerLinkedList = game.getPlayers();
+                                if (playerLinkedList == null) playerLinkedList = new LinkedList<>();
+                                playerLinkedList.add(player);
+                                game.setPlayers(playerLinkedList);
+
+                                updateCharacterList(gameCharacters);
                             }
                         }
                     });
@@ -252,7 +258,12 @@ public class ChoosePlayerScreen extends AppCompatActivity {
     }
 
     private boolean everyOneHasChosenACharacter() {
-        return game.getPlayers().size() == server.getClientList().size() + 1;
+        if (SelectedConType.getConnectionType() == connectionType.HOST) {
+            return game.getPlayers().size() == server.getClientList().size() + 1;
+        } else {
+            return game.getPlayers().size() == globalHost.getClientList().size() + 1;
+        }
+
     }
 
     private void prepareGame() {
@@ -261,7 +272,14 @@ public class ChoosePlayerScreen extends AppCompatActivity {
         GameDTO gameDTO = new GameDTO();
         gameDTO.setGame(game);
 
-        server.broadcastMessage(gameDTO);
+        if (SelectedConType.getConnectionType() == connectionType.HOST) {
+            server.broadcastMessage(gameDTO);
+        } else {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                globalHost.broadcastToClients(gameDTO);
+            }
+        }
+
 
 
     }

@@ -23,6 +23,7 @@ import com.example.cluedo_seii.network.dto.RoomsDTO;
 import com.example.cluedo_seii.network.kryonet.GlobalNetworkHostKryo;
 import com.example.cluedo_seii.network.kryonet.KryoHelper;
 import com.example.cluedo_seii.network.kryonet.NetworkClientKryo;
+import com.example.cluedo_seii.network.kryonet.NetworkConstants;
 import com.example.cluedo_seii.network.kryonet.SelectedConType;
 
 import java.util.LinkedHashMap;
@@ -30,7 +31,7 @@ import java.util.LinkedList;
 
 public class StartGlobalGameActivity extends AppCompatActivity {
     //TODO change to server Ip
-    private String serverIP = "192.168.178.20";
+    private String serverIP = NetworkConstants.serverIP;
 
     //public static connectionType conType;
     private GlobalNetworkHostKryo globalHost;
@@ -153,6 +154,7 @@ public class StartGlobalGameActivity extends AppCompatActivity {
         NewGameRoomRequestDTO newGameRoomRequestDTO = new NewGameRoomRequestDTO();
         newGameRoomRequestDTO.setUsername(username);
 
+        globalHost.setRoomHostUsername(username);
         globalHost.sendMessage(newGameRoomRequestDTO);
 
 

@@ -3,6 +3,7 @@ package com.example.cluedo_seii.network.dto;
 public class NewGameRoomRequestDTO extends RequestDTO{
     private String username;
     private String createdRoom;
+    private int hostID;
 
     public String getUsername() {
         return username;
@@ -18,5 +19,13 @@ public class NewGameRoomRequestDTO extends RequestDTO{
 
     public void setCreatedRoom(String createdRoom) {
         this.createdRoom = createdRoom;
+    }
+
+    public int getHostID() {
+        return hostID;
+    }
+
+    public void setHostID(int hostID) {
+        this.hostID = hostID;
     }
 }
