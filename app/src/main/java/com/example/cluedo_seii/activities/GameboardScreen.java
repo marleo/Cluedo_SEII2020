@@ -23,6 +23,7 @@ import com.example.cluedo_seii.Player;
 import com.example.cluedo_seii.R;
 //import com.example.cluedo_seii.activities.playerGameInteraction.AccuseSomeone;
 //import com.example.cluedo_seii.activities.playerGameInteraction.MakeSuspicion;
+import com.example.cluedo_seii.activities.playerGameInteraction.NotifyPlayerWon;
 import com.example.cluedo_seii.activities.playerGameInteraction.PlayerTurnNotification;
 import com.example.cluedo_seii.activities.playerGameInteraction.accuseAndSuspect;
 import com.example.cluedo_seii.activities.playerGameInteraction.SuspicionShowCard;
@@ -411,11 +412,18 @@ public class GameboardScreen extends AppCompatActivity  {
 
                 //Ausgeführt bei GameState.END
                 else if(game.getGameState().equals(GameState.END)){
+                    notifyPlayersWon();
                     updateGame();
-                    finish();
+                    Intent intent = new Intent(GameboardScreen.this, MainActivity.class);
+                    startActivity(intent);
                 }
             }
         });
+    }
+
+    public void notifyPlayersWon(){
+        NotifyPlayerWon playerWon = new NotifyPlayerWon();
+        playerWon.show(manager, mesaggeDialogTag);
     }
 
     //Aufruf von DialogOptionen
