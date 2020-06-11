@@ -143,7 +143,6 @@ public class NetworkServerKryo implements KryoNetComponent, NetworkServer {
     private void handleGameRequest(Connection connection, GameDTO gameDTO) {
         broadcastMessageWithoutSender(gameDTO,connection);
 
-
         Game inGame = gameDTO.getGame();
 
         Game game = Game.getInstance();
@@ -153,9 +152,12 @@ public class NetworkServerKryo implements KryoNetComponent, NetworkServer {
         game.setRound(inGame.getRound());
         game.setGameOver(inGame.getGameOver());
         game.setPlayerIterator(inGame.getPlayerIterator());
+        game.setWrongAccusers(inGame.getWrongAccusers());
 
         //game.setGameState(inGame.getGameState());
         game.changeGameState(inGame.getGameState());
+
+
         // TODO set game attributes
     }
 
