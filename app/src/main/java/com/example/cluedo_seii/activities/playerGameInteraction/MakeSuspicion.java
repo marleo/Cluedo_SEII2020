@@ -62,7 +62,7 @@ public class MakeSuspicion extends AppCompatActivity implements AdapterView.OnIt
         spinnerWeapon.setAdapter(adapterWeapon);
 
         TextView currentRoom = findViewById(R.id.currentRoomText);
-        currentRoom.setText("Tatort: " + getCurrentRoom());
+        //currentRoom.setText("Tatort: " + getCurrentRoom());
 
         weaponChoice = findViewById(R.id.weaponImage);
         characterChoice = findViewById(R.id.suspectImage);
@@ -71,7 +71,7 @@ public class MakeSuspicion extends AppCompatActivity implements AdapterView.OnIt
         possibleWeapons = getResources().getStringArray(R.array.weapons);
         possibleRooms = getResources().getStringArray(R.array.rooms);
 
-        selectedRoom = getCurrentRoom();
+        //selectedRoom = getCurrentRoom();
 
         suspectButton = findViewById(R.id.makeSuspicionButton);
         suspectButton.setOnClickListener(new View.OnClickListener() {
@@ -141,7 +141,7 @@ public class MakeSuspicion extends AppCompatActivity implements AdapterView.OnIt
         });
     }
 
-    public String getCurrentRoom() {
+   /* public String getCurrentRoom() {
         int playerX = game.getCurrentPlayer().getPosition().x;
         int playerY = game.getCurrentPlayer().getPosition().y;
 
@@ -166,7 +166,7 @@ public class MakeSuspicion extends AppCompatActivity implements AdapterView.OnIt
         }
 
         return "";
-    }
+    }*/
 
 
     public void onStop(){
