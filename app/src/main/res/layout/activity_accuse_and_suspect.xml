@@ -63,7 +63,7 @@
         android:textColor="#FFFFFF"
         android:textSize="20sp"
         android:translationY="450dp" />
-
+<!--
     <Button
         android:id="@+id/makeAccusationButton"
         style="?android:attr/borderlessButtonStyle"
@@ -76,7 +76,7 @@
         android:textColor="#FFFFFF"
         android:textSize="20sp"
         android:translationY="430dp" />
-
+-->
     <TextView
         android:id="@+id/textView"
         android:layout_width="match_parent"

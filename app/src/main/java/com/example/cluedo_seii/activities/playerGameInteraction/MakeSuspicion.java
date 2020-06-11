@@ -111,7 +111,7 @@ public class MakeSuspicion extends AppCompatActivity implements AdapterView.OnIt
             }
         });
 
-        suspectButton = findViewById(R.id.makeAccusationButton);
+        /*suspectButton = findViewById(R.id.makeAccusationButton);
         suspectButton.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View v) {
@@ -138,7 +138,7 @@ public class MakeSuspicion extends AppCompatActivity implements AdapterView.OnIt
                     finish();
                 }
             }
-        });
+        });*/
     }
 
    /* public String getCurrentRoom() {

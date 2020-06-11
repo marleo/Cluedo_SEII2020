@@ -71,7 +71,7 @@ public class AccuseSomeone extends AppCompatActivity implements AdapterView.OnIt
 
         game = Game.getInstance();
 
-        suspectButton = findViewById(R.id.makeAccusationButton);
+       suspectButton = findViewById(R.id.makeAccusationButton);
         suspectButton.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View v) {
