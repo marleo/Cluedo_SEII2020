@@ -179,5 +179,8 @@
     <string name="anklagenSpielendeButton">anklagen (Spielende)</string>
     <string name="localString">local</string>
     <string name="globalString">global</string>
+    <string name="choose_character">CHOOSE CHARACTER</string>
+    <string name="connect">Connect</string>
+    <string name="startHost">Start Host</string>
 
 </resources>

@@ -42,26 +42,99 @@ public class StartGameScreen extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start_game_screen);
 
+        findViewById(R.id.localConnectButton).setVisibility(View.INVISIBLE);
+
         //reset Game
         Game.reset();
 
-        //TODO add Logic if the game is ready to start
         final Button chooseCharacter = findViewById(R.id.chooseCharacter);
+        chooseCharacter.setVisibility(View.INVISIBLE);
         chooseCharacter.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
                 startActivity(new Intent(StartGameScreen.this, ChoosePlayerScreen.class));
             }
         });
+
+        final Button selectClientButton = findViewById(R.id.localSelectClientButton);
+        selectClientButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                findViewById(R.id.localSelectHostButton).setVisibility(View.INVISIBLE);
+                SelectedConType.setConnectionType(connectionType.CLIENT);
+
+                client = NetworkClientKryo.getInstance();
+                KryoHelper.registerClasses(client);
+
+                final Button connectButton = findViewById(R.id.localConnectButton);
+                connectButton.setVisibility(View.VISIBLE);
+                connectButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        selectClient(v);
+                    }
+                });
+            }
+        });
+
+        final Button selectHostButton = findViewById(R.id.localSelectHostButton);
+        selectHostButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                findViewById(R.id.localSelectClientButton).setVisibility(View.INVISIBLE);
+                SelectedConType.setConnectionType(connectionType.HOST);
+
+                server = NetworkServerKryo.getInstance();
+                KryoHelper.registerClasses(server);
+
+                final Button hostGame = findViewById(R.id.localConnectButton);
+                hostGame.setVisibility(View.VISIBLE);
+                hostGame.setText(R.string.startHost);
+                hostGame.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        selectHost(v);
+                        hostGame.setVisibility(View.INVISIBLE);
+                    }
+                });
+            }
+        });
+    }
+
+    public void selectClient(View view) {
+        EditText ipInput = findViewById(R.id.ipAddress);
+        String ip = ipInput.getText().toString();
+
+
+        EditText usernameInput = findViewById(R.id.username_input);
+        final UserNameRequestDTO userNameRequestDTO = new UserNameRequestDTO();
+        userNameRequestDTO.setUsername(usernameInput.getText().toString());
+
+        client.registerConnectionCallback(new Callback<ConnectedDTO>() {
+            @Override
+            public void callback(ConnectedDTO argument) {
+                // ausführung nach erflogreichem verbinden
+                Log.d("Connection Callback", "callback: ");
+                client.sendUsernameRequest(userNameRequestDTO);
+                // after a succesfull connection the client gets forwarded to the choose Player Activity
+                startActivity(new Intent(StartGameScreen.this, ChoosePlayerScreen.class));
+            }
+        });
+
+
+        try {
+            client.connect(ip);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public void selectHost(View view) {
         final ListView clientList = findViewById(R.id.clientList);
-        //conType = connectionType.HOST;
-        SelectedConType.setConnectionType(connectionType.HOST);
-        
-        server = NetworkServerKryo.getInstance();
-        KryoHelper.registerClasses(server);
+
+        TextView usernameTextView = findViewById(R.id.username_input);
+        String username = usernameTextView.getText().toString();
+        server.setHostUsername(username);
 
         server.registerNewClientCallback(new Callback<LinkedHashMap<Integer, ClientData>>() {
             @Override
@@ -74,6 +147,10 @@ public class StartGameScreen extends AppCompatActivity {
                 // UPDATE Current Players
                 runOnUiThread(new Runnable() {
                     public void run() {
+                        if (usernameList.size() >= 2) {
+                            findViewById(R.id.chooseCharacter).setVisibility(View.VISIBLE);
+                        }
+
                         TextView userNameInput = findViewById(R.id.username_input);
                         ArrayAdapter<String> clientListAdapter = new ArrayAdapter<>(StartGameScreen.this, android.R.layout.simple_list_item_1,usernameList);
                         clientList.setAdapter(clientListAdapter);
@@ -99,53 +176,5 @@ public class StartGameScreen extends AppCompatActivity {
         findViewById(R.id.username_input).setVisibility(View.INVISIBLE);
 
         clientList.setVisibility(View.VISIBLE);
-
-
-
-
-    }
-
-    public void selectClient(View view) {
-        try {
-            //conType = connectionType.CLIENT;
-            SelectedConType.setConnectionType(connectionType.CLIENT);
-
-            client = NetworkClientKryo.getInstance();
-            KryoHelper.registerClasses(client);
-
-            EditText ipInput = findViewById(R.id.ipAddress);
-            String ip = ipInput.getText().toString();
-
-            if (ip.equals("ip")) {
-                //TODO delete hardcoded ip
-                ip = "192.168.178.47";
-            }
-
-            EditText usernameInput = findViewById(R.id.username_input);
-            final UserNameRequestDTO userNameRequestDTO = new UserNameRequestDTO();
-            userNameRequestDTO.setUsername(usernameInput.getText().toString());
-
-            client.registerConnectionCallback(new Callback<ConnectedDTO>() {
-                @Override
-                public void callback(ConnectedDTO argument) {
-                    // ausführung nach erflogreichem verbinden
-                    Log.d("Connection Callback", "callback: ");
-                    client.sendUsernameRequest(userNameRequestDTO);
-                    // after a succesfull connection the client gets forwarded to the choose Player Activity
-                    startActivity(new Intent(StartGameScreen.this, ChoosePlayerScreen.class));
-                }
-            });
-
-
-            try {
-                client.connect(ip);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 }

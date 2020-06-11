@@ -38,9 +38,13 @@ public class NetworkServerKryo implements KryoNetComponent, NetworkServer {
 
     private LinkedHashMap<Integer, ClientData> clientList;
 
+    private ClientData host;
+
     private NetworkServerKryo() {
         server = new Server();
         clientList = new LinkedHashMap<>();
+        host = new ClientData();
+        host.setId(1);
     }
 
     public static NetworkServerKryo getInstance() {
@@ -239,5 +243,13 @@ public class NetworkServerKryo implements KryoNetComponent, NetworkServer {
 
     public LinkedHashMap<Integer, ClientData> getClientList() {
         return clientList;
+    }
+
+    public void setHostUsername(String username) {
+        host.setUsername(username);
+    }
+
+    public ClientData getHost() {
+        return host;
     }
 }

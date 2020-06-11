@@ -32,6 +32,7 @@ public class Game implements Serializable {
         round = 1;
         playerIterator = 0;
         gameState = GameState.START;
+        players = new LinkedList<>();
     }
 
     //Getter und Setter
