@@ -13,7 +13,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activities.NetworkActivities.ChooseGameTypeActivity"></activity>
+        <activity android:name=".activities.playerGameInteraction.AccuseSomeone"></activity>
+        <activity android:name=".activities.NetworkActivities.ChooseGameTypeActivity" />
         <activity android:name=".activities.playerGameInteraction.accuseAndSuspect" />
         <activity android:name=".activities.NetworkActivities.ChoosePlayerScreen" />
         <activity android:name=".activities.helpSettings" />
@@ -47,9 +48,6 @@
         <activity
             android:name=".activities.PlayerSelectionScreen"
             android:exported="true"
-            android:label="Cluedo" />
-        <activity
-            android:name=".activities.playerGameInteraction.AccuseSomeone"
             android:label="Cluedo" />
     </application>
 
