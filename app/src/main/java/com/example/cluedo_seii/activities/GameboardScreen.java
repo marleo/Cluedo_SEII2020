@@ -584,7 +584,7 @@ public class GameboardScreen extends AppCompatActivity  {
 
     //TODO Methoden zum Aufrufen der Netzwerkfunktionen : GameObjekt versenden, Verdachtskarte schicken
 
-
+ // Test 
     //EventListener für Swipe-Event
     @Override
     public boolean onTouchEvent (MotionEvent touchEvent){
