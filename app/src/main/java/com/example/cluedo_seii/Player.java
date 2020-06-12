@@ -17,8 +17,8 @@ public class Player implements Serializable {
     private Point position;
     private GameCharacter playerCharacter;
     private Boolean madeFalseAccusation;
-    private Boolean cheated;
-    //private Notepad notepad;
+    private Notepad notepad;
+
 
     private Player() {
         //no arg constructor for deserialization
@@ -30,7 +30,7 @@ public class Player implements Serializable {
         this.position = playerCharacter.getStartingPoint();
         this.playerCharacter = playerCharacter;
         madeFalseAccusation = false;
-        cheated = false;
+        this.notepad= new Notepad();
     }
 
     public Point getPosition() {
@@ -59,15 +59,10 @@ public class Player implements Serializable {
         return madeFalseAccusation;
     }
 
-    public void setCheated(){
-        cheated = true;
-}
 
-    public Boolean getCheated(){return cheated;}
-
-    /*public Notepad getNotepad() {
+    public Notepad getNotepad() {
         return notepad;
-    }*/
+    }
 
     public void addCard(Card card){
         playerCards.add(card);
