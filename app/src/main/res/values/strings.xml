@@ -183,4 +183,7 @@
     <string name="connect">Connect</string>
     <string name="startHost">Start Host</string>
 
+    <string name="exposeCheaterButton">Schummler \n verdächtigen</string>
+    <string name="accuseCheaterButton">Verdächtigen</string>
+
 </resources>

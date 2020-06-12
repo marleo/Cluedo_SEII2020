@@ -12,6 +12,7 @@ import com.esotericsoftware.kryonet.Listener;
 import com.example.cluedo_seii.Game;
 import com.example.cluedo_seii.network.Callback;
 import com.example.cluedo_seii.network.NetworkClient;
+import com.example.cluedo_seii.network.dto.CheatDTO;
 import com.example.cluedo_seii.network.connectionType;
 import com.example.cluedo_seii.network.dto.BroadcastDTO;
 import com.example.cluedo_seii.network.dto.ConnectedDTO;
@@ -41,12 +42,20 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
     private Callback<GameCharacterDTO> characterCallback;
     private Callback<PlayerDTO> playerCallback;
     private Callback<GameDTO> gameCallback;
+    private Callback<CheatDTO> cheatCallback;
     private Callback<RoomsDTO> roomCallback;
 
     private boolean isConnected;
+    private int cheated=0;
 
     private NetworkClientKryo() {
         client = new Client(8192,4096);
+    }
+    public int getCheated(){
+        return cheated;
+    }
+    public void setCheated(int value){
+        this.cheated+=value;
     }
 
 
@@ -121,6 +130,8 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
             handlePlayerResponse(connection, (PlayerDTO) object);
         } else if (object instanceof GameDTO) {
             handleGameResponse(connection, (GameDTO) object);
+        } else if (object instanceof CheatDTO) {
+            handleCheatResponse(connection, (CheatDTO) object);
         } else if (object instanceof RoomsDTO) {
             handleRoomsResponse(connection, (RoomsDTO) object);
         } else if (object instanceof BroadcastDTO) {
@@ -140,6 +151,13 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
             connectionCallback.callback(connectedDTO);
             // reset connection Callback
             connectionCallback = null;
+        }
+    }
+
+    private void handleCheatResponse(Connection connection, CheatDTO cheatDTO) {
+        Log.d("Player response","cheater entdeckt");
+        if (cheatCallback!= null){
+            cheatCallback.callback(cheatDTO);
         }
     }
 
@@ -228,6 +246,8 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
         this.gameCallback = callback;
     }
 
+    public void registerCheatCallback(Callback<CheatDTO> callback){this.cheatCallback = callback;}
+
     public void registerRoomCallback(Callback<RoomsDTO> callback) {
         this.roomCallback = null;
         this.roomCallback = callback;
@@ -239,6 +259,11 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
         sendMessage(gameDTO);
     }
 
+    public void sendCheat() {
+        CheatDTO cheatDTO = new CheatDTO();
+        sendMessage(cheatDTO);
+        //cheatCallback.callback(cheatDTO);
+    }
     public void sendMessageToRoomHost(RequestDTO requestDTO) {
         SendToOnePlayerDTO sendToOnePlayerDTO = new SendToOnePlayerDTO();
         Log.d("Sending Object to Host:", requestDTO.getClass().toString());

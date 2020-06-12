@@ -29,6 +29,8 @@ import com.example.cluedo_seii.activities.playerGameInteraction.MakeSuspicion;
 import com.example.cluedo_seii.activities.playerGameInteraction.SuspicionShowCard;
 import com.example.cluedo_seii.activities.playerGameInteraction.ThrowDice;
 import com.example.cluedo_seii.activities.playerGameInteraction.ThrowDiceOrUseSecretPassage;
+import com.example.cluedo_seii.network.Callback;
+import com.example.cluedo_seii.network.dto.CheatDTO;
 import com.example.cluedo_seii.network.connectionType;
 import com.example.cluedo_seii.network.kryonet.NetworkClientKryo;
 import com.example.cluedo_seii.network.kryonet.NetworkServerKryo;
@@ -241,6 +243,36 @@ public class GameboardScreen extends AppCompatActivity  {
         // Wenn sich die Id ändert, dann danach updateGameboardScreen machen so wie hier!
         playerCurrentlyPlayingId = 0;
         gameboard.updateGameboardScreen(this);
+        server = NetworkServerKryo.getInstance();
+        client= NetworkClientKryo.getInstance();
+        client.registerCheatCallback(new Callback<CheatDTO>() {
+            @Override
+            public void callback(CheatDTO argument) {
+                runOnUiThread(new Runnable() {
+                    public void run() {
+                        Toast toast;
+                        toast = Toast.makeText(getApplicationContext(),"Jemand hat geschummelt", Toast.LENGTH_LONG);
+                        toast.show();
+
+                    }
+                });
+
+            }
+        });
+        server.registerCheatDTOCallback(new Callback<CheatDTO>() {
+            @Override
+            public void callback(CheatDTO argument) {
+                runOnUiThread(new Runnable() {
+                    public void run() {
+                        Toast toast;
+                        toast = Toast.makeText(getApplicationContext(),"Jemand hat geschummelt", Toast.LENGTH_LONG);
+                        toast.show();
+
+                    }
+                });
+
+            }
+        });
     }
 
     public Gameboard getGameboard() {
