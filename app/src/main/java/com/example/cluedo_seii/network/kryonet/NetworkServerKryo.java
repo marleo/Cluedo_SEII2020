@@ -2,7 +2,6 @@ package com.example.cluedo_seii.network.kryonet;
 
 import android.os.Handler;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
@@ -99,8 +98,11 @@ public class NetworkServerKryo implements KryoNetComponent, NetworkServer {
 
     private void handleCheaterRequest(Connection connection, CheatDTO cheatDTO){
         Log.d("network-Server:","Received a cheater");
-        sendCheat();
-        cheatDTOCallback.callback(cheatDTO);
+        broadcastMessage(cheatDTO);
+        if(cheatDTOCallback!=null){
+            cheatDTOCallback.callback(cheatDTO);
+
+        }
 
 
 
@@ -196,6 +198,8 @@ public class NetworkServerKryo implements KryoNetComponent, NetworkServer {
     public void sendCheat(){
         CheatDTO cheatDTO = new CheatDTO();
         broadcastMessage(cheatDTO);
+        cheatDTOCallback.callback(cheatDTO);
+
     }
 
     @Override

@@ -26,6 +26,10 @@ import com.example.cluedo_seii.activities.playerGameInteraction.SuspectOrAccuse;
 import com.example.cluedo_seii.activities.playerGameInteraction.SuspicionShowCard;
 import com.example.cluedo_seii.activities.playerGameInteraction.ThrowDice;
 import com.example.cluedo_seii.activities.playerGameInteraction.ThrowDiceOrUseSecretPassage;
+import com.example.cluedo_seii.network.Callback;
+import com.example.cluedo_seii.network.dto.CheatDTO;
+import com.example.cluedo_seii.network.kryonet.NetworkClientKryo;
+import com.example.cluedo_seii.network.kryonet.NetworkServerKryo;
 import com.example.cluedo_seii.spielbrett.Gameboard;
 import com.example.cluedo_seii.spielbrett.StartingPoint;
 
@@ -47,6 +51,8 @@ public class GameboardScreen extends AppCompatActivity  {
     private List<StartingPoint> startingPoints;
     private List<Player> playerMove;
     private LinkedList<Card> suspicionCards;
+    private NetworkServerKryo server;
+    private NetworkClientKryo client;
 
     private Player currentPlayerInDoor;// TODO: Aufräumen und vielleicht nur mehr das Player Objekt anstatt id und Player Objekt
     private int playerCurrentlyPlayingId;
@@ -219,6 +225,36 @@ public class GameboardScreen extends AppCompatActivity  {
         // Wenn sich die Id ändert, dann danach updateGameboardScreen machen so wie hier!
         playerCurrentlyPlayingId = 0;
         gameboard.updateGameboardScreen(this);
+        server = NetworkServerKryo.getInstance();
+        client= NetworkClientKryo.getInstance();
+        client.registerCheatCallback(new Callback<CheatDTO>() {
+            @Override
+            public void callback(CheatDTO argument) {
+                runOnUiThread(new Runnable() {
+                    public void run() {
+                        Toast toast;
+                        toast = Toast.makeText(getApplicationContext(),"Jemand hat geschummelt", Toast.LENGTH_LONG);
+                        toast.show();
+
+                    }
+                });
+
+            }
+        });
+        server.registerCheatDTOCallback(new Callback<CheatDTO>() {
+            @Override
+            public void callback(CheatDTO argument) {
+                runOnUiThread(new Runnable() {
+                    public void run() {
+                        Toast toast;
+                        toast = Toast.makeText(getApplicationContext(),"Jemand hat geschummelt", Toast.LENGTH_LONG);
+                        toast.show();
+
+                    }
+                });
+
+            }
+        });
     }
 
     public Gameboard getGameboard() {

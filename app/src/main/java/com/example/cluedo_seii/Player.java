@@ -14,7 +14,6 @@ public class Player implements Serializable {
     private Point position;
     private GameCharacter playerCharacter;
     private Boolean madeFalseAccusation;
-    private int cheated;
     private Notepad notepad;
 
 
@@ -28,7 +27,6 @@ public class Player implements Serializable {
         this.position = playerCharacter.getStartingPoint();
         this.playerCharacter = playerCharacter;
         madeFalseAccusation = false;
-        cheated = 0;
         this.notepad= new Notepad();
     }
 
@@ -58,11 +56,6 @@ public class Player implements Serializable {
         return madeFalseAccusation;
     }
 
-    public void setCheated(int value){
-        cheated += value;
-}
-
-    public int getCheated(){return cheated;}
 
     public Notepad getNotepad() {
         return notepad;

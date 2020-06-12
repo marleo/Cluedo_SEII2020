@@ -37,9 +37,16 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
     private Callback<CheatDTO> cheatCallback;
 
     private boolean isConnected;
+    private int cheated=0;
 
     private NetworkClientKryo() {
         client = new Client();
+    }
+    public int getCheated(){
+        return cheated;
+    }
+    public void setCheated(int value){
+        this.cheated+=value;
     }
 
 
@@ -116,9 +123,10 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
     }
 
     private void handleCheatResponse(Connection connection, CheatDTO cheatDTO) {
-        sendCheat();
         Log.d("Player response","cheater entdeckt");
-        cheatCallback.callback(cheatDTO);
+        if (cheatCallback!= null){
+            cheatCallback.callback(cheatDTO);
+        }
 
     }
 
@@ -187,6 +195,7 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
     public void sendCheat() {
         CheatDTO cheatDTO = new CheatDTO();
         sendMessage(cheatDTO);
+        //cheatCallback.callback(cheatDTO);
 
     }
 

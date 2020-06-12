@@ -8,7 +8,6 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
@@ -18,7 +17,6 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.esotericsoftware.kryonet.Client;
 import com.example.cluedo_seii.Card;
 import com.example.cluedo_seii.Game;
 import com.example.cluedo_seii.InvestigationFile;
@@ -28,10 +26,8 @@ import com.example.cluedo_seii.R;
 import com.example.cluedo_seii.activities.playerGameInteraction.ExposeCheater;
 import com.example.cluedo_seii.network.Callback;
 import com.example.cluedo_seii.network.ClientData;
-import com.example.cluedo_seii.network.NetworkClient;
 import com.example.cluedo_seii.network.connectionType;
 import com.example.cluedo_seii.network.dto.CheatDTO;
-import com.example.cluedo_seii.network.kryonet.KryoHelper;
 import com.example.cluedo_seii.network.kryonet.NetworkClientKryo;
 import com.example.cluedo_seii.network.kryonet.NetworkServerKryo;
 
@@ -94,6 +90,36 @@ public class NotepadScreen extends AppCompatActivity {
         final SharedPreferences preferences = getSharedPreferences("notizblock", MODE_PRIVATE);
         final SharedPreferences.Editor editor = getSharedPreferences("notizblock", MODE_PRIVATE).edit();
         setContentView(R.layout.activity_notepad);
+        server = NetworkServerKryo.getInstance();
+        client=NetworkClientKryo.getInstance();
+        client.registerCheatCallback(new Callback<CheatDTO>() {
+            @Override
+            public void callback(CheatDTO argument) {
+                runOnUiThread(new Runnable() {
+                    public void run() {
+                        Toast toast;
+                        toast = Toast.makeText(getApplicationContext(),"Jemand hat geschummelt", Toast.LENGTH_LONG);
+                        toast.show();
+
+                    }
+                });
+
+            }
+        });
+        server.registerCheatDTOCallback(new Callback<CheatDTO>() {
+            @Override
+            public void callback(CheatDTO argument) {
+                runOnUiThread(new Runnable() {
+                    public void run() {
+                        Toast toast;
+                        toast = Toast.makeText(getApplicationContext(),"Jemand hat geschummelt", Toast.LENGTH_LONG);
+                        toast.show();
+
+                    }
+                });
+
+            }
+        });
 
        // player=game.getCurrentPlayer();
         player=game.getLocalPlayer();
@@ -310,50 +336,20 @@ public class NotepadScreen extends AppCompatActivity {
 
 
         public void cheatFunction (InvestigationFile investigationFile){
-            server = NetworkServerKryo.getInstance();
-            client=NetworkClientKryo.getInstance();
-
-            if(conType==connectionType.CLIENT){
+           // if(conType==connectionType.CLIENT){
 
                 client.sendCheat();
 
 
 
-            }
-            else if(conType==connectionType.HOST){
+            //}
+           // else if(conType==connectionType.HOST){
 
-                server.sendCheat();
+               server.sendCheat();
 
 
-                    }
-            client.registerCheatCallback(new Callback<CheatDTO>() {
-                @Override
-                public void callback(CheatDTO argument) {
-                    runOnUiThread(new Runnable() {
-                        public void run() {
-                            Toast toast;
-                            toast = Toast.makeText(getApplicationContext(),"Jemand hat geschummelt", Toast.LENGTH_LONG);
-                            toast.show();
+                    //}
 
-                        }
-                    });
-
-                }
-            });
-            server.registerCheatDTOCallback(new Callback<CheatDTO>() {
-                @Override
-                public void callback(CheatDTO argument) {
-                    runOnUiThread(new Runnable() {
-                        public void run() {
-                            Toast toast;
-                            toast = Toast.makeText(getApplicationContext(),"Jemand hat geschummelt", Toast.LENGTH_LONG);
-                            toast.show();
-
-                        }
-                    });
-
-                }
-            });
 
 
             Card culprit = investigationFile.getCulprit();
@@ -375,7 +371,7 @@ public class NotepadScreen extends AppCompatActivity {
             while (randomString.equals(culpritString)||randomString.equals(roomString)||randomString.equals(weaponString)||randomTextView.getTag()=="grayed");
 
             grayOut(randomTextView);
-            player.setCheated(1);
+            client.setCheated(1);
 
         }
 
@@ -482,7 +478,7 @@ public class NotepadScreen extends AppCompatActivity {
 
         public void lightEvent(SensorEvent event){
         SharedPreferences preferences=getSharedPreferences("com.example.cluedo_seii",MODE_PRIVATE);
-            if (player.getCheated() < 1 && preferences.getBoolean("cheatEnabled", false)) {
+            if (client.getCheated() < 1 && preferences.getBoolean("cheatEnabled", false)) {
                 if (event.sensor.getType() == Sensor.TYPE_LIGHT) {
                     if (event.values[0] < 3) {
                         sensorValue = event.values[0];
