@@ -19,11 +19,11 @@ public class AccusationMessageDTO extends RequestDTO {
     }
 
     public void setWinMessage(){
-        //message = "Spieler " + accuser.getId() + "  hat eine richtige Anklage erhoben und das Spiel gewonnen.";
+        message = "Spieler " + accuser.getId() + "  hat eine richtige Anklage erhoben und das Spiel gewonnen.";
      }
 
     public void setLooseMessage(){
-       // message = "Spieler " + accuser.getId() + "  hat eine falsche Anklage erhoben.";
+        message = "Spieler " + accuser.getId() + "  hat eine falsche Anklage erhoben.";
     }
 
 }
