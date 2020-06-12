@@ -23,6 +23,7 @@ import com.example.cluedo_seii.InvestigationFile;
 import com.example.cluedo_seii.Notepad;
 import com.example.cluedo_seii.Player;
 import com.example.cluedo_seii.R;
+//import com.example.cluedo_seii.activities.NetworkActivities.StartGameScreen;
 import com.example.cluedo_seii.activities.playerGameInteraction.ExposeCheater;
 import com.example.cluedo_seii.network.Callback;
 import com.example.cluedo_seii.network.ClientData;
@@ -86,7 +87,7 @@ public class NotepadScreen extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         intent = getIntent();
         game = Game.getInstance();
-        this.conType=StartGameScreen.conType;
+        //this.conType= StartGameScreen.conType;
         final SharedPreferences preferences = getSharedPreferences("notizblock", MODE_PRIVATE);
         final SharedPreferences.Editor editor = getSharedPreferences("notizblock", MODE_PRIVATE).edit();
         setContentView(R.layout.activity_notepad);

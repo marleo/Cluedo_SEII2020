@@ -19,7 +19,7 @@ import com.esotericsoftware.kryonet.Client;
 import com.example.cluedo_seii.Game;
 import com.example.cluedo_seii.Player;
 import com.example.cluedo_seii.R;
-import com.example.cluedo_seii.activities.StartGameScreen;
+import com.example.cluedo_seii.activities.NetworkActivities.StartGameScreen;
 import com.example.cluedo_seii.network.Callback;
 import com.example.cluedo_seii.network.ClientData;
 import com.example.cluedo_seii.network.connectionType;
