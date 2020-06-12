@@ -9,8 +9,10 @@ import androidx.annotation.RequiresApi;
 import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
+import com.example.cluedo_seii.Card;
 import com.example.cluedo_seii.Game;
 import com.example.cluedo_seii.GameState;
+import com.example.cluedo_seii.Player;
 import com.example.cluedo_seii.activities.GameboardScreen;
 import com.example.cluedo_seii.network.Callback;
 import com.example.cluedo_seii.network.NetworkClient;
@@ -25,6 +27,7 @@ import com.example.cluedo_seii.network.dto.PlayerDTO;
 import com.example.cluedo_seii.network.dto.RequestDTO;
 import com.example.cluedo_seii.network.dto.RoomsDTO;
 import com.example.cluedo_seii.network.dto.SendToOnePlayerDTO;
+import com.example.cluedo_seii.network.dto.SuspicionDTO;
 import com.example.cluedo_seii.network.dto.TextMessage;
 import com.example.cluedo_seii.network.dto.UserNameRequestDTO;
 
@@ -150,6 +153,10 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
         else if(object instanceof AccusationMessageDTO){
             handleAccusationMessageDTO(connection, (AccusationMessageDTO)object);
         }
+        else if(object instanceof SuspicionDTO){
+            Log.i("receivedSuspicionDTO", "yeah");
+            handleSuspicionMessageDTO(connection, (SuspicionDTO)object);
+        }
     }
 
 
@@ -216,10 +223,23 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
     }
 
     private void handleAccusationMessageDTO(Connection connection, AccusationMessageDTO accusationMessageDTO){
-        AccusationMessageDTO accusationMessage = accusationMessageDTO;
         Game game = Game.getInstance();
-        game.setMessageForLocalPlayer(accusationMessage.getMessage());
+        game.setMessageForLocalPlayer(accusationMessageDTO.getMessage());
         game.changeGameState(GameState.PASSIVE);
+    }
+
+    private void handleSuspicionMessageDTO(Connection connection, SuspicionDTO suspicionDTO){
+        Game game = Game.getInstance();
+        Player suspected=suspicionDTO.getAcusee();
+        game.setSuspicion(suspicionDTO.getSuspicion());
+        Log.i("suspicionReceived", "suspicon");
+        Log.i("ids", game.getLocalPlayer().getId() + " local|suspect" + suspected.getId());
+
+        if(game.getLocalPlayer().getId()==suspected.getId()){
+                Log.i("change", "changeGameState");
+                game.changeGameState(GameState.SUSPECTED);
+                Log.i("StateAfterChange", game.getGameState().toString());
+        }
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)

@@ -24,7 +24,15 @@ public class Game implements Serializable {
     private Player localPlayer;
     private int wrongAccusers;
     private String messageForLocalPlayer;
+    private LinkedList<Card>suspicion;
 
+    public LinkedList<Card> getSuspicion() {
+        return suspicion;
+    }
+
+    public void setSuspicion(LinkedList<Card> suspicion) {
+        this.suspicion = suspicion;
+    }
 
     private Game(){
         this.deckOfCards = new DeckOfCards();

@@ -22,6 +22,10 @@ import com.example.cluedo_seii.Player;
 import com.example.cluedo_seii.R;
 import com.example.cluedo_seii.network.connectionType;
 import com.example.cluedo_seii.network.dto.AccusationMessageDTO;
+import com.example.cluedo_seii.network.dto.SuspicionDTO;
+import com.example.cluedo_seii.network.kryonet.NetworkClientKryo;
+import com.example.cluedo_seii.network.kryonet.NetworkServerKryo;
+import com.example.cluedo_seii.network.kryonet.SelectedConType;
 import com.example.cluedo_seii.network.kryonet.NetworkClientKryo;
 import com.example.cluedo_seii.network.kryonet.NetworkServerKryo;
 import com.example.cluedo_seii.network.kryonet.SelectedConType;
@@ -46,12 +50,17 @@ public class MakeSuspicion extends AppCompatActivity implements AdapterView.OnIt
     private ImageView weaponChoice;
     private ImageView characterChoice;
     private Game game;
-    private LinkedList<String> suspectedPlayerHand;
+    private LinkedList<Card> suspectedPlayerHand;
     private Toast toast;
     private String text;
     ArrayList<String> gameCharacters;
     private String[]getPossibleCulprits;
     ArrayAdapter<String> adapter;
+    private NetworkServerKryo server;
+    private NetworkClientKryo client;
+    private connectionType conType;
+    Player suspectedPlayer;
+    SuspicionDTO suspicionDTO;
 
 
     @SuppressLint("SetTextI18n")
@@ -61,6 +70,7 @@ public class MakeSuspicion extends AppCompatActivity implements AdapterView.OnIt
         setContentView(R.layout.activity_accuse_and_suspect);
         gameCharacters=new ArrayList<String>();
         game = Game.getInstance();
+        initializeNetwork();
 
         for(Player player: game.getPlayers()){
             gameCharacters.add(player.getPlayerCharacter().getName());
@@ -105,9 +115,11 @@ public class MakeSuspicion extends AppCompatActivity implements AdapterView.OnIt
             public void onClick(View v) {
                 suspectedPlayerHand = game.getCurrentPlayer().suspect(selectedCulprit, selectedWeapon, selectedRoom, game.getPlayers());
 
+
                 for (Player player : game.getPlayers()) {
                     if (player.getPlayerCharacter().getName().equals(selectedCulprit)) {
                         player.setPosition(game.getCurrentPlayer().getPosition());
+                        suspectedPlayer = player;
                     }
                 }
 
@@ -117,6 +129,13 @@ public class MakeSuspicion extends AppCompatActivity implements AdapterView.OnIt
                     text = "Hier gibt es nichts zum sehen";
                     toast = Toast.makeText(getApplicationContext(), text, Toast.LENGTH_SHORT);
                     toast.show();
+
+                    suspicionDTO = new SuspicionDTO();
+                    suspicionDTO.setAccuser(game.getCurrentPlayer());
+                    suspicionDTO.setAcusee(suspectedPlayer);
+                    suspicionDTO.setSuspicion(suspectedPlayerHand);
+                    updateGame();
+
                     finish();
                 }
 
@@ -124,8 +143,28 @@ public class MakeSuspicion extends AppCompatActivity implements AdapterView.OnIt
 
                 else {
                     text = "Der verdächtigte Spieler hat folgende Karten auf der Hand:" + '\n';
+
+                    suspicionDTO = new SuspicionDTO();
+                    suspicionDTO.setAccuser(game.getCurrentPlayer());
+                    suspicionDTO.setAcusee(suspectedPlayer);
+                    LinkedList<Card>suspicion = new LinkedList<>();
+                    for(Card card:suspectedPlayerHand){
+                        suspicion.add(card);
+                    }
+                   while(suspicion.size()<=3){
+                        suspicion.add(suspectedPlayerHand.get(0));
+                    }
+
+                   for(Card casrd:suspicion) {
+                       Log.i("suspiconSize", casrd.getDesignation());
+                   }
+
+                    suspicionDTO.setSuspicion(suspicion);
+                    updateGame();
+
+
                     for (int i = 0; i < suspectedPlayerHand.size(); i++) {
-                        text += suspectedPlayerHand.get(i) + '\n';
+                        text += suspectedPlayerHand.get(i).getDesignation() + '\n';
                     }
 
                     toast = Toast.makeText(getApplicationContext(), text, Toast.LENGTH_SHORT);
@@ -195,7 +234,7 @@ public class MakeSuspicion extends AppCompatActivity implements AdapterView.OnIt
 
     public void onStop(){
         super.onStop();
-        game.changeGameState(GameState.PLAYERTURNEND);
+        game.changeGameState(GameState.WAITINGFORANSWER);
     }
 
     @Override
@@ -248,6 +287,27 @@ public class MakeSuspicion extends AppCompatActivity implements AdapterView.OnIt
 
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
+    }
+
+    public void initializeNetwork(){
+        conType = SelectedConType.getConnectionType();
+        if(conType==connectionType.HOST) {
+            server = NetworkServerKryo.getInstance();
+        }
+
+        else if(conType==connectionType.CLIENT){
+            client = NetworkClientKryo.getInstance();
+        }
+    }
+
+    public void updateGame( ){
+        //TODO add if for globalhost and global Client
+        if(conType==connectionType.HOST) {
+            server.broadcastMessage(suspicionDTO);
+        }
+        else if(conType==connectionType.CLIENT){
+            client.sendMessage(suspicionDTO);
+        }
     }
 
 

@@ -460,7 +460,8 @@ public class GameboardScreen extends AppCompatActivity  {
                 }
 
                 else if(game.getGameState().equals(GameState.SUSPECTED)){
-                    suspicionShowCard();
+                    Log.i("changeGameState", "SUSPECTED");
+                    suspicionShowCard(game.getSuspicion());
                 }
 
                 else if(game.getGameState().equals(GameState.WAITINGFORANSWER)){
@@ -470,6 +471,12 @@ public class GameboardScreen extends AppCompatActivity  {
             }
         });
     }
+
+    public void setSuspicionCards(LinkedList<Card> suspicionCards) {
+        this.suspicionCards = suspicionCards;
+
+    }
+
 
     public void notifyPlayersWon(){
         NotifyPlayerWon playerWon = new NotifyPlayerWon();
@@ -526,19 +533,15 @@ public class GameboardScreen extends AppCompatActivity  {
 
 
     //Zeigt Kartenauswahl auf Spielerhand bei Verdacht
-    public void suspicionShowCard(){
-        LinkedList<Card>suspicion = new LinkedList<>();
-        suspicion.add(game.getLocalPlayer().getPlayerCards().get(0));
-        suspicion.add(game.getLocalPlayer().getPlayerCards().get(1));
-        suspicion.add(game.getLocalPlayer().getPlayerCards().get(2));
+    public void suspicionShowCard(LinkedList<Card>suspicion){
+        Log.i("SuspiconCheck", suspicion.size() + "");
         if(checkSuspicionCard(suspicion).size()>0){
             SuspicionShowCard dialog = new SuspicionShowCard();
             dialog.show(manager, mesaggeDialogTag);
         }
         else{
-            String text = "Du wurdest verdächtigt, hast aber keine der Karten, die Teil deines Verdachts sind, auf deiner Hand.";
-            Toast toast = Toast.makeText(getApplicationContext(), text, Toast.LENGTH_SHORT);
-            toast.show();
+            game.setMessageForLocalPlayer("Du wurdest verdächtigt, hast aber keine der Karten, die Teil deines Verdachts sind, auf deiner Hand.");
+            showToast(game.getMessageForLocalPlayer(), 1000);
         }
     }
 

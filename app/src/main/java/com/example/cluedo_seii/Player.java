@@ -72,9 +72,9 @@ public class Player implements Serializable {
 
 
     //Verdächtigungsfunktion
-    public LinkedList<String> suspect(String suspectedCulprit, String suspectedWeapon, String suspectedLocation, LinkedList<Player> players){
+    public LinkedList<Card> suspect(String suspectedCulprit, String suspectedWeapon, String suspectedLocation, LinkedList<Player> players){
         Log.i("makeSuspicon", "");
-        LinkedList<String>wrongSuspicions = new LinkedList<>();
+        LinkedList<Card>wrongSuspicions = new LinkedList<>();
 
         for(Player player: players){
 
@@ -83,16 +83,16 @@ public class Player implements Serializable {
                 for(Card card: player.getPlayerCards())
                 {
                     if(card.getDesignation().equals(suspectedCulprit)){
-                        wrongSuspicions.add(card.getDesignation());
+                        wrongSuspicions.add(card);
                     }
 
                     if(card.getDesignation().equals(suspectedWeapon)){
-                        wrongSuspicions.add(card.getDesignation());
+                        wrongSuspicions.add(card);
 
                     }
 
                     if (card.getDesignation().equals(suspectedLocation)) {
-                        wrongSuspicions.add(card.getDesignation());
+                        wrongSuspicions.add(card);
                     }
                 }
 

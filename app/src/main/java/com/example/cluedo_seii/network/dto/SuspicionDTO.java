@@ -5,7 +5,8 @@ import com.example.cluedo_seii.Player;
 
 import java.util.LinkedList;
 
-public class SuspicionDTO {
+public class SuspicionDTO extends  RequestDTO {
+
     private Player accuser;
     private Player acusee;
     private LinkedList<Card> suspicion;
