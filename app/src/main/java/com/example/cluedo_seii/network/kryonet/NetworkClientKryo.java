@@ -10,10 +10,13 @@ import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.example.cluedo_seii.Game;
+import com.example.cluedo_seii.GameState;
+import com.example.cluedo_seii.activities.GameboardScreen;
 import com.example.cluedo_seii.network.Callback;
 import com.example.cluedo_seii.network.NetworkClient;
 import com.example.cluedo_seii.network.dto.CheatDTO;
 import com.example.cluedo_seii.network.connectionType;
+import com.example.cluedo_seii.network.dto.AccusationMessageDTO;
 import com.example.cluedo_seii.network.dto.BroadcastDTO;
 import com.example.cluedo_seii.network.dto.ConnectedDTO;
 import com.example.cluedo_seii.network.dto.GameCharacterDTO;
@@ -144,7 +147,11 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
                 handleSendToOnePlayerDTOResponse(connection, (SendToOnePlayerDTO) object);
             }
         }
+        else if(object instanceof AccusationMessageDTO){
+            handleAccusationMessageDTO(connection, (AccusationMessageDTO)object);
+        }
     }
+
 
     private void handleConnectionResponse(Connection connection, ConnectedDTO connectedDTO) {
         if (connectionCallback != null) {
@@ -197,12 +204,22 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
         game.setWrongAccusers(inGame.getWrongAccusers());
         game.changeGameState(inGame.getGameState());
 
+
+
+
         // TODO set game attributes
 
     }
 
     private void handleRoomsResponse(Connection connection, RoomsDTO roomsDTO) {
         roomCallback.callback(roomsDTO);
+    }
+
+    private void handleAccusationMessageDTO(Connection connection, AccusationMessageDTO accusationMessageDTO){
+        AccusationMessageDTO accusationMessage = accusationMessageDTO;
+        Game game = Game.getInstance();
+        game.setMessageForLocalPlayer(accusationMessage.getMessage());
+        game.changeGameState(GameState.PASSIVE);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
