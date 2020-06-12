@@ -201,6 +201,9 @@ public abstract class GameboardElement {
                 }
             }
         }
+
+        game.setCurrentPlayer(currentPlayer);
+        gameboardScreen.updateGame();
     }
 
     private void setPlayerToOldPositon(){

@@ -27,12 +27,13 @@ public class RollDiceScreen extends Activity {
     private TextView textView;
     private ImageView imageViewLeftDice, imageViewRightDice;
 
-    private int diceValueOne, diceValueTwo;
     private Game game;
+    private GameboardScreen gameboardScreen;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        gameboardScreen = (GameboardScreen) getIntent().getSerializableExtra("GameboardScreenObject");
         setContentView(R.layout.activity_roll_dices_screen);
         imageViewLeftDice = findViewById(R.id.diceView1);
         imageViewRightDice = findViewById(R.id.diceView2);
@@ -74,8 +75,8 @@ public class RollDiceScreen extends Activity {
                         imageViewRightDice.setImageResource(res2);
 
                         textView.setText("You rolled " + value1 + " + " + value2 + " = "+sum+"!");
-                        diceValueOne = value1;
-                        diceValueTwo = value2;
+                        gameboardScreen.setDiceValueOne(value1);
+                        gameboardScreen.setDiceValueTwo(value2);
 
                         finish();
 
@@ -146,21 +147,5 @@ public class RollDiceScreen extends Activity {
                 break;
         }
         return false;
-    }
-
-    public int getDiceValueOne() {
-        return diceValueOne;
-    }
-
-    public void setDiceValueOne(int diceValueOne) {
-        this.diceValueOne = diceValueOne;
-    }
-
-    public int getDiceValueTwo() {
-        return diceValueTwo;
-    }
-
-    public void setDiceValueTwo(int diceValueTwo) {
-        this.diceValueTwo = diceValueTwo;
     }
 }

@@ -38,6 +38,7 @@ import com.example.cluedo_seii.network.kryonet.SelectedConType;
 import com.example.cluedo_seii.spielbrett.Gameboard;
 import com.example.cluedo_seii.spielbrett.StartingPoint;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -62,7 +63,7 @@ public class GameboardScreen extends AppCompatActivity  {
     private Player currentPlayerInDoor;// TODO: Aufräumen und vielleicht nur mehr das Player Objekt anstatt id und Player Objekt
     private int playerCurrentlyPlayingId;
     static final int MIN_SWIPE_DISTANCE = 150;
-    private int diceValueOne = 2, diceValueTwo = 2;
+    private int diceValueOne, diceValueTwo;
 
 
     @SuppressLint("ClickableViewAccessibility")
@@ -603,7 +604,9 @@ public class GameboardScreen extends AppCompatActivity  {
 
 
                 if(swipeDown > MIN_SWIPE_DISTANCE){
-                    startActivity(new Intent(GameboardScreen.this, RollDiceScreen.class));
+                    Intent intent = new Intent(GameboardScreen.this, RollDiceScreen.class);
+                    intent.putExtra("GameboardScreenObject", (Serializable) this);
+                    startActivity(intent);
                     overridePendingTransition(R.anim.slide_down_in, R.anim.slide_down_out);
                 }else if(swipeRight > MIN_SWIPE_DISTANCE){
                     startNotepad();
