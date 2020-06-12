@@ -154,7 +154,6 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
         if (cheatCallback!= null){
             cheatCallback.callback(cheatDTO);
         }
-
     }
 
     private void handleGameCharacterResponse(Connection connection,  GameCharacterDTO gameCharacterDTO) {
@@ -249,7 +248,6 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
         CheatDTO cheatDTO = new CheatDTO();
         sendMessage(cheatDTO);
         //cheatCallback.callback(cheatDTO);
-
     }
 
     @Override

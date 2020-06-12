@@ -101,11 +101,7 @@ public class NetworkServerKryo implements KryoNetComponent, NetworkServer {
         broadcastMessage(cheatDTO);
         if(cheatDTOCallback!=null){
             cheatDTOCallback.callback(cheatDTO);
-
         }
-
-
-
     }
 
     private void handleUsernameRequest(Connection connection, UserNameRequestDTO userNameRequestDTO) {
@@ -204,7 +200,6 @@ public class NetworkServerKryo implements KryoNetComponent, NetworkServer {
         CheatDTO cheatDTO = new CheatDTO();
         broadcastMessage(cheatDTO);
         cheatDTOCallback.callback(cheatDTO);
-
     }
 
     @Override

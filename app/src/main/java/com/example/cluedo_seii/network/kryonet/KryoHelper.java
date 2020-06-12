@@ -1,13 +1,8 @@
 package com.example.cluedo_seii.network.kryonet;
 
-<<<<<<< HEAD
 import android.widget.TextView;
-
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatTextView;
-=======
 import android.graphics.Point;
->>>>>>> master
 
 import com.example.cluedo_seii.Card;
 import com.example.cluedo_seii.CardType;
@@ -17,11 +12,8 @@ import com.example.cluedo_seii.GameState;
 import com.example.cluedo_seii.InvestigationFile;
 import com.example.cluedo_seii.Notepad;
 import com.example.cluedo_seii.Player;
-<<<<<<< HEAD
 import com.example.cluedo_seii.network.dto.CheatDTO;
-=======
 import com.example.cluedo_seii.network.dto.BroadcastDTO;
->>>>>>> master
 import com.example.cluedo_seii.network.dto.ConnectedDTO;
 import com.example.cluedo_seii.network.dto.GameCharacterDTO;
 import com.example.cluedo_seii.network.dto.GameDTO;

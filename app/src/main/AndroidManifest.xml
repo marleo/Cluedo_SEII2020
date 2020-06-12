@@ -47,8 +47,8 @@
         <activity
             android:name=".activities.PlayerSelectionScreen"
             android:exported="true"
-            android:label="Cluedo"> </activity>
-
+            android:label="Cluedo">
+        </activity>
         <activity android:name=".activities.playerGameInteraction.ExposeCheater"
             android:theme="@style/Theme.AppCompat.Dialog.Alert">
         </activity>
