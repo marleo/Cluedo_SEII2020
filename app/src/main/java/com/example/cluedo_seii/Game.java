@@ -23,6 +23,7 @@ public class Game implements Serializable {
     private transient ChangeListener changeListener;
     private Player localPlayer;
     private int wrongAccusers;
+    private String messageForLocalPlayer;
 
 
     private Game(){
@@ -34,6 +35,7 @@ public class Game implements Serializable {
         playerIterator = 0;
         gameState = GameState.START;
         wrongAccusers=0;
+        messageForLocalPlayer = null;
     }
 
     //Getter und Setter
@@ -119,6 +121,14 @@ public class Game implements Serializable {
 
     public void setWrongAccusers(int wrongAccusers) {
         this.wrongAccusers = wrongAccusers;
+    }
+
+    public String getMessageForLocalPlayer() {
+        return messageForLocalPlayer;
+    }
+
+    public void setMessageForLocalPlayer(String messageForLocalPlayer) {
+        this.messageForLocalPlayer = messageForLocalPlayer;
     }
 
     public int getWrongAccusers() {

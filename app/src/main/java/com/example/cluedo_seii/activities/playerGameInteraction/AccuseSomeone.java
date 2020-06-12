@@ -17,33 +17,44 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.example.cluedo_seii.Game;
+import com.example.cluedo_seii.network.connectionType;
+import com.example.cluedo_seii.network.dto.AccusationMessageDTO;
+import com.example.cluedo_seii.network.dto.RequestDTO;
+import com.example.cluedo_seii.network.kryonet.NetworkClientKryo;
+import com.example.cluedo_seii.network.kryonet.NetworkServerKryo;
+import com.example.cluedo_seii.network.kryonet.SelectedConType;
 
 public class AccuseSomeone extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
     private Spinner spinnerCulprit;
     private Spinner spinnerWeapon;
     private Spinner spinnerRoom;
-    private ArrayAdapter<CharSequence>adapterCulprit;
-    private ArrayAdapter<CharSequence>adapterWeapon;
-    private ArrayAdapter<CharSequence>adapterRoom;
+    private ArrayAdapter<CharSequence> adapterCulprit;
+    private ArrayAdapter<CharSequence> adapterWeapon;
+    private ArrayAdapter<CharSequence> adapterRoom;
     private String selectedCulprit;
     private String selectedWeapon;
     private String selectedRoom;
-    private String[]possibleCulprits;
-    private String[]possibleWeapons;
+    private String[] possibleCulprits;
+    private String[] possibleWeapons;
     private String[] possibleRooms;
     private Button suspectButton;
     private Intent intent;
     private Game game;
     private Toast toast;
     private String text;
+    private NetworkServerKryo server;
+    private NetworkClientKryo client;
+    private connectionType conType;
+    private AccusationMessageDTO accusationMessageDTO;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_accuse_someone);
-
         //Speicherung der Auswahl des Spielers
+        initializeNetwork();
 
         spinnerCulprit = (Spinner) findViewById(R.id.suspectedCulprit);
         spinnerCulprit.setOnItemSelectedListener(this);
@@ -71,14 +82,14 @@ public class AccuseSomeone extends AppCompatActivity implements AdapterView.OnIt
 
         game = Game.getInstance();
 
-       suspectButton = findViewById(R.id.makeAccusationButton);
+        suspectButton = findViewById(R.id.makeAccusationButton);
         suspectButton.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View v) {
 
                 //Im Falle einer erfolgreichen Anklage
 
-                if(game.getCurrentPlayer().accuse(selectedCulprit, selectedWeapon, selectedRoom, game.getInvestigationFile()) == true) {
+                if (game.getCurrentPlayer().accuse(selectedCulprit, selectedWeapon, selectedRoom, game.getInvestigationFile()) == true) {
                     game.setGameOver(true);
                     text = "Gratuliere, du hast das Spiel gewonnen";
                     toast = Toast.makeText(getApplicationContext(), text, Toast.LENGTH_SHORT);
@@ -93,19 +104,20 @@ public class AccuseSomeone extends AppCompatActivity implements AdapterView.OnIt
                 else {
                     game.getCurrentPlayer().setMadeFalseAccusation(true);
                     text = "Du hast eine falsche Anklage erhoben und kannst das Spiel nicht mehr gewinnen";
-                    toast = Toast.makeText(getApplicationContext(), text , Toast.LENGTH_SHORT);
+                    toast = Toast.makeText(getApplicationContext(), text, Toast.LENGTH_SHORT);
                     toast.show();
                     game.incrWrongAccusers();
                     game.getCurrentPlayer().setMadeFalseAccusation(true);
                     game.getLocalPlayer().setMadeFalseAccusation(true);
                     //TODO Nachricht an andere Mitspieler verschicken
+                    updateGame();
                     finish();
                 }
             }
         });
     }
 
-    public void onStop(){
+    public void onStop() {
         super.onStop();
         game.changeGameState(GameState.PLAYERTURNEND);
     }
@@ -113,25 +125,21 @@ public class AccuseSomeone extends AppCompatActivity implements AdapterView.OnIt
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
-        for(int i = 0; i<possibleCulprits.length; i++) {
+        for (int i = 0; i < possibleCulprits.length; i++) {
             if (parent.getItemAtPosition(position).equals(possibleCulprits[i])) {
                 selectedCulprit = (String) parent.getItemAtPosition(position);
             }
         }
 
-        for(int i = 0; i<possibleWeapons.length; i++)
-        {
-            if(parent.getItemAtPosition(position).equals(possibleWeapons[i]))
-            {
-                selectedWeapon = (String)parent.getItemAtPosition(position);
+        for (int i = 0; i < possibleWeapons.length; i++) {
+            if (parent.getItemAtPosition(position).equals(possibleWeapons[i])) {
+                selectedWeapon = (String) parent.getItemAtPosition(position);
             }
         }
 
-        for(int i = 0; i<possibleRooms.length; i++)
-        {
-            if(parent.getItemAtPosition(position).equals(possibleRooms[i]))
-            {
-                selectedRoom = (String)parent.getItemAtPosition(position);
+        for (int i = 0; i < possibleRooms.length; i++) {
+            if (parent.getItemAtPosition(position).equals(possibleRooms[i])) {
+                selectedRoom = (String) parent.getItemAtPosition(position);
 
             }
         }
@@ -142,5 +150,30 @@ public class AccuseSomeone extends AppCompatActivity implements AdapterView.OnIt
     public void onNothingSelected(AdapterView<?> parent) {
     }
 
+    public void initializeNetwork(){
+        conType = SelectedConType.getConnectionType();
+        if(conType==connectionType.HOST) {
+            server = NetworkServerKryo.getInstance();
+        }
+
+        else if(conType==connectionType.CLIENT){
+            client = NetworkClientKryo.getInstance();
+        }
+    }
+
+    public void updateGame( ){
+        //TODO add if for globalhost and global Client
+        if(conType==connectionType.HOST) {
+            RequestDTO requestDTO = new RequestDTO();
+            //AccusationMessageDTO accusationMessageDTO = new AccusationMessageDTO();
+            server.broadcastMessage(requestDTO);
+        }
+        else if(conType==connectionType.CLIENT){
+            client.sendGame(game);
+        }
+    }
+
+
 }
+
 

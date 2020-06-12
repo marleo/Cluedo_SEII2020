@@ -9,6 +9,7 @@ import com.example.cluedo_seii.GameCharacter;
 import com.example.cluedo_seii.GameState;
 import com.example.cluedo_seii.InvestigationFile;
 import com.example.cluedo_seii.Player;
+import com.example.cluedo_seii.network.dto.AccusationMessageDTO;
 import com.example.cluedo_seii.network.dto.BroadcastDTO;
 import com.example.cluedo_seii.network.dto.ConnectedDTO;
 import com.example.cluedo_seii.network.dto.GameCharacterDTO;
@@ -57,13 +58,14 @@ public class KryoHelper {
         kryoNetComponent.registerClass(HashMap.class);
         kryoNetComponent.registerClass(Player.class);
         kryoNetComponent.registerClass(GameState.class);
+        kryoNetComponent.registerClass(AccusationMessageDTO.class);
+        kryoNetComponent.registerClass(String.class);
         kryoNetComponent.registerClass(InvestigationFile.class);
         kryoNetComponent.registerClass(Card.class);
         kryoNetComponent.registerClass(CardType.class);
         kryoNetComponent.registerClass(Point.class);
         kryoNetComponent.registerClass(Gameboard.class);
         kryoNetComponent.registerClass(Random.class);
-
         kryoNetComponent.registerClass(RegisterClassDTO.class,2);
         //kryoNetComponent.registerClass(Class.class);
         //kryoNetComponent.registerClass(Object.class);
