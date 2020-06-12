@@ -26,6 +26,7 @@ import com.example.cluedo_seii.network.dto.RequestDTO;
 import com.example.cluedo_seii.network.dto.RoomsDTO;
 import com.example.cluedo_seii.network.dto.SendToOnePlayerDTO;
 import com.example.cluedo_seii.network.dto.SerializedDTO;
+import com.example.cluedo_seii.network.dto.SuspicionAnswerDTO;
 import com.example.cluedo_seii.network.dto.SuspicionDTO;
 import com.example.cluedo_seii.network.dto.TextMessage;
 import com.example.cluedo_seii.network.dto.UserNameRequestDTO;
@@ -78,6 +79,7 @@ public class KryoHelper {
         kryoNetComponent.registerClass(Random.class);
         kryoNetComponent.registerClass(RegisterClassDTO.class,2);
         kryoNetComponent.registerClass(SuspicionDTO.class);
+        kryoNetComponent.registerClass(SuspicionAnswerDTO.class);
         //kryoNetComponent.registerClass(Class.class);
         //kryoNetComponent.registerClass(Object.class);
         kryoNetComponent.registerClass(SerializedDTO.class,3);

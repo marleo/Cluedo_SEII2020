@@ -6,8 +6,6 @@ import android.graphics.Point;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-import android.os.Message;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.widget.Toast;
@@ -39,6 +37,7 @@ import com.example.cluedo_seii.network.connectionType;
 import com.example.cluedo_seii.network.kryonet.NetworkClientKryo;
 import com.example.cluedo_seii.network.kryonet.NetworkServerKryo;
 import com.example.cluedo_seii.network.kryonet.SelectedConType;
+import com.example.cluedo_seii.network.dto.SuspicionAnswerDTO;
 import com.example.cluedo_seii.spielbrett.Gameboard;
 import com.example.cluedo_seii.spielbrett.StartingPoint;
 
@@ -88,6 +87,9 @@ public class GameboardScreen extends AppCompatActivity  {
         Log.i("gameCharacter", player.getId() + "" + player.getPlayerCharacter().getName());}
          kickOffGame();
          Log.i("gameStarted", "gameCreated");
+        for(Card card: game.getPlayers().get(1).getPlayerCards()){
+            Log.i("Card", card.getDesignation());
+        }
             }
 
     public void initializeGameboard(){
@@ -343,6 +345,9 @@ public class GameboardScreen extends AppCompatActivity  {
         game.setPlayers(players);
         game.setLocalPlayer(player1);
         game.distributeCards(); //um Notepad cheatFunction zu demonstrieren
+
+
+
     }
 
         public void setChangeGameStateChangeListener(){
@@ -468,6 +473,13 @@ public class GameboardScreen extends AppCompatActivity  {
                     game.setMessageForLocalPlayer("Waiting for Answer");
                     showToast(game.getMessageForLocalPlayer(), 1000);
                 }
+                else if(game.getGameState().equals(GameState.RECEIVINGANSWER)){
+                    Log.i("RECEIVINGANSWER", "top kek");
+                    game.setMessageForLocalPlayer("Der verdächtigte Spieler hat folgende Karte auf der Hand: " + game.getSuspicionAnswer().getDesignation());
+                    showToast(game.getMessageForLocalPlayer(), 1000);
+                    game.changeGameState(GameState.PLAYERTURNEND);
+                }
+
             }
         });
     }
@@ -580,6 +592,16 @@ public class GameboardScreen extends AppCompatActivity  {
         }
     }
 
+    public void sendSuspicionAnswer(SuspicionAnswerDTO suspicionAnswerDTO){
+        if(conType==connectionType.HOST) {
+            server.broadcastMessage(suspicionAnswerDTO);
+        }
+        else if(conType==connectionType.CLIENT){
+            client.sendMessage(suspicionAnswerDTO);
+        }
+    }
+
+
     //Netzwerkinitialisierung
     public void initializeNetwork(){
         conType = SelectedConType.getConnectionType();
@@ -642,7 +664,6 @@ public class GameboardScreen extends AppCompatActivity  {
         return false;
     }
 
-
     public int getDiceValueOne() {
         return diceValueOne;
     }
@@ -659,7 +680,6 @@ public class GameboardScreen extends AppCompatActivity  {
         this.diceValueTwo = diceValueTwo;
     }
 
-
     public void showToast(final String message, final int duration) {
         getMainThreadHandler().post(new Runnable() {
             @Override
@@ -669,16 +689,16 @@ public class GameboardScreen extends AppCompatActivity  {
                         toast.cancel(); //dismiss current toast if visible
                         toast.setText(message);
                     } else {*/
+                    if(message!=null||message!="") {
                         toast = Toast.makeText(GameboardScreen.this, message, duration);
-                    //}
-
+                        //}
+                    }
                     toast.show();
                 }
                 game.setMessageForLocalPlayer(null);
             }
         });
     }
-
 
     public Handler getMainThreadHandler() {
         if (mainThreadHandler == null) {

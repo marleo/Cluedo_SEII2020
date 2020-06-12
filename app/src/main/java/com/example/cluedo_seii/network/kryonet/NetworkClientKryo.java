@@ -27,6 +27,7 @@ import com.example.cluedo_seii.network.dto.PlayerDTO;
 import com.example.cluedo_seii.network.dto.RequestDTO;
 import com.example.cluedo_seii.network.dto.RoomsDTO;
 import com.example.cluedo_seii.network.dto.SendToOnePlayerDTO;
+import com.example.cluedo_seii.network.dto.SuspicionAnswerDTO;
 import com.example.cluedo_seii.network.dto.SuspicionDTO;
 import com.example.cluedo_seii.network.dto.TextMessage;
 import com.example.cluedo_seii.network.dto.UserNameRequestDTO;
@@ -154,8 +155,10 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
             handleAccusationMessageDTO(connection, (AccusationMessageDTO)object);
         }
         else if(object instanceof SuspicionDTO){
-            Log.i("receivedSuspicionDTO", "yeah");
             handleSuspicionMessageDTO(connection, (SuspicionDTO)object);
+        }
+        else if(object instanceof SuspicionAnswerDTO){
+            handleSuspicionAnswerDTO(connection, (SuspicionAnswerDTO)object);
         }
     }
 
@@ -231,14 +234,18 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
     private void handleSuspicionMessageDTO(Connection connection, SuspicionDTO suspicionDTO){
         Game game = Game.getInstance();
         Player suspected=suspicionDTO.getAcusee();
-        game.setSuspicion(suspicionDTO.getSuspicion());
-        Log.i("suspicionReceived", "suspicon");
-        Log.i("ids", game.getLocalPlayer().getId() + " local|suspect" + suspected.getId());
-
         if(game.getLocalPlayer().getId()==suspected.getId()){
-                Log.i("change", "changeGameState");
-                game.changeGameState(GameState.SUSPECTED);
-                Log.i("StateAfterChange", game.getGameState().toString());
+        game.setSuspicion(suspicionDTO.getSuspicion());
+        game.setAcusee(suspicionDTO.getAccuser());
+        game.changeGameState(GameState.SUSPECTED);
+        }
+    }
+
+    private void handleSuspicionAnswerDTO(Connection connection, SuspicionAnswerDTO suspicionAnswerDTO){
+        Game game = Game.getInstance();
+        if(game.getLocalPlayer().getId()==suspicionAnswerDTO.getAcusee().getId()){
+            game.setSuspicionAnswer(suspicionAnswerDTO.getAnswer());
+            game.changeGameState(GameState.RECEIVINGANSWER);
         }
     }
 

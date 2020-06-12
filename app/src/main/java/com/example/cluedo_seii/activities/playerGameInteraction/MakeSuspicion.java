@@ -142,7 +142,7 @@ public class MakeSuspicion extends AppCompatActivity implements AdapterView.OnIt
                 //Meldugn falls Verdächtiger keine der Karten auf seiner Hand hat
 
                 else {
-                    text = "Der verdächtigte Spieler hat folgende Karten auf der Hand:" + '\n';
+                  //  text = "Der verdächtigte Spieler hat folgende Karten auf der Hand:" + '\n';
 
                     suspicionDTO = new SuspicionDTO();
                     suspicionDTO.setAccuser(game.getCurrentPlayer());
@@ -155,17 +155,17 @@ public class MakeSuspicion extends AppCompatActivity implements AdapterView.OnIt
                         suspicion.add(suspectedPlayerHand.get(0));
                     }
 
-                   for(Card casrd:suspicion) {
+                  /* for(Card casrd:suspicion) {
                        Log.i("suspiconSize", casrd.getDesignation());
-                   }
+                   }*/
 
                     suspicionDTO.setSuspicion(suspicion);
                     updateGame();
 
 
-                    for (int i = 0; i < suspectedPlayerHand.size(); i++) {
+                  /*  for (int i = 0; i < suspectedPlayerHand.size(); i++) {
                         text += suspectedPlayerHand.get(i).getDesignation() + '\n';
-                    }
+                    }*/
 
                     toast = Toast.makeText(getApplicationContext(), text, Toast.LENGTH_SHORT);
                     toast.show();

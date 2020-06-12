@@ -6,6 +6,7 @@ import android.util.Log;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
+import com.example.cluedo_seii.Card;
 import com.example.cluedo_seii.Game;
 import com.example.cluedo_seii.GameCharacter;
 import com.example.cluedo_seii.GameState;
@@ -20,6 +21,8 @@ import com.example.cluedo_seii.network.dto.GameDTO;
 import com.example.cluedo_seii.network.dto.PlayerDTO;
 import com.example.cluedo_seii.network.dto.QuitGameDTO;
 import com.example.cluedo_seii.network.dto.RequestDTO;
+import com.example.cluedo_seii.network.dto.SuspicionAnswerDTO;
+import com.example.cluedo_seii.network.dto.SuspicionDTO;
 import com.example.cluedo_seii.network.dto.TextMessage;
 import com.example.cluedo_seii.network.dto.UserNameRequestDTO;
 import com.example.cluedo_seii.network.dto.AccusationMessageDTO;
@@ -97,6 +100,12 @@ public class NetworkServerKryo implements KryoNetComponent, NetworkServer {
         }
         else if(object instanceof AccusationMessageDTO){
             handleAccusationMessageDTO(connection, (AccusationMessageDTO)object);
+        }
+        else if(object instanceof SuspicionDTO){
+            handleSuspicionMessageDTO(connection, (SuspicionDTO)object);
+        }
+        else if(object instanceof SuspicionAnswerDTO){
+            handleSuspicionAnswerDTO(connection, (SuspicionAnswerDTO)object);
         }
     }
 
@@ -188,6 +197,24 @@ public class NetworkServerKryo implements KryoNetComponent, NetworkServer {
         Game game = Game.getInstance();
         game.setMessageForLocalPlayer(accusationMessage.getMessage());
         game.changeGameState(GameState.PASSIVE);
+    }
+
+    private void handleSuspicionMessageDTO(Connection connection, SuspicionDTO suspicionDTO){
+        Game game = Game.getInstance();
+        Player suspected=suspicionDTO.getAcusee();
+        if(game.getLocalPlayer().getId()==suspected.getId()){
+            game.setSuspicion(suspicionDTO.getSuspicion());
+            game.setAcusee(suspicionDTO.getAccuser());
+            game.changeGameState(GameState.SUSPECTED);
+        }
+    }
+
+    private void handleSuspicionAnswerDTO(Connection connection, SuspicionAnswerDTO suspicionAnswerDTO){
+        Game game = Game.getInstance();
+        if(game.getLocalPlayer().getId()==suspicionAnswerDTO.getAcusee().getId()){
+        game.setSuspicionAnswer(suspicionAnswerDTO.getAnswer());
+        game.changeGameState(GameState.RECEIVINGANSWER);
+        }
     }
 
 
