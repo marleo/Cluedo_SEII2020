@@ -20,6 +20,7 @@ import com.example.cluedo_seii.network.dto.GameDTO;
 import com.example.cluedo_seii.network.dto.PlayerDTO;
 import com.example.cluedo_seii.network.dto.RequestDTO;
 import com.example.cluedo_seii.network.dto.RoomsDTO;
+import com.example.cluedo_seii.network.dto.SendToOnePlayerDTO;
 import com.example.cluedo_seii.network.dto.TextMessage;
 import com.example.cluedo_seii.network.dto.UserNameRequestDTO;
 
@@ -45,7 +46,7 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
     private boolean isConnected;
 
     private NetworkClientKryo() {
-        client = new Client();
+        client = new Client(8192,4096);
     }
 
 
@@ -127,6 +128,10 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
             if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 handleBroadcastResponse(connection, (BroadcastDTO) object);
             }
+        } else if (object instanceof SendToOnePlayerDTO) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                handleSendToOnePlayerDTOResponse(connection, (SendToOnePlayerDTO) object);
+            }
         }
     }
 
@@ -193,6 +198,16 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
 
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    private void handleSendToOnePlayerDTOResponse(Connection connection, SendToOnePlayerDTO sendToOnePlayerDTO) {
+        try {
+            Object object = SerializationHelper.fromString(sendToOnePlayerDTO.getSerializedObject());
+            handleRequest(connection, object);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     @Override
     public void registerCallback(Callback<RequestDTO> callback) {
         this.callback = callback;
@@ -222,6 +237,22 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
         GameDTO gameDTO = new GameDTO();
         gameDTO.setGame(game);
         sendMessage(gameDTO);
+    }
+
+    public void sendMessageToRoomHost(RequestDTO requestDTO) {
+        SendToOnePlayerDTO sendToOnePlayerDTO = new SendToOnePlayerDTO();
+        Log.d("Sending Object to Host:", requestDTO.getClass().toString());
+
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            try {
+                sendToOnePlayerDTO.setSerializedObject(SerializationHelper.toString(requestDTO));
+                sendToOnePlayerDTO.setToHost(true);
+
+                sendMessage(sendToOnePlayerDTO);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     @Override

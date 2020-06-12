@@ -7,32 +7,30 @@
     tools:context=".activities.NetworkActivities.StartGameScreen">
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/localSelectHostButton"
+        style="?android:attr/borderlessButtonStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="51dp"
         android:layout_marginTop="44dp"
-        android:onClick="selectHost"
+        android:background="@drawable/custom_button"
         android:text="@string/hostButtonSettings"
         android:textColor="#FFFFFF"
         android:textSize="15sp"
-        android:background="@drawable/custom_button"
-        style="?android:attr/borderlessButtonStyle"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/button2"
+        android:id="@+id/localSelectClientButton"
+        style="?android:attr/borderlessButtonStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="44dp"
         android:layout_marginEnd="30dp"
-        android:onClick="selectClient"
+        android:background="@drawable/custom_button"
         android:text="@string/clientButtonOptions"
         android:textColor="#FFFFFF"
         android:textSize="15sp"
-        android:background="@drawable/custom_button"
-        style="?android:attr/borderlessButtonStyle"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -49,7 +47,7 @@
         android:autofillHints="ip"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button" />
+        app:layout_constraintTop_toBottomOf="@+id/localSelectHostButton" />
 
     <EditText
         android:id="@+id/username_input"
@@ -83,13 +81,27 @@
         style="?android:attr/borderlessButtonStyle"
         android:layout_width="179dp"
         android:layout_height="47dp"
-        android:layout_marginBottom="68dp"
+        android:layout_marginBottom="36dp"
         android:background="@drawable/custom_button"
-        android:text="CHOOSE CHARACTER"
+        android:text="@string/choose_character"
         android:textColor="#FFFFFF"
         android:textSize="15sp"
         android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/localConnectButton"
+        style="?android:attr/borderlessButtonStyle"
+        android:layout_width="179dp"
+        android:layout_height="47dp"
+        android:layout_marginBottom="36dp"
+        android:background="@drawable/custom_button"
+        android:text="@string/connect"
+        android:textColor="#FFFFFF"
+        android:textSize="15sp"
+        app:layout_constraintBottom_toTopOf="@+id/chooseCharacter"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 

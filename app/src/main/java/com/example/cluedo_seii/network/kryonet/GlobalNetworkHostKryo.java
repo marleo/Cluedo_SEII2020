@@ -59,11 +59,13 @@ public class GlobalNetworkHostKryo implements NetworkGlobalHost, KryoNetComponen
     private Callback<GameCharacterDTO> gameCharacterDTOCallback;
 
     private LinkedHashMap<Integer, ClientData> clientList;
+    private ClientData roomHost;
 
     private boolean isConnected;
 
     private GlobalNetworkHostKryo() {
-        client = new Client();
+        roomHost = new ClientData();
+        client = new Client(16384,4096);
         clientList = new LinkedHashMap<>();
     }
 
@@ -94,27 +96,6 @@ public class GlobalNetworkHostKryo implements NetworkGlobalHost, KryoNetComponen
             public void run() {
                 try {
                     client.connect(5000,host,NetworkConstants.TCP_PORT,NetworkConstants.UDP_PORT);
-
-                    /*
-                    RegisterClassDTO playerRegister = new RegisterClassDTO();
-                    playerRegister.setClassToRegister(SerializationHelper.toString(DeckOfCards.class));
-                    sendMessage(playerRegister);
-
-                     */
-                    //sendMessage(new TextMessage(SerializationHelper.toString(DeckOfCards.class)));
-
-                    /*
-                    RegisterClassDTO playerDTORegister = new RegisterClassDTO();
-                    playerDTORegister.setClassToRegister(PlayerDTO.class);
-                    sendMessage(playerDTORegister);
-
-                     */
-
-                    /*
-                    ConnectedDTO connectedDTO = new ConnectedDTO();
-                    connectedDTO.setConnected(true);
-                    sendMessage(connectedDTO);
-                     */
 
                     isConnected = true;
                 } catch (IOException e) {
@@ -177,6 +158,7 @@ public class GlobalNetworkHostKryo implements NetworkGlobalHost, KryoNetComponen
     private void handleGameRoomResponse(Connection connection, NewGameRoomRequestDTO newGameRoomRequestDTO) {
         //this.room = newGameRoomRequestDTO.
         Log.d(TAG,"new Room created:" + newGameRoomRequestDTO.getCreatedRoom());
+        roomHost.setId(newGameRoomRequestDTO.getHostID());
         if (newGameRoomCallback != null) {
             newGameRoomCallback.callback(newGameRoomRequestDTO);
         }
@@ -216,6 +198,7 @@ public class GlobalNetworkHostKryo implements NetworkGlobalHost, KryoNetComponen
         PlayerDTO playerDTO = new PlayerDTO();
         playerDTO.setPlayer(player);
         //sendMessageToClient(playerDTO, connection);
+        sendMessageToClient(playerDTO, playerID);
 
 
         //broadcast remaining Characters to the other clients
@@ -249,9 +232,25 @@ public class GlobalNetworkHostKryo implements NetworkGlobalHost, KryoNetComponen
         this.gameCharacterDTOCallback = gameCharacterDTOCallback;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public void sendMessageToClient(RequestDTO requestDTO, int playerID) {
+        Log.d("Sending Object to Plyr:", requestDTO.getClass().toString());
+        SendToOnePlayerDTO sendToOnePlayerDTO = new SendToOnePlayerDTO();
+        sendToOnePlayerDTO.setReceivingPlayerID(playerID);
+
+        try {
+            sendToOnePlayerDTO.setSerializedObject(SerializationHelper.toString(requestDTO));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        sendMessage(sendToOnePlayerDTO);
+    }
+
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     public void broadcastToClients(RequestDTO requestDTO) {
+        Log.d("Broadcasting Object:", requestDTO.getClass().toString());
         BroadcastDTO broadcast = new BroadcastDTO();
         try {
             broadcast.setSerializedObject(SerializationHelper.toString(requestDTO));
@@ -286,6 +285,22 @@ public class GlobalNetworkHostKryo implements NetworkGlobalHost, KryoNetComponen
     @Override
     public void sendGame(Game game) {
         //TODO implement
+    }
+
+    public LinkedHashMap<Integer, ClientData> getClientList() {
+        return clientList;
+    }
+
+    public void setRoomHostUsername(String username) {
+        roomHost.setUsername(username);
+    }
+
+    public void setRoomHostPlayer(Player player) {
+        roomHost.setPlayer(player);
+    }
+
+    public ClientData getRoomHost() {
+        return roomHost;
     }
 }
 
