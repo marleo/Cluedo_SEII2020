@@ -263,7 +263,7 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
         CheatDTO cheatDTO = new CheatDTO();
         sendMessage(cheatDTO);
         //cheatCallback.callback(cheatDTO);
-  
+    }
     public void sendMessageToRoomHost(RequestDTO requestDTO) {
         SendToOnePlayerDTO sendToOnePlayerDTO = new SendToOnePlayerDTO();
         Log.d("Sending Object to Host:", requestDTO.getClass().toString());

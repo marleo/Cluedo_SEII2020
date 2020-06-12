@@ -30,6 +30,7 @@ import com.example.cluedo_seii.network.kryonet.*;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.Set;
@@ -44,8 +45,7 @@ public class ExposeCheater extends AppCompatActivity implements AdapterView.OnIt
     private Spinner cheaterSpinner;
     private String selectedUsername;
     private Game game;
-    private LinkedHashMap<Integer, ClientData> clientList;
-    private ArrayList<Integer> ids;
+    private ArrayList<String> userNames;
     private String text;
     private Player selectedPlayer;
     private NetworkServerKryo server;
@@ -56,23 +56,20 @@ public class ExposeCheater extends AppCompatActivity implements AdapterView.OnIt
         setContentView(R.layout.activity_expose_cheater);
         game=Game.getInstance();
         server = NetworkServerKryo.getInstance();
+
         for(Player player : game.getPlayers()){
-            ids.add(player.getId());
+            if(player.getUsername()!=null){
+            userNames.add(player.getUsername());
         }
-        //clientList=networkServerKryo.getClientList();
+        }
+
+
 
         accuseCheaterButton=findViewById(R.id.accuseCheaterButton);
-        /*Set<Integer> keys = clientList.keySet();
-        for(Integer i : keys){
-            usernames.add(clientList.get(i).getUsername());
-        }*/
-
-
-
         cheaterSpinner=findViewById(R.id.possibleCheater);
         cheaterSpinner.setOnItemSelectedListener(this);
-        ArrayAdapter<Integer> adapter = new ArrayAdapter<>(this,
-                android.R.layout.simple_spinner_item, ids);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
+                android.R.layout.simple_spinner_item, userNames);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         cheaterSpinner.setAdapter(adapter);
 
