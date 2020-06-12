@@ -202,9 +202,7 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
         }
 
         Game inGame = gameDTO.getGame();
-
         Game game = Game.getInstance();
-
         game.setPlayers(inGame.getPlayers());
         game.setCurrentPlayer(inGame.getCurrentPlayer());
         game.setRound(inGame.getRound());
@@ -213,10 +211,6 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
         game.setInvestigationFile(inGame.getInvestigationFile());
         game.setWrongAccusers(inGame.getWrongAccusers());
         game.changeGameState(inGame.getGameState());
-
-
-
-
         // TODO set game attributes
 
     }
@@ -235,18 +229,21 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
         Game game = Game.getInstance();
         Player suspected=suspicionDTO.getAcusee();
         if(game.getLocalPlayer().getId()==suspected.getId()){
-        game.setSuspicion(suspicionDTO.getSuspicion());
-        game.setAcusee(suspicionDTO.getAccuser());
-        game.changeGameState(GameState.SUSPECTED);
+            for(Player player: game.getPlayers()){
+                if(game.getLocalPlayer().getId()== player.getId()){
+                    player.setPosition(suspicionDTO.getAccuser().getPosition());
+                }
+            }
+            game.setSuspicion(suspicionDTO.getSuspicion());
+            game.setAcusee(suspicionDTO.getAccuser());
+            game.changeGameState(GameState.SUSPECTED);
         }
     }
 
     private void handleSuspicionAnswerDTO(Connection connection, SuspicionAnswerDTO suspicionAnswerDTO){
         Game game = Game.getInstance();
-        if(game.getLocalPlayer().getId()==suspicionAnswerDTO.getAcusee().getId()){
-            game.setSuspicionAnswer(suspicionAnswerDTO.getAnswer());
-            game.changeGameState(GameState.RECEIVINGANSWER);
-        }
+        game.setSuspicionAnswer(suspicionAnswerDTO.getAnswer());
+        game.changeGameState(GameState.RECEIVINGANSWER);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -298,6 +295,7 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
     }
 
     public void sendGame(Game game) {
+        Log.i("sendingGame", "GameSend");
         GameDTO gameDTO = new GameDTO();
         gameDTO.setGame(game);
         sendMessage(gameDTO);

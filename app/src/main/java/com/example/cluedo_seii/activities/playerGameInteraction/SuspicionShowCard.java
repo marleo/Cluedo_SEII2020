@@ -14,6 +14,7 @@ import androidx.fragment.app.DialogFragment;
 
 import com.example.cluedo_seii.Card;
 import com.example.cluedo_seii.Game;
+import com.example.cluedo_seii.GameState;
 import com.example.cluedo_seii.R;
 import com.example.cluedo_seii.activities.GameboardScreen;
 import com.example.cluedo_seii.network.dto.SuspicionAnswerDTO;
@@ -44,6 +45,7 @@ public class SuspicionShowCard extends DialogFragment {
                     suspicionAnswerDTO.setAnswer(cards.get(0));
                     suspicionAnswerDTO.setAcusee(game.getAcusee());
                      ((GameboardScreen)getActivity()).sendSuspicionAnswer(suspicionAnswerDTO);
+                    game.changeGameState(GameState.PASSIVE);
             }
         };
 
@@ -53,6 +55,7 @@ public class SuspicionShowCard extends DialogFragment {
                     suspicionAnswerDTO.setAnswer(cards.get(1));
                     suspicionAnswerDTO.setAcusee(game.getAcusee());
                      ((GameboardScreen)getActivity()).sendSuspicionAnswer(suspicionAnswerDTO);
+                     game.changeGameState(GameState.PASSIVE);
                     }
         };
 
@@ -61,8 +64,8 @@ public class SuspicionShowCard extends DialogFragment {
             public void onClick(DialogInterface dialog, int which) {
                     suspicionAnswerDTO.setAnswer(cards.get(2));
                     suspicionAnswerDTO.setAcusee(game.getAcusee());
-                    Log.i("shitnigguh", suspicionAnswerDTO.getAnswer().getDesignation());
                 ((GameboardScreen)getActivity()).sendSuspicionAnswer(suspicionAnswerDTO);
+                game.changeGameState(GameState.PASSIVE);
             }
         };
 

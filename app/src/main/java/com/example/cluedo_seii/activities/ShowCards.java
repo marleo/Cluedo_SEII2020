@@ -53,14 +53,12 @@ public class ShowCards extends AppCompatActivity {
         listView = findViewById(R.id.playerHandDisplay);
         listView.setAdapter(cardListViewAdapter);
 
-        game.setListener(new Game.ChangeListener() {
-                             @Override
-                             //Wird ausgeführt wenn Methode changeGameState aufgerufen wird
-                             public void onChange() {
-                                 finish();
-                             }
-                         }
-        );
+    }
+
+    @Override
+    public void onStop(){
+        super.onStop();
+        game.changeGameState(game.getGameState());
     }
 
     @Override

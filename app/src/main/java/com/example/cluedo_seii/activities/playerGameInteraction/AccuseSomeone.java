@@ -19,7 +19,6 @@ import android.widget.Toast;
 import com.example.cluedo_seii.Game;
 import com.example.cluedo_seii.network.connectionType;
 import com.example.cluedo_seii.network.dto.AccusationMessageDTO;
-import com.example.cluedo_seii.network.dto.RequestDTO;
 import com.example.cluedo_seii.network.kryonet.NetworkClientKryo;
 import com.example.cluedo_seii.network.kryonet.NetworkServerKryo;
 import com.example.cluedo_seii.network.kryonet.SelectedConType;
@@ -39,7 +38,6 @@ public class AccuseSomeone extends AppCompatActivity implements AdapterView.OnIt
     private String[] possibleWeapons;
     private String[] possibleRooms;
     private Button suspectButton;
-    private Intent intent;
     private Game game;
     private Toast toast;
     private String text;
@@ -53,7 +51,6 @@ public class AccuseSomeone extends AppCompatActivity implements AdapterView.OnIt
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_accuse_someone);
-        //Speicherung der Auswahl des Spielers
         initializeNetwork();
 
         spinnerCulprit = (Spinner) findViewById(R.id.suspectedCulprit);
@@ -77,8 +74,6 @@ public class AccuseSomeone extends AppCompatActivity implements AdapterView.OnIt
         possibleCulprits = getResources().getStringArray(R.array.culprits);
         possibleWeapons = getResources().getStringArray(R.array.weapons);
         possibleRooms = getResources().getStringArray(R.array.rooms);
-
-        intent = getIntent();
 
         game = Game.getInstance();
 
@@ -116,7 +111,7 @@ public class AccuseSomeone extends AppCompatActivity implements AdapterView.OnIt
                     accusationMessageDTO.setAccuser(game.getCurrentPlayer());
                     accusationMessageDTO.setLooseMessage();
                     //TODO Nachricht an andere Mitspieler verschicken
-                    updateGame();
+                    sendAccusation();
                     finish();
                 }
             }
@@ -156,6 +151,9 @@ public class AccuseSomeone extends AppCompatActivity implements AdapterView.OnIt
     public void onNothingSelected(AdapterView<?> parent) {
     }
 
+    //Netzwerkfunktionen
+
+    //Netzwerkinitialisierung
     public void initializeNetwork(){
         conType = SelectedConType.getConnectionType();
         if(conType==connectionType.HOST) {
@@ -167,7 +165,8 @@ public class AccuseSomeone extends AppCompatActivity implements AdapterView.OnIt
         }
     }
 
-    public void updateGame( ){
+    //Verschickung des Anklageergebnisses
+    public void sendAccusation( ){
         //TODO add if for globalhost and global Client
         if(conType==connectionType.HOST) {
             server.broadcastMessage(accusationMessageDTO);

@@ -32,26 +32,6 @@ public class Game implements Serializable {
         return suspicion;
     }
 
-    public Card getSuspicionAnswer() {
-        return suspicionAnswer;
-    }
-
-    public void setSuspicionAnswer(Card suspicionAnswer) {
-        this.suspicionAnswer = suspicionAnswer;
-    }
-
-    public Player getAcusee() {
-        return acusee;
-    }
-
-    public void setAcusee(Player acusee) {
-        this.acusee = acusee;
-    }
-
-    public void setSuspicion(LinkedList<Card> suspicion) {
-        this.suspicion = suspicion;
-    }
-
     private Game(){
         this.deckOfCards = new DeckOfCards();
         investigationFile = new InvestigationFile();
@@ -164,6 +144,25 @@ public class Game implements Serializable {
 
     public void incrWrongAccusers(){wrongAccusers++;}
 
+    public Card getSuspicionAnswer() {
+        return suspicionAnswer;
+    }
+
+    public void setSuspicionAnswer(Card suspicionAnswer) {
+        this.suspicionAnswer = suspicionAnswer;
+    }
+
+    public Player getAcusee() {
+        return acusee;
+    }
+
+    public void setAcusee(Player acusee) {
+        this.acusee = acusee;
+    }
+
+    public void setSuspicion(LinkedList<Card> suspicion) {
+        this.suspicion = suspicion;
+    }
 
     // set for Network end
 
