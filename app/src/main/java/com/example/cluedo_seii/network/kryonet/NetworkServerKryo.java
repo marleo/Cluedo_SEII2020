@@ -8,6 +8,7 @@ import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
 import com.example.cluedo_seii.Game;
 import com.example.cluedo_seii.GameCharacter;
+import com.example.cluedo_seii.GameState;
 import com.example.cluedo_seii.Player;
 import com.example.cluedo_seii.network.Callback;
 import com.example.cluedo_seii.network.ClientData;
@@ -21,6 +22,7 @@ import com.example.cluedo_seii.network.dto.QuitGameDTO;
 import com.example.cluedo_seii.network.dto.RequestDTO;
 import com.example.cluedo_seii.network.dto.TextMessage;
 import com.example.cluedo_seii.network.dto.UserNameRequestDTO;
+import com.example.cluedo_seii.network.dto.AccusationMessageDTO;
 
 import java.io.IOException;
 import java.util.LinkedHashMap;
@@ -92,6 +94,9 @@ public class NetworkServerKryo implements KryoNetComponent, NetworkServer {
             handleGameRequest(connection, (GameDTO) object);
         } else if(object instanceof CheatDTO) {
             handleCheaterRequest(connection, (CheatDTO) object);
+        }
+        else if(object instanceof AccusationMessageDTO){
+            handleAccusationMessageDTO(connection, (AccusationMessageDTO)object);
         }
     }
 
@@ -176,6 +181,14 @@ public class NetworkServerKryo implements KryoNetComponent, NetworkServer {
 
         // TODO set game attributes
     }
+
+    private void handleAccusationMessageDTO(Connection connection, AccusationMessageDTO accusationMessageDTO){
+        broadcastMessageWithoutSender(accusationMessageDTO, connection);
+        AccusationMessageDTO accusationMessage = accusationMessageDTO;
+        Game game = Game.getInstance();
+        game.changeGameState(GameState.PASSIVE);
+    }
+
 
 
     @Override

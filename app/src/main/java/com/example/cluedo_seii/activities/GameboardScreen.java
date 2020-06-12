@@ -4,6 +4,10 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Point;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.widget.Toast;
@@ -63,6 +67,9 @@ public class GameboardScreen extends AppCompatActivity  {
     private int playerCurrentlyPlayingId;
     static final int MIN_SWIPE_DISTANCE = 150;
     private int diceValueOne = 2, diceValueTwo = 2;
+    private Handler messageHandler;
+    private Handler mainThreadHandler;
+    private Toast toast;
 
 
     @SuppressLint("ClickableViewAccessibility")
@@ -77,7 +84,8 @@ public class GameboardScreen extends AppCompatActivity  {
 
         //zu Demonstrationszwecken SpielerPosition wird gesetzt auf Raum
         for(Player player: game.getPlayers()){
-         player.setPosition(new Point(6,2));}
+         player.setPosition(new Point(6,2));
+        Log.i("gameCharacter", player.getId() + "" + player.getPlayerCharacter().getName());}
          kickOffGame();
          Log.i("gameStarted", "gameCreated");
             }
@@ -353,9 +361,11 @@ public class GameboardScreen extends AppCompatActivity  {
                     }
 
                     else{//Spieler localPlayer ist nicht am Zug
-                /*        String text = "Spieler " + game.getCurrentPlayer().getId() + " ist am Zug" ;
-                        Toast toast = Toast.makeText(getApplicationContext(), text, Toast.LENGTH_SHORT);
-                        toast.show();*/
+                       // showMsg();
+                         game.setMessageForLocalPlayer( "Spieler " + game.getCurrentPlayer().getId() + " ist am Zug" );
+                        showToast(game.getMessageForLocalPlayer(), 1000);
+                        //Toast toast = Toast.makeText(getApplicationContext(), text, Toast.LENGTH_SHORT);
+                        //toast.show();
                     }
                 }
 
@@ -431,7 +441,7 @@ public class GameboardScreen extends AppCompatActivity  {
                         else{//nächster Spieler
                             game.nextPlayer();
                             game.changeGameState(GameState.PLAYERTURNBEGIN);
-                            updateGame();
+                           // updateGame();
                         }
                     }
                 }
@@ -443,6 +453,10 @@ public class GameboardScreen extends AppCompatActivity  {
                    // notifyPlayersWon();
                    // Intent intent = new Intent(GameboardScreen.this, MainActivity.class);
                   //  startActivity(intent);
+                }
+
+                else if(game.getGameState().equals(GameState.PASSIVE)){
+                   showToast(game.getMessageForLocalPlayer(), 1000);
                 }
             }
         });
@@ -571,6 +585,7 @@ public class GameboardScreen extends AppCompatActivity  {
             game.changeGameState(GameState.PLAYERTURNBEGIN);
         }
         if(conType==connectionType.CLIENT){
+            game.changeGameState(GameState.PLAYERTURNBEGIN);
             for(Player player: game.getPlayers()){
                 if(player.getId() == game.getLocalPlayer().getId()){
                     for(Card card: player.getPlayerCards()){
@@ -615,6 +630,7 @@ public class GameboardScreen extends AppCompatActivity  {
         return false;
     }
 
+
     public int getDiceValueOne() {
         return diceValueOne;
     }
@@ -630,5 +646,34 @@ public class GameboardScreen extends AppCompatActivity  {
     public void setDiceValueTwo(int diceValueTwo) {
         this.diceValueTwo = diceValueTwo;
     }
+    
+
+    public void showToast(final String message, final int duration) {
+        getMainThreadHandler().post(new Runnable() {
+            @Override
+            public void run() {
+                Log.i("showing Toast", message);
+                if (message!=null) {
+                    /*if (toast != null) {
+                        toast.cancel(); //dismiss current toast if visible
+                        toast.setText(message);
+                    } else {*/
+                        toast = Toast.makeText(GameboardScreen.this, message, duration);
+                    //}
+                    game.setMessageForLocalPlayer(null);
+                    toast.show();
+                }
+            }
+        });
+    }
+
+
+    public Handler getMainThreadHandler() {
+        if (mainThreadHandler == null) {
+            mainThreadHandler = new Handler(Looper.getMainLooper());
+        }
+        return mainThreadHandler;
+    }
+
 }
 
