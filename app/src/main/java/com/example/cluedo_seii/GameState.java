@@ -7,6 +7,8 @@ public enum GameState {
     PLAYERACCUSATION,
     PLAYERTURNEND,
     END,
-    PASSIVE
-
+    PASSIVE,
+    WAITINGFORANSWER,
+    SUSPECTED,
+    RECEIVINGANSWER,
 }

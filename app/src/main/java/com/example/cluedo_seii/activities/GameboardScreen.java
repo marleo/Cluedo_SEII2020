@@ -458,6 +458,15 @@ public class GameboardScreen extends AppCompatActivity  {
                 else if(game.getGameState().equals(GameState.PASSIVE)){
                    showToast(game.getMessageForLocalPlayer(), 1000);
                 }
+
+                else if(game.getGameState().equals(GameState.SUSPECTED)){
+                    suspicionShowCard();
+                }
+
+                else if(game.getGameState().equals(GameState.WAITINGFORANSWER)){
+                    game.setMessageForLocalPlayer("Waiting for Answer");
+                    showToast(game.getMessageForLocalPlayer(), 1000);
+                }
             }
         });
     }
