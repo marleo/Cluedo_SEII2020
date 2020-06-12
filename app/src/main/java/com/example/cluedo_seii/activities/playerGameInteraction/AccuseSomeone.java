@@ -95,6 +95,9 @@ public class AccuseSomeone extends AppCompatActivity implements AdapterView.OnIt
                     toast = Toast.makeText(getApplicationContext(), text, Toast.LENGTH_SHORT);
                     toast.show();
                     game.setGameOver(true);
+                    accusationMessageDTO = new AccusationMessageDTO();
+                    accusationMessageDTO.setAccuser(game.getCurrentPlayer());
+                    accusationMessageDTO.setWinMessage();
                     //TODO Nachricht an andere Mitspieler verschicken
                     finish();
                 }
@@ -109,6 +112,9 @@ public class AccuseSomeone extends AppCompatActivity implements AdapterView.OnIt
                     game.incrWrongAccusers();
                     game.getCurrentPlayer().setMadeFalseAccusation(true);
                     game.getLocalPlayer().setMadeFalseAccusation(true);
+                    accusationMessageDTO = new AccusationMessageDTO();
+                    accusationMessageDTO.setAccuser(game.getCurrentPlayer());
+                    accusationMessageDTO.setLooseMessage();
                     //TODO Nachricht an andere Mitspieler verschicken
                     updateGame();
                     finish();
@@ -164,12 +170,10 @@ public class AccuseSomeone extends AppCompatActivity implements AdapterView.OnIt
     public void updateGame( ){
         //TODO add if for globalhost and global Client
         if(conType==connectionType.HOST) {
-            RequestDTO requestDTO = new RequestDTO();
-            //AccusationMessageDTO accusationMessageDTO = new AccusationMessageDTO();
-            server.broadcastMessage(requestDTO);
+            server.broadcastMessage(accusationMessageDTO);
         }
         else if(conType==connectionType.CLIENT){
-            client.sendGame(game);
+           client.sendMessage(accusationMessageDTO);
         }
     }
 

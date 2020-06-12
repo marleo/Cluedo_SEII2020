@@ -170,6 +170,7 @@ public class NetworkServerKryo implements KryoNetComponent, NetworkServer {
         broadcastMessageWithoutSender(accusationMessageDTO, connection);
         AccusationMessageDTO accusationMessage = accusationMessageDTO;
         Game game = Game.getInstance();
+        game.setMessageForLocalPlayer(accusationMessage.getMessage());
         game.changeGameState(GameState.PASSIVE);
     }
 

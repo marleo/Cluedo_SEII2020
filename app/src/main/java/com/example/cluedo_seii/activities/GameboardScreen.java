@@ -409,7 +409,7 @@ public class GameboardScreen extends AppCompatActivity  {
                         else{//nächster Spieler
                             game.nextPlayer();
                             game.changeGameState(GameState.PLAYERTURNBEGIN);
-                           // updateGame();
+                            updateGame();
                         }
                     }
                 }
@@ -614,13 +614,12 @@ public class GameboardScreen extends AppCompatActivity  {
     public void setDiceValueTwo(int diceValueTwo) {
         this.diceValueTwo = diceValueTwo;
     }
-    
+
 
     public void showToast(final String message, final int duration) {
         getMainThreadHandler().post(new Runnable() {
             @Override
             public void run() {
-                Log.i("showing Toast", message);
                 if (message!=null) {
                     /*if (toast != null) {
                         toast.cancel(); //dismiss current toast if visible
@@ -628,9 +627,10 @@ public class GameboardScreen extends AppCompatActivity  {
                     } else {*/
                         toast = Toast.makeText(GameboardScreen.this, message, duration);
                     //}
-                    game.setMessageForLocalPlayer(null);
+
                     toast.show();
                 }
+                game.setMessageForLocalPlayer(null);
             }
         });
     }
