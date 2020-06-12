@@ -127,33 +127,12 @@ public class ChoosePlayerScreen extends AppCompatActivity {
     private void characterDTOCallbackHelper(GameCharacterDTO argument) {
         availableCharacters = argument.getAvailablePlayers();
         updateCharacterList(availableCharacters);
-
-        if (everyOneHasChosenACharacter()) {
-            //TODO implement next step
-            Log.d("test", "Finished Choosing Characters");
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    final Button proceedToGame = findViewById(R.id.proceedToGameButton);
-                    proceedToGame.setVisibility(View.VISIBLE);
-                    proceedToGame.setOnClickListener(new View.OnClickListener(){
-                        @Override
-                        public void onClick(View v){
-                            prepareGame();
-                            startActivity(new Intent(ChoosePlayerScreen.this, GameboardScreen.class));
-                        }
-                    });
-                }
-            });
-        }
     }
 
     private void clientChooseCharacter() {
         client.registerCharacterCallback(new Callback<GameCharacterDTO>() {
             @Override
             public void callback(GameCharacterDTO argument) {
-                // TODO implement
-
                 updateCharacterList(argument.getAvailablePlayers());
             }
         });
@@ -161,11 +140,6 @@ public class ChoosePlayerScreen extends AppCompatActivity {
         client.registerGameCallback(new Callback<GameDTO>() {
             @Override
             public void callback(GameDTO argument) {
-                //Todo set distributed Cards
-                Game tempGame = argument.getGame();
-                if (tempGame.getPlayers().contains(Game.getInstance().getLocalPlayer())) {
-                    Log.d("Callback", "callback: nice");
-                }
                 startActivity(new Intent(ChoosePlayerScreen.this, GameboardScreen.class));
                 client.registerGameCallback(null);
             }
@@ -183,6 +157,9 @@ public class ChoosePlayerScreen extends AppCompatActivity {
             public void run() {
                 ArrayAdapter<String> characterListAdapter = new ArrayAdapter<>(ChoosePlayerScreen.this, android.R.layout.simple_list_item_1, characterNameList);
                 characterList.setAdapter(characterListAdapter);
+                if (conType == connectionType.GLOBALHOST || conType == connectionType.HOST) {
+                    proceedToGameIfPossible();
+                }
 
                 //remove on Click Listener if the character is already chosen
                 if (game.getLocalPlayer() == null) {
@@ -204,7 +181,8 @@ public class ChoosePlayerScreen extends AppCompatActivity {
                                 server.broadcastMessage(gameCharacterDTO);
 
                                 //set local Player and add Player to the Players List
-                                Player player = new Player(1, selectedCharacter);
+                                Player player = new Player(server.getHost().getId(), selectedCharacter);
+                                player.setUsername(server.getHost().getUsername());
                                 game.setLocalPlayer(player);
 
                                 LinkedList<Player> playerLinkedList = game.getPlayers();
@@ -220,27 +198,34 @@ public class ChoosePlayerScreen extends AppCompatActivity {
 
                                 client.sendMessage(gameCharacterDTO);
                             } else if (conType == connectionType.GLOBALCLIENT) {
-                                // TODO implement
-                            } else if (conType == connectionType.GLOBALHOST) {
-                                //TODO implement and refactor
+                                // TODO implement and refactor
                                 GameCharacterDTO gameCharacterDTO = new GameCharacterDTO();
                                 gameCharacterDTO.setChoosenPlayer(selectedCharacter);
                                 gameCharacterDTO.setAvailablePlayers(gameCharacters);
 
-                                SendToOnePlayerDTO sendToOnePlayerDTO = new SendToOnePlayerDTO();
+                                client.sendMessageToRoomHost(gameCharacterDTO);
 
+                            } else if (conType == connectionType.GLOBALHOST) {
+                                //TODO implement and refactor
+                                gameCharacters.remove(selectedItem);
 
+                                GameCharacterDTO gameCharacterDTO = new GameCharacterDTO();
+                                gameCharacterDTO.setAvailablePlayers(gameCharacters);
 
-                                if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                                    try {
-                                        sendToOnePlayerDTO.setSerializedObject(SerializationHelper.toString(gameCharacterDTO));
-                                        sendToOnePlayerDTO.setToHost(true);
-
-                                        client.sendMessage(sendToOnePlayerDTO);
-                                    } catch (Exception e) {
-                                        e.printStackTrace();
-                                    }
+                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                                    globalHost.broadcastToClients(gameCharacterDTO);
                                 }
+
+                                Player player = new Player(globalHost.getRoomHost().getId(), selectedCharacter);
+                                player.setUsername(globalHost.getRoomHost().getUsername());
+                                game.setLocalPlayer(player);
+
+                                LinkedList<Player> playerLinkedList = game.getPlayers();
+                                if (playerLinkedList == null) playerLinkedList = new LinkedList<>();
+                                playerLinkedList.add(player);
+                                game.setPlayers(playerLinkedList);
+
+                                updateCharacterList(gameCharacters);
                             }
                         }
                     });
@@ -251,8 +236,33 @@ public class ChoosePlayerScreen extends AppCompatActivity {
         });
     }
 
+    public void proceedToGameIfPossible() {
+        if (everyOneHasChosenACharacter()) {
+            //TODO implement next step
+            Log.d("test", "Finished Choosing Characters");
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    final Button proceedToGame = findViewById(R.id.proceedToGameButton);
+                    proceedToGame.setVisibility(View.VISIBLE);
+                    proceedToGame.setOnClickListener(new View.OnClickListener(){
+                        @Override
+                        public void onClick(View v){
+                            prepareGame();
+                            startActivity(new Intent(ChoosePlayerScreen.this, GameboardScreen.class));
+                        }
+                    });
+                }
+            });
+        }
+    }
+
     private boolean everyOneHasChosenACharacter() {
-        return game.getPlayers().size() == server.getClientList().size() + 1;
+        if (SelectedConType.getConnectionType() == connectionType.HOST) {
+            return game.getPlayers().size() == server.getClientList().size() + 1;
+        } else {
+            return game.getPlayers().size() == globalHost.getClientList().size() + 1;
+        }
     }
 
     private void prepareGame() {
@@ -261,7 +271,14 @@ public class ChoosePlayerScreen extends AppCompatActivity {
         GameDTO gameDTO = new GameDTO();
         gameDTO.setGame(game);
 
-        server.broadcastMessage(gameDTO);
+        if (SelectedConType.getConnectionType() == connectionType.HOST) {
+            server.broadcastMessage(gameDTO);
+        } else {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                globalHost.broadcastToClients(gameDTO);
+            }
+        }
+
 
 
     }
