@@ -1,4 +1,4 @@
-package com.example.cluedo_seii.activities;
+package com.example.cluedo_seii.activities.NetworkActivities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -24,13 +24,14 @@ import com.example.cluedo_seii.network.kryonet.KryoHelper;
 import com.example.cluedo_seii.network.kryonet.NetworkClientKryo;
 import com.example.cluedo_seii.network.kryonet.NetworkServerKryo;
 import com.example.cluedo_seii.R;
+import com.example.cluedo_seii.network.kryonet.SelectedConType;
 
 import java.io.IOException;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 
 public class StartGameScreen extends AppCompatActivity {
-    public static connectionType conType;
+    //public static connectionType conType;
     private NetworkServerKryo server;
     private NetworkClientKryo client;
 
@@ -56,7 +57,8 @@ public class StartGameScreen extends AppCompatActivity {
 
     public void selectHost(View view) {
         final ListView clientList = findViewById(R.id.clientList);
-        conType = connectionType.HOST;
+        //conType = connectionType.HOST;
+        SelectedConType.setConnectionType(connectionType.HOST);
         
         server = NetworkServerKryo.getInstance();
         KryoHelper.registerClasses(server);
@@ -105,7 +107,8 @@ public class StartGameScreen extends AppCompatActivity {
 
     public void selectClient(View view) {
         try {
-            conType = connectionType.CLIENT;
+            //conType = connectionType.CLIENT;
+            SelectedConType.setConnectionType(connectionType.CLIENT);
 
             client = NetworkClientKryo.getInstance();
             KryoHelper.registerClasses(client);

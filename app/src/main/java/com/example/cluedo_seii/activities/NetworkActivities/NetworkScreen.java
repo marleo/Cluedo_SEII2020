@@ -1,22 +1,17 @@
 //TODO delete NetworkScreen
 
-package com.example.cluedo_seii.activities;
+package com.example.cluedo_seii.activities.NetworkActivities;
 
 import android.annotation.SuppressLint;
-import android.net.wifi.WifiManager;
-import android.os.Build;
+import android.content.Intent;
 import android.os.Bundle;
-import android.text.format.Formatter;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.cluedo_seii.network.Callback;
-import com.example.cluedo_seii.network.NetworkGlobalHost;
 import com.example.cluedo_seii.network.connectionType;
 import com.example.cluedo_seii.network.dto.ConnectedDTO;
 import com.example.cluedo_seii.network.dto.QuitGameDTO;
@@ -24,16 +19,11 @@ import com.example.cluedo_seii.network.dto.RequestDTO;
 import com.example.cluedo_seii.network.dto.TextMessage;
 import com.example.cluedo_seii.network.kryonet.GlobalNetworkHostKryo;
 import com.example.cluedo_seii.network.kryonet.KryoHelper;
-import com.example.cluedo_seii.network.kryonet.KryoNetComponent;
 import com.example.cluedo_seii.network.kryonet.NetworkClientKryo;
-import com.example.cluedo_seii.network.kryonet.NetworkServerKryo;
 
 import com.example.cluedo_seii.R;
 
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.util.Base64;
 
 public class NetworkScreen extends AppCompatActivity {
     private connectionType conType;
@@ -45,6 +35,13 @@ public class NetworkScreen extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_network);
+
+        findViewById(R.id.test).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(NetworkScreen.this, StartGlobalGameActivity.class));
+            }
+        });
 
     }
 

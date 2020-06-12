@@ -1,14 +1,16 @@
-package com.example.cluedo_seii.activities;
+package com.example.cluedo_seii.activities.NetworkActivities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.cluedo_seii.Game;
 import com.example.cluedo_seii.GameCharacter;
 import com.example.cluedo_seii.Player;
+import com.example.cluedo_seii.activities.GameboardScreen;
 import com.example.cluedo_seii.network.Callback;
 import com.example.cluedo_seii.network.connectionType;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -18,11 +20,16 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.example.cluedo_seii.network.kryonet.SerializationHelper;
+
 import com.example.cluedo_seii.R;
 import com.example.cluedo_seii.network.dto.GameCharacterDTO;
 import com.example.cluedo_seii.network.dto.GameDTO;
+import com.example.cluedo_seii.network.dto.SendToOnePlayerDTO;
+import com.example.cluedo_seii.network.kryonet.GlobalNetworkHostKryo;
 import com.example.cluedo_seii.network.kryonet.NetworkClientKryo;
 import com.example.cluedo_seii.network.kryonet.NetworkServerKryo;
+import com.example.cluedo_seii.network.kryonet.SelectedConType;
 
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -31,6 +38,7 @@ public class ChoosePlayerScreen extends AppCompatActivity {
     private connectionType conType;
     private NetworkServerKryo server;
     private NetworkClientKryo client;
+    private GlobalNetworkHostKryo globalHost;
     private ListView characterList;
     private TextView waitingForHost;
 
@@ -48,15 +56,13 @@ public class ChoosePlayerScreen extends AppCompatActivity {
 
         game = Game.getInstance();
 
-        this.conType = StartGameScreen.conType;
+        this.conType = SelectedConType.getConnectionType();
 
-        if (conType == connectionType.CLIENT) {
+        if (conType == connectionType.CLIENT || conType == connectionType.GLOBALCLIENT) {
             client = NetworkClientKryo.getInstance();
             clientChooseCharacter();
 
-        } else if (conType == connectionType.HOST) {
-            server = NetworkServerKryo.getInstance();
-
+        } else if (conType == connectionType.HOST || conType == connectionType.GLOBALHOST) {
             //TODO implement the startingPoint from the Characters
             GameCharacter character1 = new GameCharacter("Character 1", null);
             GameCharacter character2 = new GameCharacter("Character 2", null);
@@ -75,7 +81,17 @@ public class ChoosePlayerScreen extends AppCompatActivity {
 
             GameCharacterDTO gameCharacterDTO = new GameCharacterDTO();
             gameCharacterDTO.setAvailablePlayers(availableCharacters);
-            server.broadcastMessage(gameCharacterDTO);
+
+            if (conType == connectionType.HOST) {
+                server = NetworkServerKryo.getInstance();
+                server.broadcastMessage(gameCharacterDTO);
+            } else {
+                if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    globalHost = GlobalNetworkHostKryo.getInstance();
+                    globalHost.broadcastToClients(gameCharacterDTO);
+                }
+            }
+
 
             hostChooseCharacter();
         } else {
@@ -89,33 +105,47 @@ public class ChoosePlayerScreen extends AppCompatActivity {
         updateCharacterList(availableCharacters);
 
         // UPDATE Current Players
-        server.registerCharacterDTOCallback(new Callback<GameCharacterDTO>() {
-            @Override
-            public void callback(GameCharacterDTO argument) {
-                // TODO implement
-                availableCharacters = argument.getAvailablePlayers();
-                updateCharacterList(availableCharacters);
+        if (conType == connectionType.HOST) {
+            server.registerCharacterDTOCallback(new Callback<GameCharacterDTO>() {
+                @Override
+                public void callback(GameCharacterDTO argument) {
+                    // TODO implement
+                    characterDTOCallbackHelper(argument);
+                }
+            });
+        } else {
+            globalHost.registerCharacterDTOCallback(new Callback<GameCharacterDTO>() {
+                @Override
+                public void callback(GameCharacterDTO argument) {
+                    characterDTOCallbackHelper(argument);
+                }
+            });
+        }
+    }
 
-                if (everyOneHasChosenACharacter()) {
-                    //TODO implement next step
-                    Log.d("test", "Finished Choosing Characters");
-                    runOnUiThread(new Runnable() {
+
+    private void characterDTOCallbackHelper(GameCharacterDTO argument) {
+        availableCharacters = argument.getAvailablePlayers();
+        updateCharacterList(availableCharacters);
+
+        if (everyOneHasChosenACharacter()) {
+            //TODO implement next step
+            Log.d("test", "Finished Choosing Characters");
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    final Button proceedToGame = findViewById(R.id.proceedToGameButton);
+                    proceedToGame.setVisibility(View.VISIBLE);
+                    proceedToGame.setOnClickListener(new View.OnClickListener(){
                         @Override
-                        public void run() {
-                            final Button proceedToGame = findViewById(R.id.proceedToGameButton);
-                            proceedToGame.setVisibility(View.VISIBLE);
-                            proceedToGame.setOnClickListener(new View.OnClickListener(){
-                                @Override
-                                public void onClick(View v){
-                                    prepareGame();
-                                    startActivity(new Intent(ChoosePlayerScreen.this, GameboardScreen.class));
-                                }
-                            });
+                        public void onClick(View v){
+                            prepareGame();
+                            startActivity(new Intent(ChoosePlayerScreen.this, GameboardScreen.class));
                         }
                     });
                 }
-            }
-        });
+            });
+        }
     }
 
     private void clientChooseCharacter() {
@@ -160,8 +190,6 @@ public class ChoosePlayerScreen extends AppCompatActivity {
                         @Override
                         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                             String selectedItem = (String) parent.getItemAtPosition(position);
-                            Log.d("Selected shit:", selectedItem);
-
                             GameCharacter selectedCharacter = gameCharacters.get(selectedItem);
                             Log.d("Selected Character", selectedCharacter.toString());
 
@@ -191,6 +219,28 @@ public class ChoosePlayerScreen extends AppCompatActivity {
                                 gameCharacterDTO.setAvailablePlayers(gameCharacters);
 
                                 client.sendMessage(gameCharacterDTO);
+                            } else if (conType == connectionType.GLOBALCLIENT) {
+                                // TODO implement
+                            } else if (conType == connectionType.GLOBALHOST) {
+                                //TODO implement and refactor
+                                GameCharacterDTO gameCharacterDTO = new GameCharacterDTO();
+                                gameCharacterDTO.setChoosenPlayer(selectedCharacter);
+                                gameCharacterDTO.setAvailablePlayers(gameCharacters);
+
+                                SendToOnePlayerDTO sendToOnePlayerDTO = new SendToOnePlayerDTO();
+
+
+
+                                if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                                    try {
+                                        sendToOnePlayerDTO.setSerializedObject(SerializationHelper.toString(gameCharacterDTO));
+                                        sendToOnePlayerDTO.setToHost(true);
+
+                                        client.sendMessage(sendToOnePlayerDTO);
+                                    } catch (Exception e) {
+                                        e.printStackTrace();
+                                    }
+                                }
                             }
                         }
                     });

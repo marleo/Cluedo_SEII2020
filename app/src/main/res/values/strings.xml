@@ -37,20 +37,44 @@
     </string-array>
 
     <string-array name="rooms">
-        <item>Halle</item>
-        <item>Salon</item>
-        <item>Speisezimmer</item>
-        <item>Küche</item>
-        <item>Musikzimmer</item>
-        <item>Winterzimmer</item>
-        <item>Biliardzimmer</item>
-        <item>Bibliothek</item>
         <item>Arbeitszimmer</item>
+        <item>Eingangshalle</item>
+        <item>Veranda</item>
+        <item>Bibliothek</item>
+        <item>Speisezimmer</item>
+        <item>Billardzimmer</item>
+        <item>Musikzimmer</item>
+        <item>Küche</item>
+        <item>Salon</item>
     </string-array>
 
     <string name="fragmentControlTab">
-        WORK IN PROGRESS\n\n
-        Es stehen noch nicht alle Steuerungsarten fest.
+        Spielstart
+    </string>
+    <string name="fragmentControlTab2">
+        Spiel starten:\nHost auswählen, wenn Sie das Spiel hosten wollen; Client auswählen, wenn Sie
+        einem gehosteten Spiel beitreten wollen\n\n
+        Client:\nIP Adresse des Host und gewünschten Usernamen eingeben\n\n
+        Host:\nWarten bis Client IP Adresse eingegeben hat.
+        Wenn die Clients verbunden sind -> Charakterauswahl
+    </string>
+    <string name="fragmentControlTab3">
+        Spielsteuerung
+    </string>
+    <string name="fragmentControlTab4">
+        Swipe nach unten -> Würfeln\n
+        Swipe nach links -> Karten auf eigener Hand ansehen\n
+        Swipe nach rechts -> Notizblock\n
+        Tippen auf Spielfeld -> Bewegen
+    </string>
+    <string name="fragmentControlTab5">
+        Optionen
+    </string>
+    <string name="fragmentControlTab6">
+        Schummelfunktion -> Durch Verdecken des Lichtsensors Ihres Smartphones wird ihnen im
+        Notizblock ein Gegenstand gestrichen, der nicht in der Akte liegt.\n\n
+        !! Achtung !!\n
+        Andere Spieler können Sie dabei erwischen.
     </string>
     <string name="fragmentGameplayTab1">
         GRAF ERMORDET – POLIZEI VERHÖRT VERDÄCHTIGE
@@ -152,6 +176,9 @@
     <string name="Player2">Character2</string>
     <string name="Player3">Character3</string>
     <string name="playerSelected">Start</string>
+    <string name="anklagenSpielendeButton">anklagen (Spielende)</string>
+    <string name="localString">local</string>
+    <string name="globalString">global</string>
 
     <string name="exposeCheaterButton">Schummler \n verdächtigen</string>
     <string name="accuseCheaterButton">Verdächtigen</string>

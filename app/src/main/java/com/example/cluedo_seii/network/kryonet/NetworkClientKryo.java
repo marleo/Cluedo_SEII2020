@@ -1,6 +1,10 @@
 package com.example.cluedo_seii.network.kryonet;
 
+import android.os.Build;
+import android.telecom.Call;
 import android.util.Log;
+
+import androidx.annotation.RequiresApi;
 
 import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Connection;
@@ -9,11 +13,14 @@ import com.example.cluedo_seii.Game;
 import com.example.cluedo_seii.network.Callback;
 import com.example.cluedo_seii.network.NetworkClient;
 import com.example.cluedo_seii.network.dto.CheatDTO;
+import com.example.cluedo_seii.network.connectionType;
+import com.example.cluedo_seii.network.dto.BroadcastDTO;
 import com.example.cluedo_seii.network.dto.ConnectedDTO;
 import com.example.cluedo_seii.network.dto.GameCharacterDTO;
 import com.example.cluedo_seii.network.dto.GameDTO;
 import com.example.cluedo_seii.network.dto.PlayerDTO;
 import com.example.cluedo_seii.network.dto.RequestDTO;
+import com.example.cluedo_seii.network.dto.RoomsDTO;
 import com.example.cluedo_seii.network.dto.TextMessage;
 import com.example.cluedo_seii.network.dto.UserNameRequestDTO;
 
@@ -35,6 +42,7 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
     private Callback<PlayerDTO> playerCallback;
     private Callback<GameDTO> gameCallback;
     private Callback<CheatDTO> cheatCallback;
+    private Callback<RoomsDTO> roomCallback;
 
     private boolean isConnected;
     private int cheated=0;
@@ -54,7 +62,6 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
         if (INSTANCE == null) {
             INSTANCE = new NetworkClientKryo();
         }
-
         return INSTANCE;
     }
 
@@ -62,6 +69,12 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
         INSTANCE = null;
     }
 
+
+    /**
+     * beim Aufruf dieser Methode verbindet sich der Client mit dem Host
+     * @param host hostIP address
+     * @throws IOException
+     */
     @Override
     public void connect(final String host) throws IOException {
         client.start();
@@ -74,9 +87,16 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
                 try {
                     client.connect(5000,host,NetworkConstants.TCP_PORT,NetworkConstants.UDP_PORT);
 
-                    ConnectedDTO connectedDTO = new ConnectedDTO();
-                    connectedDTO.setConnected(true);
-                    sendMessage(connectedDTO);
+
+                    //ConnectedDDTO wird nur gesendet wann es sich um ein locales Spiel handelt
+                    //TODO change to == Client
+                    if  (SelectedConType.getConnectionType() != connectionType.GLOBALCLIENT) {
+                        Log.d("Connecting: ", "test");
+                        ConnectedDTO connectedDTO = new ConnectedDTO();
+                        connectedDTO.setConnected(true);
+                        sendMessage(connectedDTO);
+                    }
+
 
                     isConnected = true;
                 } catch (IOException e) {
@@ -111,6 +131,13 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
             handleGameResponse(connection, (GameDTO) object);
         } else if (object instanceof CheatDTO) {
             handleCheatResponse(connection, (CheatDTO) object);
+        } else if (object instanceof RoomsDTO) {
+            handleRoomsResponse(connection, (RoomsDTO) object);
+        } else if (object instanceof BroadcastDTO) {
+            // Server Version only works, if the API Version is higher than 26
+            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                handleBroadcastResponse(connection, (BroadcastDTO) object);
+            }
         }
     }
 
@@ -149,7 +176,10 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
 
     private void handleGameResponse(Connection connection, GameDTO gameDTO) {
         //TODO delete
-        gameCallback.callback(gameDTO);
+        if(gameCallback!=null) {
+            gameCallback.callback(gameDTO);
+        }
+
         Game inGame = gameDTO.getGame();
 
         Game game = Game.getInstance();
@@ -158,9 +188,27 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
         game.setCurrentPlayer(inGame.getCurrentPlayer());
         game.setRound(inGame.getRound());
         game.setGameOver(inGame.getGameOver());
+        game.setPlayerIterator(inGame.getPlayerIterator());
+        game.setInvestigationFile(inGame.getInvestigationFile());
+        game.setWrongAccusers(inGame.getWrongAccusers());
+        game.changeGameState(inGame.getGameState());
 
-        game.setGameState(inGame.getGameState());
         // TODO set game attributes
+
+    }
+
+    private void handleRoomsResponse(Connection connection, RoomsDTO roomsDTO) {
+        roomCallback.callback(roomsDTO);
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    private void handleBroadcastResponse(Connection connection, BroadcastDTO broadcastDTO) {
+        try {
+            Object object = SerializationHelper.fromString(broadcastDTO.getSerializedObject());
+            handleRequest(connection,object);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
     }
 
@@ -185,6 +233,11 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
     }
 
     public void registerCheatCallback(Callback<CheatDTO> callback){this.cheatCallback = callback;}
+
+    public void registerRoomCallback(Callback<RoomsDTO> callback) {
+        this.roomCallback = null;
+        this.roomCallback = callback;
+    }
 
     public void sendGame(Game game) {
         GameDTO gameDTO = new GameDTO();

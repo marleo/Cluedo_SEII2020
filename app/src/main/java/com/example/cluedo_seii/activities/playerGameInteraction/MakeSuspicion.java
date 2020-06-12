@@ -2,14 +2,15 @@ package com.example.cluedo_seii.activities.playerGameInteraction;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.Intent;
+import android.annotation.SuppressLint;
 import android.os.Bundle;
-
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.cluedo_seii.Game;
@@ -19,15 +20,12 @@ import com.example.cluedo_seii.R;
 
 import java.util.LinkedList;
 
-
 public class MakeSuspicion extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
     private Spinner spinnerCulprit;
     private Spinner spinnerWeapon;
-    private Spinner spinnerRoom;
-    private ArrayAdapter<CharSequence>adapterCulprit;
+    private ArrayAdapter<CharSequence> adapterCulprit;
     private ArrayAdapter<CharSequence>adapterWeapon;
-    private ArrayAdapter<CharSequence>adapterRoom;
     private String selectedCulprit;
     private String selectedWeapon;
     private String selectedRoom;
@@ -35,17 +33,20 @@ public class MakeSuspicion extends AppCompatActivity implements AdapterView.OnIt
     private String[]possibleWeapons;
     private String[] possibleRooms;
     private Button suspectButton;
-    private Intent intent;
+    private ImageView weaponChoice;
+    private ImageView characterChoice;
     private Game game;
     private LinkedList<String> suspectedPlayerHand;
     private Toast toast;
     private String text;
 
+    @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_make_suspicion);
+        setContentView(R.layout.activity_accuse_and_suspect);
 
+        game = Game.getInstance();
         //Speicherung der Auswahl des Spielers
 
         spinnerCulprit = (Spinner) findViewById(R.id.suspectedCulprit);
@@ -60,59 +61,113 @@ public class MakeSuspicion extends AppCompatActivity implements AdapterView.OnIt
         adapterWeapon.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerWeapon.setAdapter(adapterWeapon);
 
-        spinnerRoom = (Spinner) findViewById(R.id.suspectedRoom);
-        spinnerRoom.setOnItemSelectedListener(this);
-        adapterRoom = ArrayAdapter.createFromResource(this, R.array.rooms, android.R.layout.simple_spinner_item);
-        adapterRoom.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinnerRoom.setAdapter(adapterRoom);
+        TextView currentRoom = findViewById(R.id.currentRoomText);
+        //currentRoom.setText("Tatort: " + getCurrentRoom());
+
+        weaponChoice = findViewById(R.id.weaponImage);
+        characterChoice = findViewById(R.id.suspectImage);
 
         possibleCulprits = getResources().getStringArray(R.array.culprits);
         possibleWeapons = getResources().getStringArray(R.array.weapons);
         possibleRooms = getResources().getStringArray(R.array.rooms);
 
-        intent = getIntent();
+        //selectedRoom = getCurrentRoom();
 
-        game = Game.getInstance();
+        suspectButton = findViewById(R.id.makeSuspicionButton);
+        suspectButton.setOnClickListener(new View.OnClickListener() {
 
+            public void onClick(View v) {
 
-       suspectButton = findViewById(R.id.makeSuspicionButton);
-       suspectButton.setOnClickListener(new View.OnClickListener() {
+                suspectedPlayerHand = game.getCurrentPlayer().suspect(selectedCulprit, selectedWeapon, selectedRoom, game.getPlayers());
 
-          public void onClick(View v) {
+                for (Player player : game.getPlayers()) {
+                    if (player.getPlayerCharacter().getName() == selectedCulprit) {
+                        player.setPosition(game.getCurrentPlayer().getPosition());
+                    }
+                }
 
-           suspectedPlayerHand = game.getCurrentPlayer().suspect(selectedCulprit, selectedWeapon, selectedRoom, game.getPlayers());
+                //Zeigt Spielerkarten des Verdächtigten
 
-           for(Player player: game.getPlayers()){
-               if(player.getPlayerCharacter().getName()==selectedCulprit){
-                   player.setPosition(game.getCurrentPlayer().getPosition());
-               }
-           }
+                if (suspectedPlayerHand.size() == 0) {
+                    text = "Hier gibt es nichts zum sehen";
+                    toast = Toast.makeText(getApplicationContext(), text, Toast.LENGTH_SHORT);
+                    toast.show();
+                    finish();
+                }
 
-           //Zeigt Spielerkarten des Verdächtigten
+                //Meldugn falls Verdächtiger keine der Karten auf seiner Hand hat
 
-           if(suspectedPlayerHand.size()==0) {
-               text = "Hier gibt es nichts zum sehen";
-               toast = Toast.makeText(getApplicationContext(), text, Toast.LENGTH_SHORT);
-               toast.show();
-               finish();
-           }
+                else {
+                    text = "Der verdächtigte Spieler hat folgende Karten auf der Hand:" + '\n';
+                    for (int i = 0; i < suspectedPlayerHand.size(); i++) {
+                        text += suspectedPlayerHand.get(i) + '\n';
+                    }
 
-           //Meldugn falls Verdächtiger keine der Karten auf seiner Hand hat
+                    toast = Toast.makeText(getApplicationContext(), text, Toast.LENGTH_SHORT);
+                    toast.show();
+                    finish();
 
-           else {
-               text = "Der verdächtigte Spieler hat folgende Karten auf der Hand:" + '\n';
-               for (int i = 0; i < suspectedPlayerHand.size(); i++) {
-                   text += suspectedPlayerHand.get(i) + '\n';
-               }
-
-               toast = Toast.makeText(getApplicationContext(), text , Toast.LENGTH_SHORT);
-               toast.show();
-               finish();
-
-           }
+                }
             }
         });
+
+        /*suspectButton = findViewById(R.id.makeAccusationButton);
+        suspectButton.setOnClickListener(new View.OnClickListener() {
+
+            public void onClick(View v) {
+
+                //Im Falle einer erfolgreichen Anklage
+
+                if(game.getCurrentPlayer().accuse(selectedCulprit, selectedWeapon, selectedRoom, game.getInvestigationFile())) {
+                    game.setGameOver(true);
+                    text = "Gratuliere, du hast das Spiel gewonnen";
+                    toast = Toast.makeText(getApplicationContext(), text, Toast.LENGTH_SHORT);
+                    toast.show();
+                    game.setGameOver(true);
+                    //TODO Nachricht an andere Mitspieler verschicken
+                    finish();
+                }
+
+                //Im Fall einer falschen Anklage
+
+                else {
+                    text = "Du hast eine falsche Anklage erhoben und kannst das Spiel nicht mehr gewinnen";
+                    toast = Toast.makeText(getApplicationContext(), text , Toast.LENGTH_SHORT);
+                    toast.show();
+                    //TODO Nachricht an andere Mitspieler verschicken
+                    finish();
+                }
+            }
+        });*/
     }
+
+   /* public String getCurrentRoom() {
+        int playerX = game.getCurrentPlayer().getPosition().x;
+        int playerY = game.getCurrentPlayer().getPosition().y;
+
+        if(playerX == 3 && playerY == 2){
+            return possibleRooms[0];
+        } else if(playerX == 6 && playerY == 2){
+            return possibleRooms[1];
+        } else if(playerX == 9 && playerY == 2){
+            return possibleRooms[2];
+        } else if(playerX == 3 && playerY == 5 || playerX == 1 && playerY == 6){
+            return possibleRooms[3];
+        } else if(playerX == 8 && playerY == 9 || playerX == 8 && playerY == 8){
+            return possibleRooms[4];
+        } else if(playerX == 1 && playerY == 9 || playerX == 4 && playerY == 10){
+            return possibleRooms[5];
+        } else if(playerX == 3 && playerY == 13){
+            return possibleRooms[6];
+        } else if(playerX == 9 && playerY == 13){
+            return possibleRooms[7];
+        } else if(playerX == 4 && playerY == 17 || playerX == 7 && playerY == 17){
+            return possibleRooms[8];
+        }
+
+        return "";
+    }*/
+
 
     public void onStop(){
         super.onStop();
@@ -122,26 +177,41 @@ public class MakeSuspicion extends AppCompatActivity implements AdapterView.OnIt
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
-        for(int i = 0; i<possibleCulprits.length; i++) {
-            if (parent.getItemAtPosition(position).equals(possibleCulprits[i])) {
+        for (String possibleCulprit : possibleCulprits) {
+            if (parent.getItemAtPosition(position).equals(possibleCulprit)) {
                 selectedCulprit = (String) parent.getItemAtPosition(position);
+                if(selectedCulprit.equals(possibleCulprits[0])){
+                    characterChoice.setImageResource(R.drawable.gatov);
+                } else if(selectedCulprit.equals(possibleCulprits[1])){
+                    characterChoice.setImageResource(R.drawable.bloom);
+                } else if(selectedCulprit.equals(possibleCulprits[2])){
+                    characterChoice.setImageResource(R.drawable.green);
+                } else if(selectedCulprit.equals(possibleCulprits[3])){
+                    characterChoice.setImageResource(R.drawable.porz);
+                } else if(selectedCulprit.equals(possibleCulprits[4])){
+                    characterChoice.setImageResource(R.drawable.gloria);
+                } else if(selectedCulprit.equals(possibleCulprits[5])){
+                    characterChoice.setImageResource(R.drawable.weiss);
+                }
             }
         }
 
-        for(int i = 0; i<possibleWeapons.length; i++)
-        {
-            if(parent.getItemAtPosition(position).equals(possibleWeapons[i]))
-            {
-                selectedWeapon = (String)parent.getItemAtPosition(position);
-            }
-        }
-
-        for(int i = 0; i<possibleRooms.length; i++)
-        {
-            if(parent.getItemAtPosition(position).equals(possibleRooms[i]))
-            {
-                selectedRoom = (String)parent.getItemAtPosition(position);
-
+        for (String possibleWeapon : possibleWeapons) {
+            if (parent.getItemAtPosition(position).equals(possibleWeapon)) {
+                selectedWeapon = (String) parent.getItemAtPosition(position);
+                if(selectedWeapon.equals(possibleWeapons[0])){
+                    weaponChoice.setImageResource(R.drawable.dolch);
+                } else if(selectedWeapon.equals(possibleWeapons[1])){
+                    weaponChoice.setImageResource(R.drawable.leuchter);
+                } else if(selectedWeapon.equals(possibleWeapons[2])){
+                    weaponChoice.setImageResource(R.drawable.pistol);
+                } else if(selectedWeapon.equals(possibleWeapons[3])){
+                    weaponChoice.setImageResource(R.drawable.seil);
+                } else if(selectedWeapon.equals(possibleWeapons[4])){
+                    weaponChoice.setImageResource(R.drawable.heizungsrohr);
+                } else if(selectedWeapon.equals(possibleWeapons[5])){
+                    weaponChoice.setImageResource(R.drawable.rohrzange);
+                }
             }
         }
 
