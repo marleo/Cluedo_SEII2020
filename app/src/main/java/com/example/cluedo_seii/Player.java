@@ -17,7 +17,6 @@ public class Player implements Serializable {
     private Point position;
     private GameCharacter playerCharacter;
     private Boolean madeFalseAccusation;
-    private Notepad notepad;
 
 
     private Player() {
@@ -30,7 +29,6 @@ public class Player implements Serializable {
         this.position = playerCharacter.getStartingPoint();
         this.playerCharacter = playerCharacter;
         madeFalseAccusation = false;
-        this.notepad= new Notepad();
     }
 
     public Point getPosition() {
@@ -60,9 +58,6 @@ public class Player implements Serializable {
     }
 
 
-    public Notepad getNotepad() {
-        return notepad;
-    }
 
     public void addCard(Card card){
         playerCards.add(card);
