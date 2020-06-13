@@ -147,7 +147,7 @@ public class StartGameScreen extends AppCompatActivity {
                 // UPDATE Current Players
                 runOnUiThread(new Runnable() {
                     public void run() {
-                        if (usernameList.size() >= 1) {
+                        if (usernameList.size() >= 2) {
                             findViewById(R.id.chooseCharacter).setVisibility(View.VISIBLE);
                         }
 
