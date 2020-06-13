@@ -13,7 +13,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activities.playerGameInteraction.AccuseSomeone"></activity>
+        <activity android:name=".activities.playerGameInteraction.SuspicionAnswer"></activity>
+        <activity android:name=".activities.playerGameInteraction.PlayerNotification" />
+        <activity android:name=".activities.playerGameInteraction.AccuseSomeone" />
         <activity android:name=".activities.NetworkActivities.ChooseGameTypeActivity" />
         <activity android:name=".activities.playerGameInteraction.MakeSuspicion" />
         <activity android:name=".activities.NetworkActivities.ChoosePlayerScreen" />
@@ -47,11 +49,10 @@
         <activity
             android:name=".activities.PlayerSelectionScreen"
             android:exported="true"
-            android:label="Cluedo">
-        </activity>
-        <activity android:name=".activities.playerGameInteraction.ExposeCheater"
-            android:theme="@style/Theme.AppCompat.Dialog.Alert">
-        </activity>
+            android:label="Cluedo" />
+        <activity
+            android:name=".activities.playerGameInteraction.ExposeCheater"
+            android:theme="@style/Theme.AppCompat.Dialog.Alert" />
     </application>
 
 </manifest>

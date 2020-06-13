@@ -62,6 +62,7 @@ public class ShowCards extends AppCompatActivity {
 
     }
 
+
     @Override
     public void onStop(){
         super.onStop();

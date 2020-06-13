@@ -54,6 +54,7 @@ public class MakeSuspicion extends AppCompatActivity implements AdapterView.OnIt
     private connectionType conType;
     Player suspectedPlayer;
     SuspicionDTO suspicionDTO;
+    TextView currentRoom;
 
 
     @SuppressLint("SetTextI18n")
@@ -97,15 +98,15 @@ public class MakeSuspicion extends AppCompatActivity implements AdapterView.OnIt
         possibleWeapons = getResources().getStringArray(R.array.weapons);
         possibleRooms = getResources().getStringArray(R.array.rooms);
 
+        selectedRoom = getCurrentRoom();
+        currentRoom = (TextView)findViewById(R.id.currentRoom);
+        currentRoom.setText(selectedRoom);
 
         suspectButton = findViewById(R.id.makeSuspicionButton);
         suspectButton.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View v) {
         suspectedPlayerHand = game.getCurrentPlayer().suspect(selectedCulprit, selectedWeapon, selectedRoom, game.getPlayers());
-
-        selectedRoom = getCurrentRoom();
-
 
                 for (Player player : game.getPlayers()) {
                     if (player.getPlayerCharacter().getName().equals(selectedCulprit)) {
@@ -134,9 +135,7 @@ public class MakeSuspicion extends AppCompatActivity implements AdapterView.OnIt
                     for(Card card:suspectedPlayerHand){
                         suspicion.add(card);
                     }
-                   while(suspicion.size()<=3){
-                        suspicion.add(suspectedPlayerHand.get(0));
-                    }
+
                         suspicionDTO.setSuspicion(suspicion);
                         sendSuspicion();
 
