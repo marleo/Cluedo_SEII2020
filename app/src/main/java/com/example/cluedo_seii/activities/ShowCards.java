@@ -52,7 +52,6 @@ public class ShowCards extends AppCompatActivity {
         ArrayAdapter<String> cardListViewAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, playerHand);
         listView = findViewById(R.id.playerHandDisplay);
         listView.setAdapter(cardListViewAdapter);
-
     }
 
     @Override

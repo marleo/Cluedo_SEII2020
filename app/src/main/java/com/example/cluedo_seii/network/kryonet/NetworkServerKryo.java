@@ -48,7 +48,7 @@ public class NetworkServerKryo implements KryoNetComponent, NetworkServer {
     private ClientData host;
 
     private NetworkServerKryo() {
-        server = new Server();
+        server = new Server(8192,4096);
         clientList = new LinkedHashMap<>();
         host = new ClientData();
         host.setId(1);
@@ -211,8 +211,9 @@ public class NetworkServerKryo implements KryoNetComponent, NetworkServer {
     private void handleSuspicionAnswerDTO(Connection connection, SuspicionAnswerDTO suspicionAnswerDTO){
         broadcastMessageWithoutSender(suspicionAnswerDTO, connection);
         Game game = Game.getInstance();
+        if(game.getCurrentPlayer().getId()==game.getLocalPlayer().getId()){
         game.setSuspicionAnswer(suspicionAnswerDTO.getAnswer());
-        game.changeGameState(GameState.RECEIVINGANSWER);
+        game.changeGameState(GameState.RECEIVINGANSWER);}
     }
 
 

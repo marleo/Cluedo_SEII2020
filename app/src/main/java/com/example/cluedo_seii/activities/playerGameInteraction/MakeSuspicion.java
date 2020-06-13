@@ -139,18 +139,8 @@ public class MakeSuspicion extends AppCompatActivity implements AdapterView.OnIt
                         suspicion.add(suspectedPlayerHand.get(0));
                     }
                         suspicionDTO.setSuspicion(suspicion);
-                      sendSuspicion();
+                        sendSuspicion();
 
-                          /* for(Card casrd:suspicion) {
-                       Log.i("suspiconSize", casrd.getDesignation());
-                   }*/
-
-                  /*  for (int i = 0; i < suspectedPlayerHand.size(); i++) {
-                        text += suspectedPlayerHand.get(i).getDesignation() + '\n';
-                    }*/
-
-                   // toast = Toast.makeText(getApplicationContext(), text, Toast.LENGTH_SHORT);
-                   // toast.show();
                     finish();
                 }
             }
@@ -274,7 +264,6 @@ public class MakeSuspicion extends AppCompatActivity implements AdapterView.OnIt
         if(conType==connectionType.HOST) {
             server = NetworkServerKryo.getInstance();
         }
-
         else if(conType==connectionType.CLIENT){
             client = NetworkClientKryo.getInstance();
         }

@@ -201,6 +201,7 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
             gameCallback.callback(gameDTO);
         }
 
+
         Game inGame = gameDTO.getGame();
         Game game = Game.getInstance();
         game.setPlayers(inGame.getPlayers());
@@ -241,9 +242,11 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
     }
 
     private void handleSuspicionAnswerDTO(Connection connection, SuspicionAnswerDTO suspicionAnswerDTO){
+
         Game game = Game.getInstance();
+        if(game.getLocalPlayer().getId()==game.getCurrentPlayer().getId()){
         game.setSuspicionAnswer(suspicionAnswerDTO.getAnswer());
-        game.changeGameState(GameState.RECEIVINGANSWER);
+        game.changeGameState(GameState.RECEIVINGANSWER);}
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
