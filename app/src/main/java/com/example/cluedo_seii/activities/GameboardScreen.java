@@ -472,13 +472,6 @@ public class GameboardScreen extends AppCompatActivity  {
 
     //Dialog für SpielerBenachrichtigung bei Rundenbeginn
     public void turnBegin() {
-       /* manager = getSupportFragmentManager();
-        FragmentTransaction transaction = manager.beginTransaction();
-        transaction.add(R.id.player_game_interaction_layout,new PlayerTurnNotification(), mesaggeDialogTag);
-        transaction.addToBackStack(null);
-        transaction.commit();*/
-
-
         PlayerTurnNotification dialog = new PlayerTurnNotification();
         manager = getSupportFragmentManager();
         dialog.show(manager, mesaggeDialogTag);
