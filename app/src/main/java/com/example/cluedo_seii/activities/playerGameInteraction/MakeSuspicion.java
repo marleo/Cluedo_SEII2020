@@ -4,7 +4,9 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
+import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -13,18 +15,26 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.cluedo_seii.Card;
 import com.example.cluedo_seii.Game;
 import com.example.cluedo_seii.GameState;
 import com.example.cluedo_seii.Player;
 import com.example.cluedo_seii.R;
+import com.example.cluedo_seii.network.connectionType;
+import com.example.cluedo_seii.network.dto.AccusationMessageDTO;
+import com.example.cluedo_seii.network.kryonet.NetworkClientKryo;
+import com.example.cluedo_seii.network.kryonet.NetworkServerKryo;
+import com.example.cluedo_seii.network.kryonet.SelectedConType;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 
 public class MakeSuspicion extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
     private Spinner spinnerCulprit;
     private Spinner spinnerWeapon;
-    private ArrayAdapter<CharSequence> adapterCulprit;
+   // private ArrayAdapter<CharSequence> adapterCulprit;
+    private ArrayAdapter<String>adapterCulprit;
     private ArrayAdapter<CharSequence>adapterWeapon;
     private String selectedCulprit;
     private String selectedWeapon;
@@ -39,21 +49,31 @@ public class MakeSuspicion extends AppCompatActivity implements AdapterView.OnIt
     private LinkedList<String> suspectedPlayerHand;
     private Toast toast;
     private String text;
+    ArrayList<String> gameCharacters;
+    private String[]getPossibleCulprits;
+    ArrayAdapter<String> adapter;
+
 
     @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_accuse_and_suspect);
-
+        gameCharacters=new ArrayList<String>();
         game = Game.getInstance();
-        //Speicherung der Auswahl des Spielers
 
+        for(Player player: game.getPlayers()){
+            gameCharacters.add(player.getPlayerCharacter().getName());
+        }
+
+        adapterCulprit = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item,gameCharacters);
+        //Speicherung der Auswahl des Spielers
         spinnerCulprit = (Spinner) findViewById(R.id.suspectedCulprit);
         spinnerCulprit.setOnItemSelectedListener(this);
-        adapterCulprit = ArrayAdapter.createFromResource(this, R.array.culprits, android.R.layout.simple_spinner_item);
+        //adapterCulprit = ArrayAdapter.createFromResource(this, R.array.suspectCulprits, android.R.layout.simple_spinner_item);
         adapterCulprit.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerCulprit.setAdapter(adapterCulprit);
+
 
         spinnerWeapon = (Spinner) findViewById(R.id.suspectedWeapon);
         spinnerWeapon.setOnItemSelectedListener(this);
@@ -67,9 +87,15 @@ public class MakeSuspicion extends AppCompatActivity implements AdapterView.OnIt
         weaponChoice = findViewById(R.id.weaponImage);
         characterChoice = findViewById(R.id.suspectImage);
 
-        possibleCulprits = getResources().getStringArray(R.array.culprits);
+        //possibleCulprits = getResources().getStringArray(R.array.culprits);
+        possibleCulprits=new String[gameCharacters.size()];
+        for(int i=0; i<possibleCulprits.length;i++){
+            possibleCulprits[i]=gameCharacters.get(i);
+        }
         possibleWeapons = getResources().getStringArray(R.array.weapons);
         possibleRooms = getResources().getStringArray(R.array.rooms);
+
+
 
         //selectedRoom = getCurrentRoom();
 
@@ -77,11 +103,10 @@ public class MakeSuspicion extends AppCompatActivity implements AdapterView.OnIt
         suspectButton.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View v) {
-
                 suspectedPlayerHand = game.getCurrentPlayer().suspect(selectedCulprit, selectedWeapon, selectedRoom, game.getPlayers());
 
                 for (Player player : game.getPlayers()) {
-                    if (player.getPlayerCharacter().getName() == selectedCulprit) {
+                    if (player.getPlayerCharacter().getName().equals(selectedCulprit)) {
                         player.setPosition(game.getCurrentPlayer().getPosition());
                     }
                 }
@@ -106,7 +131,6 @@ public class MakeSuspicion extends AppCompatActivity implements AdapterView.OnIt
                     toast = Toast.makeText(getApplicationContext(), text, Toast.LENGTH_SHORT);
                     toast.show();
                     finish();
-
                 }
             }
         });
@@ -141,9 +165,9 @@ public class MakeSuspicion extends AppCompatActivity implements AdapterView.OnIt
         });*/
     }
 
-   /* public String getCurrentRoom() {
-        int playerX = game.getCurrentPlayer().getPosition().x;
-        int playerY = game.getCurrentPlayer().getPosition().y;
+    public String getCurrentRoom() {
+        int playerX = game.getLocalPlayer().getPosition().x;
+        int playerY = game.getLocalPlayer().getPosition().y;
 
         if(playerX == 3 && playerY == 2){
             return possibleRooms[0];
@@ -166,7 +190,7 @@ public class MakeSuspicion extends AppCompatActivity implements AdapterView.OnIt
         }
 
         return "";
-    }*/
+    }
 
 
     public void onStop(){
@@ -177,9 +201,14 @@ public class MakeSuspicion extends AppCompatActivity implements AdapterView.OnIt
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
+
+       // Log.i("selectedWeapon", selectedWeapon);
+        //Log.i("selectedRoom", getCurrentRoom());
+
+
         for (String possibleCulprit : possibleCulprits) {
             if (parent.getItemAtPosition(position).equals(possibleCulprit)) {
-                selectedCulprit = (String) parent.getItemAtPosition(position);
+                selectedCulprit = (String) parent.getItemAtPosition(position).toString();
                 if(selectedCulprit.equals(possibleCulprits[0])){
                     characterChoice.setImageResource(R.drawable.gatov);
                 } else if(selectedCulprit.equals(possibleCulprits[1])){
@@ -220,5 +249,6 @@ public class MakeSuspicion extends AppCompatActivity implements AdapterView.OnIt
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
     }
+
 
 }

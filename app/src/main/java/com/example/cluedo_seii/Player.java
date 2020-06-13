@@ -2,6 +2,8 @@ package com.example.cluedo_seii;
 
 
 import android.graphics.Point;
+import android.util.Log;
+
 import com.example.cluedo_seii.spielbrett.GameboardElement;
 
 import java.io.Serializable;
@@ -66,7 +68,7 @@ public class Player implements Serializable {
 
     //Verdächtigungsfunktion
     public LinkedList<String> suspect(String suspectedCulprit, String suspectedWeapon, String suspectedLocation, LinkedList<Player> players){
-
+        Log.i("makeSuspicon", "");
         LinkedList<String>wrongSuspicions = new LinkedList<>();
 
         for(Player player: players){
@@ -115,6 +117,8 @@ public class Player implements Serializable {
            return  false;
         }
     }
+
+
 
     public String getUsername() {
         return username;
