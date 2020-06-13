@@ -42,6 +42,7 @@ public class NetworkServerKryo implements KryoNetComponent, NetworkServer {
     private Callback<LinkedHashMap<Integer, ClientData>> newClientCallback;
     private Callback<GameCharacterDTO> gameCharacterDTOCallback;
     private Callback<CheatDTO> cheatDTOCallback;
+    private ChangeListener changeListener;
 
     private LinkedHashMap<Integer, ClientData> clientList;
 
@@ -204,6 +205,7 @@ public class NetworkServerKryo implements KryoNetComponent, NetworkServer {
             }
             game.setSuspicion(suspicionDTO.getSuspicion());
             game.setAcusee(suspicionDTO.getAccuser());
+            notifyPlayer();
             game.changeGameState(GameState.SUSPECTED);
         }
     }
@@ -314,5 +316,22 @@ public class NetworkServerKryo implements KryoNetComponent, NetworkServer {
 
     public ClientData getHost() {
         return host;
+    }
+
+
+    public void notifyPlayer(){
+        if(changeListener != null) changeListener.onChange();
+    }
+
+    public ChangeListener getListener() {
+        return changeListener;
+    }
+
+    public void setListener(ChangeListener changeListener) {
+        this.changeListener = changeListener;
+    }
+
+    public interface ChangeListener {
+        void onChange();
     }
 }

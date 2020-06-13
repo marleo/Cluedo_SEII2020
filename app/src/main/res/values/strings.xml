@@ -18,8 +18,7 @@
     <string name="startGameOptions">Start Game</string>
     <string name="networkButtonOptions">Playground</string>
 
-    <string-array name = "suspectCulprits">
-    </string-array>
+    <string-array name="suspectCulprits"></string-array>
 
 
     <string-array name="culprits">

@@ -26,9 +26,11 @@ import com.example.cluedo_seii.R;
 //import com.example.cluedo_seii.activities.playerGameInteraction.MakeSuspicion;
 import com.example.cluedo_seii.activities.playerGameInteraction.AccuseSomeone;
 import com.example.cluedo_seii.activities.playerGameInteraction.NotifyPlayerWon;
+import com.example.cluedo_seii.activities.playerGameInteraction.PlayerNotification;
 import com.example.cluedo_seii.activities.playerGameInteraction.PlayerTurnNotification;
 import com.example.cluedo_seii.activities.playerGameInteraction.SuspectOrAccuse;
 import com.example.cluedo_seii.activities.playerGameInteraction.MakeSuspicion;
+import com.example.cluedo_seii.activities.playerGameInteraction.SuspicionAnswer;
 import com.example.cluedo_seii.activities.playerGameInteraction.SuspicionShowCard;
 import com.example.cluedo_seii.activities.playerGameInteraction.ThrowDice;
 import com.example.cluedo_seii.activities.playerGameInteraction.ThrowDiceOrUseSecretPassage;
@@ -81,6 +83,7 @@ public class GameboardScreen extends AppCompatActivity  {
         initializeGameboard();
         initializeNetwork();
         setChangeGameStateChangeListener();
+
 
         //zu Demonstrationszwecken SpielerPosition wird gesetzt auf Raum
         for(Player player: game.getPlayers()){
@@ -353,7 +356,9 @@ public class GameboardScreen extends AppCompatActivity  {
                 if(game.getGameState().equals(GameState.PLAYERTURNBEGIN) ){
                     //Überprüfung ob der am Gerät lokal gespeicherte Spieler sich am Zug befindet
                     if(game.getCurrentPlayer().getId()==game.getLocalPlayer().getId()){
-                        turnBegin();
+                       // turnBegin();
+                       // new Intent(GameboardScreen.this, PlayerNotification.class);
+                        startActivity(new Intent(GameboardScreen.this, PlayerNotification.class));
                     }
                     else{//Spieler localPlayer ist nicht am Zug
                         game.setMessageForLocalPlayer( "Spieler " + game.getCurrentPlayer().getId() + " ist am Zug" );
@@ -474,6 +479,7 @@ public class GameboardScreen extends AppCompatActivity  {
         PlayerTurnNotification dialog = new PlayerTurnNotification();
         manager = getSupportFragmentManager();
         dialog.show(manager, mesaggeDialogTag);
+
     }
 
     //Dialog Würfel werfen
@@ -542,10 +548,10 @@ public class GameboardScreen extends AppCompatActivity  {
     public void suspicionShowCard(LinkedList<Card>suspicion){
 
         //Im Falle dessen, das der Spieler eine der VerdachtsKarten auf der Hand hat
-        if(checkSuspicionCard(suspicion).size()>0){
-            SuspicionShowCard dialog = new SuspicionShowCard();
-            manager = getSupportFragmentManager();
-            dialog.show(manager, mesaggeDialogTag);
+        if(checkSuspicionCard(suspicion).size()>0) {
+            LinkedList<Card>temp = checkSuspicionCard(suspicion);
+           game.setSuspicion(checkSuspicionCard(suspicion));
+           startActivity(new Intent(GameboardScreen.this, SuspicionAnswer.class));
         }
 
         //Falls der Verdächtigte Spieler keine VerdachtsKarte auf der Hand hat
@@ -560,7 +566,7 @@ public class GameboardScreen extends AppCompatActivity  {
     }
 
     //Prüft ob Eine der Verdachtskarten sich auf der Spielerhand befindet
-    public List<Card> checkSuspicionCard(List<Card> cards){
+    public LinkedList<Card> checkSuspicionCard(LinkedList<Card> cards){
         LinkedList<Card>localPlayerSuspCards = new LinkedList<>();
         for(Card cardSusp: cards){
             for(Card cardLocal: game.getLocalPlayer().getPlayerCards()){
@@ -696,6 +702,11 @@ public class GameboardScreen extends AppCompatActivity  {
 
     public void setDiceValueTwo(int diceValueTwo) {
         this.diceValueTwo = diceValueTwo;
+    }
+
+    @Override
+    protected void onPause(){
+        super.onPause();
     }
 
 
