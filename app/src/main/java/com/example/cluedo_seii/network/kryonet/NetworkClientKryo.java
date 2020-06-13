@@ -51,6 +51,7 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
     private Callback<GameDTO> gameCallback;
     private Callback<CheatDTO> cheatCallback;
     private Callback<RoomsDTO> roomCallback;
+    private ChangeListener changeListener;
 
     private boolean isConnected;
     private int cheated=0;
@@ -211,6 +212,7 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
         game.setPlayerIterator(inGame.getPlayerIterator());
         game.setInvestigationFile(inGame.getInvestigationFile());
         game.setWrongAccusers(inGame.getWrongAccusers());
+        notifyPlayer();
         game.changeGameState(inGame.getGameState());
         // TODO set game attributes
 
@@ -237,6 +239,7 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
             }
             game.setSuspicion(suspicionDTO.getSuspicion());
             game.setAcusee(suspicionDTO.getAccuser());
+            notifyPlayer();
             game.changeGameState(GameState.SUSPECTED);
         }
     }
@@ -246,6 +249,7 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
         Game game = Game.getInstance();
         if(game.getLocalPlayer().getId()==game.getCurrentPlayer().getId()){
         game.setSuspicionAnswer(suspicionAnswerDTO.getAnswer());
+        notifyPlayer();
         game.changeGameState(GameState.RECEIVINGANSWER);}
     }
 
@@ -378,5 +382,22 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
 
     public boolean isConnected() {
         return isConnected;
+    }
+
+
+    public void notifyPlayer(){
+        if(changeListener != null) changeListener.onChange();
+    }
+
+    public ChangeListener getListener() {
+        return changeListener;
+    }
+
+    public void setListener(ChangeListener changeListener) {
+        this.changeListener = changeListener;
+    }
+
+    public interface ChangeListener {
+        void onChange();
     }
 }

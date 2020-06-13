@@ -13,6 +13,7 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.example.cluedo_seii.Card;
 import com.example.cluedo_seii.CardType;
@@ -471,6 +472,13 @@ public class GameboardScreen extends AppCompatActivity  {
 
     //Dialog für SpielerBenachrichtigung bei Rundenbeginn
     public void turnBegin() {
+       /* manager = getSupportFragmentManager();
+        FragmentTransaction transaction = manager.beginTransaction();
+        transaction.add(R.id.player_game_interaction_layout,new PlayerTurnNotification(), mesaggeDialogTag);
+        transaction.addToBackStack(null);
+        transaction.commit();*/
+
+
         PlayerTurnNotification dialog = new PlayerTurnNotification();
         manager = getSupportFragmentManager();
         dialog.show(manager, mesaggeDialogTag);
@@ -542,8 +550,9 @@ public class GameboardScreen extends AppCompatActivity  {
     public void suspicionShowCard(LinkedList<Card>suspicion){
 
         //Im Falle dessen, das der Spieler eine der VerdachtsKarten auf der Hand hat
-        if(checkSuspicionCard(suspicion).size()>0){
+        if(checkSuspicionCard(suspicion).size()>0) {
             SuspicionShowCard dialog = new SuspicionShowCard();
+
             manager = getSupportFragmentManager();
             dialog.show(manager, mesaggeDialogTag);
         }

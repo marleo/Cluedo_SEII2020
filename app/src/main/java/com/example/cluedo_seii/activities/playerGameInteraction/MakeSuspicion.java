@@ -23,7 +23,6 @@ import com.example.cluedo_seii.network.dto.SuspicionDTO;
 import com.example.cluedo_seii.network.kryonet.NetworkClientKryo;
 import com.example.cluedo_seii.network.kryonet.NetworkServerKryo;
 import com.example.cluedo_seii.network.kryonet.SelectedConType;
-
 import java.util.ArrayList;
 import java.util.LinkedList;
 
