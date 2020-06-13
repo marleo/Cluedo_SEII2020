@@ -21,13 +21,9 @@ import com.example.cluedo_seii.Card;
 import com.example.cluedo_seii.Game;
 import com.example.cluedo_seii.InvestigationFile;
 import com.example.cluedo_seii.Notepad;
-import com.example.cluedo_seii.Player;
 import com.example.cluedo_seii.R;
-//import com.example.cluedo_seii.activities.NetworkActivities.StartGameScreen;
 import com.example.cluedo_seii.activities.playerGameInteraction.ExposeCheater;
 import com.example.cluedo_seii.network.Callback;
-import com.example.cluedo_seii.network.ClientData;
-import com.example.cluedo_seii.network.connectionType;
 import com.example.cluedo_seii.network.dto.CheatDTO;
 import com.example.cluedo_seii.network.kryonet.NetworkClientKryo;
 import com.example.cluedo_seii.network.kryonet.NetworkServerKryo;
@@ -65,10 +61,6 @@ public class NotepadScreen extends AppCompatActivity {
     private TextView textView;
     private Notepad notepad;
     private Game game;
-    private ClientData clientData;
-    private Player player;
-    private Intent intent;
-    private connectionType conType;
     private NetworkServerKryo server;
     private NetworkClientKryo client;
 
@@ -79,15 +71,12 @@ public class NotepadScreen extends AppCompatActivity {
 
 
     private String test = " ";
-    private String count="";
 
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        intent = getIntent();
         game = Game.getInstance();
-        //this.conType= StartGameScreen.conType;
         final SharedPreferences preferences = getSharedPreferences("notizblock", MODE_PRIVATE);
         final SharedPreferences.Editor editor = getSharedPreferences("notizblock", MODE_PRIVATE).edit();
         setContentView(R.layout.activity_notepad);
@@ -122,10 +111,7 @@ public class NotepadScreen extends AppCompatActivity {
             }
         });
 
-       // player=game.getCurrentPlayer();
-        player=game.getLocalPlayer();
-        //player = clientData.getPlayer();
-        notepad = player.getNotepad();
+        notepad=new Notepad();
 
 
         textViewGatov = findViewById(R.id.notepad_gatov);
@@ -327,9 +313,11 @@ public class NotepadScreen extends AppCompatActivity {
 
             }
 
-            public void onDestroy() {
-                super.onDestroy();
+            @Override
+            public void onBackPressed() {
+                super.onBackPressed();
                 getSharedPreferences("notizblock", MODE_PRIVATE).edit().clear().commit();
+                finish();
             }
 
 
@@ -509,8 +497,8 @@ public class NotepadScreen extends AppCompatActivity {
                     float swipeLeft = x1 - x2;
 
                     if (swipeLeft > MIN_SWIPE_DISTANCE) {
-                        startActivity(new Intent(NotepadScreen.this, GameboardScreen.class));
-                        //finish();
+                        //startActivity(new Intent(NotepadScreen.this, GameboardScreen.class));
+                        finish();
                         overridePendingTransition(R.anim.slide_left_in, R.anim.slide_left_out);
                     }
                     break;
