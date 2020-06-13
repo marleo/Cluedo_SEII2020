@@ -4,9 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
-import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -21,7 +19,7 @@ import com.example.cluedo_seii.GameState;
 import com.example.cluedo_seii.Player;
 import com.example.cluedo_seii.R;
 import com.example.cluedo_seii.network.connectionType;
-import com.example.cluedo_seii.network.dto.AccusationMessageDTO;
+import com.example.cluedo_seii.network.dto.SuspicionDTO;
 import com.example.cluedo_seii.network.kryonet.NetworkClientKryo;
 import com.example.cluedo_seii.network.kryonet.NetworkServerKryo;
 import com.example.cluedo_seii.network.kryonet.SelectedConType;
@@ -46,12 +44,17 @@ public class MakeSuspicion extends AppCompatActivity implements AdapterView.OnIt
     private ImageView weaponChoice;
     private ImageView characterChoice;
     private Game game;
-    private LinkedList<String> suspectedPlayerHand;
+    private LinkedList<Card> suspectedPlayerHand;
     private Toast toast;
     private String text;
     ArrayList<String> gameCharacters;
     private String[]getPossibleCulprits;
     ArrayAdapter<String> adapter;
+    private NetworkServerKryo server;
+    private NetworkClientKryo client;
+    private connectionType conType;
+    Player suspectedPlayer;
+    SuspicionDTO suspicionDTO;
 
 
     @SuppressLint("SetTextI18n")
@@ -61,16 +64,16 @@ public class MakeSuspicion extends AppCompatActivity implements AdapterView.OnIt
         setContentView(R.layout.activity_accuse_and_suspect);
         gameCharacters=new ArrayList<String>();
         game = Game.getInstance();
+        initializeNetwork();
 
         for(Player player: game.getPlayers()){
-            gameCharacters.add(player.getPlayerCharacter().getName());
+            if(player.getId()!=game.getLocalPlayer().getId()){
+            gameCharacters.add(player.getPlayerCharacter().getName());}
         }
 
         adapterCulprit = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item,gameCharacters);
-        //Speicherung der Auswahl des Spielers
         spinnerCulprit = (Spinner) findViewById(R.id.suspectedCulprit);
-        spinnerCulprit.setOnItemSelectedListener(this);
-        //adapterCulprit = ArrayAdapter.createFromResource(this, R.array.suspectCulprits, android.R.layout.simple_spinner_item);
+        spinnerCulprit.setOnItemSelectedListener(this);;
         adapterCulprit.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerCulprit.setAdapter(adapterCulprit);
 
@@ -81,7 +84,7 @@ public class MakeSuspicion extends AppCompatActivity implements AdapterView.OnIt
         adapterWeapon.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerWeapon.setAdapter(adapterWeapon);
 
-        TextView currentRoom = findViewById(R.id.currentRoomText);
+        //TextView currentRoom = findViewById(R.id.currentRoomText);
         //currentRoom.setText("Tatort: " + getCurrentRoom());
 
         weaponChoice = findViewById(R.id.weaponImage);
@@ -96,40 +99,48 @@ public class MakeSuspicion extends AppCompatActivity implements AdapterView.OnIt
         possibleRooms = getResources().getStringArray(R.array.rooms);
 
 
-
-        //selectedRoom = getCurrentRoom();
-
         suspectButton = findViewById(R.id.makeSuspicionButton);
         suspectButton.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View v) {
-                suspectedPlayerHand = game.getCurrentPlayer().suspect(selectedCulprit, selectedWeapon, selectedRoom, game.getPlayers());
+        suspectedPlayerHand = game.getCurrentPlayer().suspect(selectedCulprit, selectedWeapon, selectedRoom, game.getPlayers());
+
+        selectedRoom = getCurrentRoom();
+
 
                 for (Player player : game.getPlayers()) {
                     if (player.getPlayerCharacter().getName().equals(selectedCulprit)) {
                         player.setPosition(game.getCurrentPlayer().getPosition());
+                        suspectedPlayer = player;
                     }
                 }
 
-                //Zeigt Spielerkarten des Verdächtigten
-
+                //Falls der Verdächtigte keine der Karten auf der Hand hat
                 if (suspectedPlayerHand.size() == 0) {
-                    text = "Hier gibt es nichts zum sehen";
-                    toast = Toast.makeText(getApplicationContext(), text, Toast.LENGTH_SHORT);
-                    toast.show();
+                    suspicionDTO = new SuspicionDTO();
+                    suspicionDTO.setAccuser(game.getCurrentPlayer());
+                    suspicionDTO.setAcusee(suspectedPlayer);
+                    suspicionDTO.setSuspicion(suspectedPlayerHand);
+                    sendSuspicion();
                     finish();
                 }
 
-                //Meldugn falls Verdächtiger keine der Karten auf seiner Hand hat
-
+                //Falls der Verdächtigte eine Karte auf der Hand hat
                 else {
-                    text = "Der verdächtigte Spieler hat folgende Karten auf der Hand:" + '\n';
-                    for (int i = 0; i < suspectedPlayerHand.size(); i++) {
-                        text += suspectedPlayerHand.get(i) + '\n';
+                  //  text = "Der verdächtigte Spieler hat folgende Karten auf der Hand:" + '\n';
+                    suspicionDTO = new SuspicionDTO();
+                    suspicionDTO.setAccuser(game.getCurrentPlayer());
+                    suspicionDTO.setAcusee(suspectedPlayer);
+                    LinkedList<Card>suspicion = new LinkedList<>();
+                    for(Card card:suspectedPlayerHand){
+                        suspicion.add(card);
                     }
+                   while(suspicion.size()<=3){
+                        suspicion.add(suspectedPlayerHand.get(0));
+                    }
+                        suspicionDTO.setSuspicion(suspicion);
+                        sendSuspicion();
 
-                    toast = Toast.makeText(getApplicationContext(), text, Toast.LENGTH_SHORT);
-                    toast.show();
                     finish();
                 }
             }
@@ -166,8 +177,8 @@ public class MakeSuspicion extends AppCompatActivity implements AdapterView.OnIt
     }
 
     public String getCurrentRoom() {
-        int playerX = game.getLocalPlayer().getPosition().x;
-        int playerY = game.getLocalPlayer().getPosition().y;
+        int playerX = game.getCurrentPlayer().getPosition().x;
+        int playerY = game.getCurrentPlayer().getPosition().y;
 
         if(playerX == 3 && playerY == 2){
             return possibleRooms[0];
@@ -192,19 +203,14 @@ public class MakeSuspicion extends AppCompatActivity implements AdapterView.OnIt
         return "";
     }
 
-
     public void onStop(){
         super.onStop();
-        game.changeGameState(GameState.PLAYERTURNEND);
+        game.changeGameState(GameState.WAITINGFORANSWER);
     }
 
     @Override
+    //Festhaltung der Spielerauswahl
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-
-
-       // Log.i("selectedWeapon", selectedWeapon);
-        //Log.i("selectedRoom", getCurrentRoom());
-
 
         for (String possibleCulprit : possibleCulprits) {
             if (parent.getItemAtPosition(position).equals(possibleCulprit)) {
@@ -250,5 +256,27 @@ public class MakeSuspicion extends AppCompatActivity implements AdapterView.OnIt
     public void onNothingSelected(AdapterView<?> parent) {
     }
 
+    //Netzwerkfunktionen
 
+    //Netzwerkinitialisierung
+    public void initializeNetwork(){
+        conType = SelectedConType.getConnectionType();
+        if(conType==connectionType.HOST) {
+            server = NetworkServerKryo.getInstance();
+        }
+        else if(conType==connectionType.CLIENT){
+            client = NetworkClientKryo.getInstance();
+        }
+    }
+
+    //Verdachtsverschickung
+    public void sendSuspicion( ){
+        //TODO add if for globalhost and global Client
+        if(conType==connectionType.HOST) {
+            server.broadcastMessage(suspicionDTO);
+        }
+        else if(conType==connectionType.CLIENT){
+            client.sendMessage(suspicionDTO);
+        }
+    }
 }
