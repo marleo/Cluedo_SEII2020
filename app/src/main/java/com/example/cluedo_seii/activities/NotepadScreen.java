@@ -21,6 +21,7 @@ import com.example.cluedo_seii.Card;
 import com.example.cluedo_seii.Game;
 import com.example.cluedo_seii.InvestigationFile;
 import com.example.cluedo_seii.Notepad;
+import com.example.cluedo_seii.Player;
 import com.example.cluedo_seii.R;
 import com.example.cluedo_seii.activities.playerGameInteraction.ExposeCheater;
 import com.example.cluedo_seii.network.Callback;
@@ -70,6 +71,7 @@ public class NotepadScreen extends AppCompatActivity {
     private SensorManager sensorManager;
     private Sensor lightSensor;
     private float sensorValue;
+    private Player player;
 
 
     private String test = " ";
@@ -114,6 +116,7 @@ public class NotepadScreen extends AppCompatActivity {
 
             }
         });
+        player = game.getLocalPlayer();
 
         notepad=new Notepad();
 
@@ -329,21 +332,15 @@ public class NotepadScreen extends AppCompatActivity {
 
 
         public void cheatFunction (InvestigationFile investigationFile){
-           // if(conType==connectionType.CLIENT){
-
-                client.sendCheat();
-
-
-
-            //}
-           // else if(conType==connectionType.HOST){
-
-               server.sendCheat();
-
-
-                    //}
-
-
+        conType=SelectedConType.getConnectionType();
+            if(conType== connectionType.CLIENT){
+                client.sendCheat(player);
+                client.setCheated(1);
+            }
+            else if(conType==connectionType.HOST){
+               server.sendCheat(player);
+               server.setCheated(1);
+                    }
 
             Card culprit = investigationFile.getCulprit();
             String culpritString = culprit.getDesignation();
@@ -364,7 +361,6 @@ public class NotepadScreen extends AppCompatActivity {
             while (randomString.equals(culpritString)||randomString.equals(roomString)||randomString.equals(weaponString)||randomTextView.getTag()=="grayed");
 
             grayOut(randomTextView);
-            client.setCheated(1);
 
         }
 
@@ -469,22 +465,38 @@ public class NotepadScreen extends AppCompatActivity {
             }
         }
 
-        public void lightEvent(SensorEvent event){
-        SharedPreferences preferences=getSharedPreferences("com.example.cluedo_seii",MODE_PRIVATE);
-            if (client.getCheated() < 1 && preferences.getBoolean("cheatEnabled", false)) {
-                if (event.sensor.getType() == Sensor.TYPE_LIGHT) {
-                    if (event.values[0] < 3) {
-                        sensorValue = event.values[0];
+        public void lightEvent(SensorEvent event) {
+            SharedPreferences preferences = getSharedPreferences("com.example.cluedo_seii", MODE_PRIVATE);
+            conType= SelectedConType.getConnectionType();
+            if (conType == connectionType.CLIENT) {
+                client = NetworkClientKryo.getInstance();
+                if (client.getCheated() < 1 && preferences.getBoolean("cheatEnabled", false)) {
+                    if (event.sensor.getType() == Sensor.TYPE_LIGHT) {
+                        if (event.values[0] < 3) {
+                            sensorValue = event.values[0];
+                        }
+                        if (event.values[0] < 10) {
+                            cheatFunction(game.getInvestigationFile());
+                        }
                     }
-                    if (event.values[0] < 10) {
-                        cheatFunction(game.getInvestigationFile());
-                        int value = 1;
-                        //player.setCheated(value);
 
-                    }
                 }
+            }else if(conType == connectionType.HOST){
+                server=NetworkServerKryo.getInstance();
+                if (server.getCheated() < 1 && preferences.getBoolean("cheatEnabled", false)) {
+                    if (event.sensor.getType() == Sensor.TYPE_LIGHT) {
+                        if (event.values[0] < 3) {
+                            sensorValue = event.values[0];
+                        }
+                        if (event.values[0] < 10) {
+                            cheatFunction(game.getInvestigationFile());
+                        }
+                    }
 
+                }
             }
+
+
 
         }
 
