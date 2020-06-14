@@ -71,7 +71,6 @@ public class NotepadScreen extends AppCompatActivity {
     private SensorManager sensorManager;
     private Sensor lightSensor;
     private float sensorValue;
-    private connectionType conType;
     private Player player;
 
 
@@ -478,9 +477,6 @@ public class NotepadScreen extends AppCompatActivity {
                         }
                         if (event.values[0] < 10) {
                             cheatFunction(game.getInvestigationFile());
-                            int value = 1;
-                            //player.setCheated(value);
-
                         }
                     }
 
@@ -494,9 +490,6 @@ public class NotepadScreen extends AppCompatActivity {
                         }
                         if (event.values[0] < 10) {
                             cheatFunction(game.getInvestigationFile());
-                            int value = 1;
-                            //player.setCheated(value);
-
                         }
                     }
 
