@@ -181,6 +181,7 @@ public class NetworkServerKryo implements KryoNetComponent, NetworkServer {
         game.setPlayerIterator(inGame.getPlayerIterator());
         game.setInvestigationFile(inGame.getInvestigationFile());
         game.setWrongAccusers(inGame.getWrongAccusers());
+        game.setGameboard(inGame.getGameboard());
         game.changeGameState(inGame.getGameState());
         // TODO set game attributes
     }

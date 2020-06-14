@@ -373,6 +373,7 @@ public class GameboardScreen extends AppCompatActivity  {
 
                 //Ausgeführt bei GameState.PLAYERTURNBEGIN)
                 if(game.getGameState().equals(GameState.PLAYERTURNBEGIN) ){
+                    updateGameScreen();
                     //Überprüfung ob der am Gerät lokal gespeicherte Spieler sich am Zug befindet
                     if(game.getCurrentPlayer().getId()==game.getLocalPlayer().getId()){
                        // turnBegin();

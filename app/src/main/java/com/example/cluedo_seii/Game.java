@@ -107,6 +107,10 @@ public class Game implements Serializable {
         this.gameboard = gameboard;
     }
 
+    public Gameboard getGameboard() {
+        return gameboard;
+    }
+
     // set for Network start
     public void setGameState(GameState gameState) {
         this.gameState = gameState;
@@ -139,6 +143,8 @@ public class Game implements Serializable {
     public void setMessageForLocalPlayer(String messageForLocalPlayer) {
         this.messageForLocalPlayer = messageForLocalPlayer;
     }
+
+
 
     public int getWrongAccusers() {
         return wrongAccusers;
