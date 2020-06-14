@@ -72,6 +72,7 @@ public class GameboardScreen extends AppCompatActivity  {
     private Handler messageHandler;
     private Handler mainThreadHandler;
     private Toast toast;
+    private String gameBoard;
 
 
     @SuppressLint("ClickableViewAccessibility")
@@ -80,8 +81,12 @@ public class GameboardScreen extends AppCompatActivity  {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_spielbrett_screen);
         game = Game.getInstance();
+        bundle = new Bundle();
+        mesaggeDialogTag = "MessageDialog";
         initializeGameboard();
         initializeNetwork();
+        setCallbacksForCheatFunction();
+        setPlayerStartingPoints();
         setChangeGameStateChangeListener();
 
 
@@ -101,7 +106,7 @@ public class GameboardScreen extends AppCompatActivity  {
     /////////////////////////////////////
 
     //Spielbrettinitialisierung
-    public void initializeGameboard(){
+    public void initializeGameboard() {
 
         /*
             0 = GameField
@@ -200,77 +205,74 @@ public class GameboardScreen extends AppCompatActivity  {
             Ü = Veranda7
             Ö = Veranda8
             Ä = Veranda9
-
-
-
-
          */
 
-        String gameBoard =
+         gameBoard =
                 "cdef04562=_{}" +
-                "ghij07890~€ÜÖ" +
-                "Akk30a3b03ÄÄA" +
-                "2000000000000" +
-                "lmt0000000000" +
-                "opq3000000002" +
-                "r3u0000000000" +
-                "0000000000002" +
-                "000000003*.,#" +
-                "v3wxy0003:;<>" +
-                "zBCD30000@[]^" +
-                "EFGHI00000000" +
-                "0000000000000" +
-                "JAK30000Z3!äö" +
-                "LMNO0000ü$%&-" +
-                "PQRT0000A/()+" +
-                "0000000000000" +
-                "00003SU300000" +
-                "0000VWXY00000" +
-                "0020000002000";
+                        "ghij07890~€ÜÖ" +
+                        "Akk30a3b03ÄÄA" +
+                        "2000000000000" +
+                        "lmt0000000000" +
+                        "opq3000000002" +
+                        "r3u0000000000" +
+                        "0000000000002" +
+                        "000000003*.,#" +
+                        "v3wxy0003:;<>" +
+                        "zBCD30000@[]^" +
+                        "EFGHI00000000" +
+                        "0000000000000" +
+                        "JAK30000Z3!äö" +
+                        "LMNO0000ü$%&-" +
+                        "PQRT0000A/()+" +
+                        "0000000000000" +
+                        "00003SU300000" +
+                        "0000VWXY00000" +
+                        "0020000002000";
+    }
 
-        // Init Starting Points
+        public void setPlayerStartingPoints(){
+
         startingPoints = new ArrayList<>();
-        startingPoints.add(new StartingPoint(0, 0));
-        startingPoints.add(new StartingPoint(2, 1));
+        for(int ind = 0; ind<game.getPlayers().size(); ind++){
+            startingPoints.add(new StartingPoint(ind, game.getPlayers().get(ind).getId()));
+        }
 
-        // Init Player Ids and PlayerMove-Array
-        int countPlayerIds = 0;
-        playerMove = new ArrayList<>();
-
-        gameboard = new Gameboard(this,13,20, gameBoard);
+        gameboard = new Gameboard(this, 13, 20, gameBoard);
         setContentView(gameboard.getLayout());
-
-        bundle = new Bundle();
-        mesaggeDialogTag = "MessageDialog";
-        //
-
-        //TODO delete
-       //startGame();
-
         gameboard.spawnPlayer(startingPoints, this);
 
-        for(StartingPoint startingPoint: startingPoints) {
+        for(int ind = 0; ind<game.getPlayers().size(); ind++){
+            game.getPlayers().get(ind).setPosition(startingPoints.get(ind).getPlayerPosition());
+        }
+
+        
+        for (StartingPoint startingPoint : startingPoints) {
             Log.i("Test",
                     "StartingPoint Position: " + startingPoint.getPlayerPosition().x + ":"
                             + startingPoint.getPlayerPosition().y);
-            GameCharacter gameCharacter = new GameCharacter("Player_"+countPlayerIds, startingPoint.getPlayerPosition());
-            playerMove.add(
-                    new Player(countPlayerIds++, gameCharacter)
-            );
+         //   GameCharacter gameCharacter = new GameCharacter("Player_" + countPlayerIds, startingPoint.getPlayerPosition());
+         //   playerMove.add(
+                 //   new Player(countPlayerIds++, gameCharacter)
+          //  );
         }
 
         // Wenn sich die Id ändert, dann danach updateGameboardScreen machen so wie hier!
         playerCurrentlyPlayingId = 0;
         gameboard.updateGameboardScreen(this);
-        server = NetworkServerKryo.getInstance();
-        client= NetworkClientKryo.getInstance();
+    }
+
+        public void setCallbacksForCheatFunction(){
+
+
+            server = NetworkServerKryo.getInstance();
+        client = NetworkClientKryo.getInstance();
         client.registerCheatCallback(new Callback<CheatDTO>() {
             @Override
             public void callback(CheatDTO argument) {
                 runOnUiThread(new Runnable() {
                     public void run() {
                         Toast toast;
-                        toast = Toast.makeText(getApplicationContext(),"Jemand hat geschummelt", Toast.LENGTH_LONG);
+                        toast = Toast.makeText(getApplicationContext(), "Jemand hat geschummelt", Toast.LENGTH_LONG);
                         toast.show();
 
                     }
@@ -278,6 +280,7 @@ public class GameboardScreen extends AppCompatActivity  {
 
             }
         });
+
         server.registerCheatDTOCallback(new Callback<CheatDTO>() {
             @Override
             public void callback(CheatDTO argument) {
