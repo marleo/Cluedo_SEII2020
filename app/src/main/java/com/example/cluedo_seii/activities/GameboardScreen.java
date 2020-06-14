@@ -2,7 +2,6 @@ package com.example.cluedo_seii.activities;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.graphics.Point;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -18,7 +17,6 @@ import com.example.cluedo_seii.Card;
 import com.example.cluedo_seii.CardType;
 import com.example.cluedo_seii.DeckOfCards;
 import com.example.cluedo_seii.Game;
-import com.example.cluedo_seii.GameCharacter;
 import com.example.cluedo_seii.GameState;
 import com.example.cluedo_seii.Player;
 import com.example.cluedo_seii.R;
@@ -31,7 +29,6 @@ import com.example.cluedo_seii.activities.playerGameInteraction.PlayerTurnNotifi
 import com.example.cluedo_seii.activities.playerGameInteraction.SuspectOrAccuse;
 import com.example.cluedo_seii.activities.playerGameInteraction.MakeSuspicion;
 import com.example.cluedo_seii.activities.playerGameInteraction.SuspicionAnswer;
-import com.example.cluedo_seii.activities.playerGameInteraction.SuspicionShowCard;
 import com.example.cluedo_seii.activities.playerGameInteraction.ThrowDice;
 import com.example.cluedo_seii.activities.playerGameInteraction.ThrowDiceOrUseSecretPassage;
 import com.example.cluedo_seii.network.Callback;
@@ -68,7 +65,7 @@ public class GameboardScreen extends AppCompatActivity  {
     private Player currentPlayerInDoor;// TODO: Aufräumen und vielleicht nur mehr das Player Objekt anstatt id und Player Objekt
     private int playerCurrentlyPlayingId;
     static final int MIN_SWIPE_DISTANCE = 150;
-    private int diceValueOne = 2, diceValueTwo = 2;
+    private int diceValueOne , diceValueTwo;
     private Handler messageHandler;
     private Handler mainThreadHandler;
     private Toast toast;
@@ -91,14 +88,14 @@ public class GameboardScreen extends AppCompatActivity  {
 
 
         //zu Demonstrationszwecken SpielerPosition wird gesetzt auf Raum
-        for(Player player: game.getPlayers()){
-         player.setPosition(new Point(6,2));
-        Log.i("gameCharacter", player.getId() + "" + player.getPlayerCharacter().getName());}
+      //  for(Player player: game.getPlayers()){
+        // player.setPosition(new Point(6,2));
+        ///(Log.i("gameCharacter", player.getId() + "" + player.getPlayerCharacter().getName());}
          kickOffGame();
-         Log.i("gameStarted", "gameCreated");
-        for(Card card: game.getPlayers().get(1).getPlayerCards()){
-            Log.i("Card", card.getDesignation());
-        }
+        // Log.i("gameStarted", "gameCreated");
+       // for(Card card: game.getPlayers().get(1).getPlayerCards()){
+        //    Log.i("Card", card.getDesignation());
+      //  }
             }
 
      /////////////////////////////////////
@@ -232,6 +229,8 @@ public class GameboardScreen extends AppCompatActivity  {
 
         public void setPlayerStartingPoints(){
 
+        playerMove = new ArrayList<>();
+
         startingPoints = new ArrayList<>();
         for(int ind = 0; ind<game.getPlayers().size(); ind++){
             startingPoints.add(new StartingPoint(ind, game.getPlayers().get(ind).getId()));
@@ -250,21 +249,18 @@ public class GameboardScreen extends AppCompatActivity  {
             Log.i("Test",
                     "StartingPoint Position: " + startingPoint.getPlayerPosition().x + ":"
                             + startingPoint.getPlayerPosition().y);
-         //   GameCharacter gameCharacter = new GameCharacter("Player_" + countPlayerIds, startingPoint.getPlayerPosition());
-         //   playerMove.add(
-                 //   new Player(countPlayerIds++, gameCharacter)
-          //  );
-        }
+            //   GameCharacter gameCharacter = new GameCharacter("Player_" + countPlayerIds, startingPoint.getPlayerPosition());
 
+            for (Player player : game.getPlayers()) {
+                playerMove.add(game.getCurrentPlayer());
+            }
+        }
         // Wenn sich die Id ändert, dann danach updateGameboardScreen machen so wie hier!
-        playerCurrentlyPlayingId = 0;
-        gameboard.updateGameboardScreen(this);
     }
 
         public void setCallbacksForCheatFunction(){
 
-
-            server = NetworkServerKryo.getInstance();
+        server = NetworkServerKryo.getInstance();
         client = NetworkClientKryo.getInstance();
         client.registerCheatCallback(new Callback<CheatDTO>() {
             @Override
@@ -338,6 +334,26 @@ public class GameboardScreen extends AppCompatActivity  {
         this.currentPlayerInDoor = currentPlayerInDoor;
     }
 
+    public int getDiceValueOne() {
+        return diceValueOne;
+    }
+
+    public void setDiceValueOne(int diceValueOne) {
+        this.diceValueOne = diceValueOne;
+    }
+
+    public int getDiceValueTwo() {
+        return diceValueTwo;
+    }
+
+    public void setDiceValueTwo(int diceValueTwo) {
+        this.diceValueTwo = diceValueTwo;
+    }
+
+    public void updateGameScreen(){
+        gameboard.updateGameboardScreen(this);
+    }
+
     ////////////////////////////////////////////////////////////////////////////////////
     //ChangeListener - Code wird ausgeführt wenn game.changeGameState()ausgeführt wird//
     ////////////////////////////////////////////////////////////////////////////////////
@@ -370,7 +386,7 @@ public class GameboardScreen extends AppCompatActivity  {
                 }
 
                 //Ausgefürt bei GameState.PLAVERMOVEMENT
-                else if(game.getGameState().equals(GameState.PLAVERMOVEMENT)){
+                else if(game.getGameState().equals(GameState.PLAYERMOVEMENTDECISION)){
                     if(game.getCurrentPlayer().getId()==game.getLocalPlayer().getId()){
                         int playerX = game.getCurrentPlayer().getPosition().x;
                         int playerY = game.getCurrentPlayer().getPosition().y;
@@ -394,6 +410,15 @@ public class GameboardScreen extends AppCompatActivity  {
                             throwDice();
                         }
                     }
+                }
+
+                else if(game.getGameState().equals(GameState.PLAYERMOVEMENT)){
+                    setDiceValueOne(game.getDiceOne());
+                    setDiceValueTwo(game.getDiceTwo());
+                    int sum = getDiceValueOne() +  getDiceValueTwo();
+                    toast = Toast.makeText(GameboardScreen.this, "Du hast " + sum + " gewürfelt.", Toast.LENGTH_SHORT);
+                    toast.show();
+                    playerCurrentlyPlayingId = game.getCurrentPlayer().getId();
                 }
 
                 //Ausgeführt bei GameState.PLAYERACCUSATION
@@ -453,7 +478,9 @@ public class GameboardScreen extends AppCompatActivity  {
 
                         //wenn Abbruchbedingungen nicht zutreffen
                         else{//nächster Spieler
+                            updateGameScreen();
                             game.nextPlayer();
+                            playerCurrentlyPlayingId=game.getCurrentPlayer().getId();
                             game.changeGameState(GameState.PLAYERTURNBEGIN);
                             updateGame();
                         }
@@ -691,27 +718,10 @@ public class GameboardScreen extends AppCompatActivity  {
         return mainThreadHandler;
     }
 
-    public int getDiceValueOne() {
-        return diceValueOne;
-    }
-
-    public void setDiceValueOne(int diceValueOne) {
-        this.diceValueOne = diceValueOne;
-    }
-
-    public int getDiceValueTwo() {
-        return diceValueTwo;
-    }
-
-    public void setDiceValueTwo(int diceValueTwo) {
-        this.diceValueTwo = diceValueTwo;
-    }
-
     @Override
     protected void onPause(){
         super.onPause();
     }
-
 
 }
 

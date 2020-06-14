@@ -31,7 +31,7 @@ public class PlayerNotification extends AppCompatActivity {
     @Override
     protected void onStop(){
         super.onStop();
-        game.changeGameState(GameState.PLAVERMOVEMENT);
+        game.changeGameState(GameState.PLAYERMOVEMENTDECISION);
     }
 
 }

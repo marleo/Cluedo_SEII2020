@@ -14,7 +14,6 @@ import androidx.fragment.app.DialogFragment;
 import com.example.cluedo_seii.Game;
 import com.example.cluedo_seii.GameState;
 import com.example.cluedo_seii.R;
-import com.example.cluedo_seii.activities.GameboardScreen;
 
 public class PlayerTurnNotification extends DialogFragment {
     Game game;
@@ -29,7 +28,7 @@ public class PlayerTurnNotification extends DialogFragment {
         DialogInterface.OnClickListener startTurn = new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-               game.changeGameState(GameState.PLAVERMOVEMENT);
+               game.changeGameState(GameState.PLAYERMOVEMENTDECISION);
 
             }
         };

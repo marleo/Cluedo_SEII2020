@@ -27,6 +27,8 @@ public class Game implements Serializable {
     private LinkedList<Card>suspicion;
     private Card suspicionAnswer;
     private Player acusee;
+    private int diceOne;
+    private int diceTwo;
 
     public LinkedList<Card> getSuspicion() {
         return suspicion;
@@ -162,6 +164,22 @@ public class Game implements Serializable {
 
     public void setSuspicion(LinkedList<Card> suspicion) {
         this.suspicion = suspicion;
+    }
+
+    public int getDiceOne() {
+        return diceOne;
+    }
+
+    public void setDiceOne(int diceOne) {
+        this.diceOne = diceOne;
+    }
+
+    public int getDiceTwo() {
+        return diceTwo;
+    }
+
+    public void setDiceTwo(int diceTwo) {
+        this.diceTwo = diceTwo;
     }
 
     // set for Network end
