@@ -29,6 +29,7 @@ public class Game implements Serializable {
     private Player acusee;
     private int diceOne;
     private int diceTwo;
+    private String gameBoardString;
 
     public LinkedList<Card> getSuspicion() {
         return suspicion;
@@ -105,6 +106,14 @@ public class Game implements Serializable {
 
     public void setGameboard(Gameboard gameboard){
         this.gameboard = gameboard;
+    }
+
+    public String getGameBoardString() {
+        return gameBoardString;
+    }
+
+    public void setGameBoardString(String gameBoardString) {
+        this.gameBoardString = gameBoardString;
     }
 
     public Gameboard getGameboard() {

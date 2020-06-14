@@ -250,7 +250,7 @@ public class GameboardScreen extends AppCompatActivity  {
                             + startingPoint.getPlayerPosition().y);
             //   GameCharacter gameCharacter = new GameCharacter("Player_" + countPlayerIds, startingPoint.getPlayerPosition());
             for (Player player : game.getPlayers()) {
-                playerMove.add(game.getCurrentPlayer());
+                playerMove.add(player);
             }
         }
         // Wenn sich die Id ändert, dann danach updateGameboardScreen machen so wie hier!
@@ -371,6 +371,7 @@ public class GameboardScreen extends AppCompatActivity  {
 
                 //Ausgeführt bei GameState.PLAYERTURNBEGIN)
                 if(game.getGameState().equals(GameState.PLAYERTURNBEGIN) ){
+
                     updateGameScreen();
                     //Überprüfung ob der am Gerät lokal gespeicherte Spieler sich am Zug befindet
                     if(game.getCurrentPlayer().getId()==game.getLocalPlayer().getId()){
@@ -412,8 +413,7 @@ public class GameboardScreen extends AppCompatActivity  {
                 }
 
                 else if(game.getGameState().equals(GameState.PLAYERMOVEMENT)){
-                    playerCurrentlyPlayingId = game.getCurrentPlayer().getId();
-                    setPlayerCurrentlyPlayingId(playerCurrentlyPlayingId);
+                    playerCurrentlyPlayingId=game.getCurrentPlayer().getId();
                     setDiceValueOne(game.getDiceOne());
                     setDiceValueTwo(game.getDiceTwo());
                     int sum = getDiceValueOne() +  getDiceValueTwo();
@@ -425,7 +425,7 @@ public class GameboardScreen extends AppCompatActivity  {
                 //Ausgeführt bei GameState.PLAYERACCUSATION
                 else if(game.getGameState().equals(GameState.PLAYERACCUSATION)){
                     if(game.getCurrentPlayer().getId()==game.getLocalPlayer().getId()){
-                        playerCurrentlyPlayingId=2;
+                        game.getCurrentPlayer().setPosition(playerMove.get(game.getCurrentPlayer().getId()-1).getPosition());
                         int playerX = game.getCurrentPlayer().getPosition().x;
                         int playerY = game.getCurrentPlayer().getPosition().y;
                         if(game.getLocalPlayer().getMadeFalseAccusation()==false){
@@ -486,7 +486,6 @@ public class GameboardScreen extends AppCompatActivity  {
                         else{//nächster Spieler
                             updateGameScreen();
                             game.nextPlayer();
-                            playerCurrentlyPlayingId=game.getCurrentPlayer().getId();
                             game.changeGameState(GameState.PLAYERTURNBEGIN);
                             updateGame();
                         }

@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.example.cluedo_seii.Game;
 import com.example.cluedo_seii.GameState;
@@ -47,6 +48,7 @@ public abstract class GameboardElement {
             public void onClick(View view) {
                 Log.i("Test", "Testing");
                 movePlayer();
+                game.changeGameState(GameState.PLAYERACCUSATION);
             }
         });
     }
@@ -95,6 +97,7 @@ public abstract class GameboardElement {
         oldRoomElement = null;
         oldGeheimgang = null;
         //gameboardScreen.getGameboard().updateGameboardScreen(gameboardScreen);
+
     }
 
     public GameboardElement() {
@@ -121,7 +124,6 @@ public abstract class GameboardElement {
             } else if (diceValueTotal == playerStepsTotal) {
                 // Gegangener Wert stimmt mit gewürfeltem Wert überein => Spieler Bewegung abgeschlossen
                 ((GameFieldElement) newGameboardElement).positionPlayer(true);
-                game.changeGameState(GameState.PLAYERACCUSATION);
             }
         } else if(newGameboardElement instanceof RoomElement) {
             // Update Spieler Position temporär bis der Spieler seinen Zug beendet hat => Server muss das irgendwie verspeichern
@@ -143,7 +145,6 @@ public abstract class GameboardElement {
                 // Gegangener Wert stimmt mit gewürfeltem Wert überein => Spieler Bewegung abgeschlossen
                 ((RoomElement) newGameboardElement).positionPlayer(true);
                 gameboardScreen.setCurrentPlayerInDoor(currentPlayer);
-                game.changeGameState(GameState.PLAYERACCUSATION);
                 // TODO: Lock alle anderen Spieler + Öffne Activity
                 //if(((RoomElement) gameboardElementTemp).getRoomElementId() == 0) {
                 // ODER
@@ -170,7 +171,6 @@ public abstract class GameboardElement {
             } else if (diceValueTotal == playerStepsTotal) {
                 // Gegangener Wert stimmt mit gewürfeltem Wert überein => Spieler Bewegung abgeschlossen
                 ((StartingpointElement) newGameboardElement).positionPlayer(true);
-                game.changeGameState(GameState.PLAYERACCUSATION);
             }
         } else if(newGameboardElement instanceof Geheimgang) {
             // Update Spieler Position temporär bis der Spieler seinen Zug beendet hat => Server muss das irgendwie verspeichern
@@ -201,7 +201,6 @@ public abstract class GameboardElement {
                         }
                     }
                 }
-                game.changeGameState(GameState.PLAYERACCUSATION);
             }
         }
     }
@@ -261,14 +260,15 @@ public abstract class GameboardElement {
         String messagePart = "";
 
         if(toMuchSteps) {
-            messagePart = " Schritte zu viel gemacht";
-            game.changeGameState(GameState.PLAYERACCUSATION);
+            messagePart = "Spieler hat "+ diff + "Schritte zu viel gemacht";
         } else {
             messagePart = " Schritte zu wenig gemacht";
-            game.changeGameState(GameState.PLAYERACCUSATION);
         }
 
-        new AlertDialog.Builder(gameboardScreen)
+        //Toast toast = new Toast(this);
+        gameboardScreen.showToast(messagePart, 1000);
+
+        /*new AlertDialog.Builder(gameboardScreen)
                 .setTitle("Error")
                 .setMessage("Spieler hat " + diff + messagePart)
                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {
@@ -277,7 +277,7 @@ public abstract class GameboardElement {
                         // Hier passiert nichts da die Position sowieso zurück gesetzt werden muss
                     }
                 })
-                .show();
+                .show();*/
     }
 
     public GameboardScreen getGameboardScreen() {
