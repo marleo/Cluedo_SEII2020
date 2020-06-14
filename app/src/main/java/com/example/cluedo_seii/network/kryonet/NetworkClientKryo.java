@@ -85,7 +85,7 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
 
 
                     //ConnectedDDTO wird nur gesendet wann es sich um ein locales Spiel handelt
-                    if  (SelectedConType.getConnectionType() != connectionType.CLIENT) {
+                    if  (SelectedConType.getConnectionType() == connectionType.CLIENT) {
                         Log.d("Connecting: ", "test");
                         ConnectedDTO connectedDTO = new ConnectedDTO();
                         connectedDTO.setConnected(true);

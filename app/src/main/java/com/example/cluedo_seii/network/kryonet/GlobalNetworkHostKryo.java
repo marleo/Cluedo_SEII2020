@@ -95,7 +95,7 @@ public class GlobalNetworkHostKryo implements NetworkGlobalHost, KryoNetComponen
             @Override
             public void run() {
                 try {
-                    client.connect(5000,host,NetworkConstants.SERVER_TCP_PORT);
+                    client.connect(5000,host,NetworkConstants.SERVER_TCP_PORT,NetworkConstants.SERVER_UDP_PORT);
 
                     isConnected = true;
                 } catch (IOException e) {
