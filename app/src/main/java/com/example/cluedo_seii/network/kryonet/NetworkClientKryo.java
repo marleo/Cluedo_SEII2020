@@ -1,7 +1,6 @@
 package com.example.cluedo_seii.network.kryonet;
 
 import android.os.Build;
-import android.telecom.Call;
 import android.util.Log;
 
 import androidx.annotation.RequiresApi;
@@ -77,12 +76,16 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
             @Override
             public void run() {
                 try {
-                    client.connect(5000,host,NetworkConstants.TCP_PORT,NetworkConstants.UDP_PORT);
+                    if (SelectedConType.getConnectionType() == connectionType.CLIENT) {
+                        client.connect(5000,host,NetworkConstants.TCP_PORT,NetworkConstants.UDP_PORT);
+                    } else {
+                        client.connect(5000,host,NetworkConstants.SERVER_TCP_PORT,NetworkConstants.SERVER_UDP_PORT);
+                    }
+
 
 
                     //ConnectedDDTO wird nur gesendet wann es sich um ein locales Spiel handelt
-                    //TODO change to == Client
-                    if  (SelectedConType.getConnectionType() != connectionType.GLOBALCLIENT) {
+                    if  (SelectedConType.getConnectionType() != connectionType.CLIENT) {
                         Log.d("Connecting: ", "test");
                         ConnectedDTO connectedDTO = new ConnectedDTO();
                         connectedDTO.setConnected(true);
