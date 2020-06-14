@@ -24,9 +24,11 @@ import com.example.cluedo_seii.Notepad;
 import com.example.cluedo_seii.R;
 import com.example.cluedo_seii.activities.playerGameInteraction.ExposeCheater;
 import com.example.cluedo_seii.network.Callback;
+import com.example.cluedo_seii.network.connectionType;
 import com.example.cluedo_seii.network.dto.CheatDTO;
 import com.example.cluedo_seii.network.kryonet.NetworkClientKryo;
 import com.example.cluedo_seii.network.kryonet.NetworkServerKryo;
+import com.example.cluedo_seii.network.kryonet.SelectedConType;
 
 import java.util.Random;
 
@@ -64,7 +66,7 @@ public class NotepadScreen extends AppCompatActivity {
     private NetworkServerKryo server;
     private NetworkClientKryo client;
 
-
+    private connectionType conType;
     private SensorManager sensorManager;
     private Sensor lightSensor;
     private float sensorValue;
@@ -80,8 +82,10 @@ public class NotepadScreen extends AppCompatActivity {
         final SharedPreferences preferences = getSharedPreferences("notizblock", MODE_PRIVATE);
         final SharedPreferences.Editor editor = getSharedPreferences("notizblock", MODE_PRIVATE).edit();
         setContentView(R.layout.activity_notepad);
+        conType = SelectedConType.getConnectionType();
         server = NetworkServerKryo.getInstance();
         client=NetworkClientKryo.getInstance();
+        setListener();
         client.registerCheatCallback(new Callback<CheatDTO>() {
             @Override
             public void callback(CheatDTO argument) {
@@ -505,6 +509,27 @@ public class NotepadScreen extends AppCompatActivity {
             }
             return false;
         }
+
+    //setListener zur Netzwerkintegration
+
+    public void setListener() {
+        if(conType== connectionType.HOST){
+            server.setListener(new NetworkServerKryo.ChangeListener() {
+                @Override
+                public void onChange() {
+                    finish();
+                }
+            });
+        }
+
+        else if(conType==connectionType.CLIENT){
+            client.setListener(new NetworkClientKryo.ChangeListener() {
+                @Override
+                public void onChange() {
+                    finish();
+                }
+            });}
+    }
 
 
 }
