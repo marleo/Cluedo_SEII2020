@@ -2,10 +2,8 @@ package com.example.cluedo_seii;
 
 import android.app.Activity;
 import android.app.Instrumentation;
-import android.content.Context;
 import android.content.Intent;
 
-import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
@@ -14,7 +12,7 @@ import com.example.cluedo_seii.spielbrett.GameFieldElement;
 import com.example.cluedo_seii.spielbrett.Gameboard;
 import com.example.cluedo_seii.spielbrett.GameboardElement;
 import com.example.cluedo_seii.spielbrett.NoneWalkableElement;
-import com.example.cluedo_seii.spielbrett.RoomElement;
+import com.example.cluedo_seii.spielbrett.DoorElement;
 import com.example.cluedo_seii.spielbrett.StartingpointElement;
 
 import org.junit.After;
@@ -144,7 +142,7 @@ public class GameboardInstrumentedTest {
                 actualStartingPointElementCount++;
             }
 
-            if(gameboardElement instanceof RoomElement) {
+            if(gameboardElement instanceof DoorElement) {
                 actualRoomElementCount++;
             }
         }

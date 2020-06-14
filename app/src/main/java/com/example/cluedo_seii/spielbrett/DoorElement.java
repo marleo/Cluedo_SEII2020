@@ -5,13 +5,13 @@ import android.widget.LinearLayout;
 import com.example.cluedo_seii.R;
 import com.example.cluedo_seii.activities.GameboardScreen;
 
-public class RoomElement extends GameboardElement {
+public class DoorElement extends GameboardElement {
 
-    private int roomElementId;
+    private int doorElementId;
 
-    public RoomElement(GameboardScreen gameboardScreen, int xKoordinate, int yKoordinate, LinearLayout.LayoutParams layoutParams, int roomElementId) {
+    public DoorElement(GameboardScreen gameboardScreen, int xKoordinate, int yKoordinate, LinearLayout.LayoutParams layoutParams, int roomElementId) {
         super(gameboardScreen, xKoordinate, yKoordinate, layoutParams, R.drawable.room_element);
-        this.roomElementId = roomElementId;
+        this.doorElementId = roomElementId;
     }
 
     public void positionPlayer(boolean isPlayer) {
@@ -22,11 +22,11 @@ public class RoomElement extends GameboardElement {
         }
     }
 
-    public int getRoomElementId() {
-        return roomElementId;
+    public int getDoorElementId() {
+        return doorElementId;
     }
 
-    public void setRoomElementId(int roomElementId) {
-        this.roomElementId = roomElementId;
+    public void setDoorElementId(int doorElementId) {
+        this.doorElementId = doorElementId;
     }
 }

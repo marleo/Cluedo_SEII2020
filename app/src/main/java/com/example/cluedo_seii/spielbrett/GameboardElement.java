@@ -18,12 +18,10 @@ public abstract class GameboardElement {
     private int xKoordinate;
     private int yKoordinate;
     private ImageButton gameBoardElement;
-
     private GameboardScreen gameboardScreen;
-
     private Point oldPosition;
     private GameFieldElement oldGameFieldElement;
-    private RoomElement oldRoomElement;
+    private DoorElement oldRoomElement;
     private StartingpointElement oldStartingpointElement;
     private Geheimgang oldGeheimgang;
 
@@ -52,7 +50,6 @@ public abstract class GameboardElement {
     }
 
     public void movePlayer() {
-        // Für später beim kalkulieren wie viele Schritte erlaubt sind
 
         // Welcher Spieler macht gerade den Zug
         for(Player player: gameboardScreen.getPlayerMove()) {
@@ -104,7 +101,7 @@ public abstract class GameboardElement {
     private void positionPlayerForNewPosition(GameboardElement newGameboardElement, Player currentPlayer) {
         game = Game.getInstance();
         if(newGameboardElement instanceof GameFieldElement) {
-            // Update Spieler Position temporär bis der Spieler seinen Zug beendet hat => Server muss das irgendwie verspeichern
+            // Update Spieler Position temporär bis der Spieler seinen Zug beendet hat
             int diceValueTotal = gameboardScreen.getDiceValueOne() + gameboardScreen.getDiceValueTwo();
             int playerStepsTotal = calculatePlayerStepsTotal(currentPlayer);
             //Vergleich mit dem gewürfeltem
@@ -122,7 +119,7 @@ public abstract class GameboardElement {
                 // Gegangener Wert stimmt mit gewürfeltem Wert überein => Spieler Bewegung abgeschlossen
                 ((GameFieldElement) newGameboardElement).positionPlayer(true);
             }
-        } else if(newGameboardElement instanceof RoomElement) {
+        } else if(newGameboardElement instanceof DoorElement) {
             // Update Spieler Position temporär bis der Spieler seinen Zug beendet hat => Server muss das irgendwie verspeichern
             int diceValueTotal = gameboardScreen.getDiceValueOne() + gameboardScreen.getDiceValueTwo();
             int playerStepsTotal = calculatePlayerStepsTotal(currentPlayer);
@@ -140,7 +137,7 @@ public abstract class GameboardElement {
 
             } else if (diceValueTotal == playerStepsTotal) {
                 // Gegangener Wert stimmt mit gewürfeltem Wert überein => Spieler Bewegung abgeschlossen
-                ((RoomElement) newGameboardElement).positionPlayer(true);
+                ((DoorElement) newGameboardElement).positionPlayer(true);
                 gameboardScreen.setCurrentPlayerInDoor(currentPlayer);
                 game.changeGameState(GameState.PLAYERACCUSATION);
                 // TODO: Lock alle anderen Spieler + Öffne Activity
@@ -212,7 +209,7 @@ public abstract class GameboardElement {
         } else if(oldStartingpointElement != null) {
             ((StartingpointElement) oldStartingpointElement).positionPlayer(true);
         } else if (oldRoomElement != null) {
-            ((RoomElement) oldRoomElement).positionPlayer(true);
+            ((DoorElement) oldRoomElement).positionPlayer(true);
         } else if (oldGeheimgang != null) {
             ((Geheimgang) oldGeheimgang).positionPlayer(true);
         }
@@ -222,9 +219,9 @@ public abstract class GameboardElement {
         if(gameboardElementTemp instanceof GameFieldElement) {
             oldGameFieldElement = (GameFieldElement) gameboardElementTemp;
             ((GameFieldElement) gameboardElementTemp).positionPlayer(false);
-        } else if(gameboardElementTemp instanceof RoomElement) {
-            oldRoomElement = (RoomElement) gameboardElementTemp;
-            ((RoomElement) gameboardElementTemp).positionPlayer(false);
+        } else if(gameboardElementTemp instanceof DoorElement) {
+            oldRoomElement = (DoorElement) gameboardElementTemp;
+            ((DoorElement) gameboardElementTemp).positionPlayer(false);
         } else if(gameboardElementTemp instanceof StartingpointElement) {
             oldStartingpointElement = (StartingpointElement) gameboardElementTemp;
             ((StartingpointElement) gameboardElementTemp).positionPlayer(false);
@@ -255,6 +252,7 @@ public abstract class GameboardElement {
         return diffX + diffY;
     }
 
+        //Meldung wenn zu viel oder zu wenig Schritte gemacht werden
     private void showAlertDialog(int greaterValue, int smallerValue, Player currentPlayer, boolean toMuchSteps){
         int diff = greaterValue - smallerValue;
 

@@ -25,10 +25,8 @@ import static com.example.cluedo_seii.R.drawable.k8;
 import static com.example.cluedo_seii.R.drawable.k9;
 import static com.example.cluedo_seii.R.drawable.m1;
 import static com.example.cluedo_seii.R.drawable.m10;
-import static com.example.cluedo_seii.R.drawable.m11;
 import static com.example.cluedo_seii.R.drawable.m12;
 import static com.example.cluedo_seii.R.drawable.m2;
-import static com.example.cluedo_seii.R.drawable.m3;
 import static com.example.cluedo_seii.R.drawable.m4;
 import static com.example.cluedo_seii.R.drawable.m5;
 import static com.example.cluedo_seii.R.drawable.m6;
@@ -41,7 +39,6 @@ import static com.example.cluedo_seii.R.drawable.s3;
 import static com.example.cluedo_seii.R.drawable.s4;
 import static com.example.cluedo_seii.R.drawable.s5;
 import static com.example.cluedo_seii.R.drawable.s6;
-import static com.example.cluedo_seii.R.drawable.sp10;
 import static com.example.cluedo_seii.R.drawable.sp11;
 import static com.example.cluedo_seii.R.drawable.sp12;
 import static com.example.cluedo_seii.R.drawable.sp13;
@@ -101,7 +98,7 @@ public class Gameboard {
         }
 
         int startingPointCounter = 0;
-        int roomElementCounter = 0;
+        int doorElementCounter = 0;
         for (int y = 0; y < breite; y++) {
             LinearLayout row = new LinearLayout(gameboardScreen);
             row.setLayoutParams(new LinearLayout.LayoutParams
@@ -127,9 +124,9 @@ public class Gameboard {
                                         LinearLayout.LayoutParams.MATCH_PARENT), startingPointCounter++);
                         break;
                     case '3':
-                        gameboardElement = new RoomElement(gameboardScreen, x, y, new LinearLayout.LayoutParams
+                        gameboardElement = new DoorElement(gameboardScreen, x, y, new LinearLayout.LayoutParams
                                 (LinearLayout.LayoutParams.WRAP_CONTENT,
-                                        LinearLayout.LayoutParams.MATCH_PARENT), roomElementCounter++);
+                                        LinearLayout.LayoutParams.MATCH_PARENT), doorElementCounter++);
                         break;
                     case '4':
                         gameboardElement = new NoneWalkableElement(gameboardScreen, x, y, new LinearLayout.LayoutParams
@@ -678,8 +675,6 @@ public class Gameboard {
                         gameboardElement.getGameBoardElement().setImageResource(v9);
                         break;
 
-
-
                 }
 
                 if (gameboardElement != null) {
@@ -690,19 +685,13 @@ public class Gameboard {
 
                 listeGameboardElemente.add(gameboardElement);
 
-                // welche Felder an welcher Position eingespeichert werden sollen
-                // Beispiel: if(x == 1 && y == 2) { listeSpielbrettElemente.add(new Raum(x,y,32,32)); }
-                // else => Spielfeld
             }
             layout.addView(row);
         }
 
-        // Berechne kürzester Geheimgang
-        // listeGameboardElement
-
         this.startingPointTotal = startingPointCounter-1;
     }
-
+    // Spieler auf die StaringPoints setzen
     public void spawnPlayer(List<StartingPoint> startingPoints, GameboardScreen gameboardScreen) {
         for(GameboardElement gameboardElement: listeGameboardElemente) {
             if(gameboardElement instanceof StartingpointElement) {
@@ -723,7 +712,6 @@ public class Gameboard {
                             ((StartingpointElement) gameboardElement).getxKoordinate(),
                             ((StartingpointElement) gameboardElement).getyKoordinate()
                         ));
-
             }
         }
     }
@@ -732,14 +720,6 @@ public class Gameboard {
         for(GameboardElement gameboardElement: listeGameboardElemente) {
             gameboardElement.setGameboardScreen(gameboardScreen);
         }
-    }
-
-    private void berechneWeg(/* Spieler möchte diese Koordinaten begehen */) {
-        /*
-            Beispiel: Spieler würfelt 7
-            Spieler geht 3 Schritte => Anzeige mit Information (Spieler ist 3 Schritte gegangen und muss noch 4 weitere gehen)
-            => erst wenn Spieler die gewürfelte Zahl gegangen ist kann der nächste Spieler dran sein oder ein Ereignis (Raum) passiert
-         */
     }
 
     public List<GameboardElement> getListeGameboardElemente() {

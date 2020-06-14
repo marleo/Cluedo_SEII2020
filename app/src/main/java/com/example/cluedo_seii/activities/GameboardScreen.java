@@ -182,12 +182,8 @@ public class GameboardScreen extends AppCompatActivity  {
             Ü = Veranda7
             Ö = Veranda8
             Ä = Veranda9
-
-
-
-
          */
-
+        //Darstellung Lineares Layout
         String gameBoard =
                 "cdef04562=_{}" +
                 "ghij07890~€ÜÖ" +
@@ -210,15 +206,16 @@ public class GameboardScreen extends AppCompatActivity  {
                 "0000VWXY00000" +
                 "0020000002000";
 
-        // Init Starting Points
+        //Init Starting Points
         startingPoints = new ArrayList<>();
         startingPoints.add(new StartingPoint(0, 0));
         startingPoints.add(new StartingPoint(2, 1));
 
-        // Init Player Ids and PlayerMove-Array
+        //Init Player Ids and PlayerMove-Array
         int countPlayerIds = 0;
         playerMove = new ArrayList<>();
 
+        //Init des Gameboards
         gameboard = new Gameboard(this,13,20, gameBoard);
         setContentView(gameboard.getLayout());
 
@@ -584,7 +581,7 @@ public class GameboardScreen extends AppCompatActivity  {
 
     //TODO Methoden zum Aufrufen der Netzwerkfunktionen : GameObjekt versenden, Verdachtskarte schicken
 
- // Test 
+ // Test
     //EventListener für Swipe-Event
     @Override
     public boolean onTouchEvent (MotionEvent touchEvent){
