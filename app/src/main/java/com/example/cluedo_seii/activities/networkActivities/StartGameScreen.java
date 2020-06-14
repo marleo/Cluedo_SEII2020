@@ -1,4 +1,4 @@
-package com.example.cluedo_seii.activities.NetworkActivities;
+package com.example.cluedo_seii.activities.networkActivities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -31,7 +31,6 @@ import java.util.LinkedHashMap;
 import java.util.LinkedList;
 
 public class StartGameScreen extends AppCompatActivity {
-    //public static connectionType conType;
     private NetworkServerKryo server;
     private NetworkClientKryo client;
 
@@ -71,7 +70,7 @@ public class StartGameScreen extends AppCompatActivity {
                 connectButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        selectClient(v);
+                        selectClient();
                     }
                 });
             }
@@ -93,7 +92,7 @@ public class StartGameScreen extends AppCompatActivity {
                 hostGame.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        selectHost(v);
+                        selectHost();
                         hostGame.setVisibility(View.INVISIBLE);
                     }
                 });
@@ -101,7 +100,7 @@ public class StartGameScreen extends AppCompatActivity {
         });
     }
 
-    public void selectClient(View view) {
+    public void selectClient() {
         EditText ipInput = findViewById(R.id.ipAddress);
         String ip = ipInput.getText().toString();
 
@@ -129,7 +128,7 @@ public class StartGameScreen extends AppCompatActivity {
         }
     }
 
-    public void selectHost(View view) {
+    public void selectHost() {
         final ListView clientList = findViewById(R.id.clientList);
 
         TextView usernameTextView = findViewById(R.id.username_input);

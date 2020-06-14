@@ -51,7 +51,6 @@ public class KryoHelper {
     public static void registerClasses (KryoNetComponent kryoNetComponent) {
         //Classes with ID are for Server Application
         kryoNetComponent.registerClass(RequestDTO.class, 1);
-        kryoNetComponent.registerClass(TextMessage.class);
         kryoNetComponent.registerClass(QuitGameDTO.class);
         kryoNetComponent.registerClass(ConnectedDTO.class);
         kryoNetComponent.registerClass(UserNameRequestDTO.class,7);
@@ -80,8 +79,6 @@ public class KryoHelper {
         kryoNetComponent.registerClass(RegisterClassDTO.class,2);
         kryoNetComponent.registerClass(SuspicionDTO.class);
         kryoNetComponent.registerClass(SuspicionAnswerDTO.class);
-        //kryoNetComponent.registerClass(Class.class);
-        //kryoNetComponent.registerClass(Object.class);
         kryoNetComponent.registerClass(SerializedDTO.class,3);
         kryoNetComponent.registerClass(NewGameRoomRequestDTO.class,4);
         kryoNetComponent.registerClass(RoomsDTO.class,5);
