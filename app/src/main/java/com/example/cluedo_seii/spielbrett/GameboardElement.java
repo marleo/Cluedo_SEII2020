@@ -121,6 +121,7 @@ public abstract class GameboardElement {
             } else if (diceValueTotal == playerStepsTotal) {
                 // Gegangener Wert stimmt mit gewürfeltem Wert überein => Spieler Bewegung abgeschlossen
                 ((GameFieldElement) newGameboardElement).positionPlayer(true);
+                game.changeGameState(GameState.PLAYERACCUSATION);
             }
         } else if(newGameboardElement instanceof RoomElement) {
             // Update Spieler Position temporär bis der Spieler seinen Zug beendet hat => Server muss das irgendwie verspeichern
@@ -169,6 +170,7 @@ public abstract class GameboardElement {
             } else if (diceValueTotal == playerStepsTotal) {
                 // Gegangener Wert stimmt mit gewürfeltem Wert überein => Spieler Bewegung abgeschlossen
                 ((StartingpointElement) newGameboardElement).positionPlayer(true);
+                game.changeGameState(GameState.PLAYERACCUSATION);
             }
         } else if(newGameboardElement instanceof Geheimgang) {
             // Update Spieler Position temporär bis der Spieler seinen Zug beendet hat => Server muss das irgendwie verspeichern
@@ -199,6 +201,7 @@ public abstract class GameboardElement {
                         }
                     }
                 }
+                game.changeGameState(GameState.PLAYERACCUSATION);
             }
         }
     }
@@ -259,8 +262,10 @@ public abstract class GameboardElement {
 
         if(toMuchSteps) {
             messagePart = " Schritte zu viel gemacht";
+            game.changeGameState(GameState.PLAYERACCUSATION);
         } else {
             messagePart = " Schritte zu wenig gemacht";
+            game.changeGameState(GameState.PLAYERACCUSATION);
         }
 
         new AlertDialog.Builder(gameboardScreen)

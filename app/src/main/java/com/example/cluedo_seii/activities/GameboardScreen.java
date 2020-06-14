@@ -230,7 +230,6 @@ public class GameboardScreen extends AppCompatActivity  {
         public void setPlayerStartingPoints(){
 
         playerMove = new ArrayList<>();
-
         startingPoints = new ArrayList<>();
         for(int ind = 0; ind<game.getPlayers().size(); ind++){
             startingPoints.add(new StartingPoint(ind, game.getPlayers().get(ind).getId()));
@@ -250,7 +249,6 @@ public class GameboardScreen extends AppCompatActivity  {
                     "StartingPoint Position: " + startingPoint.getPlayerPosition().x + ":"
                             + startingPoint.getPlayerPosition().y);
             //   GameCharacter gameCharacter = new GameCharacter("Player_" + countPlayerIds, startingPoint.getPlayerPosition());
-
             for (Player player : game.getPlayers()) {
                 playerMove.add(game.getCurrentPlayer());
             }
@@ -414,17 +412,20 @@ public class GameboardScreen extends AppCompatActivity  {
                 }
 
                 else if(game.getGameState().equals(GameState.PLAYERMOVEMENT)){
+                    playerCurrentlyPlayingId = game.getCurrentPlayer().getId();
+                    setPlayerCurrentlyPlayingId(playerCurrentlyPlayingId);
                     setDiceValueOne(game.getDiceOne());
                     setDiceValueTwo(game.getDiceTwo());
                     int sum = getDiceValueOne() +  getDiceValueTwo();
+                    Log.i("PayerCurrentlyPlaying", "| "+ playerCurrentlyPlayingId);
                     toast = Toast.makeText(GameboardScreen.this, "Du hast " + sum + " gewürfelt.", Toast.LENGTH_SHORT);
                     toast.show();
-                    playerCurrentlyPlayingId = game.getCurrentPlayer().getId();
                 }
 
                 //Ausgeführt bei GameState.PLAYERACCUSATION
                 else if(game.getGameState().equals(GameState.PLAYERACCUSATION)){
                     if(game.getCurrentPlayer().getId()==game.getLocalPlayer().getId()){
+                        playerCurrentlyPlayingId=2;
                         int playerX = game.getCurrentPlayer().getPosition().x;
                         int playerY = game.getCurrentPlayer().getPosition().y;
                         if(game.getLocalPlayer().getMadeFalseAccusation()==false){
@@ -443,6 +444,9 @@ public class GameboardScreen extends AppCompatActivity  {
                                 playerX == 8 && playerY==9  ||
                                 playerX == 8 && playerY==8){
                             suspectOrAccuse();}
+                        else{
+                            game.changeGameState(GameState.PLAYERTURNEND);
+                        }
                         } else{ //Wenn der sich am Zug befindende sich Spieler nicht in einen Raum befindet
                             game.changeGameState(GameState.PLAYERTURNEND);
                           }
@@ -470,6 +474,7 @@ public class GameboardScreen extends AppCompatActivity  {
 
                 //Ausgeführt bei GameState.PLAYERTURNEND
                 else if(game.getGameState().equals(GameState.PLAYERTURNEND)) {
+                    updateGameScreen();
                     if (game.getCurrentPlayer().getId() == game.getLocalPlayer().getId()) {
 
                         //Prüfe ob Abbruchbedingungen zutreffen
