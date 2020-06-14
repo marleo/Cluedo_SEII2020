@@ -8,7 +8,6 @@ import androidx.annotation.RequiresApi;
 import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
-import com.example.cluedo_seii.DeckOfCards;
 import com.example.cluedo_seii.Game;
 import com.example.cluedo_seii.GameCharacter;
 import com.example.cluedo_seii.Player;
@@ -21,20 +20,14 @@ import com.example.cluedo_seii.network.dto.GameCharacterDTO;
 import com.example.cluedo_seii.network.dto.GameDTO;
 import com.example.cluedo_seii.network.dto.NewGameRoomRequestDTO;
 import com.example.cluedo_seii.network.dto.PlayerDTO;
-import com.example.cluedo_seii.network.dto.RegisterClassDTO;
 import com.example.cluedo_seii.network.dto.RequestDTO;
 import com.example.cluedo_seii.network.dto.SendToOnePlayerDTO;
 import com.example.cluedo_seii.network.dto.SerializedDTO;
 import com.example.cluedo_seii.network.dto.TextMessage;
 import com.example.cluedo_seii.network.dto.UserNameRequestDTO;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
+
 import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.Serializable;
-import java.util.Base64;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 
@@ -128,6 +121,8 @@ public class GlobalNetworkHostKryo implements NetworkGlobalHost, KryoNetComponen
             handleUsernameRequest(connection, (UserNameRequestDTO) object);
         } else if (object instanceof SendToOnePlayerDTO) {
             handleSendToOnePlayeDTO(connection, (SendToOnePlayerDTO) object);
+        } else if (object instanceof BroadcastDTO) {
+            handleBroadcast(connection, (BroadcastDTO) object);
         }
 
 
@@ -211,6 +206,36 @@ public class GlobalNetworkHostKryo implements NetworkGlobalHost, KryoNetComponen
         }
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    private void handleBroadcast(Connection connection, BroadcastDTO broadcastDTO) {
+        try {
+            Object object = SerializationHelper.fromString(broadcastDTO.getSerializedObject());
+
+            if (object instanceof GameDTO) {
+                handleGameRequest(connection, (GameDTO) object);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void handleGameRequest(Connection connection, GameDTO gameDTO) {
+        Game inGame = gameDTO.getGame();
+
+        Game game = Game.getInstance();
+
+        game.setPlayers(inGame.getPlayers());
+        game.setCurrentPlayer(inGame.getCurrentPlayer());
+        game.setRound(inGame.getRound());
+        game.setGameOver(inGame.getGameOver());
+        game.setPlayerIterator(inGame.getPlayerIterator());
+        game.setWrongAccusers(inGame.getWrongAccusers());
+
+        //game.setGameState(inGame.getGameState());
+        game.changeGameState(inGame.getGameState());
+
+    }
+
     @Override
     public void registerCallback(Callback<RequestDTO> callback) {
         //TODO implement
@@ -284,7 +309,11 @@ public class GlobalNetworkHostKryo implements NetworkGlobalHost, KryoNetComponen
 
     @Override
     public void sendGame(Game game) {
-        //TODO implement
+        GameDTO gameDTO = new GameDTO();
+        gameDTO.setGame(game);
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            broadcastToClients(gameDTO);
+        }
     }
 
     public LinkedHashMap<Integer, ClientData> getClientList() {
