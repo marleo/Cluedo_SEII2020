@@ -39,6 +39,15 @@ public class NetworkServerKryo implements KryoNetComponent, NetworkServer {
     private Callback<LinkedHashMap<Integer, ClientData>> newClientCallback;
     private Callback<GameCharacterDTO> gameCharacterDTOCallback;
     private Callback<CheatDTO> cheatDTOCallback;
+    private Player cheater;
+    private int cheated=0;
+    public int getCheated(){
+        return cheated;
+    }
+    public void setCheated(int value){
+        this.cheated+=value;
+    }
+    public void guessedCheater(){this.cheated-=1;}
 
     private LinkedHashMap<Integer, ClientData> clientList;
 
@@ -107,6 +116,7 @@ public class NetworkServerKryo implements KryoNetComponent, NetworkServer {
 
     private void handleCheaterRequest(Connection connection, CheatDTO cheatDTO){
         Log.d("network-Server:","Received a cheater");
+        cheater = new Player(cheatDTO.getCheater().getId(), cheatDTO.getCheater().getPlayerCharacter());
         broadcastMessage(cheatDTO);
         if(cheatDTOCallback!=null){
             cheatDTOCallback.callback(cheatDTO);
@@ -214,8 +224,9 @@ public class NetworkServerKryo implements KryoNetComponent, NetworkServer {
         broadcastMessage(gameDTO);
     }
 
-    public void sendCheat(){
+    public void sendCheat(Player player){
         CheatDTO cheatDTO = new CheatDTO();
+        cheatDTO.setCheater(player);
         broadcastMessage(cheatDTO);
         cheatDTOCallback.callback(cheatDTO);
     }
@@ -288,5 +299,8 @@ public class NetworkServerKryo implements KryoNetComponent, NetworkServer {
 
     public ClientData getHost() {
         return host;
+    }
+    public Player getCheater(){
+        return cheater;
     }
 }

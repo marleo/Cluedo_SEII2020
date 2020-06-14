@@ -1,7 +1,6 @@
 package com.example.cluedo_seii.network.kryonet;
 
 import android.os.Build;
-import android.telecom.Call;
 import android.util.Log;
 
 import androidx.annotation.RequiresApi;
@@ -11,7 +10,7 @@ import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.example.cluedo_seii.Game;
 import com.example.cluedo_seii.GameState;
-import com.example.cluedo_seii.activities.GameboardScreen;
+import com.example.cluedo_seii.Player;
 import com.example.cluedo_seii.network.Callback;
 import com.example.cluedo_seii.network.NetworkClient;
 import com.example.cluedo_seii.network.dto.CheatDTO;
@@ -47,6 +46,7 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
     private Callback<GameDTO> gameCallback;
     private Callback<CheatDTO> cheatCallback;
     private Callback<RoomsDTO> roomCallback;
+    private Player cheater;
 
     private boolean isConnected;
     private int cheated=0;
@@ -60,6 +60,7 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
     public void setCheated(int value){
         this.cheated+=value;
     }
+    public void guessedCheater(){this.cheated-=1;}
 
 
     public static NetworkClientKryo getInstance() {
@@ -163,6 +164,7 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
 
     private void handleCheatResponse(Connection connection, CheatDTO cheatDTO) {
         Log.d("Player response","cheater entdeckt");
+        cheater = new Player(cheatDTO.getCheater().getId(),cheatDTO.getCheater().getPlayerCharacter());
         if (cheatCallback!= null){
             cheatCallback.callback(cheatDTO);
         }
@@ -276,8 +278,9 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
         sendMessage(gameDTO);
     }
 
-    public void sendCheat() {
+    public void sendCheat(Player player) {
         CheatDTO cheatDTO = new CheatDTO();
+        cheatDTO.setCheater(player);
         sendMessage(cheatDTO);
         //cheatCallback.callback(cheatDTO);
     }
@@ -350,5 +353,8 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
 
     public boolean isConnected() {
         return isConnected;
+    }
+    public Player getCheater(){
+        return cheater;
     }
 }

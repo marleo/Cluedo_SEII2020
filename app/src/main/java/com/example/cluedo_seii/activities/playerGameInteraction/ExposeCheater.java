@@ -1,44 +1,27 @@
 package com.example.cluedo_seii.activities.playerGameInteraction;
 
-import android.net.wifi.WifiManager;
 import android.os.Bundle;
-import android.text.format.Formatter;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.ListView;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.esotericsoftware.kryonet.Client;
 import com.example.cluedo_seii.Game;
 import com.example.cluedo_seii.Player;
 import com.example.cluedo_seii.R;
-import com.example.cluedo_seii.activities.NetworkActivities.StartGameScreen;
-import com.example.cluedo_seii.network.Callback;
-import com.example.cluedo_seii.network.ClientData;
 import com.example.cluedo_seii.network.connectionType;
-import com.example.cluedo_seii.network.dto.CheatDTO;
-import com.example.cluedo_seii.network.dto.UserNameRequestDTO;
 import com.example.cluedo_seii.network.kryonet.*;
 
-import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
-import java.util.LinkedList;
-import java.util.Set;
 
-import com.example.cluedo_seii.network.kryonet.KryoHelper;
 import com.example.cluedo_seii.network.kryonet.NetworkServerKryo;
 
-public class ExposeCheater extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
+public class ExposeCheater extends AppCompatActivity implements AdapterView.OnItemSelectedListener, Serializable {
 
     private Button accuseCheaterButton;
     private Toast toast;
@@ -49,24 +32,25 @@ public class ExposeCheater extends AppCompatActivity implements AdapterView.OnIt
     private String text;
     private Player selectedPlayer;
     private NetworkServerKryo server;
+    private NetworkClientKryo client;
+    private connectionType conType;
+
 
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_expose_cheater);
-        game=Game.getInstance();
-        server = NetworkServerKryo.getInstance();
+        game = Game.getInstance();
 
-        for(Player player : game.getPlayers()){
-            if(player.getUsername()!=null){
-            userNames.add(player.getUsername());
+        userNames = new ArrayList<>();
+
+        for (Player player : game.getPlayers()) {
+            if (player.getUsername() != null) {
+                userNames.add(player.getUsername());
+            }
         }
-        }
-
-
-
-        accuseCheaterButton=findViewById(R.id.accuseCheaterButton);
-        cheaterSpinner=findViewById(R.id.possibleCheater);
+        accuseCheaterButton = findViewById(R.id.accuseCheaterButton);
+        cheaterSpinner = findViewById(R.id.possibleCheater);
         cheaterSpinner.setOnItemSelectedListener(this);
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
                 android.R.layout.simple_spinner_item, userNames);
@@ -76,9 +60,7 @@ public class ExposeCheater extends AppCompatActivity implements AdapterView.OnIt
         View.OnClickListener onButtonClickListener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //accuseCheating(selectedPlayer);
-
-
+                accuseCheating();
             }
         };
         accuseCheaterButton.setOnClickListener(onButtonClickListener);
@@ -86,9 +68,10 @@ public class ExposeCheater extends AppCompatActivity implements AdapterView.OnIt
 
     }
 
+
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-       /* for (Player player : game.getPlayers()) {
+        for (Player player : game.getPlayers()) {
             if (parent.getItemAtPosition(position).equals(player.getUsername())) {
                 selectedUsername = (String) parent.getItemAtPosition(position);
                 for (Player player2 : game.getPlayers()) {
@@ -99,7 +82,7 @@ public class ExposeCheater extends AppCompatActivity implements AdapterView.OnIt
                 }
             }
 
-        }*/
+        }
     }
 
     @Override
@@ -107,26 +90,37 @@ public class ExposeCheater extends AppCompatActivity implements AdapterView.OnIt
 
     }
 
-    /*public void accuseCheating(Player player){
-        CheatDTO cheatDTO = new CheatDTO();
 
-            if (cheatDTO.getCheater()==player){
-                if(clientData.getCheated()>0){
-                    text = "Deine Anschuldigung ist richtig";
-                    toast = Toast.makeText(getApplicationContext(), text, Toast.LENGTH_SHORT);
-                    toast.show();
-                }
-                else {
-                    text = "Deine Anschuldigung ist falsch";
-                    toast = Toast.makeText(getApplicationContext(), text, Toast.LENGTH_SHORT);
-                    toast.show();
-
-                }
+    public void accuseCheating() {
+        conType = SelectedConType.getConnectionType();
+        if(conType==connectionType.HOST){
+            server = NetworkServerKryo.getInstance();
+            if(server.getCheater().getId()==selectedPlayer.getId()){
+                text = "Deine Anschuldigung ist richtig";
+                toast = Toast.makeText(getApplicationContext(), text, Toast.LENGTH_SHORT);
+                toast.show();
+                server.guessedCheater();
+            }else {
+                text = "Deine Anschuldigung ist falsch";
+                toast = Toast.makeText(getApplicationContext(), text, Toast.LENGTH_SHORT);
+                toast.show();
+                server.setCheated(1);
             }
-
-
+        } else if(conType==connectionType.CLIENT){
+            client = NetworkClientKryo.getInstance();
+            if(client.getCheater().getId()==selectedPlayer.getId()){
+                text = "Deine Anschuldigung ist richtig";
+                toast = Toast.makeText(getApplicationContext(), text, Toast.LENGTH_SHORT);
+                toast.show();
+                client.guessedCheater();
+            }else {
+                text = "Deine Anschuldigung ist falsch";
+                toast = Toast.makeText(getApplicationContext(), text, Toast.LENGTH_SHORT);
+                toast.show();
+                client.setCheated(1);
+            }
         }
-    }*/
+    }
 
 }
 

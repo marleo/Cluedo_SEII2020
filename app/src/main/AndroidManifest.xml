@@ -50,7 +50,8 @@
             android:label="Cluedo">
         </activity>
         <activity android:name=".activities.playerGameInteraction.ExposeCheater"
-            android:theme="@style/Theme.AppCompat.Dialog.Alert">
+            android:theme="@style/Theme.AppCompat.Dialog.Alert"
+            android:label="Wer hat geschummelt?">
         </activity>
     </application>
 
