@@ -10,12 +10,17 @@ import android.view.MotionEvent;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import com.esotericsoftware.kryonet.Client;
 import com.example.cluedo_seii.Card;
 import com.example.cluedo_seii.DeckOfCards;
 import com.example.cluedo_seii.Game;
 import com.example.cluedo_seii.GameState;
 import com.example.cluedo_seii.Player;
 import com.example.cluedo_seii.R;
+import com.example.cluedo_seii.network.connectionType;
+import com.example.cluedo_seii.network.kryonet.NetworkClientKryo;
+import com.example.cluedo_seii.network.kryonet.NetworkServerKryo;
+import com.example.cluedo_seii.network.kryonet.SelectedConType;
 import com.example.cluedo_seii.spielbrett.Gameboard;
 
 import java.util.LinkedList;
@@ -29,18 +34,20 @@ public class ShowCards extends AppCompatActivity {
     private Game game;
     private LinkedList<String> playerHand;
     private ListView listView;
+    private connectionType conType;
+    private NetworkServerKryo server;
+    private NetworkClientKryo client;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        initializeNetwork();
+        setListener();
         game = Game.getInstance();
-
         setContentView(R.layout.activity_show_cards);
-
         playerHand = new LinkedList<>();
-
         playerHand.add("YOUR CARDS");
 
         for (Card card : game.getLocalPlayer().getPlayerCards()) {
@@ -53,14 +60,12 @@ public class ShowCards extends AppCompatActivity {
         listView = findViewById(R.id.playerHandDisplay);
         listView.setAdapter(cardListViewAdapter);
 
-        game.setListener(new Game.ChangeListener() {
-                             @Override
-                             //Wird ausgeführt wenn Methode changeGameState aufgerufen wird
-                             public void onChange() {
-                                 finish();
-                             }
-                         }
-        );
+    }
+
+
+    @Override
+    public void onStop(){
+        super.onStop();
     }
 
     @Override
@@ -84,4 +89,36 @@ public class ShowCards extends AppCompatActivity {
         return false;
     }
 
+    //Netzwerkinitialisierung
+    public void initializeNetwork(){
+        conType = SelectedConType.getConnectionType();
+        if(conType==connectionType.HOST) {
+            server = NetworkServerKryo.getInstance();
+        }
+
+        else if(conType==connectionType.CLIENT){
+            client = NetworkClientKryo.getInstance();
+        }
+    }
+
+    //setListener zur Netzwerkintegration
+
+    public void setListener() {
+        if(conType==connectionType.HOST){
+            server.setListener(new NetworkServerKryo.ChangeListener() {
+                @Override
+                public void onChange() {
+                    finish();
+                }
+            });
+        }
+
+        else if(conType==connectionType.CLIENT){
+        client.setListener(new NetworkClientKryo.ChangeListener() {
+            @Override
+            public void onChange() {
+                finish();
+            }
+        });}
+    }
 }

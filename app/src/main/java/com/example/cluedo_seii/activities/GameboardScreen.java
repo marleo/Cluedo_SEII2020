@@ -6,8 +6,6 @@ import android.graphics.Point;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-import android.os.Message;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.widget.Toast;
@@ -17,6 +15,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 
 import com.example.cluedo_seii.Card;
+import com.example.cluedo_seii.CardType;
 import com.example.cluedo_seii.DeckOfCards;
 import com.example.cluedo_seii.Game;
 import com.example.cluedo_seii.GameCharacter;
@@ -27,9 +26,11 @@ import com.example.cluedo_seii.R;
 //import com.example.cluedo_seii.activities.playerGameInteraction.MakeSuspicion;
 import com.example.cluedo_seii.activities.playerGameInteraction.AccuseSomeone;
 import com.example.cluedo_seii.activities.playerGameInteraction.NotifyPlayerWon;
+import com.example.cluedo_seii.activities.playerGameInteraction.PlayerNotification;
 import com.example.cluedo_seii.activities.playerGameInteraction.PlayerTurnNotification;
 import com.example.cluedo_seii.activities.playerGameInteraction.SuspectOrAccuse;
 import com.example.cluedo_seii.activities.playerGameInteraction.MakeSuspicion;
+import com.example.cluedo_seii.activities.playerGameInteraction.SuspicionAnswer;
 import com.example.cluedo_seii.activities.playerGameInteraction.SuspicionShowCard;
 import com.example.cluedo_seii.activities.playerGameInteraction.ThrowDice;
 import com.example.cluedo_seii.activities.playerGameInteraction.ThrowDiceOrUseSecretPassage;
@@ -39,6 +40,7 @@ import com.example.cluedo_seii.network.connectionType;
 import com.example.cluedo_seii.network.kryonet.NetworkClientKryo;
 import com.example.cluedo_seii.network.kryonet.NetworkServerKryo;
 import com.example.cluedo_seii.network.kryonet.SelectedConType;
+import com.example.cluedo_seii.network.dto.SuspicionAnswerDTO;
 import com.example.cluedo_seii.spielbrett.Gameboard;
 import com.example.cluedo_seii.spielbrett.StartingPoint;
 
@@ -82,14 +84,23 @@ public class GameboardScreen extends AppCompatActivity  {
         initializeNetwork();
         setChangeGameStateChangeListener();
 
+
         //zu Demonstrationszwecken SpielerPosition wird gesetzt auf Raum
         for(Player player: game.getPlayers()){
          player.setPosition(new Point(6,2));
         Log.i("gameCharacter", player.getId() + "" + player.getPlayerCharacter().getName());}
          kickOffGame();
          Log.i("gameStarted", "gameCreated");
+        for(Card card: game.getPlayers().get(1).getPlayerCards()){
+            Log.i("Card", card.getDesignation());
+        }
             }
 
+     /////////////////////////////////////
+    //Methoden zur Spielinitialisierung//
+    /////////////////////////////////////
+
+    //Spielbrettinitialisierung
     public void initializeGameboard(){
 
         /*
@@ -231,7 +242,7 @@ public class GameboardScreen extends AppCompatActivity  {
 
         bundle = new Bundle();
         mesaggeDialogTag = "MessageDialog";
-        manager = getSupportFragmentManager();
+        //
 
         //TODO delete
        //startGame();
@@ -324,58 +335,42 @@ public class GameboardScreen extends AppCompatActivity  {
         this.currentPlayerInDoor = currentPlayerInDoor;
     }
 
-    private void startGame() {
-        //TODO initialize Game according to GameLobby Settings
-        //Instanz eines Game-objektes Zu Demonstrationszwecken
-        deckOfCards = new DeckOfCards();
-        players = new LinkedList<>();
+    ////////////////////////////////////////////////////////////////////////////////////
+    //ChangeListener - Code wird ausgeführt wenn game.changeGameState()ausgeführt wird//
+    ////////////////////////////////////////////////////////////////////////////////////
 
-        GameCharacter gameCharacter = new GameCharacter("Prof. Bloom", new Point(0, 0));
-        GameCharacter gameCharacterAlt = new GameCharacter("Fräulein Weiss", new Point(0, 0));
-        Player player1 = new Player(1, gameCharacterAlt);
-        Player player2 = new Player(2, gameCharacter);
-        Player player3 = new Player(3, gameCharacterAlt);
-        players.add(player1);
-        players.add(player2);
-        players.add(player3);
-        game = Game.getInstance();
-        game.setGameboard(gameboard);
-        game.setPlayers(players);
-        game.setLocalPlayer(player1);
-        game.distributeCards(); //um Notepad cheatFunction zu demonstrieren
-    }
+    public void setChangeGameStateChangeListener(){
 
-        public void setChangeGameStateChangeListener(){
-        //Ausführung erfolgt wenn Methode changeGameState der Instanz game aufgerufen wird
+
         game.setListener(new Game.ChangeListener() {
             @Override
             //Wird ausgeführt wenn Methode changeGameState aufgerufen wird
             public void onChange() {
+
+
+                Log.i("currentPlayer", game.getCurrentPlayer().getId()+"");
+                Log.i("currentGameState", game.getGameState().toString());
+
+
                 //Ausgeführt bei GameState.PLAYERTURNBEGIN)
                 if(game.getGameState().equals(GameState.PLAYERTURNBEGIN) ){
-
-
+                    //Überprüfung ob der am Gerät lokal gespeicherte Spieler sich am Zug befindet
                     if(game.getCurrentPlayer().getId()==game.getLocalPlayer().getId()){
-                        turnBegin();
-
+                       // turnBegin();
+                       // new Intent(GameboardScreen.this, PlayerNotification.class);
+                        startActivity(new Intent(GameboardScreen.this, PlayerNotification.class));
                     }
-
                     else{//Spieler localPlayer ist nicht am Zug
-                       // showMsg();
-                         game.setMessageForLocalPlayer( "Spieler " + game.getCurrentPlayer().getId() + " ist am Zug" );
+                        game.setMessageForLocalPlayer( "Spieler " + game.getCurrentPlayer().getId() + " ist am Zug" );
                         showToast(game.getMessageForLocalPlayer(), 1000);
-                        //Toast toast = Toast.makeText(getApplicationContext(), text, Toast.LENGTH_SHORT);
-                        //toast.show();
                     }
                 }
 
                 //Ausgefürt bei GameState.PLAVERMOVEMENT
-
                 else if(game.getGameState().equals(GameState.PLAVERMOVEMENT)){
                     if(game.getCurrentPlayer().getId()==game.getLocalPlayer().getId()){
                         int playerX = game.getCurrentPlayer().getPosition().x;
                         int playerY = game.getCurrentPlayer().getPosition().y;
-
                         //Prüfe ob Spieler sich in einen Raum befindet
                         if (playerX == 3 && playerY==2  ||
                                 playerX == 6 && playerY==2  ||
@@ -400,7 +395,6 @@ public class GameboardScreen extends AppCompatActivity  {
 
                 //Ausgeführt bei GameState.PLAYERACCUSATION
                 else if(game.getGameState().equals(GameState.PLAYERACCUSATION)){
-                    //suspectOrAccuse();
                     if(game.getCurrentPlayer().getId()==game.getLocalPlayer().getId()){
                         int playerX = game.getCurrentPlayer().getPosition().x;
                         int playerY = game.getCurrentPlayer().getPosition().y;
@@ -419,7 +413,6 @@ public class GameboardScreen extends AppCompatActivity  {
                                 playerX == 9 && playerY==13 ||
                                 playerX == 8 && playerY==9  ||
                                 playerX == 8 && playerY==8){
-
                             suspectOrAccuse();}
                         } else{ //Wenn der sich am Zug befindende sich Spieler nicht in einen Raum befindet
                             game.changeGameState(GameState.PLAYERTURNEND);
@@ -427,12 +420,30 @@ public class GameboardScreen extends AppCompatActivity  {
                     }
                 }
 
+                //Ausgeführt bei GameState Suspected - wenn ein Spieler Ziel einer Verdächtigung ist
+                else if(game.getGameState().equals(GameState.SUSPECTED)){
+                    suspicionShowCard(game.getSuspicion());
+                }
+
+                //Ausgeführt bei Gamestate.RECEIVINGANSWER - Antwort auf Verdachtäußerung
+                else if(game.getGameState().equals(GameState.RECEIVINGANSWER)){
+                  if(game.getSuspicionAnswer().getDesignation().equals("goAway")){
+                      game.setMessageForLocalPlayer("Der Verdächtige Spieler hatte keine der Karten auf der Hand");
+                      showToast(game.getMessageForLocalPlayer(), 1000);
+                      game.changeGameState(GameState.PLAYERTURNEND);
+                  }
+                  else{
+                    game.setMessageForLocalPlayer("Der verdächtigte Spieler hat folgende Karte auf der Hand: " + game.getSuspicionAnswer().getDesignation());
+                    showToast(game.getMessageForLocalPlayer(), 1000);
+                    game.changeGameState(GameState.PLAYERTURNEND);
+                  }
+                }
+
                 //Ausgeführt bei GameState.PLAYERTURNEND
                 else if(game.getGameState().equals(GameState.PLAYERTURNEND)) {
-                    System.out.println("####### PLAYER TURNED");
                     if (game.getCurrentPlayer().getId() == game.getLocalPlayer().getId()) {
-                        Log.i("GameOver", "" + game.getGameOver());
-                        Log.i("GameOver", "" + game.checkGameEnd());
+
+                        //Prüfe ob Abbruchbedingungen zutreffen
                         if(game.checkGameEnd()==true){
                             game.changeGameState(GameState.END);
                         }
@@ -446,56 +457,65 @@ public class GameboardScreen extends AppCompatActivity  {
                     }
                 }
 
-                //Ausgeführt bei GameState.END
+                //Ausgeführt bei GameState.END - Ende des Spiels
                 else if(game.getGameState().equals(GameState.END)){
                     updateGame();
                     finish();
-                   // notifyPlayersWon();
-                   // Intent intent = new Intent(GameboardScreen.this, MainActivity.class);
-                  //  startActivity(intent);
+                    // notifyPlayersWon();
+                    // Intent intent = new Intent(GameboardScreen.this, MainActivity.class);
+                    //  startActivity(intent);
                 }
 
-                else if(game.getGameState().equals(GameState.PASSIVE)){
-                   showToast(game.getMessageForLocalPlayer(), 1000);
-                }
             }
         });
     }
 
-    public void notifyPlayersWon(){
-        NotifyPlayerWon playerWon = new NotifyPlayerWon();
-        playerWon.show(manager, mesaggeDialogTag);
-    }
+    ////////////////////////////////////////////////////////
+    //Aufruf von DialogOptionen für Spielerentscheidungen//
+    ///////////////////////////////////////////////////////
 
-    //Aufruf von DialogOptionen
+    //Dialog für SpielerBenachrichtigung bei Rundenbeginn
+    public void turnBegin() {
+        PlayerTurnNotification dialog = new PlayerTurnNotification();
+        manager = getSupportFragmentManager();
+        dialog.show(manager, mesaggeDialogTag);
+
+    }
 
     //Dialog Würfel werfen
     public void throwDice(){
         ThrowDice dialog = new ThrowDice();
+        manager = getSupportFragmentManager();
         dialog.show(manager, mesaggeDialogTag);
     }
 
     //Dialog Würfel werfen oder Geheimgang verwenden
     public void throwDiceOrUseSecretPassage(){
         ThrowDiceOrUseSecretPassage dialog = new ThrowDiceOrUseSecretPassage();
+        manager = getSupportFragmentManager();
         dialog.show(manager, mesaggeDialogTag);
     }
 
     //Dialog Anklagen oder Verdächtigen
     public void suspectOrAccuse(){
         SuspectOrAccuse dialog = new SuspectOrAccuse();
+        manager = getSupportFragmentManager();
         dialog.show(manager, mesaggeDialogTag);
     }
 
-    //Aufruf von Verdächtigung
-    public void makeSuspicion(){
-        startActivity(new Intent(this, MakeSuspicion.class));
+    //Benachrichtigung bei Spielende
+    public void notifyPlayersWon(){
+        NotifyPlayerWon playerWon = new NotifyPlayerWon();
+        manager = getSupportFragmentManager();
+        playerWon.show(manager, mesaggeDialogTag);
     }
 
-    //Aufruf von Anklage
-    public void accuseSomeone(){startActivity(new Intent(this, AccuseSomeone.class));}
 
-    //UI Aufruf von Würfeln, Verdächtigung, Anklage, Spielerhand, Kartenauswahl bei Verdacht
+    //////////////////////////////////////////////////////////////////////////////////////////
+    //UI Aufruf von Würfeln, Verdächtigung, Anklage, Spielerhand, Kartenauswahl bei Verdacht//
+    //Aufruf von Würfeln                                                                    //
+    //////////////////////////////////////////////////////////////////////////////////////////
+
     //Aufruf von Würfeln
     public void rollDice(){
         startActivity(new Intent(this, RollDiceScreen.class));
@@ -515,26 +535,38 @@ public class GameboardScreen extends AppCompatActivity  {
         overridePendingTransition(R.anim.slide_left_in, R.anim.slide_left_out);
     }
 
+    //Aufruf von Verdächtigung
+    public void makeSuspicion(){
+        startActivity(new Intent(this, MakeSuspicion.class));
+    }
+
+    //Aufruf von Anklage
+    public void accuseSomeone(){startActivity(new Intent(this, AccuseSomeone.class));}
+
 
     //Zeigt Kartenauswahl auf Spielerhand bei Verdacht
-    public void suspicionShowCard(){
-        LinkedList<Card>suspicion = new LinkedList<>();
-        suspicion.add(game.getLocalPlayer().getPlayerCards().get(0));
-        suspicion.add(game.getLocalPlayer().getPlayerCards().get(1));
-        suspicion.add(game.getLocalPlayer().getPlayerCards().get(2));
-        if(checkSuspicionCard(suspicion).size()>0){
-            SuspicionShowCard dialog = new SuspicionShowCard();
-            dialog.show(manager, mesaggeDialogTag);
+    public void suspicionShowCard(LinkedList<Card>suspicion){
+
+        //Im Falle dessen, das der Spieler eine der VerdachtsKarten auf der Hand hat
+        if(checkSuspicionCard(suspicion).size()>0) {
+            LinkedList<Card>temp = checkSuspicionCard(suspicion);
+           game.setSuspicion(checkSuspicionCard(suspicion));
+           startActivity(new Intent(GameboardScreen.this, SuspicionAnswer.class));
         }
+
+        //Falls der Verdächtigte Spieler keine VerdachtsKarte auf der Hand hat
         else{
-            String text = "Du wurdest verdächtigt, hast aber keine der Karten, die Teil deines Verdachts sind, auf deiner Hand.";
-            Toast toast = Toast.makeText(getApplicationContext(), text, Toast.LENGTH_SHORT);
-            toast.show();
+            game.setMessageForLocalPlayer("Du wurdest verdächtigt, hast aber keine der Karten, die Teil deines Verdachts sind, auf deiner Hand.");
+            showToast(game.getMessageForLocalPlayer(), 1000);
+            SuspicionAnswerDTO suspicionAnswerDTO = new SuspicionAnswerDTO();
+            Card nothingAnswer = new Card(64, "goAway", CardType.ROOM);
+            suspicionAnswerDTO.setAnswer(nothingAnswer);
+            sendSuspicionAnswer(suspicionAnswerDTO);
         }
     }
 
     //Prüft ob Eine der Verdachtskarten sich auf der Spielerhand befindet
-    public List<Card> checkSuspicionCard(List<Card> cards){
+    public LinkedList<Card> checkSuspicionCard(LinkedList<Card> cards){
         LinkedList<Card>localPlayerSuspCards = new LinkedList<>();
         for(Card cardSusp: cards){
             for(Card cardLocal: game.getLocalPlayer().getPlayerCards()){
@@ -547,14 +579,20 @@ public class GameboardScreen extends AppCompatActivity  {
         return localPlayerSuspCards;
     }
 
-    public LinkedList<Card> getSuspicionCards() {
-        return suspicionCards;
-    }
+    ///////////////////////////////////
+    //Methoden für Netzwerkfunktionen//
+    ///////////////////////////////////
 
-    //Dialog für SpielerBenachrichtigung bei Rundenbeginn
-    public void turnBegin() {
-        PlayerTurnNotification dialog = new PlayerTurnNotification();
-        dialog.show(manager, mesaggeDialogTag);
+    //Netzwerkinitialisierung
+    public void initializeNetwork(){
+        conType = SelectedConType.getConnectionType();
+        if(conType==connectionType.HOST) {
+            server = NetworkServerKryo.getInstance();
+        }
+
+        else if(conType==connectionType.CLIENT){
+            client = NetworkClientKryo.getInstance();
+        }
     }
 
     //Spielverschicken über Netzwerk
@@ -568,18 +606,17 @@ public class GameboardScreen extends AppCompatActivity  {
         }
     }
 
-    //Netzwerkinitialisierung
-    public void initializeNetwork(){
-        conType = SelectedConType.getConnectionType();
+    //Antwort auf Verdacht
+    public void sendSuspicionAnswer(SuspicionAnswerDTO suspicionAnswerDTO){
         if(conType==connectionType.HOST) {
-            server = NetworkServerKryo.getInstance();
+            server.broadcastMessage(suspicionAnswerDTO);
         }
-
         else if(conType==connectionType.CLIENT){
-            client = NetworkClientKryo.getInstance();
-            }
+            client.sendMessage(suspicionAnswerDTO);
+        }
     }
 
+    //KickoffMethode für Spielstart
     public void kickOffGame(){
         if(conType==connectionType.HOST){
             game.changeGameState(GameState.PLAYERTURNBEGIN);
@@ -595,9 +632,6 @@ public class GameboardScreen extends AppCompatActivity  {
             }
         }
     }
-
-    //TODO Methoden zum Aufrufen der Netzwerkfunktionen : GameObjekt versenden, Verdachtskarte schicken
-
 
     //EventListener für Swipe-Event
     @Override
@@ -630,6 +664,29 @@ public class GameboardScreen extends AppCompatActivity  {
         return false;
     }
 
+    //Handler zum Zeigen von ToastNachrichten
+
+    public void showToast(final String message, final int duration) {
+        getMainThreadHandler().post(new Runnable() {
+            @Override
+            public void run() {
+                if (message!=null) {
+                    if(message!=null||message!="") {
+                        toast = Toast.makeText(GameboardScreen.this, message, duration);
+                    }
+                    toast.show();
+                }
+                game.setMessageForLocalPlayer(null);
+            }
+        });
+    }
+
+    public Handler getMainThreadHandler() {
+        if (mainThreadHandler == null) {
+            mainThreadHandler = new Handler(Looper.getMainLooper());
+        }
+        return mainThreadHandler;
+    }
 
     public int getDiceValueOne() {
         return diceValueOne;
@@ -647,33 +704,11 @@ public class GameboardScreen extends AppCompatActivity  {
         this.diceValueTwo = diceValueTwo;
     }
 
-
-    public void showToast(final String message, final int duration) {
-        getMainThreadHandler().post(new Runnable() {
-            @Override
-            public void run() {
-                if (message!=null) {
-                    /*if (toast != null) {
-                        toast.cancel(); //dismiss current toast if visible
-                        toast.setText(message);
-                    } else {*/
-                        toast = Toast.makeText(GameboardScreen.this, message, duration);
-                    //}
-
-                    toast.show();
-                }
-                game.setMessageForLocalPlayer(null);
-            }
-        });
+    @Override
+    protected void onPause(){
+        super.onPause();
     }
 
-
-    public Handler getMainThreadHandler() {
-        if (mainThreadHandler == null) {
-            mainThreadHandler = new Handler(Looper.getMainLooper());
-        }
-        return mainThreadHandler;
-    }
 
 }
 

@@ -8,9 +8,11 @@ import androidx.annotation.RequiresApi;
 import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
+import com.example.cluedo_seii.Card;
 import com.example.cluedo_seii.Game;
 import com.example.cluedo_seii.GameState;
 import com.example.cluedo_seii.Player;
+import com.example.cluedo_seii.activities.GameboardScreen;
 import com.example.cluedo_seii.network.Callback;
 import com.example.cluedo_seii.network.NetworkClient;
 import com.example.cluedo_seii.network.dto.CheatDTO;
@@ -24,6 +26,8 @@ import com.example.cluedo_seii.network.dto.PlayerDTO;
 import com.example.cluedo_seii.network.dto.RequestDTO;
 import com.example.cluedo_seii.network.dto.RoomsDTO;
 import com.example.cluedo_seii.network.dto.SendToOnePlayerDTO;
+import com.example.cluedo_seii.network.dto.SuspicionAnswerDTO;
+import com.example.cluedo_seii.network.dto.SuspicionDTO;
 import com.example.cluedo_seii.network.dto.TextMessage;
 import com.example.cluedo_seii.network.dto.UserNameRequestDTO;
 
@@ -47,6 +51,8 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
     private Callback<CheatDTO> cheatCallback;
     private Callback<RoomsDTO> roomCallback;
     private Player cheater;
+    private ChangeListener changeListener;
+
 
     private boolean isConnected;
     private int cheated=0;
@@ -151,6 +157,12 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
         else if(object instanceof AccusationMessageDTO){
             handleAccusationMessageDTO(connection, (AccusationMessageDTO)object);
         }
+        else if(object instanceof SuspicionDTO){
+            handleSuspicionMessageDTO(connection, (SuspicionDTO)object);
+        }
+        else if(object instanceof SuspicionAnswerDTO){
+            handleSuspicionAnswerDTO(connection, (SuspicionAnswerDTO)object);
+        }
     }
 
 
@@ -193,10 +205,9 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
             gameCallback.callback(gameDTO);
         }
 
+
         Game inGame = gameDTO.getGame();
-
         Game game = Game.getInstance();
-
         game.setPlayers(inGame.getPlayers());
         game.setCurrentPlayer(inGame.getCurrentPlayer());
         game.setRound(inGame.getRound());
@@ -204,11 +215,8 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
         game.setPlayerIterator(inGame.getPlayerIterator());
         game.setInvestigationFile(inGame.getInvestigationFile());
         game.setWrongAccusers(inGame.getWrongAccusers());
+        notifyPlayer();
         game.changeGameState(inGame.getGameState());
-
-
-
-
         // TODO set game attributes
 
     }
@@ -218,10 +226,34 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
     }
 
     private void handleAccusationMessageDTO(Connection connection, AccusationMessageDTO accusationMessageDTO){
-        AccusationMessageDTO accusationMessage = accusationMessageDTO;
         Game game = Game.getInstance();
-        game.setMessageForLocalPlayer(accusationMessage.getMessage());
+        game.setMessageForLocalPlayer(accusationMessageDTO.getMessage());
         game.changeGameState(GameState.PASSIVE);
+    }
+
+    private void handleSuspicionMessageDTO(Connection connection, SuspicionDTO suspicionDTO){
+        Game game = Game.getInstance();
+        Player suspected=suspicionDTO.getAcusee();
+        if(game.getLocalPlayer().getId()==suspected.getId()){
+            for(Player player: game.getPlayers()){
+                if(game.getLocalPlayer().getId()== player.getId()){
+                    player.setPosition(suspicionDTO.getAccuser().getPosition());
+                }
+            }
+            game.setSuspicion(suspicionDTO.getSuspicion());
+            game.setAcusee(suspicionDTO.getAccuser());
+            notifyPlayer();
+            game.changeGameState(GameState.SUSPECTED);
+        }
+    }
+
+    private void handleSuspicionAnswerDTO(Connection connection, SuspicionAnswerDTO suspicionAnswerDTO){
+
+        Game game = Game.getInstance();
+        if(game.getLocalPlayer().getId()==game.getCurrentPlayer().getId()){
+        game.setSuspicionAnswer(suspicionAnswerDTO.getAnswer());
+        notifyPlayer();
+        game.changeGameState(GameState.RECEIVINGANSWER);}
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -273,6 +305,7 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
     }
 
     public void sendGame(Game game) {
+        Log.i("sendingGame", "GameSend");
         GameDTO gameDTO = new GameDTO();
         gameDTO.setGame(game);
         sendMessage(gameDTO);
@@ -354,7 +387,22 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
     public boolean isConnected() {
         return isConnected;
     }
-    public Player getCheater(){
+    public Player getCheater() {
         return cheater;
+    }
+    public void notifyPlayer(){
+        if(changeListener != null) changeListener.onChange();
+    }
+
+    public ChangeListener getListener() {
+        return changeListener;
+    }
+
+    public void setListener(ChangeListener changeListener) {
+        this.changeListener = changeListener;
+    }
+
+    public interface ChangeListener {
+        void onChange();
     }
 }

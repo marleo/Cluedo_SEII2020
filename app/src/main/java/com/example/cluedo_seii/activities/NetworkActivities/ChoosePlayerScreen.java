@@ -64,12 +64,12 @@ public class ChoosePlayerScreen extends AppCompatActivity {
 
         } else if (conType == connectionType.HOST || conType == connectionType.GLOBALHOST) {
             //TODO implement the startingPoint from the Characters
-            GameCharacter character1 = new GameCharacter("Character 1", null);
-            GameCharacter character2 = new GameCharacter("Character 2", null);
-            GameCharacter character3 = new GameCharacter("Character 3", null);
-            GameCharacter character4 = new GameCharacter("Character 4", null);
-            GameCharacter character5 = new GameCharacter("Character 5", null);
-            GameCharacter character6 = new GameCharacter("Character 6", null);
+            GameCharacter character1 = new GameCharacter("Oberst von Gatov", null);
+            GameCharacter character2 = new GameCharacter("Prof. Bloom", null);
+            GameCharacter character3 = new GameCharacter("Reverend Grün", null);
+            GameCharacter character4 = new GameCharacter("Baronin von Porz", null);
+            GameCharacter character5 = new GameCharacter("Fräulein Gloria", null);
+            GameCharacter character6 = new GameCharacter("Frau Weiss", null);
 
             availableCharacters = new HashMap<>();
             availableCharacters.put(character1.getName(),character1);
