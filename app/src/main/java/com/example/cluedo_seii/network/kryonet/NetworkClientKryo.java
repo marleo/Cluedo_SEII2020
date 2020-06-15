@@ -317,8 +317,27 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
     public void sendCheat(Player player) {
         CheatDTO cheatDTO = new CheatDTO();
         cheatDTO.setCheater(player);
-        sendMessage(cheatDTO);
+        if (SelectedConType.getConnectionType() == connectionType.CLIENT) {
+            sendMessage(cheatDTO);
+        } else {
+            broadcastToGameRoom(cheatDTO);
+        }
+
     }
+
+    public void broadcastToGameRoom(RequestDTO requestDTO) {
+        BroadcastDTO broadcastDTO = new BroadcastDTO();
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            try {
+                broadcastDTO.setSerializedObject(SerializationHelper.toString(requestDTO));
+
+                sendMessage(broadcastDTO);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
     public void sendMessageToRoomHost(RequestDTO requestDTO) {
         SendToOnePlayerDTO sendToOnePlayerDTO = new SendToOnePlayerDTO();
         Log.d("Sending Object to Host:", requestDTO.getClass().toString());

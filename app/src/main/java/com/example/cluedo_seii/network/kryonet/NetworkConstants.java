@@ -5,6 +5,6 @@ public class NetworkConstants {
     static final int UDP_PORT = 54777;
     static final int SERVER_TCP_PORT = 53209;
     static final int SERVER_UDP_PORT = 53290;
-    //public static final String serverIP = "18.184.168.149"; Server
-    public static final String serverIP = "192.168.178.20";
+    public static final String serverIP = "18.184.168.149";
+    //public static final String serverIP = "192.168.178.20"; local
 }

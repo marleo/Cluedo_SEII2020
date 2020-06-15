@@ -10,11 +10,14 @@ import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.example.cluedo_seii.Game;
 import com.example.cluedo_seii.GameCharacter;
+import com.example.cluedo_seii.GameState;
 import com.example.cluedo_seii.Player;
 import com.example.cluedo_seii.network.Callback;
 import com.example.cluedo_seii.network.ClientData;
 import com.example.cluedo_seii.network.NetworkGlobalHost;
+import com.example.cluedo_seii.network.dto.AccusationMessageDTO;
 import com.example.cluedo_seii.network.dto.BroadcastDTO;
+import com.example.cluedo_seii.network.dto.CheatDTO;
 import com.example.cluedo_seii.network.dto.ConnectedDTO;
 import com.example.cluedo_seii.network.dto.GameCharacterDTO;
 import com.example.cluedo_seii.network.dto.GameDTO;
@@ -23,6 +26,8 @@ import com.example.cluedo_seii.network.dto.PlayerDTO;
 import com.example.cluedo_seii.network.dto.RequestDTO;
 import com.example.cluedo_seii.network.dto.SendToOnePlayerDTO;
 import com.example.cluedo_seii.network.dto.SerializedDTO;
+import com.example.cluedo_seii.network.dto.SuspicionAnswerDTO;
+import com.example.cluedo_seii.network.dto.SuspicionDTO;
 import com.example.cluedo_seii.network.dto.UserNameRequestDTO;
 
 
@@ -42,6 +47,18 @@ public class GlobalNetworkHostKryo implements NetworkGlobalHost, KryoNetComponen
     private Callback<NewGameRoomRequestDTO> newGameRoomCallback;
     private Callback<LinkedHashMap<Integer,ClientData>> newClientCallback;
     private Callback<GameCharacterDTO> gameCharacterDTOCallback;
+    private Callback<CheatDTO> cheatDTOCallback;
+
+    private Player cheater;
+    private int cheated=0;
+    public int getCheated(){
+        return cheated;
+    }
+    public void setCheated(int value){
+        this.cheated+=value;
+    }
+    public void guessedCheater(){this.cheated-=1;}
+    private NetworkServerKryo.ChangeListener changeListener;
 
     private LinkedHashMap<Integer, ClientData> clientList;
     private ClientData roomHost;
@@ -196,6 +213,14 @@ public class GlobalNetworkHostKryo implements NetworkGlobalHost, KryoNetComponen
 
             if (object instanceof GameDTO) {
                 handleGameRequest(connection, (GameDTO) object);
+            } else if(object instanceof CheatDTO) {
+                handleCheaterRequest(connection, (CheatDTO) object);
+            } else if(object instanceof AccusationMessageDTO){
+                handleAccusationMessageDTO(connection, (AccusationMessageDTO)object);
+            } else if(object instanceof SuspicionDTO){
+                handleSuspicionMessageDTO(connection, (SuspicionDTO)object);
+            } else if(object instanceof SuspicionAnswerDTO){
+                handleSuspicionAnswerDTO(connection, (SuspicionAnswerDTO)object);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -218,6 +243,46 @@ public class GlobalNetworkHostKryo implements NetworkGlobalHost, KryoNetComponen
 
     }
 
+    private void handleCheaterRequest(Connection connection, CheatDTO cheatDTO){
+        Log.d("network-Server:","Received a cheater");
+        cheater = new Player(cheatDTO.getCheater().getId(), cheatDTO.getCheater().getPlayerCharacter());
+        if(cheatDTOCallback!=null){
+            cheatDTOCallback.callback(cheatDTO);
+        }
+    }
+
+    private void handleAccusationMessageDTO(Connection connection, AccusationMessageDTO accusationMessageDTO){
+        AccusationMessageDTO accusationMessage = accusationMessageDTO;
+        Game game = Game.getInstance();
+        game.setMessageForLocalPlayer(accusationMessage.getMessage());
+        game.changeGameState(GameState.PASSIVE);
+    }
+
+    private void handleSuspicionMessageDTO(Connection connection, SuspicionDTO suspicionDTO){
+        Game game = Game.getInstance();
+        Player suspected=suspicionDTO.getAcusee();
+        if(game.getLocalPlayer().getId()==suspected.getId()){
+            for(Player player: game.getPlayers()){
+                if(game.getLocalPlayer().getId()== player.getId()){
+                    player.setPosition(suspicionDTO.getAccuser().getPosition());
+                }
+            }
+            game.setSuspicion(suspicionDTO.getSuspicion());
+            game.setAcusee(suspicionDTO.getAccuser());
+            notifyPlayer();
+            game.changeGameState(GameState.SUSPECTED);
+        }
+    }
+
+    private void handleSuspicionAnswerDTO(Connection connection, SuspicionAnswerDTO suspicionAnswerDTO){
+        Game game = Game.getInstance();
+        if(game.getCurrentPlayer().getId()==game.getLocalPlayer().getId()){
+            game.setSuspicionAnswer(suspicionAnswerDTO.getAnswer());
+            game.changeGameState(GameState.RECEIVINGANSWER);}
+    }
+
+
+
 
     public void registerReceivedGameRoomCallback(Callback<NewGameRoomRequestDTO> callback) {
         this.newGameRoomCallback = callback;
@@ -229,6 +294,19 @@ public class GlobalNetworkHostKryo implements NetworkGlobalHost, KryoNetComponen
 
     public void registerCharacterDTOCallback(Callback<GameCharacterDTO> gameCharacterDTOCallback) {
         this.gameCharacterDTOCallback = gameCharacterDTOCallback;
+    }
+
+    public void registerCheatDTOCallback(Callback<CheatDTO> cheatDTOCallback){
+        this.cheatDTOCallback = cheatDTOCallback;
+    }
+
+    public void sendCheat(Player player){
+        CheatDTO cheatDTO = new CheatDTO();
+        cheatDTO.setCheater(player);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            broadcastToClients(cheatDTO);
+        }
+        cheatDTOCallback.callback(cheatDTO);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -304,5 +382,27 @@ public class GlobalNetworkHostKryo implements NetworkGlobalHost, KryoNetComponen
     public ClientData getRoomHost() {
         return roomHost;
     }
+
+    public Player getCheater() {
+        return cheater;
+    }
+
+    public void notifyPlayer(){
+        if(changeListener != null) changeListener.onChange();
+    }
+
+    public NetworkServerKryo.ChangeListener getListener() {
+        return changeListener;
+    }
+
+    public void setListener(NetworkServerKryo.ChangeListener changeListener) {
+        this.changeListener = changeListener;
+    }
+
+    public interface ChangeListener {
+        void onChange();
+    }
+
+
 }
 

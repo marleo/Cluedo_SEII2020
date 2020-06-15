@@ -2,6 +2,7 @@ package com.example.cluedo_seii.activities.playerGameInteraction;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.os.Build;
 import android.os.Bundle;
 
 import com.example.cluedo_seii.GameState;
@@ -19,6 +20,7 @@ import android.widget.Toast;
 import com.example.cluedo_seii.Game;
 import com.example.cluedo_seii.network.connectionType;
 import com.example.cluedo_seii.network.dto.AccusationMessageDTO;
+import com.example.cluedo_seii.network.kryonet.GlobalNetworkHostKryo;
 import com.example.cluedo_seii.network.kryonet.NetworkClientKryo;
 import com.example.cluedo_seii.network.kryonet.NetworkServerKryo;
 import com.example.cluedo_seii.network.kryonet.SelectedConType;
@@ -43,6 +45,7 @@ public class AccuseSomeone extends AppCompatActivity implements AdapterView.OnIt
     private String text;
     private NetworkServerKryo server;
     private NetworkClientKryo client;
+    private GlobalNetworkHostKryo globalHost;
     private connectionType conType;
     private AccusationMessageDTO accusationMessageDTO;
 
@@ -159,8 +162,10 @@ public class AccuseSomeone extends AppCompatActivity implements AdapterView.OnIt
         if(conType==connectionType.HOST) {
             server = NetworkServerKryo.getInstance();
         }
-
-        else if(conType==connectionType.CLIENT){
+        else if(conType == connectionType.GLOBALHOST) {
+            globalHost = GlobalNetworkHostKryo.getInstance();
+        }
+        else if(conType==connectionType.CLIENT || conType==connectionType.GLOBALCLIENT){
             client = NetworkClientKryo.getInstance();
         }
     }
@@ -173,6 +178,12 @@ public class AccuseSomeone extends AppCompatActivity implements AdapterView.OnIt
         }
         else if(conType==connectionType.CLIENT){
            client.sendMessage(accusationMessageDTO);
+        } else if (conType == connectionType.GLOBALCLIENT) {
+            client.broadcastToGameRoom(accusationMessageDTO);
+        } else if(conType==connectionType.GLOBALHOST) {
+            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                globalHost.broadcastToClients(accusationMessageDTO);
+            }
         }
     }
 

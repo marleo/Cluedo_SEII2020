@@ -231,6 +231,7 @@ public class NetworkServerKryo implements KryoNetComponent, NetworkServer {
     public void registerCharacterDTOCallback(Callback<GameCharacterDTO> gameCharacterDTOCallback) {
         this.gameCharacterDTOCallback = gameCharacterDTOCallback;
     }
+
     public void registerCheatDTOCallback(Callback<CheatDTO> cheatDTOCallback){
         this.cheatDTOCallback = cheatDTOCallback;
     }
