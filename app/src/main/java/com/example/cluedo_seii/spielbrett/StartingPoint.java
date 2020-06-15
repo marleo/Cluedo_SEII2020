@@ -1,6 +1,5 @@
 package com.example.cluedo_seii.spielbrett;
 
-import android.graphics.Point;
 
 import com.example.cluedo_seii.MyPoint;
 

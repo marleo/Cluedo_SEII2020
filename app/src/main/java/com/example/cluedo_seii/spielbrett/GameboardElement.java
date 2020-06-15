@@ -2,7 +2,6 @@ package com.example.cluedo_seii.spielbrett;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.graphics.Point;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
