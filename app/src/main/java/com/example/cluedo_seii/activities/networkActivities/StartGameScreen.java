@@ -150,10 +150,8 @@ public class StartGameScreen extends AppCompatActivity {
                             findViewById(R.id.chooseCharacter).setVisibility(View.VISIBLE);
                         }
 
-                        TextView userNameInput = findViewById(R.id.username_input);
                         ArrayAdapter<String> clientListAdapter = new ArrayAdapter<>(StartGameScreen.this, android.R.layout.simple_list_item_1,usernameList);
                         clientList.setAdapter(clientListAdapter);
-                        userNameInput.setText(usernameList.toString());
                     }
                 });
             }
