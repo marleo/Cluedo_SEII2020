@@ -209,6 +209,7 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
         game.setPlayerIterator(inGame.getPlayerIterator());
         game.setInvestigationFile(inGame.getInvestigationFile());
         game.setWrongAccusers(inGame.getWrongAccusers());
+        game.setGameboard(inGame.getGameboard());
         notifyPlayer();
         game.changeGameState(inGame.getGameState());
 

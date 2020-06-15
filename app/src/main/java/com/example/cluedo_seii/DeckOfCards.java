@@ -10,7 +10,7 @@ public class DeckOfCards  {
     public Card profBloom = new Card(1, "Prof. Bloom", CardType.PERSON);
     public Card reverendGruen = new Card(2, "Reverend Grün", CardType.PERSON);
     public Card baroninVonPorz = new Card(3, "Baronin von Porz", CardType.PERSON);
-    public Card fraeuleinGloria = new Card(4, "Fraeulein Gloria", CardType.PERSON);
+    public Card fraeuleinGloria = new Card(4, "Fräulein Gloria", CardType.PERSON);
     public Card frauWeiss = new Card(5, "Frau Weiss", CardType.PERSON);
 
     public Card dolch = new Card(6, "Dolch", CardType.WEAPON);
