@@ -2,10 +2,12 @@ package com.example.cluedo_seii.spielbrett;
 
 import android.graphics.Point;
 
+import com.example.cluedo_seii.MyPoint;
+
 public class StartingPoint {
     private int startingPointId;
     private int playerId; // Überlegen ob hier der Spieler (Klasse) verspeichert wird
-    private Point playerPosition;
+    private MyPoint playerPosition;
 
     public StartingPoint(int startingPointId, int playerId) {
         this.startingPointId = startingPointId;
@@ -28,11 +30,11 @@ public class StartingPoint {
         this.playerId = playerId;
     }
 
-    public Point getPlayerPosition() {
+    public MyPoint getPlayerPosition() {
         return playerPosition;
     }
 
-    public void setPlayerPosition(Point playerPosition) {
+    public void setPlayerPosition(MyPoint playerPosition) {
         this.playerPosition = playerPosition;
     }
 }

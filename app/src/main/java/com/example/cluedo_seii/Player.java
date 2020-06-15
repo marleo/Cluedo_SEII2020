@@ -14,7 +14,7 @@ public class Player implements Serializable {
     private int id;
     private String username;
     private LinkedList<Card> playerCards;
-    private Point position;
+    private MyPoint position;
     private GameCharacter playerCharacter;
     private Boolean madeFalseAccusation;
 
@@ -31,7 +31,7 @@ public class Player implements Serializable {
         madeFalseAccusation = false;
     }
 
-    public Point getPosition() {
+    public MyPoint getPosition() {
         return position;
     }
 
@@ -98,7 +98,7 @@ public class Player implements Serializable {
         return wrongSuspicions;
     }
 
-    public void setPosition(Point position) {
+    public void setPosition(MyPoint position) {
         this.position = position;
     }
 

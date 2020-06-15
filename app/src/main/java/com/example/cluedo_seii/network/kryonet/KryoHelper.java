@@ -10,6 +10,7 @@ import com.example.cluedo_seii.Game;
 import com.example.cluedo_seii.GameCharacter;
 import com.example.cluedo_seii.GameState;
 import com.example.cluedo_seii.InvestigationFile;
+import com.example.cluedo_seii.MyPoint;
 import com.example.cluedo_seii.Notepad;
 import com.example.cluedo_seii.Player;
 import com.example.cluedo_seii.network.dto.AccusationMessageDTO;
@@ -73,7 +74,7 @@ public class KryoHelper {
         kryoNetComponent.registerClass(TextView[].class);
         kryoNetComponent.registerClass(CheatDTO.class);
         kryoNetComponent.registerClass(AppCompatTextView.class);
-        kryoNetComponent.registerClass(Point.class);
+        kryoNetComponent.registerClass(MyPoint.class);
         kryoNetComponent.registerClass(Gameboard.class);
         kryoNetComponent.registerClass(Random.class);
         kryoNetComponent.registerClass(RegisterClassDTO.class,2);

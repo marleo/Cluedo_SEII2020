@@ -3,6 +3,7 @@ package com.example.cluedo_seii.spielbrett;
 import android.graphics.Point;
 import android.widget.LinearLayout;
 
+import com.example.cluedo_seii.MyPoint;
 import com.example.cluedo_seii.R;
 import com.example.cluedo_seii.activities.GameboardScreen;
 
@@ -719,7 +720,7 @@ public class Gameboard {
             if(startingPoint.getStartingPointId() == ((StartingpointElement) gameboardElement).getStartingPointId()) {
                 ((StartingpointElement) gameboardElement).positionPlayer(true);
                 startingPoint.setPlayerPosition(
-                        new Point(
+                        new MyPoint(
                             ((StartingpointElement) gameboardElement).getxKoordinate(),
                             ((StartingpointElement) gameboardElement).getyKoordinate()
                         ));

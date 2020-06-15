@@ -20,6 +20,7 @@ import com.example.cluedo_seii.DeckOfCards;
 import com.example.cluedo_seii.Game;
 import com.example.cluedo_seii.GameCharacter;
 import com.example.cluedo_seii.GameState;
+import com.example.cluedo_seii.MyPoint;
 import com.example.cluedo_seii.Player;
 import com.example.cluedo_seii.R;
 //import com.example.cluedo_seii.activities.playerGameInteraction.AccuseSomeone;
@@ -89,7 +90,7 @@ public class GameboardScreen extends AppCompatActivity  {
 
         //zu Demonstrationszwecken SpielerPosition wird gesetzt auf Raum
         for(Player player: game.getPlayers()){
-         player.setPosition(new Point(6,2));
+         player.setPosition(new MyPoint(6,2));
         Log.i("gameCharacter", player.getId() + "" + player.getPlayerCharacter().getName());}
          kickOffGame();
          Log.i("gameStarted", "gameCreated");
