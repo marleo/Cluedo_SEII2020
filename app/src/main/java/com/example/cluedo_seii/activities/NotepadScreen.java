@@ -14,9 +14,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import androidx.appcompat.app.AppCompatActivity;
-
 import com.example.cluedo_seii.Card;
 import com.example.cluedo_seii.Game;
 import com.example.cluedo_seii.InvestigationFile;
@@ -30,8 +28,13 @@ import com.example.cluedo_seii.network.dto.CheatDTO;
 import com.example.cluedo_seii.network.kryonet.NetworkClientKryo;
 import com.example.cluedo_seii.network.kryonet.NetworkServerKryo;
 import com.example.cluedo_seii.network.kryonet.SelectedConType;
-
 import java.util.Random;
+
+/**
+ * Erzeugt den Notizblock und bietet die Funktionen Karten vom Block zu streichen, eigene Notizen
+ * hinzuzufügen, eine Schummelfunktion und man gelangt durch Button Click zur
+ * activity_expose_cheater.
+ */
 
 public class NotepadScreen extends AppCompatActivity {
     float x1, x2;
@@ -120,7 +123,7 @@ public class NotepadScreen extends AppCompatActivity {
 
         notepad=new Notepad();
 
-
+        //If Bedingungen damit graue TextViews, nach Wechsel zu anderer Activity, grau bleiben
         textViewGatov = findViewById(R.id.notepad_gatov);
         if(preferences.getBoolean("gatovGray",false)){
             textViewGatov.setBackgroundColor(Color.argb(150, 200, 200, 200));
@@ -319,7 +322,7 @@ public class NotepadScreen extends AppCompatActivity {
 
 
             }
-
+            //Damit man die grauen TextViews und Notizen löschen kann
             @Override
             public void onBackPressed() {
                 super.onBackPressed();
@@ -330,7 +333,13 @@ public class NotepadScreen extends AppCompatActivity {
 
 
 
-
+        /**
+         * Diese Funktion wählt einen zufälligen TextView vom Notizblock aus der ausgegraut werden
+         * soll. Sie macht das so lange bis ein TextView (Karte) gefunden wird die nicht in der
+         * Ermittlungsakte steht. Wird einer gefunden, wird die Methode grayOut() aufgerufen.
+         * @param investigationFile liefert die Ermittlungsakte vom aktuellen Spiel zur Überprüfung
+         *                          welche TextViews nicht ausgegraut werden dürfen.
+         */
         public void cheatFunction (InvestigationFile investigationFile){
         conType=SelectedConType.getConnectionType();
             if(conType== connectionType.CLIENT){
@@ -365,9 +374,16 @@ public class NotepadScreen extends AppCompatActivity {
         }
 
 
-
-
-        public void grayOut (View view){
+    /**
+     * Die Methode grayOut ist die onClick() Mehtode der TextViews die am Notizblock angezeigt
+     * werden. Bei einem Klick auf den jeweiligen View wird dieser ausgegraut. Damit der Spieler
+     * notieren kann, dass diese Karte nicht in der Ermittlungsakte ist. Es wird überprüft ob
+     * der TextView einen Tag besitzt erst dann wird er ausgegraut und erhält einen Tag.
+     * Außerdem wird es in SharedPreferences gespeichert damit bei einem Wechsel auf eine andere
+     * Aktivität die bereits ausgegrauten Views grau bleiben.
+     * @param view TextView welcher ausgegraut werden soll
+     */
+    public void grayOut (View view){
             SharedPreferences.Editor editor = getSharedPreferences("notizblock",MODE_PRIVATE).edit();
 
             if (view.getTag() != "grayed") {
@@ -465,7 +481,14 @@ public class NotepadScreen extends AppCompatActivity {
             }
         }
 
-        public void lightEvent(SensorEvent event) {
+    /**
+     * Methode lightEvent wird aufgerufen wenn der Licht Sensor Veränderungen wahrnimmt.
+     * Es wird geprüft ob der cheated Wert kleiner eins ist und Schummelfunktion aktiviert ist.
+     * Außerdem wird geprüft ob der Lichtsensor abgedeckt ist indem man einen kleinen Lichtwert
+     * annimmt und erst dann wird die cheatFunction aufgerufen.
+     * @param event beinhaltet den Lichtwert zur Überprüfung ob Sensor abgedeckt wird
+     */
+    public void lightEvent(SensorEvent event) {
             SharedPreferences preferences = getSharedPreferences("com.example.cluedo_seii", MODE_PRIVATE);
             conType= SelectedConType.getConnectionType();
             if (conType == connectionType.CLIENT) {
@@ -499,7 +522,7 @@ public class NotepadScreen extends AppCompatActivity {
 
 
         }
-
+        //swipeListener zur Navigation zum GameboardScreen
         @Override
         public boolean onTouchEvent (MotionEvent touchEvent){
             switch (touchEvent.getAction()) {
@@ -513,7 +536,6 @@ public class NotepadScreen extends AppCompatActivity {
                     float swipeLeft = x1 - x2;
 
                     if (swipeLeft > MIN_SWIPE_DISTANCE) {
-                        //startActivity(new Intent(NotepadScreen.this, GameboardScreen.class));
                         finish();
                         overridePendingTransition(R.anim.slide_left_in, R.anim.slide_left_out);
                     }
@@ -523,7 +545,6 @@ public class NotepadScreen extends AppCompatActivity {
         }
 
     //setListener zur Netzwerkintegration
-
     public void setListener() {
         if(conType== connectionType.HOST){
             server.setListener(new NetworkServerKryo.ChangeListener() {

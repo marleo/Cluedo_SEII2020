@@ -21,6 +21,13 @@ import java.util.ArrayList;
 
 import com.example.cluedo_seii.network.kryonet.NetworkServerKryo;
 
+/**
+ * Die Klasse ExposeCheater öffnet die Activity activity_expose_cheater und dient dazu,
+ * jemanden der geschummelt hat zu verdächtigen. Ist die Verdächtigung richtig erhält der
+ * Verdächtiger eine weitere Schummelmöglickeit, falls nicht wird ihm eine Schummelmöglichkeit
+ * genommen.
+ */
+
 public class ExposeCheater extends AppCompatActivity implements AdapterView.OnItemSelectedListener, Serializable {
 
     private Button accuseCheaterButton;
@@ -44,6 +51,7 @@ public class ExposeCheater extends AppCompatActivity implements AdapterView.OnIt
 
         userNames = new ArrayList<>();
 
+        //hinzufügen der usernames, der verbundenen Spieler, in die ArrayList userNames
         for (Player player : game.getPlayers()) {
             if (player.getUsername() != null) {
                 userNames.add(player.getUsername());
@@ -90,7 +98,11 @@ public class ExposeCheater extends AppCompatActivity implements AdapterView.OnIt
 
     }
 
-
+    /**
+     * Prüft connectionType und dann ob die id des selectedPlayer gleich der des Players,
+     * der zuletzt geschummelt hat, ist. Zeigt Toast mit einer Nachricht ob die Anschuldigung
+     * richtig oder falsch war und ändert Wert der cheated Variable.
+     */
     public void accuseCheating() {
         conType = SelectedConType.getConnectionType();
         if(conType==connectionType.HOST){
