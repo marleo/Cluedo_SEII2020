@@ -34,6 +34,7 @@ import com.example.cluedo_seii.activities.playerGameInteraction.ThrowDiceOrUseSe
 import com.example.cluedo_seii.network.Callback;
 import com.example.cluedo_seii.network.dto.CheatDTO;
 import com.example.cluedo_seii.network.connectionType;
+import com.example.cluedo_seii.network.kryonet.GlobalNetworkHostKryo;
 import com.example.cluedo_seii.network.kryonet.NetworkClientKryo;
 import com.example.cluedo_seii.network.kryonet.NetworkServerKryo;
 import com.example.cluedo_seii.network.kryonet.SelectedConType;
@@ -62,6 +63,7 @@ public class GameboardScreen extends AppCompatActivity  {
     private connectionType conType;
     private NetworkServerKryo server;
     private NetworkClientKryo client;
+    private GlobalNetworkHostKryo globalHost;
     private Player currentPlayerInDoor;// TODO: Aufräumen und vielleicht nur mehr das Player Objekt anstatt id und Player Objekt
     private int playerCurrentlyPlayingId;
     static final int MIN_SWIPE_DISTANCE = 150;
@@ -559,7 +561,6 @@ public class GameboardScreen extends AppCompatActivity  {
     //Aufruf Detektivnotizblock
     public void startNotepad(){
         intent = new Intent(this, NotepadScreen.class);
-        //intent.putExtra("game",game);
         startActivity(intent);
         overridePendingTransition(R.anim.slide_right_in, R.anim.slide_right_out);
     }
@@ -623,20 +624,22 @@ public class GameboardScreen extends AppCompatActivity  {
         conType = SelectedConType.getConnectionType();
         if(conType==connectionType.HOST) {
             server = NetworkServerKryo.getInstance();
-        }
-
-        else if(conType==connectionType.CLIENT){
+        } else if (conType == connectionType.GLOBALHOST) {
+            globalHost = GlobalNetworkHostKryo.getInstance();
+        } else if (conType == connectionType.CLIENT || conType == connectionType.GLOBALCLIENT) {
             client = NetworkClientKryo.getInstance();
         }
     }
 
     //Spielverschicken über Netzwerk
     public void updateGame( ){
-        //TODO add if for globalhost and global Client
         if(conType==connectionType.HOST) {
             server.sendGame(game);
         }
-        else if(conType==connectionType.CLIENT){
+        else if(conType==connectionType.GLOBALHOST) {
+            globalHost.sendGame(game);
+        }
+        else if(conType==connectionType.CLIENT || conType == connectionType.GLOBALCLIENT){
             client.sendGame(game);
         }
     }
@@ -653,10 +656,10 @@ public class GameboardScreen extends AppCompatActivity  {
 
     //KickoffMethode für Spielstart
     public void kickOffGame(){
-        if(conType==connectionType.HOST){
+        if(conType==connectionType.HOST || conType==connectionType.GLOBALHOST){
             game.changeGameState(GameState.PLAYERTURNBEGIN);
         }
-        if(conType==connectionType.CLIENT){
+        if(conType==connectionType.CLIENT || conType==connectionType.GLOBALCLIENT){
             game.changeGameState(GameState.PLAYERTURNBEGIN);
             for(Player player: game.getPlayers()){
                 if(player.getId() == game.getLocalPlayer().getId()){

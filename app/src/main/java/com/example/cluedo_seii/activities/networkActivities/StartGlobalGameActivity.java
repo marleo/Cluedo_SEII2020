@@ -1,4 +1,4 @@
-package com.example.cluedo_seii.activities.NetworkActivities;
+package com.example.cluedo_seii.activities.networkActivities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -30,10 +30,8 @@ import java.util.LinkedHashMap;
 import java.util.LinkedList;
 
 public class StartGlobalGameActivity extends AppCompatActivity {
-    //TODO change to server Ip
     private String serverIP = NetworkConstants.serverIP;
 
-    //public static connectionType conType;
     private GlobalNetworkHostKryo globalHost;
     private NetworkClientKryo client;
 
@@ -47,7 +45,6 @@ public class StartGlobalGameActivity extends AppCompatActivity {
 
         Game.reset();
 
-        //TODO add Logic if the game is ready to start
         final Button chooseCharacter = findViewById(R.id.global_choose_player_button);
         chooseCharacter.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -162,8 +159,6 @@ public class StartGlobalGameActivity extends AppCompatActivity {
     }
 
     private void selectClient() {
-        final ListView clientList = findViewById(R.id.clientList);
-
         client.registerRoomCallback(new Callback<RoomsDTO>() {
             @Override
             public void callback(RoomsDTO argument) {

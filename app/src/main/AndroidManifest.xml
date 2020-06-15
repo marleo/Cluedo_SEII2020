@@ -16,12 +16,12 @@
         <activity android:name=".activities.playerGameInteraction.SuspicionAnswer"></activity>
         <activity android:name=".activities.playerGameInteraction.PlayerNotification" />
         <activity android:name=".activities.playerGameInteraction.AccuseSomeone" />
-        <activity android:name=".activities.NetworkActivities.ChooseGameTypeActivity" />
+        <activity android:name=".activities.networkActivities.ChooseGameTypeActivity" />
         <activity android:name=".activities.playerGameInteraction.MakeSuspicion" />
-        <activity android:name=".activities.NetworkActivities.ChoosePlayerScreen" />
+        <activity android:name=".activities.networkActivities.ChoosePlayerScreen" />
         <activity android:name=".activities.helpSettings" />
-        <activity android:name=".activities.NetworkActivities.StartGlobalGameActivity" />
-        <activity android:name=".activities.NetworkActivities.StartGameScreen" />
+        <activity android:name=".activities.networkActivities.StartGlobalGameActivity" />
+        <activity android:name=".activities.networkActivities.StartGameScreen" />
         <activity android:name=".activities.ShowCards" />
         <activity
             android:name=".activities.SettingScreen"
@@ -38,7 +38,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activities.NetworkActivities.NetworkScreen" />
         <activity
             android:name=".activities.NotepadScreen"
             android:label="Cluedo" />
@@ -49,10 +48,12 @@
         <activity
             android:name=".activities.PlayerSelectionScreen"
             android:exported="true"
-            android:label="Cluedo" />
-        <activity
-            android:name=".activities.playerGameInteraction.ExposeCheater"
-            android:theme="@style/Theme.AppCompat.Dialog.Alert" />
+            android:label="Cluedo">
+        </activity>
+        <activity android:name=".activities.playerGameInteraction.ExposeCheater"
+            android:theme="@style/Theme.AppCompat.Dialog.Alert"
+            android:label="Wer hat geschummelt?">
+        </activity>
     </application>
 
 </manifest>

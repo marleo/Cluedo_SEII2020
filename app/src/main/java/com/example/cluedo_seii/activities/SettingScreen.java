@@ -12,7 +12,6 @@ import android.widget.ImageButton;
 import android.widget.Switch;
 
 import com.example.cluedo_seii.R;
-import com.example.cluedo_seii.activities.NetworkActivities.NetworkScreen;
 
 
 public class SettingScreen extends AppCompatActivity {
@@ -49,13 +48,6 @@ public class SettingScreen extends AppCompatActivity {
 
         });
 
-        final Button networkSetting = findViewById(R.id.network_setting);
-        networkSetting.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v){
-                startActivity(new Intent(SettingScreen.this, NetworkScreen.class));
-            }
-        });
 
         final Button helpButton = findViewById(R.id.helpButton);
         helpButton.setOnClickListener(new View.OnClickListener(){

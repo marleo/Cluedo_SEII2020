@@ -21,12 +21,15 @@ import com.example.cluedo_seii.Card;
 import com.example.cluedo_seii.Game;
 import com.example.cluedo_seii.InvestigationFile;
 import com.example.cluedo_seii.Notepad;
+import com.example.cluedo_seii.Player;
 import com.example.cluedo_seii.R;
 import com.example.cluedo_seii.activities.playerGameInteraction.ExposeCheater;
 import com.example.cluedo_seii.network.Callback;
+import com.example.cluedo_seii.network.connectionType;
 import com.example.cluedo_seii.network.dto.CheatDTO;
 import com.example.cluedo_seii.network.kryonet.NetworkClientKryo;
 import com.example.cluedo_seii.network.kryonet.NetworkServerKryo;
+import com.example.cluedo_seii.network.kryonet.SelectedConType;
 
 import java.util.Random;
 
@@ -64,10 +67,11 @@ public class NotepadScreen extends AppCompatActivity {
     private NetworkServerKryo server;
     private NetworkClientKryo client;
 
-
+    private connectionType conType;
     private SensorManager sensorManager;
     private Sensor lightSensor;
     private float sensorValue;
+    private Player player;
 
 
     private String test = " ";
@@ -80,8 +84,10 @@ public class NotepadScreen extends AppCompatActivity {
         final SharedPreferences preferences = getSharedPreferences("notizblock", MODE_PRIVATE);
         final SharedPreferences.Editor editor = getSharedPreferences("notizblock", MODE_PRIVATE).edit();
         setContentView(R.layout.activity_notepad);
+        conType = SelectedConType.getConnectionType();
         server = NetworkServerKryo.getInstance();
         client=NetworkClientKryo.getInstance();
+        setListener();
         client.registerCheatCallback(new Callback<CheatDTO>() {
             @Override
             public void callback(CheatDTO argument) {
@@ -110,6 +116,7 @@ public class NotepadScreen extends AppCompatActivity {
 
             }
         });
+        player = game.getLocalPlayer();
 
         notepad=new Notepad();
 
@@ -325,21 +332,15 @@ public class NotepadScreen extends AppCompatActivity {
 
 
         public void cheatFunction (InvestigationFile investigationFile){
-           // if(conType==connectionType.CLIENT){
-
-                client.sendCheat();
-
-
-
-            //}
-           // else if(conType==connectionType.HOST){
-
-               server.sendCheat();
-
-
-                    //}
-
-
+        conType=SelectedConType.getConnectionType();
+            if(conType== connectionType.CLIENT){
+                client.sendCheat(player);
+                client.setCheated(1);
+            }
+            else if(conType==connectionType.HOST){
+               server.sendCheat(player);
+               server.setCheated(1);
+                    }
 
             Card culprit = investigationFile.getCulprit();
             String culpritString = culprit.getDesignation();
@@ -360,7 +361,6 @@ public class NotepadScreen extends AppCompatActivity {
             while (randomString.equals(culpritString)||randomString.equals(roomString)||randomString.equals(weaponString)||randomTextView.getTag()=="grayed");
 
             grayOut(randomTextView);
-            client.setCheated(1);
 
         }
 
@@ -465,22 +465,38 @@ public class NotepadScreen extends AppCompatActivity {
             }
         }
 
-        public void lightEvent(SensorEvent event){
-        SharedPreferences preferences=getSharedPreferences("com.example.cluedo_seii",MODE_PRIVATE);
-            if (client.getCheated() < 1 && preferences.getBoolean("cheatEnabled", false)) {
-                if (event.sensor.getType() == Sensor.TYPE_LIGHT) {
-                    if (event.values[0] < 3) {
-                        sensorValue = event.values[0];
+        public void lightEvent(SensorEvent event) {
+            SharedPreferences preferences = getSharedPreferences("com.example.cluedo_seii", MODE_PRIVATE);
+            conType= SelectedConType.getConnectionType();
+            if (conType == connectionType.CLIENT) {
+                client = NetworkClientKryo.getInstance();
+                if (client.getCheated() < 1 && preferences.getBoolean("cheatEnabled", false)) {
+                    if (event.sensor.getType() == Sensor.TYPE_LIGHT) {
+                        if (event.values[0] < 3) {
+                            sensorValue = event.values[0];
+                        }
+                        if (event.values[0] < 10) {
+                            cheatFunction(game.getInvestigationFile());
+                        }
                     }
-                    if (event.values[0] < 10) {
-                        cheatFunction(game.getInvestigationFile());
-                        int value = 1;
-                        //player.setCheated(value);
 
-                    }
                 }
+            }else if(conType == connectionType.HOST){
+                server=NetworkServerKryo.getInstance();
+                if (server.getCheated() < 1 && preferences.getBoolean("cheatEnabled", false)) {
+                    if (event.sensor.getType() == Sensor.TYPE_LIGHT) {
+                        if (event.values[0] < 3) {
+                            sensorValue = event.values[0];
+                        }
+                        if (event.values[0] < 10) {
+                            cheatFunction(game.getInvestigationFile());
+                        }
+                    }
 
+                }
             }
+
+
 
         }
 
@@ -505,6 +521,27 @@ public class NotepadScreen extends AppCompatActivity {
             }
             return false;
         }
+
+    //setListener zur Netzwerkintegration
+
+    public void setListener() {
+        if(conType== connectionType.HOST){
+            server.setListener(new NetworkServerKryo.ChangeListener() {
+                @Override
+                public void onChange() {
+                    finish();
+                }
+            });
+        }
+
+        else if(conType==connectionType.CLIENT){
+            client.setListener(new NetworkClientKryo.ChangeListener() {
+                @Override
+                public void onChange() {
+                    finish();
+                }
+            });}
+    }
 
 
 }
