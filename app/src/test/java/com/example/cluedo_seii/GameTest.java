@@ -217,6 +217,25 @@ public class GameTest {
         assertEquals(game.getRound(), 2);
     }
 
+    @Test
+    public void testCheckGameEndTrue(){
+        game.incrWrongAccusers();
+        game.incrWrongAccusers();
+        game.incrWrongAccusers();
+        game.incrWrongAccusers();
+        game.incrWrongAccusers();
+        game.incrWrongAccusers();
+        assertEquals(game.checkGameEnd(), true);
+    }
+
+    @Test
+    public void testCheckGameEndFalse(){
+        game.incrWrongAccusers();
+        game.incrWrongAccusers();
+        game.incrWrongAccusers();
+        assertEquals(game.checkGameEnd(), false);
+    }
+
 
 
 
