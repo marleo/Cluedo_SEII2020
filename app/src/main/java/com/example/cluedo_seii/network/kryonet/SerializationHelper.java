@@ -13,6 +13,11 @@ import java.io.Serializable;
 import java.util.Base64;
 
 public class SerializationHelper {
+
+    private SerializationHelper() {
+
+    }
+
     /** Read the object from Base64 string. */
     @RequiresApi(api = Build.VERSION_CODES.O)
     public static Object fromString(String s ) throws IOException ,

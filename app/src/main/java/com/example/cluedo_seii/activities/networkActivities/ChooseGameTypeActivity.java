@@ -1,4 +1,4 @@
-package com.example.cluedo_seii.activities.NetworkActivities;
+package com.example.cluedo_seii.activities.networkActivities;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;

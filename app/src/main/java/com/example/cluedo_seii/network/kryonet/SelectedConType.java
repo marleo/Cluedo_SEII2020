@@ -5,6 +5,10 @@ import com.example.cluedo_seii.network.connectionType;
 public class SelectedConType {
     private static connectionType connectionType;
 
+    private SelectedConType() {
+
+    }
+
     public static com.example.cluedo_seii.network.connectionType getConnectionType() {
         return connectionType;
     }

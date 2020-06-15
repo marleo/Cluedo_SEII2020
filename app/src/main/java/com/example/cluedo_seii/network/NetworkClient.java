@@ -10,8 +10,6 @@ public interface NetworkClient {
 
     void connect(String host) throws IOException;
 
-    void registerCallback(Callback<RequestDTO> callback);
-
     void registerConnectionCallback(Callback<ConnectedDTO> callback);
 
     void registerCharacterCallback(Callback<GameCharacterDTO> callback);
