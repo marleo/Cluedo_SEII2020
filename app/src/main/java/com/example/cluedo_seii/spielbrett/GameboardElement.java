@@ -48,7 +48,7 @@ public abstract class GameboardElement {
             public void onClick(View view) {
                 Log.i("Test", "Testing");
                 movePlayer();
-                game.changeGameState(GameState.PLAYERACCUSATION);
+                if(game.getCurrentPlayer().getId()==game.getLocalPlayer().getId()){ game.changeGameState(GameState.PLAYERACCUSATION);}
             }
         });
     }
