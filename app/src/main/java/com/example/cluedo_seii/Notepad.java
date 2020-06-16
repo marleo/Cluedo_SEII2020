@@ -1,11 +1,12 @@
 package com.example.cluedo_seii;
 
-
-
 import android.widget.TextView;
-
-
 import java.io.Serializable;
+/**
+ * Klasse Notepad stellt die benötigten Karten für NotepadScreen zur Verfügung und
+ * ein TextView Array um einen zufälligen TextView für die Schummelfunktion auszuwählen.
+ * Außerdem noch getter und setter Methoden.
+ */
 
 public class Notepad implements Serializable {
     private Card[] cards;
