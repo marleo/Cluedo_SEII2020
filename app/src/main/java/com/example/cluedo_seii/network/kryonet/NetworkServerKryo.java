@@ -6,7 +6,6 @@ import android.util.Log;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
-import com.example.cluedo_seii.Card;
 import com.example.cluedo_seii.Game;
 import com.example.cluedo_seii.GameCharacter;
 import com.example.cluedo_seii.GameState;
@@ -23,13 +22,13 @@ import com.example.cluedo_seii.network.dto.QuitGameDTO;
 import com.example.cluedo_seii.network.dto.RequestDTO;
 import com.example.cluedo_seii.network.dto.SuspicionAnswerDTO;
 import com.example.cluedo_seii.network.dto.SuspicionDTO;
-import com.example.cluedo_seii.network.dto.TextMessage;
 import com.example.cluedo_seii.network.dto.UserNameRequestDTO;
 import com.example.cluedo_seii.network.dto.AccusationMessageDTO;
 
 import java.io.IOException;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
+import java.util.Map;
 
 import static android.content.ContentValues.TAG;
 
@@ -38,7 +37,6 @@ public class NetworkServerKryo implements KryoNetComponent, NetworkServer {
     private static NetworkServerKryo INSTANCE = null;
 
     private Server server;
-    private Callback<RequestDTO> messageCallback;
     private Callback<LinkedHashMap<Integer, ClientData>> newClientCallback;
     private Callback<GameCharacterDTO> gameCharacterDTOCallback;
     private Callback<CheatDTO> cheatDTOCallback;
@@ -86,16 +84,13 @@ public class NetworkServerKryo implements KryoNetComponent, NetworkServer {
             public void received(Connection connection, Object object) {
                 if (object instanceof RequestDTO)
                     handleRequest(connection, object);
-                    //messageCallback.callback((RequestDTO) object);
             }
         });
     }
 
     private void handleRequest(Connection connection, Object object) {
         Log.d("Received Object:",object.getClass().toString());
-        if (object instanceof TextMessage) {
-            messageCallback.callback((TextMessage) object);
-        } else if (object instanceof ConnectedDTO) {
+        if (object instanceof ConnectedDTO) {
             Log.d("test", "ConnectedDTO");
             handleConnectedRequest(connection, (ConnectedDTO) object);
         } else if (object instanceof UserNameRequestDTO) {
@@ -146,7 +141,6 @@ public class NetworkServerKryo implements KryoNetComponent, NetworkServer {
     }
 
     private void handleGameCharacterRequest(Connection connection, GameCharacterDTO gameCharacterDTO) {
-        // TODO implement
         //remove the chosen Player from the List
         GameCharacter chosenCharacter = gameCharacterDTO.getChoosenPlayer();
         gameCharacterDTO.getAvailablePlayers().remove(chosenCharacter.getName());
@@ -160,7 +154,9 @@ public class NetworkServerKryo implements KryoNetComponent, NetworkServer {
 
                 //add Players to local Game Object
                  LinkedList<Player> playerLinkedList = Game.getInstance().getPlayers();
-                if (playerLinkedList == null) playerLinkedList = new LinkedList<>();
+                if (playerLinkedList == null) {
+                    playerLinkedList = new LinkedList<>();
+                }
                  playerLinkedList.add(player);
                  Game.getInstance().setPlayers(playerLinkedList);
 
@@ -191,8 +187,8 @@ public class NetworkServerKryo implements KryoNetComponent, NetworkServer {
         game.setPlayerIterator(inGame.getPlayerIterator());
         game.setInvestigationFile(inGame.getInvestigationFile());
         game.setWrongAccusers(inGame.getWrongAccusers());
+        game.setGameboard(inGame.getGameboard());
         game.changeGameState(inGame.getGameState());
-        // TODO set game attributes
     }
 
     private void handleAccusationMessageDTO(Connection connection, AccusationMessageDTO accusationMessageDTO){
@@ -228,12 +224,6 @@ public class NetworkServerKryo implements KryoNetComponent, NetworkServer {
         game.changeGameState(GameState.RECEIVINGANSWER);}
     }
 
-
-
-    @Override
-    public void registerCallback(Callback<RequestDTO> callback) {
-        this.messageCallback = callback;
-    }
 
     public void registerNewClientCallback(Callback<LinkedHashMap<Integer, ClientData>> callback) {
         this.newClientCallback = callback;
@@ -317,7 +307,7 @@ public class NetworkServerKryo implements KryoNetComponent, NetworkServer {
         broadcastMessage(quitGame);
     }
 
-    public LinkedHashMap<Integer, ClientData> getClientList() {
+    public Map<Integer, ClientData> getClientList() {
         return clientList;
     }
 

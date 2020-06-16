@@ -6,6 +6,4 @@ import java.io.IOException;
 
 public interface NetworkGlobalHost {
     void connect(String host) throws IOException;
-
-    void registerCallback(Callback<RequestDTO> callback);
 }

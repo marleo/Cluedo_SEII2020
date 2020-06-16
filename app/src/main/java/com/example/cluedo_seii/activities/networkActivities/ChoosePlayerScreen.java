@@ -1,4 +1,4 @@
-package com.example.cluedo_seii.activities.NetworkActivities;
+package com.example.cluedo_seii.activities.networkActivities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -20,12 +20,9 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.example.cluedo_seii.network.kryonet.SerializationHelper;
-
 import com.example.cluedo_seii.R;
 import com.example.cluedo_seii.network.dto.GameCharacterDTO;
 import com.example.cluedo_seii.network.dto.GameDTO;
-import com.example.cluedo_seii.network.dto.SendToOnePlayerDTO;
 import com.example.cluedo_seii.network.kryonet.GlobalNetworkHostKryo;
 import com.example.cluedo_seii.network.kryonet.NetworkClientKryo;
 import com.example.cluedo_seii.network.kryonet.NetworkServerKryo;
@@ -109,7 +106,6 @@ public class ChoosePlayerScreen extends AppCompatActivity {
             server.registerCharacterDTOCallback(new Callback<GameCharacterDTO>() {
                 @Override
                 public void callback(GameCharacterDTO argument) {
-                    // TODO implement
                     characterDTOCallbackHelper(argument);
                 }
             });
@@ -198,7 +194,6 @@ public class ChoosePlayerScreen extends AppCompatActivity {
 
                                 client.sendMessage(gameCharacterDTO);
                             } else if (conType == connectionType.GLOBALCLIENT) {
-                                // TODO implement and refactor
                                 GameCharacterDTO gameCharacterDTO = new GameCharacterDTO();
                                 gameCharacterDTO.setChoosenPlayer(selectedCharacter);
                                 gameCharacterDTO.setAvailablePlayers(gameCharacters);
@@ -206,7 +201,6 @@ public class ChoosePlayerScreen extends AppCompatActivity {
                                 client.sendMessageToRoomHost(gameCharacterDTO);
 
                             } else if (conType == connectionType.GLOBALHOST) {
-                                //TODO implement and refactor
                                 gameCharacters.remove(selectedItem);
 
                                 GameCharacterDTO gameCharacterDTO = new GameCharacterDTO();
@@ -238,8 +232,6 @@ public class ChoosePlayerScreen extends AppCompatActivity {
 
     public void proceedToGameIfPossible() {
         if (everyOneHasChosenACharacter()) {
-            //TODO implement next step
-            Log.d("test", "Finished Choosing Characters");
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
@@ -266,7 +258,6 @@ public class ChoosePlayerScreen extends AppCompatActivity {
     }
 
     private void prepareGame() {
-        //TODO implement
         game.distributeCards();
         GameDTO gameDTO = new GameDTO();
         gameDTO.setGame(game);
@@ -278,9 +269,6 @@ public class ChoosePlayerScreen extends AppCompatActivity {
                 globalHost.broadcastToClients(gameDTO);
             }
         }
-
-
-
     }
 
 

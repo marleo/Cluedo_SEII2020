@@ -27,6 +27,9 @@ public class Game implements Serializable {
     private LinkedList<Card>suspicion;
     private Card suspicionAnswer;
     private Player acusee;
+    private int diceOne;
+    private int diceTwo;
+    private String gameBoardString;
 
     public LinkedList<Card> getSuspicion() {
         return suspicion;
@@ -105,6 +108,18 @@ public class Game implements Serializable {
         this.gameboard = gameboard;
     }
 
+    public String getGameBoardString() {
+        return gameBoardString;
+    }
+
+    public void setGameBoardString(String gameBoardString) {
+        this.gameBoardString = gameBoardString;
+    }
+
+    public Gameboard getGameboard() {
+        return gameboard;
+    }
+
     // set for Network start
     public void setGameState(GameState gameState) {
         this.gameState = gameState;
@@ -138,6 +153,8 @@ public class Game implements Serializable {
         this.messageForLocalPlayer = messageForLocalPlayer;
     }
 
+
+
     public int getWrongAccusers() {
         return wrongAccusers;
     }
@@ -162,6 +179,22 @@ public class Game implements Serializable {
 
     public void setSuspicion(LinkedList<Card> suspicion) {
         this.suspicion = suspicion;
+    }
+
+    public int getDiceOne() {
+        return diceOne;
+    }
+
+    public void setDiceOne(int diceOne) {
+        this.diceOne = diceOne;
+    }
+
+    public int getDiceTwo() {
+        return diceTwo;
+    }
+
+    public void setDiceTwo(int diceTwo) {
+        this.diceTwo = diceTwo;
     }
 
     // set for Network end
