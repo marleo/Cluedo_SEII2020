@@ -2,6 +2,7 @@ package com.example.cluedo_seii.activities.playerGameInteraction;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -16,6 +17,7 @@ import com.example.cluedo_seii.GameState;
 import com.example.cluedo_seii.R;
 import com.example.cluedo_seii.network.connectionType;
 import com.example.cluedo_seii.network.dto.SuspicionAnswerDTO;
+import com.example.cluedo_seii.network.kryonet.GlobalNetworkHostKryo;
 import com.example.cluedo_seii.network.kryonet.NetworkClientKryo;
 import com.example.cluedo_seii.network.kryonet.NetworkServerKryo;
 import com.example.cluedo_seii.network.kryonet.SelectedConType;
@@ -31,6 +33,7 @@ public class SuspicionAnswer extends AppCompatActivity implements AdapterView.On
     private Spinner cardSpinner;
     private NetworkServerKryo server;
     private NetworkClientKryo client;
+    private GlobalNetworkHostKryo globalHost;
     private connectionType conType;
     private String answer;
     private Button btnAnswer;
@@ -103,8 +106,10 @@ public class SuspicionAnswer extends AppCompatActivity implements AdapterView.On
         if(conType== connectionType.HOST) {
             server = NetworkServerKryo.getInstance();
         }
-        else if(conType==connectionType.CLIENT){
+        else if(conType==connectionType.CLIENT || conType==connectionType.GLOBALCLIENT){
             client = NetworkClientKryo.getInstance();
+        } else if (conType==connectionType.GLOBALHOST) {
+            globalHost = GlobalNetworkHostKryo.getInstance();
         }
     }
 
@@ -116,6 +121,12 @@ public class SuspicionAnswer extends AppCompatActivity implements AdapterView.On
         }
         else if(conType==connectionType.CLIENT){
             client.sendMessage(suspicionAnswerDTO);
+        } else if (conType == connectionType.GLOBALCLIENT) {
+            client.broadcastToGameRoom(suspicionAnswerDTO);
+        } else if (conType==connectionType.GLOBALHOST) {
+            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                globalHost.broadcastToClients(suspicionAnswerDTO);
+            }
         }
     }
 }

@@ -1,15 +1,20 @@
 package com.example.cluedo_seii.activities;
 
 import android.annotation.SuppressLint;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.os.PersistableBundle;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 
@@ -101,7 +106,7 @@ public class GameboardScreen extends AppCompatActivity  {
       //  }
             }
 
-     /////////////////////////////////////
+    /////////////////////////////////////
     //Methoden zur Spielinitialisierung//
     /////////////////////////////////////
 
@@ -401,6 +406,22 @@ public class GameboardScreen extends AppCompatActivity  {
                        // turnBegin();
                        // new Intent(GameboardScreen.this, PlayerNotification.class);
                         startActivity(new Intent(GameboardScreen.this, PlayerNotification.class));
+                        /*
+                        AlertDialog.Builder builder = new AlertDialog.Builder(GameboardScreen.this);
+                        builder.setTitle("Du bist am Zug");
+                        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                Game.getInstance().changeGameState(GameState.PLAYERMOVEMENTDECISION);
+                            }
+                        });
+                        builder.setCancelable(false);
+                        AlertDialog alert = builder.create();
+                        alert.show();
+
+                         */
+
+
                     }
                     else{//Spieler localPlayer ist nicht am Zug
                         game.setMessageForLocalPlayer( "Spieler " + game.getCurrentPlayer().getId() + " ist am Zug" );
@@ -681,6 +702,12 @@ public class GameboardScreen extends AppCompatActivity  {
         }
         else if(conType==connectionType.CLIENT){
             client.sendMessage(suspicionAnswerDTO);
+        } else if (conType==connectionType.GLOBALCLIENT) {
+            client.broadcastToGameRoom(suspicionAnswerDTO);
+        } else if (conType==connectionType.GLOBALHOST) {
+            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                globalHost.broadcastToClients(suspicionAnswerDTO);
+            }
         }
     }
 

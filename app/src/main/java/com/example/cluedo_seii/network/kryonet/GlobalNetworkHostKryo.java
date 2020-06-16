@@ -58,7 +58,8 @@ public class GlobalNetworkHostKryo implements NetworkGlobalHost, KryoNetComponen
         this.cheated+=value;
     }
     public void guessedCheater(){this.cheated-=1;}
-    private NetworkServerKryo.ChangeListener changeListener;
+
+    private ChangeListener changeListener;
 
     private LinkedHashMap<Integer, ClientData> clientList;
     private ClientData roomHost;
@@ -391,11 +392,11 @@ public class GlobalNetworkHostKryo implements NetworkGlobalHost, KryoNetComponen
         if(changeListener != null) changeListener.onChange();
     }
 
-    public NetworkServerKryo.ChangeListener getListener() {
+    public ChangeListener getListener() {
         return changeListener;
     }
 
-    public void setListener(NetworkServerKryo.ChangeListener changeListener) {
+    public void setListener(ChangeListener changeListener) {
         this.changeListener = changeListener;
     }
 
