@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activities.networkActivities.StartGameScreen">
+    tools:context=".activities.network_activities.StartGameScreen">
 
     <Button
         android:id="@+id/localSelectHostButton"

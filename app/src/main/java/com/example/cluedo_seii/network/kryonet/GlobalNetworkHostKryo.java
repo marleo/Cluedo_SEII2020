@@ -24,7 +24,6 @@ import com.example.cluedo_seii.network.dto.NewGameRoomRequestDTO;
 import com.example.cluedo_seii.network.dto.PlayerDTO;
 import com.example.cluedo_seii.network.dto.RequestDTO;
 import com.example.cluedo_seii.network.dto.SendToOnePlayerDTO;
-import com.example.cluedo_seii.network.dto.SerializedDTO;
 import com.example.cluedo_seii.network.dto.SuspicionAnswerDTO;
 import com.example.cluedo_seii.network.dto.SuspicionDTO;
 import com.example.cluedo_seii.network.dto.UserNameRequestDTO;
@@ -131,17 +130,6 @@ public class GlobalNetworkHostKryo implements NetworkGlobalHost, KryoNetComponen
             handleSendToOnePlayeDTO((SendToOnePlayerDTO) object);
         } else if (object instanceof BroadcastDTO) {
             handleBroadcast((BroadcastDTO) object);
-        }
-
-
-
-        else if (object instanceof SerializedDTO) {
-            try {
-                Log.d("Received Object: ", ((SerializedDTO) object).getSerializedObject());
-                Log.d("Deserialized Object:", SerializationHelper.fromString(((SerializedDTO) object).getSerializedObject()).toString());
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
         }
     }
 

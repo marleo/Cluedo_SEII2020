@@ -1,4 +1,4 @@
-package com.example.cluedo_seii.activities.networkActivities;
+package com.example.cluedo_seii.activities.network_activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
