@@ -16,6 +16,7 @@ import java.util.Collection;
 import java.util.LinkedList;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 
 @RunWith(Parameterized.class)
 public class GamDistributeCardsInvestigationFile {
@@ -132,6 +133,51 @@ public class GamDistributeCardsInvestigationFile {
 
         }
         assertEquals(rightCards, true);
+    }
+
+
+    //Test if the investigation file has different cards than the players
+    @Test
+    public void playerCardsInvestigationCards(){
+        boolean wrongDistribution = false;
+
+        game.distributeCards();
+
+        for(Player test : players) {
+            for(Card card : test.getPlayerCards()){
+                if (card == game.getInvestigationFile().getCulprit() ||
+                        card == game.getInvestigationFile().getRoom() ||
+                        card == game.getInvestigationFile().getWeapon()) {
+                    wrongDistribution = true;
+                    break;
+                }
+            }
+        }
+        assertFalse(wrongDistribution);
+    }
+
+
+    // Test if any players have the same cards on hand
+    @Test
+    public void playerPlayerCards(){
+        boolean wrongDistribution = false;
+
+        game.distributeCards();
+
+        for(Player test : players) {
+            for(Player test2 : players){
+                if(test != test2){
+                    for(Card player1 : test.getPlayerCards()){
+                        for(Card player2 : test2.getPlayerCards()){
+                            if(player1 == player2){
+                                wrongDistribution = true;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        assertFalse(wrongDistribution);
     }
 
 }
