@@ -8,21 +8,61 @@
 
     <Switch
         android:id="@+id/cheatToggle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
+        android:layout_width="250dp"
+        android:layout_height="60dp"
         android:layout_marginTop="64dp"
+        android:paddingStart="15dp"
+        android:paddingEnd="15dp"
         android:text="@string/optionsScreenCheatToggle"
+        android:textSize="20sp"
+        android:textColor="#cb2d3e"
+        android:background="@drawable/custom_toggle"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/network_setting"
+        style="?android:attr/borderlessButtonStyle"
+        android:layout_width="250dp"
+        android:layout_height="60dp"
+        android:layout_marginBottom="48dp"
+        android:background="@drawable/custom_button"
+        android:text="@string/networkButtonOptions"
+        android:textColor="#FFFFFF"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toTopOf="@+id/helpButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/helpButton"
+        style="?android:attr/borderlessButtonStyle"
+        android:layout_width="250dp"
+        android:layout_height="60dp"
+        android:layout_marginBottom="48dp"
+        android:background="@drawable/custom_button"
+        android:text="@string/helpButton"
+        android:textColor="#FFFFFF"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <ImageButton
+        android:id="@+id/backButtonOptions"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="38dp"
-        android:layout_marginBottom="67dp"
-        android:text="network"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:background="#00FFFFFF"
+        android:contentDescription="@string/backbuttonSettings"
+        android:scaleX="1.5"
+        android:scaleY="1.5"
+        android:tint="#cb2d3e"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/abc_vector_test"
+        tools:ignore="PrivateResource" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

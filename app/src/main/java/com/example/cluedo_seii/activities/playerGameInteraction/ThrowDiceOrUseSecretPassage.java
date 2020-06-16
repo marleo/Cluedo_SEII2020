@@ -4,10 +4,8 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.Button;
 
 import com.example.cluedo_seii.Game;
 
@@ -15,8 +13,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatDialogFragment;
 
+import com.example.cluedo_seii.GameState;
 import com.example.cluedo_seii.R;
-import com.example.cluedo_seii.UserInput;
 import com.example.cluedo_seii.activities.GameboardScreen;
 
 public class ThrowDiceOrUseSecretPassage extends AppCompatDialogFragment {
@@ -28,32 +26,29 @@ public class ThrowDiceOrUseSecretPassage extends AppCompatDialogFragment {
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
         View view = LayoutInflater.from(getActivity()).inflate(R.layout.player_game_interaction_layout, null);
         setCancelable(false);
-
-        game = (Game) savedInstanceState.getSerializable("game");
+        game = Game.getInstance();
 
 
         DialogInterface.OnClickListener listenerThrowDice = new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
+                ((GameboardScreen)getActivity()).rollDice();
 
-                game.gameControl(UserInput.THROWDICE);
-                ((GameboardScreen)getActivity()).updateGame(game);
             }
         };
         DialogInterface.OnClickListener  listenerUseSecretPassage = new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-
-                game.gameControl(UserInput.USESECRETPASSAGE);
-                ((GameboardScreen)getActivity()).updateGame(game);
+                //((GameboardScreen)getActivity()).useSecretPassage();
+                game.changeGameState(GameState.PLAYERACCUSATION);
         }
         };
 
         return new AlertDialog.Builder(getActivity())
-                .setTitle("What do You Wanna Do")
+                .setTitle("Was willst du tun?")
                 .setView(view)
-                .setPositiveButton("Throw Dice", listenerThrowDice)
-                .setNegativeButton("Use Secret Passage", listenerUseSecretPassage)
+                .setPositiveButton("Würfeln", listenerThrowDice)
+                .setNegativeButton("Geheimgang verwenden", listenerUseSecretPassage)
                 .create();
     }
 

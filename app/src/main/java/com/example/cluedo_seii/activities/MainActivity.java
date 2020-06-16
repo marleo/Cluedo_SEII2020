@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.cluedo_seii.R;
+import com.example.cluedo_seii.activities.networkActivities.ChooseGameTypeActivity;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -24,9 +25,7 @@ public class MainActivity extends AppCompatActivity {
         startGame.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-
-                // TODO : Switch to Game Scene after button press
-                startActivity(new Intent(MainActivity.this, GameboardScreen.class));
+                startActivity(new Intent(MainActivity.this, ChooseGameTypeActivity.class));
 
             }
         });
@@ -50,8 +49,8 @@ public class MainActivity extends AppCompatActivity {
 
         // Handle Cheat-Toggle State in Options Activity
         final TextView cheatText = (TextView) findViewById(R.id.mainScreenCheatInformation);
-        String cheatsOn = "Cheats Enabled";
-        String cheatsOff = "Cheats Disabled";
+        String cheatsOn = "Schummeln aktiviert";
+        String cheatsOff = "Schummeln deaktiviert";
 
         if(preferences.getBoolean("cheatEnabled", false)){ // Get Boolean Value of cheatEnabled (this is set in SettingScreen.java)
             cheatText.setText(cheatsOn);

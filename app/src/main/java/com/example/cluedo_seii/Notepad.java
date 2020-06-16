@@ -1,53 +1,54 @@
 package com.example.cluedo_seii;
 
+import android.widget.TextView;
+import java.io.Serializable;
+/**
+ * Klasse Notepad stellt die benötigten Karten für NotepadScreen zur Verfügung und
+ * ein TextView Array um einen zufälligen TextView für die Schummelfunktion auszuwählen.
+ * Außerdem noch getter und setter Methoden.
+ */
 
-import android.os.Build;
-
-
-import androidx.annotation.RequiresApi;
-
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-
-
-public class Notepad  {
-    public LinkedHashMap<String, String> notes;
-    private String[] cards;
-    private String moreNotes;
+public class Notepad implements Serializable {
+    private Card[] cards;
+    private String notes;
+    private TextView[] textViews;
 
 
+    public Notepad() {
+        DeckOfCards deckOfCards = new DeckOfCards();
+
+        this.cards =new Card[]{deckOfCards.oberstVonGatow, deckOfCards.profBloom, deckOfCards.reverendGruen, deckOfCards.baroninVonPorz, deckOfCards.fraeuleinGloria, deckOfCards.frauWeiss,
+                deckOfCards.dolch, deckOfCards.leuchter, deckOfCards.pistole, deckOfCards.seil, deckOfCards.heizungsrohr, deckOfCards.rohrzange,
+                deckOfCards.eingangshalle, deckOfCards.salon, deckOfCards.speisezimmer, deckOfCards.kueche, deckOfCards.musikzimmer, deckOfCards.veranda, deckOfCards.billardzimmer, deckOfCards.bibliothek, deckOfCards.arbeitszimmer};
+        this.notes = " ";
+
+        this.textViews=new TextView[21];
 
 
-
-
-    public Notepad(String[] cards, LinkedHashMap<String,String> notes){
-        this.cards=cards;
-        this.moreNotes=" ";
-
-        for (String c : cards) {
-                notes.put(c, " ");
-            }
-        }
-
-
-
-        @RequiresApi(api = Build.VERSION_CODES.N)
-        public void excludeOpportunity (String bezeichnung, HashMap<String,String> notes){
-           if (notes.containsKey(bezeichnung)){
-                    notes.replace(bezeichnung," ", "X");
-                }
-            }
-
-
-
-
-
-        public String getMoreNotes () {
-            return this.moreNotes;
-        }
-
-        public void addMoreNotes (String message){
-            moreNotes += message;
-        }
     }
+
+
+    public String getNotes() {
+        return this.notes;
+    }
+
+    public Card[] getCards() {
+        return cards;
+    }
+
+    public void setNotes(String message) {
+        notes +=" "+ message;
+    }
+
+    public TextView[] getTextViews(){
+        return textViews;
+    }
+
+    public void setTextViews(TextView textView, int number){
+        this.textViews[number]=textView;
+
+    }
+}
+
+
 

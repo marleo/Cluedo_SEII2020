@@ -4,7 +4,6 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 
@@ -14,7 +13,6 @@ import androidx.appcompat.app.AppCompatDialogFragment;
 
 import com.example.cluedo_seii.Game;
 import com.example.cluedo_seii.R;
-import com.example.cluedo_seii.UserInput;
 import com.example.cluedo_seii.activities.GameboardScreen;
 
 public class ThrowDice extends AppCompatDialogFragment {
@@ -27,27 +25,19 @@ public class ThrowDice extends AppCompatDialogFragment {
         View view = LayoutInflater.from(getActivity()).inflate(R.layout.player_game_interaction_layout, null);
         setCancelable(false);
 
-        game = (Game) getArguments().getSerializable("game");
-
+        game = Game.getInstance();
 
         DialogInterface.OnClickListener listenerThrowDice = new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-
-                int idCurrentPlayer;
-
-                game.gameControl(UserInput.THROWDICE);
-
-                game.nextPlayer();
-
-                ((GameboardScreen)getActivity()).updateGame(game);
+                ((GameboardScreen)getActivity()).rollDice();
             }
         };
 
         return new AlertDialog.Builder(getActivity())
-                .setTitle("What do You Wanna Do")
+                .setTitle("Was willst du tun?")
                 .setView(view)
-                .setPositiveButton("Throw Dice", listenerThrowDice)
+                .setPositiveButton("Würfeln", listenerThrowDice)
                 .create();
 
     }
