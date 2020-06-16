@@ -8,32 +8,41 @@
 
     <Button
         android:id="@+id/global_host_button"
+        style="?android:attr/borderlessButtonStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="50dp"
         android:layout_marginTop="54dp"
         android:layout_marginEnd="136dp"
         android:text="HOST"
+        android:textColor="#FFFF"
+        android:background="@drawable/custom_button"
         app:layout_constraintEnd_toStartOf="@+id/global_client_button"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/global_client_button"
+        style="?android:attr/borderlessButtonStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="54dp"
         android:layout_marginEnd="50dp"
         android:text="Client"
+        android:textColor="#FFFF"
+        android:background="@drawable/custom_button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/connect_global_game_button"
+        style="?android:attr/borderlessButtonStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
         android:text="CONNECT"
+        android:textColor="#FFFF"
+        android:background="@drawable/custom_button"
         app:layout_constraintBottom_toTopOf="@+id/global_choose_player_button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.503"
@@ -41,10 +50,14 @@
 
     <Button
         android:id="@+id/global_choose_player_button"
+        style="?android:attr/borderlessButtonStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
         android:text="Choose Character"
+        android:textColor="#FFFF"
+        android:padding="7dp"
+        android:background="@drawable/custom_button"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />

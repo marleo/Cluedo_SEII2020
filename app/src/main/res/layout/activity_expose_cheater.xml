@@ -1,25 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    >
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_gravity="center">
+
         <Spinner
             android:id="@+id/possibleCheater"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
+            android:layout_marginTop="16dp"
             android:dropDownWidth="match_parent"
             android:spinnerMode="dropdown" />
 
     </LinearLayout>
+
     <Button
         android:id="@+id/accuseCheaterButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/accuseCheaterButton"/>
+        android:background="@drawable/custom_button_green"
+        android:gravity="center|center_vertical"
+        android:text="@string/accuseCheaterButton"
+        android:textColor="#FFFFFF"
+        android:translationY="280dp" />
 
 </LinearLayout>

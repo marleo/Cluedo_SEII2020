@@ -725,15 +725,9 @@ public class GameboardScreen extends AppCompatActivity  {
                 x2 = touchEvent.getX();
                 y2 = touchEvent.getY();
                 float swipeRight = x2-x1,
-                        swipeLeft = x1-x2,
-                        swipeDown = y2-y1,
-                        swipeUp = y1-y2;
+                        swipeLeft = x1-x2;
 
-
-                if(swipeDown > MIN_SWIPE_DISTANCE){
-                    startActivity(new Intent(GameboardScreen.this, RollDiceScreen.class));
-                    overridePendingTransition(R.anim.slide_down_in, R.anim.slide_down_out);
-                }else if(swipeRight > MIN_SWIPE_DISTANCE){
+                if(swipeRight > MIN_SWIPE_DISTANCE){
                     startNotepad();
                 } else if(swipeLeft > MIN_SWIPE_DISTANCE){
                     showCards();
