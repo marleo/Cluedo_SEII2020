@@ -259,9 +259,6 @@ public class GameboardScreen extends AppCompatActivity  {
     }
 
         public void setCallbacksForCheatFunction(){
-
-        server = NetworkServerKryo.getInstance();
-        client = NetworkClientKryo.getInstance();
         client.registerCheatCallback(new Callback<CheatDTO>() {
             @Override
             public void callback(CheatDTO argument) {
@@ -278,6 +275,21 @@ public class GameboardScreen extends AppCompatActivity  {
         });
 
         server.registerCheatDTOCallback(new Callback<CheatDTO>() {
+            @Override
+            public void callback(CheatDTO argument) {
+                runOnUiThread(new Runnable() {
+                    public void run() {
+                        Toast toast;
+                        toast = Toast.makeText(getApplicationContext(),"Jemand hat geschummelt", Toast.LENGTH_LONG);
+                        toast.show();
+
+                    }
+                });
+
+            }
+        });
+
+        globalHost.registerCheatDTOCallback(new Callback<CheatDTO>() {
             @Override
             public void callback(CheatDTO argument) {
                 runOnUiThread(new Runnable() {
