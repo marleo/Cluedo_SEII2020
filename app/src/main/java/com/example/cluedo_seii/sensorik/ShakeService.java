@@ -10,7 +10,6 @@ import android.hardware.SensorManager;
 import android.os.Handler;
 import android.os.IBinder;
 
-import com.example.cluedo_seii.activities.RollDiceScreen;
 
 
 public class ShakeService extends Service implements SensorEventListener{

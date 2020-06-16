@@ -55,7 +55,7 @@ public class NotepadScreen extends AppCompatActivity {
     private TextView textViewHalle;
     private TextView textViewSalon;
     private TextView textViewSpeisezimmer;
-    private TextView textViewKüche;
+    private TextView textViewKueche;
     private TextView textViewMusikzimmer;
     private TextView textViewWinterzimmer;
     private TextView textViewBiliardzimmer;
@@ -63,7 +63,6 @@ public class NotepadScreen extends AppCompatActivity {
     private TextView textViewArbeitszimmer;
 
     private EditText editText1;
-    private Button btn1;
     private TextView textView;
     private Notepad notepad;
     private Game game;
@@ -71,11 +70,7 @@ public class NotepadScreen extends AppCompatActivity {
     private NetworkClientKryo client;
 
     private connectionType conType;
-    private SensorManager sensorManager;
-    private Sensor lightSensor;
-    private float sensorValue;
     private Player player;
-
 
     private String test = " ";
 
@@ -186,9 +181,9 @@ public class NotepadScreen extends AppCompatActivity {
         if(preferences.getBoolean("speisezimmerGray",false)){
             textViewSpeisezimmer.setBackgroundColor(Color.argb(150, 200, 200, 200));
         }
-        textViewKüche = findViewById(R.id.notepad_küche);
+        textViewKueche = findViewById(R.id.notepad_küche);
         if(preferences.getBoolean("kücheGray",false)){
-            textViewKüche.setBackgroundColor(Color.argb(150, 200, 200, 200));
+            textViewKueche.setBackgroundColor(Color.argb(150, 200, 200, 200));
         }
         textViewMusikzimmer = findViewById(R.id.notepad_musikzimmer);
         if(preferences.getBoolean("musikzimmerGray",false)){
@@ -212,7 +207,7 @@ public class NotepadScreen extends AppCompatActivity {
         }
 
         editText1 = findViewById(R.id.addMoreNotes);
-        btn1 = findViewById(R.id.addMoreNotesButton);
+        Button btn1 = findViewById(R.id.addMoreNotesButton);
         textView = findViewById(R.id.moreNotesView);
 
 
@@ -231,7 +226,7 @@ public class NotepadScreen extends AppCompatActivity {
         textViewHalle.append(notepad.getCards()[12].getDesignation());
         textViewSalon.append(notepad.getCards()[13].getDesignation());
         textViewSpeisezimmer.append(notepad.getCards()[14].getDesignation());
-        textViewKüche.append(notepad.getCards()[15].getDesignation());
+        textViewKueche.append(notepad.getCards()[15].getDesignation());
         textViewMusikzimmer.append(notepad.getCards()[16].getDesignation());
         textViewWinterzimmer.append(notepad.getCards()[17].getDesignation());
         textViewBiliardzimmer.append(notepad.getCards()[18].getDesignation());
@@ -253,7 +248,7 @@ public class NotepadScreen extends AppCompatActivity {
         notepad.setTextViews(textViewHalle, 12);
         notepad.setTextViews(textViewSalon, 13);
         notepad.setTextViews(textViewSpeisezimmer, 14);
-        notepad.setTextViews(textViewKüche, 15);
+        notepad.setTextViews(textViewKueche, 15);
         notepad.setTextViews(textViewMusikzimmer, 16);
         notepad.setTextViews(textViewWinterzimmer, 17);
         notepad.setTextViews(textViewBiliardzimmer, 18);
@@ -278,8 +273,8 @@ public class NotepadScreen extends AppCompatActivity {
             btn1.setOnClickListener(onButtonClickListener1);
 
 
-            sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
-            lightSensor = sensorManager.getDefaultSensor(Sensor.TYPE_LIGHT);
+        SensorManager sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
+        Sensor lightSensor = sensorManager.getDefaultSensor(Sensor.TYPE_LIGHT);
             if (lightSensor == null) {
                 finish();
             }
@@ -315,7 +310,6 @@ public class NotepadScreen extends AppCompatActivity {
 
             super.onStart();
             SharedPreferences preferences = getSharedPreferences("notizblock", MODE_PRIVATE);
-            final SharedPreferences.Editor editor = getSharedPreferences("notizblock", MODE_PRIVATE).edit();
             textView.append(preferences.getString("notes", " "));
 
 
@@ -326,7 +320,7 @@ public class NotepadScreen extends AppCompatActivity {
             @Override
             public void onBackPressed() {
                 super.onBackPressed();
-                getSharedPreferences("notizblock", MODE_PRIVATE).edit().clear().commit();
+                getSharedPreferences("notizblock", MODE_PRIVATE).edit().clear().apply();
                 finish();
             }
 
@@ -469,7 +463,7 @@ public class NotepadScreen extends AppCompatActivity {
                     editor.putBoolean("halleGray",true);
                     editor.apply();
                 }
-                else if(view.getId()==textViewKüche.getId()){
+                else if(view.getId()==textViewKueche.getId()){
                     editor.putBoolean("kücheGray",true);
                     editor.apply();
                 }
@@ -491,7 +485,8 @@ public class NotepadScreen extends AppCompatActivity {
     public void lightEvent(SensorEvent event) {
             SharedPreferences preferences = getSharedPreferences("com.example.cluedo_seii", MODE_PRIVATE);
             conType= SelectedConType.getConnectionType();
-            if (conType == connectionType.CLIENT) {
+        float sensorValue;
+        if (conType == connectionType.CLIENT) {
                 client = NetworkClientKryo.getInstance();
                 if (client.getCheated() < 1 && preferences.getBoolean("cheatEnabled", false)) {
                     if (event.sensor.getType() == Sensor.TYPE_LIGHT) {
