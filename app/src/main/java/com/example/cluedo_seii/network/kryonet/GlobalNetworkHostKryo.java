@@ -29,6 +29,7 @@ import com.example.cluedo_seii.network.dto.SerializedDTO;
 import com.example.cluedo_seii.network.dto.SuspicionAnswerDTO;
 import com.example.cluedo_seii.network.dto.SuspicionDTO;
 import com.example.cluedo_seii.network.dto.UserNameRequestDTO;
+import com.example.cluedo_seii.network.dto.WinDTO;
 
 
 import java.io.IOException;
@@ -48,6 +49,7 @@ public class GlobalNetworkHostKryo implements NetworkGlobalHost, KryoNetComponen
     private Callback<LinkedHashMap<Integer,ClientData>> newClientCallback;
     private Callback<GameCharacterDTO> gameCharacterDTOCallback;
     private Callback<CheatDTO> cheatDTOCallback;
+    private Callback<WinDTO> winnerCallback;
 
     private Player cheater;
     private int cheated=0;
@@ -222,6 +224,8 @@ public class GlobalNetworkHostKryo implements NetworkGlobalHost, KryoNetComponen
                 handleSuspicionMessageDTO(connection, (SuspicionDTO)object);
             } else if(object instanceof SuspicionAnswerDTO){
                 handleSuspicionAnswerDTO(connection, (SuspicionAnswerDTO)object);
+            } else if (object instanceof WinDTO) {
+                handleWinDTORequest((WinDTO) object);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -282,6 +286,10 @@ public class GlobalNetworkHostKryo implements NetworkGlobalHost, KryoNetComponen
             game.changeGameState(GameState.RECEIVINGANSWER);}
     }
 
+    private void handleWinDTORequest(WinDTO winDTO) {
+        Game.getInstance().setWinner(winDTO.getWinner());
+        winnerCallback.callback(winDTO);
+    }
 
 
 
@@ -299,6 +307,10 @@ public class GlobalNetworkHostKryo implements NetworkGlobalHost, KryoNetComponen
 
     public void registerCheatDTOCallback(Callback<CheatDTO> cheatDTOCallback){
         this.cheatDTOCallback = cheatDTOCallback;
+    }
+
+    public void registerWinDTOCallback(Callback<WinDTO> winDTOCallback) {
+        this.winnerCallback = winDTOCallback;
     }
 
     public void sendCheat(Player player){

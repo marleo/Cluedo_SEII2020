@@ -24,6 +24,7 @@ import com.example.cluedo_seii.network.dto.SuspicionAnswerDTO;
 import com.example.cluedo_seii.network.dto.SuspicionDTO;
 import com.example.cluedo_seii.network.dto.UserNameRequestDTO;
 import com.example.cluedo_seii.network.dto.AccusationMessageDTO;
+import com.example.cluedo_seii.network.dto.WinDTO;
 
 import java.io.IOException;
 import java.util.LinkedHashMap;
@@ -40,6 +41,7 @@ public class NetworkServerKryo implements KryoNetComponent, NetworkServer {
     private Callback<LinkedHashMap<Integer, ClientData>> newClientCallback;
     private Callback<GameCharacterDTO> gameCharacterDTOCallback;
     private Callback<CheatDTO> cheatDTOCallback;
+    private Callback<WinDTO> winnerCallback;
     private Player cheater;
     private int cheated=0;
     public int getCheated(){
@@ -111,6 +113,9 @@ public class NetworkServerKryo implements KryoNetComponent, NetworkServer {
         }
         else if(object instanceof SuspicionAnswerDTO){
             handleSuspicionAnswerDTO(connection, (SuspicionAnswerDTO)object);
+        }
+        else if(object instanceof WinDTO) {
+            handleWinRequest(connection, (WinDTO) object);
         }
     }
 
@@ -224,6 +229,12 @@ public class NetworkServerKryo implements KryoNetComponent, NetworkServer {
         game.changeGameState(GameState.RECEIVINGANSWER);}
     }
 
+    private void handleWinRequest(Connection connection, WinDTO winDTO) {
+        broadcastMessageWithoutSender(winDTO,connection);
+        Game.getInstance().setWinner(winDTO.getWinner());
+        winnerCallback.callback(winDTO);
+    }
+
 
     public void registerNewClientCallback(Callback<LinkedHashMap<Integer, ClientData>> callback) {
         this.newClientCallback = callback;
@@ -235,6 +246,10 @@ public class NetworkServerKryo implements KryoNetComponent, NetworkServer {
 
     public void registerCheatDTOCallback(Callback<CheatDTO> cheatDTOCallback){
         this.cheatDTOCallback = cheatDTOCallback;
+    }
+
+    public void registerWinDTOCallback(Callback<WinDTO> winDTOCallback) {
+        this.winnerCallback = winDTOCallback;
     }
 
     public void sendGame(Game game) {

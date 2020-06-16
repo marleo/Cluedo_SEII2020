@@ -73,6 +73,7 @@ public class Gameboard {
     private String board;
     private int startingPointTotal;
 
+
     public Gameboard(GameboardScreen gameboardScreen, int laenge, int breite, String board) {
         this.laenge = laenge;
         this.breite = breite;

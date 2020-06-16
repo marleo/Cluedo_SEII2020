@@ -27,6 +27,7 @@ import com.example.cluedo_seii.network.dto.SendToOnePlayerDTO;
 import com.example.cluedo_seii.network.dto.SuspicionAnswerDTO;
 import com.example.cluedo_seii.network.dto.SuspicionDTO;
 import com.example.cluedo_seii.network.dto.UserNameRequestDTO;
+import com.example.cluedo_seii.network.dto.WinDTO;
 
 import java.io.IOException;
 
@@ -43,6 +44,7 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
     private Callback<GameDTO> gameCallback;
     private Callback<CheatDTO> cheatCallback;
     private Callback<RoomsDTO> roomCallback;
+    private Callback<WinDTO> winnerCallback;
     private Player cheater;
     private ChangeListener changeListener;
 
@@ -156,6 +158,9 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
         else if(object instanceof SuspicionAnswerDTO){
             handleSuspicionAnswerDTO((SuspicionAnswerDTO)object);
         }
+        else if (object instanceof WinDTO) {
+            handleWinDTOResponse((WinDTO) object);
+        }
     }
 
 
@@ -247,6 +252,11 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
         game.changeGameState(GameState.RECEIVINGANSWER);}
     }
 
+    private void handleWinDTOResponse(WinDTO winDTO) {
+        Game.getInstance().setWinner(winDTO.getWinner());
+        winnerCallback.callback(winDTO);
+    }
+
     @RequiresApi(api = Build.VERSION_CODES.O)
     private void handleBroadcastResponse(Connection connection, BroadcastDTO broadcastDTO) {
         try {
@@ -289,6 +299,10 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
     public void registerRoomCallback(Callback<RoomsDTO> callback) {
         this.roomCallback = null;
         this.roomCallback = callback;
+    }
+
+    public void registerWinDTOCallback(Callback<WinDTO> winDTOCallback) {
+        this.winnerCallback = winDTOCallback;
     }
 
     public void sendGame(Game game) {

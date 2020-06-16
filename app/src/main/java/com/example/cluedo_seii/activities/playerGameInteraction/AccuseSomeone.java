@@ -49,7 +49,6 @@ public class AccuseSomeone extends AppCompatActivity implements AdapterView.OnIt
     private connectionType conType;
     private AccusationMessageDTO accusationMessageDTO;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
