@@ -1,4 +1,4 @@
-package com.example.cluedo_seii.activities.networkActivities;
+package com.example.cluedo_seii.activities.network_activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -60,7 +60,6 @@ public class ChoosePlayerScreen extends AppCompatActivity {
             clientChooseCharacter();
 
         } else if (conType == connectionType.HOST || conType == connectionType.GLOBALHOST) {
-            //TODO implement the startingPoint from the Characters
             GameCharacter character1 = new GameCharacter("Oberst von Gatov", null);
             GameCharacter character2 = new GameCharacter("Prof. Bloom", null);
             GameCharacter character3 = new GameCharacter("Reverend Grün", null);

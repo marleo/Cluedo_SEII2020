@@ -16,12 +16,12 @@
         <activity android:name=".activities.playerGameInteraction.SuspicionAnswer"></activity>
         <activity android:name=".activities.playerGameInteraction.PlayerNotification" />
         <activity android:name=".activities.playerGameInteraction.AccuseSomeone" />
-        <activity android:name=".activities.networkActivities.ChooseGameTypeActivity" />
+        <activity android:name=".activities.network_activities.ChooseGameTypeActivity" />
         <activity android:name=".activities.playerGameInteraction.MakeSuspicion" />
-        <activity android:name=".activities.networkActivities.ChoosePlayerScreen" />
+        <activity android:name=".activities.network_activities.ChoosePlayerScreen" />
         <activity android:name=".activities.helpSettings" />
-        <activity android:name=".activities.networkActivities.StartGlobalGameActivity" />
-        <activity android:name=".activities.networkActivities.StartGameScreen" />
+        <activity android:name=".activities.network_activities.StartGlobalGameActivity" />
+        <activity android:name=".activities.network_activities.StartGameScreen" />
         <activity android:name=".activities.ShowCards" />
         <activity
             android:name=".activities.SettingScreen"
