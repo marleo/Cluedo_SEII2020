@@ -20,9 +20,6 @@ Anklage erhoben haben, endet das Spiel aber ohne Gewinner.</p>
 <h2 align="center">Konzepte / TODO</h2>
 <p align="center"><a href="https://trello.com/b/lhu92lui/cluedo">Trello-Board</a></p>
 
-<h2 align="center">Kommunikation</h2>
-<p align="center"><a href="https://discord.gg/sCPqrU">Discord</a></p>
-
 <h2 align="center">Server</h2>
 <p align="center"><a href="https://github.com/michi0311/Cluedo_Server">Server-Repository</a></p>
 
