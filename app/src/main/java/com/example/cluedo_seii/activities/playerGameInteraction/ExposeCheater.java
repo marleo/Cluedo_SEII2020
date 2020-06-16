@@ -33,7 +33,6 @@ public class ExposeCheater extends AppCompatActivity implements AdapterView.OnIt
     private Game game;
     private Player selectedPlayer;
 
-
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
@@ -113,7 +112,8 @@ public class ExposeCheater extends AppCompatActivity implements AdapterView.OnIt
                 toast.show();
                 server.setCheated(1);
             }
-        } else if(conType ==connectionType.CLIENT){
+
+        } else if(conType==connectionType.CLIENT || conType==connectionType.GLOBALCLIENT){
             NetworkClientKryo client = NetworkClientKryo.getInstance();
             if(client.getCheater().getId()==selectedPlayer.getId()){
                 text = "Deine Anschuldigung ist richtig";
@@ -125,6 +125,19 @@ public class ExposeCheater extends AppCompatActivity implements AdapterView.OnIt
                 toast = Toast.makeText(getApplicationContext(), text, Toast.LENGTH_SHORT);
                 toast.show();
                 client.setCheated(1);
+            }
+        } else if (conType==connectionType.GLOBALHOST ) {
+            GlobalNetworkHostKryo globalHost = GlobalNetworkHostKryo.getInstance();
+            if(globalHost.getCheater().getId()==selectedPlayer.getId()){
+                text = "Deine Anschuldigung ist richtig";
+                toast = Toast.makeText(getApplicationContext(), text, Toast.LENGTH_SHORT);
+                toast.show();
+                globalHost.guessedCheater();
+            }else {
+                text = "Deine Anschuldigung ist falsch";
+                toast = Toast.makeText(getApplicationContext(), text, Toast.LENGTH_SHORT);
+                toast.show();
+                globalHost.setCheated(1);
             }
         }
     }

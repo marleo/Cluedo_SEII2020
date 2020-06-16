@@ -32,14 +32,14 @@ public class GameTest {
     private DeckOfCards deckOfCards;
     private Gameboard gameboard;
 
-    private Point oberstVonGatovStart;
-    private Point profBloomStart;
-    private Point reverendGruenStart;
-    private Point baroninVonPorzStart;
-    private Point fraeuleinGloriaStart;
-    private Point frauWeissStart;
-    private Point deckOfCardsStart;
-    private Point gameboardStart;
+    private MyPoint oberstVonGatovStart;
+    private MyPoint profBloomStart;
+    private MyPoint reverendGruenStart;
+    private MyPoint baroninVonPorzStart;
+    private MyPoint fraeuleinGloriaStart;
+    private MyPoint frauWeissStart;
+    private MyPoint deckOfCardsStart;
+    private MyPoint gameboardStart;
 
     private LinkedList<Player>players;
 

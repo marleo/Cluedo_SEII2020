@@ -2,7 +2,6 @@ package com.example.cluedo_seii.network.kryonet;
 
 import android.widget.TextView;
 import androidx.appcompat.widget.AppCompatTextView;
-import android.graphics.Point;
 
 import com.example.cluedo_seii.Card;
 import com.example.cluedo_seii.CardType;
@@ -10,6 +9,7 @@ import com.example.cluedo_seii.Game;
 import com.example.cluedo_seii.GameCharacter;
 import com.example.cluedo_seii.GameState;
 import com.example.cluedo_seii.InvestigationFile;
+import com.example.cluedo_seii.MyPoint;
 import com.example.cluedo_seii.Notepad;
 import com.example.cluedo_seii.Player;
 import com.example.cluedo_seii.network.dto.AccusationMessageDTO;
@@ -28,7 +28,6 @@ import com.example.cluedo_seii.network.dto.SendToOnePlayerDTO;
 import com.example.cluedo_seii.network.dto.SerializedDTO;
 import com.example.cluedo_seii.network.dto.SuspicionAnswerDTO;
 import com.example.cluedo_seii.network.dto.SuspicionDTO;
-import com.example.cluedo_seii.network.dto.TextMessage;
 import com.example.cluedo_seii.network.dto.UserNameRequestDTO;
 import com.example.cluedo_seii.spielbrett.Gameboard;
 
@@ -73,7 +72,7 @@ public class KryoHelper {
         kryoNetComponent.registerClass(TextView[].class);
         kryoNetComponent.registerClass(CheatDTO.class);
         kryoNetComponent.registerClass(AppCompatTextView.class);
-        kryoNetComponent.registerClass(Point.class);
+        kryoNetComponent.registerClass(MyPoint.class);
         kryoNetComponent.registerClass(Gameboard.class);
         kryoNetComponent.registerClass(Random.class);
         kryoNetComponent.registerClass(RegisterClassDTO.class,2);

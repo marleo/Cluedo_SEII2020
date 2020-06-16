@@ -30,6 +30,7 @@ public class Game implements Serializable {
     private int diceOne;
     private int diceTwo;
     private String gameBoardString;
+    private String winner;
 
     public LinkedList<Card> getSuspicion() {
         return suspicion;
@@ -299,4 +300,12 @@ public class Game implements Serializable {
         {gameOver=true;}
         return gameOver;
         }
+
+    public String getWinner() {
+        return winner;
+    }
+
+    public void setWinner(String winner) {
+        this.winner = winner;
+    }
 }

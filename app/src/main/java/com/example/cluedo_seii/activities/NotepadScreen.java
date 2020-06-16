@@ -25,6 +25,7 @@ import com.example.cluedo_seii.activities.playerGameInteraction.ExposeCheater;
 import com.example.cluedo_seii.network.Callback;
 import com.example.cluedo_seii.network.connectionType;
 import com.example.cluedo_seii.network.dto.CheatDTO;
+import com.example.cluedo_seii.network.kryonet.GlobalNetworkHostKryo;
 import com.example.cluedo_seii.network.kryonet.NetworkClientKryo;
 import com.example.cluedo_seii.network.kryonet.NetworkServerKryo;
 import com.example.cluedo_seii.network.kryonet.SelectedConType;
@@ -68,6 +69,7 @@ public class NotepadScreen extends AppCompatActivity {
     private Game game;
     private NetworkServerKryo server;
     private NetworkClientKryo client;
+    private GlobalNetworkHostKryo globalHost;
 
     private connectionType conType;
     private Player player;
@@ -85,6 +87,7 @@ public class NotepadScreen extends AppCompatActivity {
         conType = SelectedConType.getConnectionType();
         server = NetworkServerKryo.getInstance();
         client=NetworkClientKryo.getInstance();
+        globalHost=GlobalNetworkHostKryo.getInstance();
         setListener();
 
         //register Callback damit ein Toast angezeigt wird wenn jemand schummelt
@@ -344,14 +347,17 @@ public class NotepadScreen extends AppCompatActivity {
          */
         public void cheatFunction (InvestigationFile investigationFile){
         conType=SelectedConType.getConnectionType();
-            if(conType== connectionType.CLIENT){
+            if(conType== connectionType.CLIENT || conType==connectionType.GLOBALCLIENT){
                 client.sendCheat(player);
                 client.setCheated(1);
             }
             else if(conType==connectionType.HOST){
                server.sendCheat(player);
                server.setCheated(1);
-                    }
+            } else if (conType==connectionType.GLOBALHOST) {
+                globalHost.sendCheat(player);
+                globalHost.setCheated(1);
+            }
 
             Card culprit = investigationFile.getCulprit();
             String culpritString = culprit.getDesignation();
@@ -493,8 +499,9 @@ public class NotepadScreen extends AppCompatActivity {
     public void lightEvent(SensorEvent event) {
             SharedPreferences preferences = getSharedPreferences("com.example.cluedo_seii", MODE_PRIVATE);
             conType= SelectedConType.getConnectionType();
+
         float sensorValue;
-        if (conType == connectionType.CLIENT) {
+        if (conType == connectionType.CLIENT  || conType == connectionType.GLOBALCLIENT) {
                 client = NetworkClientKryo.getInstance();
                 if (client.getCheated() < 1 && preferences.getBoolean("cheatEnabled", false)) {
                     if (event.sensor.getType() == Sensor.TYPE_LIGHT) {
@@ -510,6 +517,19 @@ public class NotepadScreen extends AppCompatActivity {
             }else if(conType == connectionType.HOST){
                 server=NetworkServerKryo.getInstance();
                 if (server.getCheated() < 1 && preferences.getBoolean("cheatEnabled", false)) {
+                    if (event.sensor.getType() == Sensor.TYPE_LIGHT) {
+                        if (event.values[0] < 3) {
+                            sensorValue = event.values[0];
+                        }
+                        if (event.values[0] < 10) {
+                            cheatFunction(game.getInvestigationFile());
+                        }
+                    }
+
+                }
+            } else if (conType == connectionType.GLOBALHOST) {
+                globalHost=GlobalNetworkHostKryo.getInstance();
+                if (globalHost.getCheated() < 1 && preferences.getBoolean("cheatEnabled", false)) {
                     if (event.sensor.getType() == Sensor.TYPE_LIGHT) {
                         if (event.values[0] < 3) {
                             sensorValue = event.values[0];
@@ -558,13 +578,22 @@ public class NotepadScreen extends AppCompatActivity {
             });
         }
 
-        else if(conType==connectionType.CLIENT){
+        else if(conType==connectionType.CLIENT || conType==connectionType.GLOBALCLIENT){
             client.setListener(new NetworkClientKryo.ChangeListener() {
                 @Override
                 public void onChange() {
                     finish();
                 }
             });}
+        else if(conType==connectionType.GLOBALHOST) {
+            globalHost.setListener(new GlobalNetworkHostKryo.ChangeListener() {
+                @Override
+                public void onChange() {
+                    finish();
+                }
+            });
+
+        }
     }
 
 

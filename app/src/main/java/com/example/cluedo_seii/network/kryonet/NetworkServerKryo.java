@@ -24,6 +24,7 @@ import com.example.cluedo_seii.network.dto.SuspicionAnswerDTO;
 import com.example.cluedo_seii.network.dto.SuspicionDTO;
 import com.example.cluedo_seii.network.dto.UserNameRequestDTO;
 import com.example.cluedo_seii.network.dto.AccusationMessageDTO;
+import com.example.cluedo_seii.network.dto.WinDTO;
 
 import java.io.IOException;
 import java.util.LinkedHashMap;
@@ -40,6 +41,7 @@ public class NetworkServerKryo implements KryoNetComponent, NetworkServer {
     private Callback<LinkedHashMap<Integer, ClientData>> newClientCallback;
     private Callback<GameCharacterDTO> gameCharacterDTOCallback;
     private Callback<CheatDTO> cheatDTOCallback;
+    private Callback<WinDTO> winnerCallback;
     private Player cheater;
     private int cheated=0;
     public int getCheated(){
@@ -55,6 +57,7 @@ public class NetworkServerKryo implements KryoNetComponent, NetworkServer {
 
     private ClientData host;
 
+    // Singleton Pattern
     private NetworkServerKryo() {
         server = new Server(8192,4096);
         clientList = new LinkedHashMap<>();
@@ -75,6 +78,7 @@ public class NetworkServerKryo implements KryoNetComponent, NetworkServer {
     }
 
 
+    // localen server starten
     public void start() throws IOException {
         server.start();
         server.bind(NetworkConstants.TCP_PORT,NetworkConstants.UDP_PORT);
@@ -88,6 +92,7 @@ public class NetworkServerKryo implements KryoNetComponent, NetworkServer {
         });
     }
 
+    //Request Handler
     private void handleRequest(Connection connection, Object object) {
         Log.d("Received Object:",object.getClass().toString());
         if (object instanceof ConnectedDTO) {
@@ -111,6 +116,9 @@ public class NetworkServerKryo implements KryoNetComponent, NetworkServer {
         }
         else if(object instanceof SuspicionAnswerDTO){
             handleSuspicionAnswerDTO(connection, (SuspicionAnswerDTO)object);
+        }
+        else if(object instanceof WinDTO) {
+            handleWinRequest(connection, (WinDTO) object);
         }
     }
 
@@ -177,6 +185,7 @@ public class NetworkServerKryo implements KryoNetComponent, NetworkServer {
 
     private void handleGameRequest(Connection connection, GameDTO gameDTO) {
         Log.i("receivingGame", gameDTO.getGame().getCurrentPlayer().getId()+ "");
+        //game Attribute aktualisieren
         broadcastMessageWithoutSender(gameDTO,connection);
         Game inGame = gameDTO.getGame();
         Game game = Game.getInstance();
@@ -224,7 +233,14 @@ public class NetworkServerKryo implements KryoNetComponent, NetworkServer {
         game.changeGameState(GameState.RECEIVINGANSWER);}
     }
 
+    private void handleWinRequest(Connection connection, WinDTO winDTO) {
+        broadcastMessageWithoutSender(winDTO,connection);
+        Game.getInstance().setWinner(winDTO.getWinner());
+        winnerCallback.callback(winDTO);
+    }
 
+
+    // callbacks registrieren
     public void registerNewClientCallback(Callback<LinkedHashMap<Integer, ClientData>> callback) {
         this.newClientCallback = callback;
     }
@@ -232,8 +248,13 @@ public class NetworkServerKryo implements KryoNetComponent, NetworkServer {
     public void registerCharacterDTOCallback(Callback<GameCharacterDTO> gameCharacterDTOCallback) {
         this.gameCharacterDTOCallback = gameCharacterDTOCallback;
     }
+
     public void registerCheatDTOCallback(Callback<CheatDTO> cheatDTOCallback){
         this.cheatDTOCallback = cheatDTOCallback;
+    }
+
+    public void registerWinDTOCallback(Callback<WinDTO> winDTOCallback) {
+        this.winnerCallback = winDTOCallback;
     }
 
     public void sendGame(Game game) {
@@ -249,6 +270,7 @@ public class NetworkServerKryo implements KryoNetComponent, NetworkServer {
         cheatDTOCallback.callback(cheatDTO);
     }
 
+    // nachricht an alle clients broadcasten
     @Override
     public void broadcastMessage(RequestDTO message) {
         for (Connection connection: server.getConnections()) {
@@ -256,12 +278,14 @@ public class NetworkServerKryo implements KryoNetComponent, NetworkServer {
         }
     }
 
+    // nachricht an alle außer den Absender Broadcasten
     public void broadcastMessageWithoutSender(RequestDTO message, Connection clientSenderConnection) {
         for (Connection connection: server.getConnections()) {
             if (connection != clientSenderConnection) sendMessageToClient(message, connection);
         }
     }
 
+    // nachricht an einen Client senden
     private void sendMessageToClient(final RequestDTO message, final Connection connection) {
         Log.d(TAG, "sendMessageToClient: " + message.toString());
 
@@ -273,12 +297,13 @@ public class NetworkServerKryo implements KryoNetComponent, NetworkServer {
         }.start();
     }
 
+    // klassen für Kryonet registrieren
     @Override
     public void registerClass(Class c) {
         server.getKryo().register(c);
     }
 
-    //TODO delete if it doesn't work
+
     public void registerClass(Class c, int id) {
         server.getKryo().register(c,id);
     }

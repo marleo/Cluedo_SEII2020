@@ -1,15 +1,20 @@
 package com.example.cluedo_seii.activities;
 
 import android.annotation.SuppressLint;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.os.PersistableBundle;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 
@@ -18,6 +23,7 @@ import com.example.cluedo_seii.CardType;
 import com.example.cluedo_seii.DeckOfCards;
 import com.example.cluedo_seii.Game;
 import com.example.cluedo_seii.GameState;
+import com.example.cluedo_seii.MyPoint;
 import com.example.cluedo_seii.Player;
 import com.example.cluedo_seii.R;
 //import com.example.cluedo_seii.activities.playerGameInteraction.AccuseSomeone;
@@ -100,7 +106,7 @@ public class GameboardScreen extends AppCompatActivity  {
       //  }
             }
 
-     /////////////////////////////////////
+    /////////////////////////////////////
     //Methoden zur Spielinitialisierung//
     /////////////////////////////////////
 
@@ -259,38 +265,58 @@ public class GameboardScreen extends AppCompatActivity  {
     }
 
         public void setCallbacksForCheatFunction(){
+            if(conType==connectionType.HOST) {
 
-        server = NetworkServerKryo.getInstance();
-        client = NetworkClientKryo.getInstance();
-        client.registerCheatCallback(new Callback<CheatDTO>() {
-            @Override
-            public void callback(CheatDTO argument) {
-                runOnUiThread(new Runnable() {
-                    public void run() {
-                        Toast toast;
-                        toast = Toast.makeText(getApplicationContext(), "Jemand hat geschummelt", Toast.LENGTH_LONG);
-                        toast.show();
+                server.registerCheatDTOCallback(new Callback<CheatDTO>() {
+                    @Override
+                    public void callback(CheatDTO argument) {
+                        runOnUiThread(new Runnable() {
+                            public void run() {
+                                Toast toast;
+                                toast = Toast.makeText(getApplicationContext(),"Jemand hat geschummelt", Toast.LENGTH_LONG);
+                                toast.show();
+
+                            }
+                        });
+
+                    }
+                });
+
+            } else if (conType == connectionType.GLOBALHOST) {
+
+                globalHost.registerCheatDTOCallback(new Callback<CheatDTO>() {
+                    @Override
+                    public void callback(CheatDTO argument) {
+                        runOnUiThread(new Runnable() {
+                            public void run() {
+                                Toast toast;
+                                toast = Toast.makeText(getApplicationContext(),"Jemand hat geschummelt", Toast.LENGTH_LONG);
+                                toast.show();
+
+                            }
+                        });
+
+                    }
+                });
+
+            } else if (conType == connectionType.CLIENT || conType == connectionType.GLOBALCLIENT) {
+
+                client.registerCheatCallback(new Callback<CheatDTO>() {
+                    @Override
+                    public void callback(CheatDTO argument) {
+                        runOnUiThread(new Runnable() {
+                            public void run() {
+                                Toast toast;
+                                toast = Toast.makeText(getApplicationContext(), "Jemand hat geschummelt", Toast.LENGTH_LONG);
+                                toast.show();
+
+                            }
+                        });
 
                     }
                 });
 
             }
-        });
-
-        server.registerCheatDTOCallback(new Callback<CheatDTO>() {
-            @Override
-            public void callback(CheatDTO argument) {
-                runOnUiThread(new Runnable() {
-                    public void run() {
-                        Toast toast;
-                        toast = Toast.makeText(getApplicationContext(),"Jemand hat geschummelt", Toast.LENGTH_LONG);
-                        toast.show();
-
-                    }
-                });
-
-            }
-        });
     }
 
     public Gameboard getGameboard() {
@@ -427,7 +453,16 @@ public class GameboardScreen extends AppCompatActivity  {
                 //Ausgeführt bei GameState.PLAYERACCUSATION
                 else if(game.getGameState().equals(GameState.PLAYERACCUSATION)){
                     if(game.getCurrentPlayer().getId()==game.getLocalPlayer().getId()){
-                        game.getCurrentPlayer().setPosition(playerMove.get(game.getCurrentPlayer().getId()-1).getPosition());
+                        Player movingPlayer = null;
+                        for (Player p: playerMove) {
+                            if (p.getId() == game.getCurrentPlayer().getId()) {
+                                movingPlayer = p;
+                            }
+                        }
+
+                        //game.getCurrentPlayer().setPosition(playerMove.get(game.getCurrentPlayer().getId()-1).getPosition());
+                        game.getCurrentPlayer().setPosition(movingPlayer.getPosition());
+
                         int playerX = game.getCurrentPlayer().getPosition().x;
                         int playerY = game.getCurrentPlayer().getPosition().y;
                         if(game.getLocalPlayer().getMadeFalseAccusation()==false){
@@ -651,6 +686,12 @@ public class GameboardScreen extends AppCompatActivity  {
         }
         else if(conType==connectionType.CLIENT){
             client.sendMessage(suspicionAnswerDTO);
+        } else if (conType==connectionType.GLOBALCLIENT) {
+            client.broadcastToGameRoom(suspicionAnswerDTO);
+        } else if (conType==connectionType.GLOBALHOST) {
+            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                globalHost.broadcastToClients(suspicionAnswerDTO);
+            }
         }
     }
 

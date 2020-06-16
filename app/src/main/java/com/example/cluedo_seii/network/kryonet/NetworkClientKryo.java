@@ -27,11 +27,9 @@ import com.example.cluedo_seii.network.dto.SendToOnePlayerDTO;
 import com.example.cluedo_seii.network.dto.SuspicionAnswerDTO;
 import com.example.cluedo_seii.network.dto.SuspicionDTO;
 import com.example.cluedo_seii.network.dto.UserNameRequestDTO;
+import com.example.cluedo_seii.network.dto.WinDTO;
 
 import java.io.IOException;
-import java.net.InetAddress;
-import java.util.LinkedList;
-import java.util.List;
 
 import static android.content.ContentValues.TAG;
 
@@ -46,6 +44,7 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
     private Callback<GameDTO> gameCallback;
     private Callback<CheatDTO> cheatCallback;
     private Callback<RoomsDTO> roomCallback;
+    private Callback<WinDTO> winnerCallback;
     private Player cheater;
     private ChangeListener changeListener;
 
@@ -65,6 +64,7 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
     public void guessedCheater(){this.cheated-=1;}
 
 
+    // Singleton Pattern
     public static NetworkClientKryo getInstance() {
         if (INSTANCE == null) {
             INSTANCE = new NetworkClientKryo();
@@ -127,6 +127,7 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
         });
     }
 
+    // request handler
     private void handleRequest(Connection connection, Object object) {
         if (object instanceof ConnectedDTO) {
             handleConnectionResponse((ConnectedDTO) object);
@@ -158,6 +159,9 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
         }
         else if(object instanceof SuspicionAnswerDTO){
             handleSuspicionAnswerDTO((SuspicionAnswerDTO)object);
+        }
+        else if (object instanceof WinDTO) {
+            handleWinDTOResponse((WinDTO) object);
         }
     }
 
@@ -200,6 +204,7 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
         }
 
 
+        //game attribute aktualisieren
         Game inGame = gameDTO.getGame();
         Game game = Game.getInstance();
         game.setPlayers(inGame.getPlayers());
@@ -250,8 +255,15 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
         game.changeGameState(GameState.RECEIVINGANSWER);}
     }
 
+    private void handleWinDTOResponse(WinDTO winDTO) {
+        Game.getInstance().setWinner(winDTO.getWinner());
+        winnerCallback.callback(winDTO);
+    }
+
+
     @RequiresApi(api = Build.VERSION_CODES.O)
     private void handleBroadcastResponse(Connection connection, BroadcastDTO broadcastDTO) {
+        // object von global broadcast deserialisieren und den Request handler aufrufen
         try {
             Object object = SerializationHelper.fromString(broadcastDTO.getSerializedObject());
             handleRequest(connection,object);
@@ -263,6 +275,7 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     private void handleSendToOnePlayerDTOResponse(Connection connection, SendToOnePlayerDTO sendToOnePlayerDTO) {
+        // object von global send to one Player deserialisieren und den Request handler aufrufen
         try {
             Object object = SerializationHelper.fromString(sendToOnePlayerDTO.getSerializedObject());
             handleRequest(connection, object);
@@ -272,6 +285,7 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
     }
 
 
+    //Callbacks registrieren
     @Override
     public void registerConnectionCallback(Callback<ConnectedDTO> callback) {
         this.connectionCallback = callback;
@@ -294,6 +308,11 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
         this.roomCallback = callback;
     }
 
+    public void registerWinDTOCallback(Callback<WinDTO> winDTOCallback) {
+        this.winnerCallback = winDTOCallback;
+    }
+
+    // send game für client und globalclient
     public void sendGame(Game game) {
         Log.i("sendingGame", "GameSend");
         GameDTO gameDTO = new GameDTO();
@@ -318,8 +337,29 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
     public void sendCheat(Player player) {
         CheatDTO cheatDTO = new CheatDTO();
         cheatDTO.setCheater(player);
-        sendMessage(cheatDTO);
+        if (SelectedConType.getConnectionType() == connectionType.CLIENT) {
+            sendMessage(cheatDTO);
+        } else {
+            broadcastToGameRoom(cheatDTO);
+        }
+
     }
+
+    // an den gesamten game room broadcasten
+    public void broadcastToGameRoom(RequestDTO requestDTO) {
+        BroadcastDTO broadcastDTO = new BroadcastDTO();
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            try {
+                broadcastDTO.setSerializedObject(SerializationHelper.toString(requestDTO));
+
+                sendMessage(broadcastDTO);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    // message an room hsot senden
     public void sendMessageToRoomHost(RequestDTO requestDTO) {
         SendToOnePlayerDTO sendToOnePlayerDTO = new SendToOnePlayerDTO();
         Log.d("Sending Object to Host:", requestDTO.getClass().toString());
@@ -336,6 +376,7 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
         }
     }
 
+    // message an local host senden
     @Override
     public void sendMessage(final RequestDTO message) {
         new Thread("send") {
@@ -348,6 +389,7 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
 
     }
 
+    //Klassen für Kryonet registrieren
     @Override
     public void registerClass(Class c) {
         client.getKryo().register(c);

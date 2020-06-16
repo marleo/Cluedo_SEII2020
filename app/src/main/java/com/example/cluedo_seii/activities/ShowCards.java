@@ -18,6 +18,7 @@ import com.example.cluedo_seii.GameState;
 import com.example.cluedo_seii.Player;
 import com.example.cluedo_seii.R;
 import com.example.cluedo_seii.network.connectionType;
+import com.example.cluedo_seii.network.kryonet.GlobalNetworkHostKryo;
 import com.example.cluedo_seii.network.kryonet.NetworkClientKryo;
 import com.example.cluedo_seii.network.kryonet.NetworkServerKryo;
 import com.example.cluedo_seii.network.kryonet.SelectedConType;
@@ -37,6 +38,7 @@ public class ShowCards extends AppCompatActivity {
     private connectionType conType;
     private NetworkServerKryo server;
     private NetworkClientKryo client;
+    private GlobalNetworkHostKryo globalHost;
 
 
     @Override
@@ -96,8 +98,11 @@ public class ShowCards extends AppCompatActivity {
             server = NetworkServerKryo.getInstance();
         }
 
-        else if(conType==connectionType.CLIENT){
+        else if(conType==connectionType.CLIENT || conType==connectionType.GLOBALCLIENT){
             client = NetworkClientKryo.getInstance();
+        }
+        else if (conType==connectionType.GLOBALHOST) {
+            globalHost = GlobalNetworkHostKryo.getInstance();
         }
     }
 
@@ -113,12 +118,20 @@ public class ShowCards extends AppCompatActivity {
             });
         }
 
-        else if(conType==connectionType.CLIENT){
+        else if(conType==connectionType.CLIENT || conType==connectionType.GLOBALCLIENT){
         client.setListener(new NetworkClientKryo.ChangeListener() {
             @Override
             public void onChange() {
                 finish();
             }
         });}
+        else if (conType==connectionType.GLOBALHOST) {
+            globalHost.setListener(new GlobalNetworkHostKryo.ChangeListener() {
+                @Override
+                public void onChange() {
+                    finish();
+                }
+            });
+        }
     }
 }

@@ -10,12 +10,14 @@ import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.example.cluedo_seii.Game;
 import com.example.cluedo_seii.GameCharacter;
+import com.example.cluedo_seii.GameState;
 import com.example.cluedo_seii.Player;
 import com.example.cluedo_seii.network.Callback;
 import com.example.cluedo_seii.network.ClientData;
 import com.example.cluedo_seii.network.NetworkGlobalHost;
+import com.example.cluedo_seii.network.dto.AccusationMessageDTO;
 import com.example.cluedo_seii.network.dto.BroadcastDTO;
-import com.example.cluedo_seii.network.dto.ConnectedDTO;
+import com.example.cluedo_seii.network.dto.CheatDTO;
 import com.example.cluedo_seii.network.dto.GameCharacterDTO;
 import com.example.cluedo_seii.network.dto.GameDTO;
 import com.example.cluedo_seii.network.dto.NewGameRoomRequestDTO;
@@ -23,7 +25,10 @@ import com.example.cluedo_seii.network.dto.PlayerDTO;
 import com.example.cluedo_seii.network.dto.RequestDTO;
 import com.example.cluedo_seii.network.dto.SendToOnePlayerDTO;
 import com.example.cluedo_seii.network.dto.SerializedDTO;
+import com.example.cluedo_seii.network.dto.SuspicionAnswerDTO;
+import com.example.cluedo_seii.network.dto.SuspicionDTO;
 import com.example.cluedo_seii.network.dto.UserNameRequestDTO;
+import com.example.cluedo_seii.network.dto.WinDTO;
 
 
 import java.io.IOException;
@@ -42,11 +47,26 @@ public class GlobalNetworkHostKryo implements NetworkGlobalHost, KryoNetComponen
     private Callback<NewGameRoomRequestDTO> newGameRoomCallback;
     private Callback<LinkedHashMap<Integer,ClientData>> newClientCallback;
     private Callback<GameCharacterDTO> gameCharacterDTOCallback;
+    private Callback<CheatDTO> cheatDTOCallback;
+    private Callback<WinDTO> winnerCallback;
+
+    private Player cheater;
+    private int cheated=0;
+    public int getCheated(){
+        return cheated;
+    }
+    public void setCheated(int value){
+        this.cheated+=value;
+    }
+    public void guessedCheater(){this.cheated-=1;}
+
+    private ChangeListener changeListener;
 
     private LinkedHashMap<Integer, ClientData> clientList;
     private ClientData roomHost;
 
 
+    //Singleton Pattern
     private GlobalNetworkHostKryo() {
         roomHost = new ClientData();
         client = new Client(16384,4096);
@@ -67,6 +87,7 @@ public class GlobalNetworkHostKryo implements NetworkGlobalHost, KryoNetComponen
     }
 
 
+    //Mit Server Verbinden
     @Override
     public void connect(final String host) throws IOException {
         Log.d("GLOBALHOST:", "Connecting to: " + host);
@@ -93,22 +114,23 @@ public class GlobalNetworkHostKryo implements NetworkGlobalHost, KryoNetComponen
             public void received(Connection connection, Object object) {
                 if (object instanceof RequestDTO) {
                     Log.i(TAG, "received: " + object.toString());
-                    handleRequest(connection,object);
+                    handleRequest(object);
                 }
             }
         });
     }
 
+    //Handler für Requests
     @RequiresApi(api = Build.VERSION_CODES.O)
-    private void handleRequest(Connection connection, Object object) {
+    private void handleRequest(Object object) {
         if (object instanceof NewGameRoomRequestDTO) {
-            handleGameRoomResponse(connection, (NewGameRoomRequestDTO) object);
+            handleGameRoomResponse((NewGameRoomRequestDTO) object);
         } else if (object instanceof UserNameRequestDTO) {
-            handleUsernameRequest(connection, (UserNameRequestDTO) object);
+            handleUsernameRequest((UserNameRequestDTO) object);
         } else if (object instanceof SendToOnePlayerDTO) {
-            handleSendToOnePlayeDTO(connection, (SendToOnePlayerDTO) object);
+            handleSendToOnePlayeDTO((SendToOnePlayerDTO) object);
         } else if (object instanceof BroadcastDTO) {
-            handleBroadcast(connection, (BroadcastDTO) object);
+            handleBroadcast((BroadcastDTO) object);
         }
 
 
@@ -123,20 +145,22 @@ public class GlobalNetworkHostKryo implements NetworkGlobalHost, KryoNetComponen
         }
     }
 
+    //Handler für requests die nur an den Host gehen
     @RequiresApi(api = Build.VERSION_CODES.O)
-    private void handleSendToOnePlayeDTO(Connection connection, SendToOnePlayerDTO sendToOnePlayerDTO) {
+    private void handleSendToOnePlayeDTO(SendToOnePlayerDTO sendToOnePlayerDTO) {
         try {
             Object object = SerializationHelper.fromString(sendToOnePlayerDTO.getSerializedObject());
 
             if (object instanceof GameCharacterDTO) {
-                handleGameCharacterRequest(connection, (GameCharacterDTO) object, sendToOnePlayerDTO.getSendingPlayerID());
+                handleGameCharacterRequest((GameCharacterDTO) object, sendToOnePlayerDTO.getSendingPlayerID());
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    private void handleGameRoomResponse(Connection connection, NewGameRoomRequestDTO newGameRoomRequestDTO) {
+    //handler für requests die an den game Room gebroadcasted werden
+    private void handleGameRoomResponse(NewGameRoomRequestDTO newGameRoomRequestDTO) {
         Log.d(TAG,"new Room created:" + newGameRoomRequestDTO.getCreatedRoom());
         roomHost.setId(newGameRoomRequestDTO.getHostID());
         if (newGameRoomCallback != null) {
@@ -145,7 +169,7 @@ public class GlobalNetworkHostKryo implements NetworkGlobalHost, KryoNetComponen
 
     }
 
-    private void handleUsernameRequest(Connection connection, UserNameRequestDTO userNameRequestDTO) {
+    private void handleUsernameRequest(UserNameRequestDTO userNameRequestDTO) {
         Log.d(TAG, "New User joined: " + userNameRequestDTO.getUsername());
         ClientData clientData = new ClientData();
         clientData.setId(userNameRequestDTO.getId());
@@ -159,7 +183,7 @@ public class GlobalNetworkHostKryo implements NetworkGlobalHost, KryoNetComponen
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-    private void handleGameCharacterRequest(Connection connection, GameCharacterDTO gameCharacterDTO, int playerID) {
+    private void handleGameCharacterRequest(GameCharacterDTO gameCharacterDTO, int playerID) {
         // remove the chosen Player from the list
         GameCharacter chosenCharacter = gameCharacterDTO.getChoosenPlayer();
         gameCharacterDTO.getAvailablePlayers().remove(chosenCharacter.getName());
@@ -190,19 +214,30 @@ public class GlobalNetworkHostKryo implements NetworkGlobalHost, KryoNetComponen
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-    private void handleBroadcast(Connection connection, BroadcastDTO broadcastDTO) {
+    private void handleBroadcast(BroadcastDTO broadcastDTO) {
         try {
             Object object = SerializationHelper.fromString(broadcastDTO.getSerializedObject());
 
             if (object instanceof GameDTO) {
-                handleGameRequest(connection, (GameDTO) object);
+                handleGameRequest((GameDTO) object);
+            } else if(object instanceof CheatDTO) {
+                handleCheaterRequest((CheatDTO) object);
+            } else if(object instanceof AccusationMessageDTO){
+                handleAccusationMessageDTO((AccusationMessageDTO)object);
+            } else if(object instanceof SuspicionDTO){
+                handleSuspicionMessageDTO((SuspicionDTO)object);
+            } else if(object instanceof SuspicionAnswerDTO){
+                handleSuspicionAnswerDTO((SuspicionAnswerDTO)object);
+            } else if (object instanceof WinDTO) {
+                handleWinDTORequest((WinDTO) object);
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    private void handleGameRequest(Connection connection, GameDTO gameDTO) {
+    private void handleGameRequest( GameDTO gameDTO) {
+        //Game Attribute aktualisieren
         Game inGame = gameDTO.getGame();
 
         Game game = Game.getInstance();
@@ -218,6 +253,50 @@ public class GlobalNetworkHostKryo implements NetworkGlobalHost, KryoNetComponen
 
     }
 
+    private void handleCheaterRequest(CheatDTO cheatDTO){
+        Log.d("network-Server:","Received a cheater");
+        cheater = new Player(cheatDTO.getCheater().getId(), cheatDTO.getCheater().getPlayerCharacter());
+        if(cheatDTOCallback!=null){
+            cheatDTOCallback.callback(cheatDTO);
+        }
+    }
+
+    private void handleAccusationMessageDTO(AccusationMessageDTO accusationMessageDTO){
+        AccusationMessageDTO accusationMessage = accusationMessageDTO;
+        Game game = Game.getInstance();
+        game.setMessageForLocalPlayer(accusationMessage.getMessage());
+        game.changeGameState(GameState.PASSIVE);
+    }
+
+    private void handleSuspicionMessageDTO(SuspicionDTO suspicionDTO){
+        Game game = Game.getInstance();
+        Player suspected=suspicionDTO.getAcusee();
+        if(game.getLocalPlayer().getId()==suspected.getId()){
+            for(Player player: game.getPlayers()){
+                if(game.getLocalPlayer().getId()== player.getId()){
+                    player.setPosition(suspicionDTO.getAccuser().getPosition());
+                }
+            }
+            game.setSuspicion(suspicionDTO.getSuspicion());
+            game.setAcusee(suspicionDTO.getAccuser());
+            notifyPlayer();
+            game.changeGameState(GameState.SUSPECTED);
+        }
+    }
+
+    private void handleSuspicionAnswerDTO(SuspicionAnswerDTO suspicionAnswerDTO){
+        Game game = Game.getInstance();
+        if(game.getCurrentPlayer().getId()==game.getLocalPlayer().getId()){
+            game.setSuspicionAnswer(suspicionAnswerDTO.getAnswer());
+            game.changeGameState(GameState.RECEIVINGANSWER);}
+    }
+
+    private void handleWinDTORequest(WinDTO winDTO) {
+        Game.getInstance().setWinner(winDTO.getWinner());
+        winnerCallback.callback(winDTO);
+    }
+
+
 
     public void registerReceivedGameRoomCallback(Callback<NewGameRoomRequestDTO> callback) {
         this.newGameRoomCallback = callback;
@@ -229,6 +308,23 @@ public class GlobalNetworkHostKryo implements NetworkGlobalHost, KryoNetComponen
 
     public void registerCharacterDTOCallback(Callback<GameCharacterDTO> gameCharacterDTOCallback) {
         this.gameCharacterDTOCallback = gameCharacterDTOCallback;
+    }
+
+    public void registerCheatDTOCallback(Callback<CheatDTO> cheatDTOCallback){
+        this.cheatDTOCallback = cheatDTOCallback;
+    }
+
+    public void registerWinDTOCallback(Callback<WinDTO> winDTOCallback) {
+        this.winnerCallback = winDTOCallback;
+    }
+
+    public void sendCheat(Player player){
+        CheatDTO cheatDTO = new CheatDTO();
+        cheatDTO.setCheater(player);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            broadcastToClients(cheatDTO);
+        }
+        cheatDTOCallback.callback(cheatDTO);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -304,5 +400,27 @@ public class GlobalNetworkHostKryo implements NetworkGlobalHost, KryoNetComponen
     public ClientData getRoomHost() {
         return roomHost;
     }
+
+    public Player getCheater() {
+        return cheater;
+    }
+
+    public void notifyPlayer(){
+        if(changeListener != null) changeListener.onChange();
+    }
+
+    public ChangeListener getListener() {
+        return changeListener;
+    }
+
+    public void setListener(ChangeListener changeListener) {
+        this.changeListener = changeListener;
+    }
+
+    public interface ChangeListener {
+        void onChange();
+    }
+
+
 }
 
