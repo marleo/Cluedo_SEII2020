@@ -68,7 +68,14 @@ public class ExposeCheater extends AppCompatActivity implements AdapterView.OnIt
         View.OnClickListener onButtonClickListener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                accuseCheating();
+                client = NetworkClientKryo.getInstance();
+                server = NetworkServerKryo.getInstance();
+                if(client.getCheated()==0&&server.getCheated()==0){
+                    text="Deine Anschuldigung ist falsch";
+                    toast=Toast.makeText(getApplicationContext(),text,Toast.LENGTH_LONG);
+                    toast.show();
+                }
+                else{accuseCheating();}
             }
         };
         accuseCheaterButton.setOnClickListener(onButtonClickListener);
@@ -105,32 +112,40 @@ public class ExposeCheater extends AppCompatActivity implements AdapterView.OnIt
      */
     public void accuseCheating() {
         conType = SelectedConType.getConnectionType();
-        if(conType==connectionType.HOST){
+        if(conType==connectionType.HOST) {
             server = NetworkServerKryo.getInstance();
-            if(server.getCheater().getId()==selectedPlayer.getId()){
-                text = "Deine Anschuldigung ist richtig";
-                toast = Toast.makeText(getApplicationContext(), text, Toast.LENGTH_SHORT);
-                toast.show();
-                server.guessedCheater();
-            }else {
-                text = "Deine Anschuldigung ist falsch";
-                toast = Toast.makeText(getApplicationContext(), text, Toast.LENGTH_SHORT);
-                toast.show();
-                server.setCheated(1);
-            }
-        } else if(conType==connectionType.CLIENT){
+            if (!server.getExposedCheater()){
+                if (server.getCheater().getId() == selectedPlayer.getId()) {
+                    text = "Deine Anschuldigung ist richtig";
+                    toast = Toast.makeText(getApplicationContext(), text, Toast.LENGTH_SHORT);
+                    toast.show();
+                    server.guessedCheater();
+                    server.setExposedCheater();
+                } else {
+                    text = "Deine Anschuldigung ist falsch";
+                    toast = Toast.makeText(getApplicationContext(), text, Toast.LENGTH_SHORT);
+                    toast.show();
+                    server.setCheated(1);
+                    server.setExposedCheater();
+                }
+        }
+        } else if(conType==connectionType.CLIENT) {
             client = NetworkClientKryo.getInstance();
-            if(client.getCheater().getId()==selectedPlayer.getId()){
-                text = "Deine Anschuldigung ist richtig";
-                toast = Toast.makeText(getApplicationContext(), text, Toast.LENGTH_SHORT);
-                toast.show();
-                client.guessedCheater();
-            }else {
-                text = "Deine Anschuldigung ist falsch";
-                toast = Toast.makeText(getApplicationContext(), text, Toast.LENGTH_SHORT);
-                toast.show();
-                client.setCheated(1);
-            }
+            if (!client.getExposedCheater()){
+                if (client.getCheater().getId() == selectedPlayer.getId()) {
+                    text = "Deine Anschuldigung ist richtig";
+                    toast = Toast.makeText(getApplicationContext(), text, Toast.LENGTH_SHORT);
+                    toast.show();
+                    client.guessedCheater();
+                    client.setExposedCheater();
+                } else {
+                    text = "Deine Anschuldigung ist falsch";
+                    toast = Toast.makeText(getApplicationContext(), text, Toast.LENGTH_SHORT);
+                    toast.show();
+                    client.setCheated(1);
+                    client.setExposedCheater();
+                }
+        }
         }
     }
 
