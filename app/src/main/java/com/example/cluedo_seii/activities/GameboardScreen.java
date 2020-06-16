@@ -259,50 +259,58 @@ public class GameboardScreen extends AppCompatActivity  {
     }
 
         public void setCallbacksForCheatFunction(){
-        client.registerCheatCallback(new Callback<CheatDTO>() {
-            @Override
-            public void callback(CheatDTO argument) {
-                runOnUiThread(new Runnable() {
-                    public void run() {
-                        Toast toast;
-                        toast = Toast.makeText(getApplicationContext(), "Jemand hat geschummelt", Toast.LENGTH_LONG);
-                        toast.show();
+            if(conType==connectionType.HOST) {
+
+                server.registerCheatDTOCallback(new Callback<CheatDTO>() {
+                    @Override
+                    public void callback(CheatDTO argument) {
+                        runOnUiThread(new Runnable() {
+                            public void run() {
+                                Toast toast;
+                                toast = Toast.makeText(getApplicationContext(),"Jemand hat geschummelt", Toast.LENGTH_LONG);
+                                toast.show();
+
+                            }
+                        });
+
+                    }
+                });
+
+            } else if (conType == connectionType.GLOBALHOST) {
+
+                globalHost.registerCheatDTOCallback(new Callback<CheatDTO>() {
+                    @Override
+                    public void callback(CheatDTO argument) {
+                        runOnUiThread(new Runnable() {
+                            public void run() {
+                                Toast toast;
+                                toast = Toast.makeText(getApplicationContext(),"Jemand hat geschummelt", Toast.LENGTH_LONG);
+                                toast.show();
+
+                            }
+                        });
+
+                    }
+                });
+
+            } else if (conType == connectionType.CLIENT || conType == connectionType.GLOBALCLIENT) {
+
+                client.registerCheatCallback(new Callback<CheatDTO>() {
+                    @Override
+                    public void callback(CheatDTO argument) {
+                        runOnUiThread(new Runnable() {
+                            public void run() {
+                                Toast toast;
+                                toast = Toast.makeText(getApplicationContext(), "Jemand hat geschummelt", Toast.LENGTH_LONG);
+                                toast.show();
+
+                            }
+                        });
 
                     }
                 });
 
             }
-        });
-
-        server.registerCheatDTOCallback(new Callback<CheatDTO>() {
-            @Override
-            public void callback(CheatDTO argument) {
-                runOnUiThread(new Runnable() {
-                    public void run() {
-                        Toast toast;
-                        toast = Toast.makeText(getApplicationContext(),"Jemand hat geschummelt", Toast.LENGTH_LONG);
-                        toast.show();
-
-                    }
-                });
-
-            }
-        });
-
-        globalHost.registerCheatDTOCallback(new Callback<CheatDTO>() {
-            @Override
-            public void callback(CheatDTO argument) {
-                runOnUiThread(new Runnable() {
-                    public void run() {
-                        Toast toast;
-                        toast = Toast.makeText(getApplicationContext(),"Jemand hat geschummelt", Toast.LENGTH_LONG);
-                        toast.show();
-
-                    }
-                });
-
-            }
-        });
     }
 
     public Gameboard getGameboard() {
@@ -439,7 +447,16 @@ public class GameboardScreen extends AppCompatActivity  {
                 //Ausgeführt bei GameState.PLAYERACCUSATION
                 else if(game.getGameState().equals(GameState.PLAYERACCUSATION)){
                     if(game.getCurrentPlayer().getId()==game.getLocalPlayer().getId()){
-                        game.getCurrentPlayer().setPosition(playerMove.get(game.getCurrentPlayer().getId()-1).getPosition());
+                        Player movingPlayer = null;
+                        for (Player p: playerMove) {
+                            if (p.getId() == game.getCurrentPlayer().getId()) {
+                                movingPlayer = p;
+                            }
+                        }
+
+                        //game.getCurrentPlayer().setPosition(playerMove.get(game.getCurrentPlayer().getId()-1).getPosition());
+                        game.getCurrentPlayer().setPosition(movingPlayer.getPosition());
+
                         int playerX = game.getCurrentPlayer().getPosition().x;
                         int playerY = game.getCurrentPlayer().getPosition().y;
                         if(game.getLocalPlayer().getMadeFalseAccusation()==false){
