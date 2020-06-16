@@ -4,7 +4,7 @@ import android.graphics.Point;
 
 public class StartingPoint {
     private int startingPointId;
-    private int playerId; // Überlegen ob hier der Spieler (Klasse) verspeichert wird
+    private int playerId;
     private Point playerPosition;
 
     public StartingPoint(int startingPointId, int playerId) {

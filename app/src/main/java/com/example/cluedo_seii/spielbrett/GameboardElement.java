@@ -13,6 +13,11 @@ import com.example.cluedo_seii.GameState;
 import com.example.cluedo_seii.Player;
 import com.example.cluedo_seii.activities.GameboardScreen;
 
+/* Hier wird der gesamte Spiellogik implementiert
+Spielerbewegung, Spieler-Weg Berechnung, Geheimwege
+
+*/
+
 public abstract class GameboardElement {
     private Game game;
     private int xKoordinate;
@@ -91,7 +96,8 @@ public abstract class GameboardElement {
         oldStartingpointElement = null;
         oldRoomElement = null;
         oldGeheimgang = null;
-        //gameboardScreen.getGameboard().updateGameboardScreen(gameboardScreen);
+
+        gameboardScreen.getGameboard().updateGameboardScreen(gameboardScreen);
     }
 
     public GameboardElement() {

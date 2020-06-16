@@ -61,6 +61,11 @@ import static com.example.cluedo_seii.R.drawable.v7;
 import static com.example.cluedo_seii.R.drawable.v8;
 import static com.example.cluedo_seii.R.drawable.v9;
 
+
+/* Hier wird die grafische Darstellung des Gameboards (Linear Layout) implementiert
+ebenso werden die Player gespawnt
+*
+* */
 public class Gameboard {
 
     private List<GameboardElement> listeGameboardElemente;
