@@ -2,7 +2,6 @@ package com.example.cluedo_seii.spielbrett;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.graphics.Point;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
@@ -11,6 +10,7 @@ import android.widget.Toast;
 
 import com.example.cluedo_seii.Game;
 import com.example.cluedo_seii.GameState;
+import com.example.cluedo_seii.MyPoint;
 import com.example.cluedo_seii.Player;
 import com.example.cluedo_seii.activities.GameboardScreen;
 
@@ -22,7 +22,7 @@ public abstract class GameboardElement {
 
     private GameboardScreen gameboardScreen;
 
-    private Point oldPosition;
+    private MyPoint oldPosition;
     private GameFieldElement oldGameFieldElement;
     private RoomElement oldRoomElement;
     private StartingpointElement oldStartingpointElement;
@@ -85,7 +85,7 @@ public abstract class GameboardElement {
                 for(GameboardElement gameboardElementTemp: gameboardScreen.getGameboard().getListeGameboardElemente()) {
                     if (xKoordinate == gameboardElementTemp.getxKoordinate() &&
                             yKoordinate == gameboardElementTemp.getyKoordinate()) {
-                        player.setPosition(new Point(xKoordinate, yKoordinate));
+                        player.setPosition(new MyPoint(xKoordinate, yKoordinate));
                         positionPlayerForNewPosition(gameboardElementTemp, player);
                     }
                 }
@@ -195,7 +195,7 @@ public abstract class GameboardElement {
                         if (newGameboardElement.getxKoordinate() != gameboardElementTemp.getxKoordinate() &&
                                 newGameboardElement.getyKoordinate() != gameboardElementTemp.getyKoordinate()) {
                             // Setzte Spieler auf irgend einen anderen Geheimgang
-                            currentPlayer.setPosition(new Point(gameboardElementTemp.getxKoordinate(), gameboardElementTemp.getyKoordinate()));
+                            currentPlayer.setPosition(new MyPoint(gameboardElementTemp.getxKoordinate(), gameboardElementTemp.getyKoordinate()));
                             ((Geheimgang) gameboardElementTemp).positionPlayer(true);
                             break ListLoop;
                         }
@@ -234,8 +234,8 @@ public abstract class GameboardElement {
     }
 
     private int calculatePlayerStepsTotal(Player currentPlayer) {
-        Point oldPositionCalc = oldPosition;
-        Point newPositionCalc = currentPlayer.getPosition();
+        MyPoint oldPositionCalc = oldPosition;
+        MyPoint newPositionCalc = currentPlayer.getPosition();
 
         int diffX, diffY;
 

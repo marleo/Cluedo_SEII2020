@@ -29,9 +29,6 @@ import com.example.cluedo_seii.network.dto.SuspicionDTO;
 import com.example.cluedo_seii.network.dto.UserNameRequestDTO;
 
 import java.io.IOException;
-import java.net.InetAddress;
-import java.util.LinkedList;
-import java.util.List;
 
 import static android.content.ContentValues.TAG;
 
