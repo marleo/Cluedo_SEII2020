@@ -30,7 +30,6 @@ public class SerializationHelper {
         return o;
     }
 
-    /** Read the object from Base64 string. */
     @RequiresApi(api = Build.VERSION_CODES.O)
     /** Write the object to a Base64 string. */
     public static String toString( Serializable o ) throws IOException {

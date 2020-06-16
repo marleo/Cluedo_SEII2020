@@ -2,7 +2,6 @@ package com.example.cluedo_seii.network.kryonet;
 
 import android.widget.TextView;
 import androidx.appcompat.widget.AppCompatTextView;
-import android.graphics.Point;
 
 import com.example.cluedo_seii.Card;
 import com.example.cluedo_seii.CardType;
@@ -29,7 +28,6 @@ import com.example.cluedo_seii.network.dto.SendToOnePlayerDTO;
 import com.example.cluedo_seii.network.dto.SerializedDTO;
 import com.example.cluedo_seii.network.dto.SuspicionAnswerDTO;
 import com.example.cluedo_seii.network.dto.SuspicionDTO;
-import com.example.cluedo_seii.network.dto.TextMessage;
 import com.example.cluedo_seii.network.dto.UserNameRequestDTO;
 import com.example.cluedo_seii.spielbrett.Gameboard;
 

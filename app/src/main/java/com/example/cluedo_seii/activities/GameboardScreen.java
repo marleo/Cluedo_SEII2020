@@ -406,22 +406,6 @@ public class GameboardScreen extends AppCompatActivity  {
                        // turnBegin();
                        // new Intent(GameboardScreen.this, PlayerNotification.class);
                         startActivity(new Intent(GameboardScreen.this, PlayerNotification.class));
-                        /*
-                        AlertDialog.Builder builder = new AlertDialog.Builder(GameboardScreen.this);
-                        builder.setTitle("Du bist am Zug");
-                        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                Game.getInstance().changeGameState(GameState.PLAYERMOVEMENTDECISION);
-                            }
-                        });
-                        builder.setCancelable(false);
-                        AlertDialog alert = builder.create();
-                        alert.show();
-
-                         */
-
-
                     }
                     else{//Spieler localPlayer ist nicht am Zug
                         game.setMessageForLocalPlayer( "Spieler " + game.getCurrentPlayer().getId() + " ist am Zug" );
