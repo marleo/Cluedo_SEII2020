@@ -56,7 +56,6 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
 
     private boolean isConnected;
     private int cheated=0;
-    private boolean exposedCheater=false;
 
     private NetworkClientKryo() {
         client = new Client(8192,4096);
@@ -68,8 +67,6 @@ public class NetworkClientKryo implements NetworkClient, KryoNetComponent {
         this.cheated+=value;
     }
     public void guessedCheater(){this.cheated-=1;}
-    public void setExposedCheater(){ this.exposedCheater=true;}
-    public boolean getExposedCheater(){return exposedCheater;}
 
 
     public static NetworkClientKryo getInstance() {

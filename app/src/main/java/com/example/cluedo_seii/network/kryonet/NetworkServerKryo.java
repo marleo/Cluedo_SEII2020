@@ -51,9 +51,6 @@ public class NetworkServerKryo implements KryoNetComponent, NetworkServer {
         this.cheated+=value;
     }
     public void guessedCheater(){this.cheated-=1;}
-    private boolean exposedCheater=false;
-    public void setExposedCheater(){ this.exposedCheater=true;}
-    public boolean getExposedCheater(){return exposedCheater;}
     private ChangeListener changeListener;
 
     private LinkedHashMap<Integer, ClientData> clientList;
