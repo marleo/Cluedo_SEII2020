@@ -26,7 +26,6 @@
         android:background="@drawable/custom_button_green"
         android:gravity="center|center_vertical"
         android:text="@string/accuseCheaterButton"
-        android:textColor="#FFFFFF"
-        android:translationY="280dp" />
+        android:textColor="#FFFFFF" />
 
 </LinearLayout>
