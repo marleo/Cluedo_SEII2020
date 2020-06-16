@@ -65,7 +65,10 @@ public class RollDiceScreen extends Activity {
                     public void onAnimationEnd(Animation animation) {
                         int value1 = randomDiceValue();
                         int value2 = randomDiceValue();
-                        int sum = value1+value2;
+                        game.setDiceTwo(value1);
+                        game.setDiceTwo(value2);
+
+                      /*  int sum = value1+value2;
                         int res = getResources().getIdentifier("dice" + value1, "drawable", getPackageName());
                         int res2 = getResources().getIdentifier("dice" + value2, "drawable", getPackageName());
 
@@ -75,7 +78,7 @@ public class RollDiceScreen extends Activity {
 
                         textView.setText("You rolled " + value1 + " + " + value2 + " = "+sum+"!");
                         diceValueOne = value1;
-                        diceValueTwo = value2;
+                        diceValueTwo = value2;*/
 
                         finish();
 
@@ -115,8 +118,7 @@ public class RollDiceScreen extends Activity {
     @Override
     public void onStop(){
         super.onStop();
-        game.changeGameState(GameState.PLAYERTURNEND);
-
+        game.changeGameState(GameState.PLAYERMOVEMENT);
     }
 
     //dices

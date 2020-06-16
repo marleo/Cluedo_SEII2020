@@ -113,7 +113,7 @@ public class MakeSuspicion extends AppCompatActivity implements AdapterView.OnIt
 
                 for (Player player : game.getPlayers()) {
                     if (player.getPlayerCharacter().getName().equals(selectedCulprit)) {
-                        player.setPosition(game.getCurrentPlayer().getPosition());
+                       // player.setPosition(game.getCurrentPlayer().getPosition());
                         suspectedPlayer = player;
                     }
                 }
