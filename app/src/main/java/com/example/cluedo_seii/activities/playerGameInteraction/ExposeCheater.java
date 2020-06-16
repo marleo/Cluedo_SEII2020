@@ -49,6 +49,7 @@ public class ExposeCheater extends AppCompatActivity implements AdapterView.OnIt
             }
         }
         Button accuseCheaterButton = findViewById(R.id.accuseCheaterButton);
+        //instanzieren und initalisieren des Spinners
         Spinner cheaterSpinner = findViewById(R.id.possibleCheater);
         cheaterSpinner.setOnItemSelectedListener(this);
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
@@ -57,6 +58,7 @@ public class ExposeCheater extends AppCompatActivity implements AdapterView.OnIt
         cheaterSpinner.setAdapter(adapter);
 
         View.OnClickListener onButtonClickListener = new View.OnClickListener() {
+            //onClick startet accuseCheating() function
             @Override
             public void onClick(View v) {
                 accuseCheating();
@@ -67,7 +69,7 @@ public class ExposeCheater extends AppCompatActivity implements AdapterView.OnIt
 
     }
 
-
+    //speichert Player welcher im Spinner ausgewählt wurde
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         for (Player player : game.getPlayers()) {

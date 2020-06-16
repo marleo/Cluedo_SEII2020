@@ -86,6 +86,8 @@ public class NotepadScreen extends AppCompatActivity {
         server = NetworkServerKryo.getInstance();
         client=NetworkClientKryo.getInstance();
         setListener();
+
+        //register Callback damit ein Toast angezeigt wird wenn jemand schummelt
         client.registerCheatCallback(new Callback<CheatDTO>() {
             @Override
             public void callback(CheatDTO argument) {
@@ -114,6 +116,7 @@ public class NotepadScreen extends AppCompatActivity {
 
             }
         });
+
         player = game.getLocalPlayer();
 
         notepad=new Notepad();
@@ -210,7 +213,7 @@ public class NotepadScreen extends AppCompatActivity {
         Button btn1 = findViewById(R.id.addMoreNotesButton);
         textView = findViewById(R.id.moreNotesView);
 
-
+        //füllen der TextViews
         textViewGatov.append(notepad.getCards()[0].getDesignation());
         textViewBloom.append(notepad.getCards()[1].getDesignation());
         textViewGreen.append(notepad.getCards()[2].getDesignation());
@@ -233,6 +236,7 @@ public class NotepadScreen extends AppCompatActivity {
         textViewBibliothek.append(notepad.getCards()[19].getDesignation());
         textViewArbeitszimmer.append(notepad.getCards()[20].getDesignation());
 
+        //initalisieren des Arrays textViews
         notepad.setTextViews(textViewGatov, 0);
         notepad.setTextViews(textViewBloom, 1);
         notepad.setTextViews(textViewGreen, 2);
@@ -258,6 +262,7 @@ public class NotepadScreen extends AppCompatActivity {
 
 
             View.OnClickListener onButtonClickListener1 = new View.OnClickListener() {
+                // onClick() fügt Text von EditText1 zum textView
                 @Override
                 public void onClick(View v) {
                     String message = editText1.getText().toString();
@@ -272,7 +277,7 @@ public class NotepadScreen extends AppCompatActivity {
             };
             btn1.setOnClickListener(onButtonClickListener1);
 
-
+        //Lichtänderungen wahrnehmen
         SensorManager sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
         Sensor lightSensor = sensorManager.getDefaultSensor(Sensor.TYPE_LIGHT);
             if (lightSensor == null) {
@@ -294,6 +299,8 @@ public class NotepadScreen extends AppCompatActivity {
 
             final Button exposeButton = findViewById(R.id.exposeButton);
             exposeButton.setOnClickListener(new View.OnClickListener() {
+
+                //Wechsel zur activity_expose_cheater
                 @Override
                 public void onClick(View v) {
                     startActivity(new Intent(NotepadScreen.this, ExposeCheater.class));
@@ -309,6 +316,7 @@ public class NotepadScreen extends AppCompatActivity {
         public void onStart () {
 
             super.onStart();
+            //notes in textView bleiben erhalten nach Wechsel zu anderer Activity
             SharedPreferences preferences = getSharedPreferences("notizblock", MODE_PRIVATE);
             textView.append(preferences.getString("notes", " "));
 
