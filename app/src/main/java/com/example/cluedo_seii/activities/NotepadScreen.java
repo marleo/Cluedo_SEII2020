@@ -14,9 +14,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import androidx.appcompat.app.AppCompatActivity;
-
 import com.example.cluedo_seii.Card;
 import com.example.cluedo_seii.Game;
 import com.example.cluedo_seii.InvestigationFile;
@@ -31,8 +29,13 @@ import com.example.cluedo_seii.network.kryonet.GlobalNetworkHostKryo;
 import com.example.cluedo_seii.network.kryonet.NetworkClientKryo;
 import com.example.cluedo_seii.network.kryonet.NetworkServerKryo;
 import com.example.cluedo_seii.network.kryonet.SelectedConType;
-
 import java.util.Random;
+
+/**
+ * Erzeugt den Notizblock und bietet die Funktionen Karten vom Block zu streichen, eigene Notizen
+ * hinzuzufügen, eine Schummelfunktion und man gelangt durch Button Click zur
+ * activity_expose_cheater.
+ */
 
 public class NotepadScreen extends AppCompatActivity {
     float x1, x2;
@@ -53,7 +56,7 @@ public class NotepadScreen extends AppCompatActivity {
     private TextView textViewHalle;
     private TextView textViewSalon;
     private TextView textViewSpeisezimmer;
-    private TextView textViewKüche;
+    private TextView textViewKueche;
     private TextView textViewMusikzimmer;
     private TextView textViewWinterzimmer;
     private TextView textViewBiliardzimmer;
@@ -61,7 +64,6 @@ public class NotepadScreen extends AppCompatActivity {
     private TextView textViewArbeitszimmer;
 
     private EditText editText1;
-    private Button btn1;
     private TextView textView;
     private Notepad notepad;
     private Game game;
@@ -70,11 +72,7 @@ public class NotepadScreen extends AppCompatActivity {
     private GlobalNetworkHostKryo globalHost;
 
     private connectionType conType;
-    private SensorManager sensorManager;
-    private Sensor lightSensor;
-    private float sensorValue;
     private Player player;
-
 
     private String test = " ";
 
@@ -91,6 +89,8 @@ public class NotepadScreen extends AppCompatActivity {
         client=NetworkClientKryo.getInstance();
         globalHost=GlobalNetworkHostKryo.getInstance();
         setListener();
+
+        //register Callback damit ein Toast angezeigt wird wenn jemand schummelt
         client.registerCheatCallback(new Callback<CheatDTO>() {
             @Override
             public void callback(CheatDTO argument) {
@@ -119,11 +119,12 @@ public class NotepadScreen extends AppCompatActivity {
 
             }
         });
+
         player = game.getLocalPlayer();
 
         notepad=new Notepad();
 
-
+        //If Bedingungen damit graue TextViews, nach Wechsel zu anderer Activity, grau bleiben
         textViewGatov = findViewById(R.id.notepad_gatov);
         if(preferences.getBoolean("gatovGray",false)){
             textViewGatov.setBackgroundColor(Color.argb(150, 200, 200, 200));
@@ -186,9 +187,9 @@ public class NotepadScreen extends AppCompatActivity {
         if(preferences.getBoolean("speisezimmerGray",false)){
             textViewSpeisezimmer.setBackgroundColor(Color.argb(150, 200, 200, 200));
         }
-        textViewKüche = findViewById(R.id.notepad_küche);
+        textViewKueche = findViewById(R.id.notepad_küche);
         if(preferences.getBoolean("kücheGray",false)){
-            textViewKüche.setBackgroundColor(Color.argb(150, 200, 200, 200));
+            textViewKueche.setBackgroundColor(Color.argb(150, 200, 200, 200));
         }
         textViewMusikzimmer = findViewById(R.id.notepad_musikzimmer);
         if(preferences.getBoolean("musikzimmerGray",false)){
@@ -212,10 +213,10 @@ public class NotepadScreen extends AppCompatActivity {
         }
 
         editText1 = findViewById(R.id.addMoreNotes);
-        btn1 = findViewById(R.id.addMoreNotesButton);
+        Button btn1 = findViewById(R.id.addMoreNotesButton);
         textView = findViewById(R.id.moreNotesView);
 
-
+        //füllen der TextViews
         textViewGatov.append(notepad.getCards()[0].getDesignation());
         textViewBloom.append(notepad.getCards()[1].getDesignation());
         textViewGreen.append(notepad.getCards()[2].getDesignation());
@@ -231,13 +232,14 @@ public class NotepadScreen extends AppCompatActivity {
         textViewHalle.append(notepad.getCards()[12].getDesignation());
         textViewSalon.append(notepad.getCards()[13].getDesignation());
         textViewSpeisezimmer.append(notepad.getCards()[14].getDesignation());
-        textViewKüche.append(notepad.getCards()[15].getDesignation());
+        textViewKueche.append(notepad.getCards()[15].getDesignation());
         textViewMusikzimmer.append(notepad.getCards()[16].getDesignation());
         textViewWinterzimmer.append(notepad.getCards()[17].getDesignation());
         textViewBiliardzimmer.append(notepad.getCards()[18].getDesignation());
         textViewBibliothek.append(notepad.getCards()[19].getDesignation());
         textViewArbeitszimmer.append(notepad.getCards()[20].getDesignation());
 
+        //initalisieren des Arrays textViews
         notepad.setTextViews(textViewGatov, 0);
         notepad.setTextViews(textViewBloom, 1);
         notepad.setTextViews(textViewGreen, 2);
@@ -253,7 +255,7 @@ public class NotepadScreen extends AppCompatActivity {
         notepad.setTextViews(textViewHalle, 12);
         notepad.setTextViews(textViewSalon, 13);
         notepad.setTextViews(textViewSpeisezimmer, 14);
-        notepad.setTextViews(textViewKüche, 15);
+        notepad.setTextViews(textViewKueche, 15);
         notepad.setTextViews(textViewMusikzimmer, 16);
         notepad.setTextViews(textViewWinterzimmer, 17);
         notepad.setTextViews(textViewBiliardzimmer, 18);
@@ -263,6 +265,7 @@ public class NotepadScreen extends AppCompatActivity {
 
 
             View.OnClickListener onButtonClickListener1 = new View.OnClickListener() {
+                // onClick() fügt Text von EditText1 zum textView
                 @Override
                 public void onClick(View v) {
                     String message = editText1.getText().toString();
@@ -277,9 +280,9 @@ public class NotepadScreen extends AppCompatActivity {
             };
             btn1.setOnClickListener(onButtonClickListener1);
 
-
-            sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
-            lightSensor = sensorManager.getDefaultSensor(Sensor.TYPE_LIGHT);
+        //Lichtänderungen wahrnehmen
+        SensorManager sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
+        Sensor lightSensor = sensorManager.getDefaultSensor(Sensor.TYPE_LIGHT);
             if (lightSensor == null) {
                 finish();
             }
@@ -299,6 +302,8 @@ public class NotepadScreen extends AppCompatActivity {
 
             final Button exposeButton = findViewById(R.id.exposeButton);
             exposeButton.setOnClickListener(new View.OnClickListener() {
+
+                //Wechsel zur activity_expose_cheater
                 @Override
                 public void onClick(View v) {
                     startActivity(new Intent(NotepadScreen.this, ExposeCheater.class));
@@ -314,26 +319,32 @@ public class NotepadScreen extends AppCompatActivity {
         public void onStart () {
 
             super.onStart();
+            //notes in textView bleiben erhalten nach Wechsel zu anderer Activity
             SharedPreferences preferences = getSharedPreferences("notizblock", MODE_PRIVATE);
-            final SharedPreferences.Editor editor = getSharedPreferences("notizblock", MODE_PRIVATE).edit();
             textView.append(preferences.getString("notes", " "));
 
 
 
 
             }
-
+            //Damit man die grauen TextViews und Notizen löschen kann
             @Override
             public void onBackPressed() {
                 super.onBackPressed();
-                getSharedPreferences("notizblock", MODE_PRIVATE).edit().clear().commit();
+                getSharedPreferences("notizblock", MODE_PRIVATE).edit().clear().apply();
                 finish();
             }
 
 
 
 
-
+        /**
+         * Diese Funktion wählt einen zufälligen TextView vom Notizblock aus der ausgegraut werden
+         * soll. Sie macht das so lange bis ein TextView (Karte) gefunden wird die nicht in der
+         * Ermittlungsakte steht. Wird einer gefunden, wird die Methode grayOut() aufgerufen.
+         * @param investigationFile liefert die Ermittlungsakte vom aktuellen Spiel zur Überprüfung
+         *                          welche TextViews nicht ausgegraut werden dürfen.
+         */
         public void cheatFunction (InvestigationFile investigationFile){
         conType=SelectedConType.getConnectionType();
             if(conType== connectionType.CLIENT || conType==connectionType.GLOBALCLIENT){
@@ -371,9 +382,16 @@ public class NotepadScreen extends AppCompatActivity {
         }
 
 
-
-
-        public void grayOut (View view){
+    /**
+     * Die Methode grayOut ist die onClick() Mehtode der TextViews die am Notizblock angezeigt
+     * werden. Bei einem Klick auf den jeweiligen View wird dieser ausgegraut. Damit der Spieler
+     * notieren kann, dass diese Karte nicht in der Ermittlungsakte ist. Es wird überprüft ob
+     * der TextView einen Tag besitzt erst dann wird er ausgegraut und erhält einen Tag.
+     * Außerdem wird es in SharedPreferences gespeichert damit bei einem Wechsel auf eine andere
+     * Aktivität die bereits ausgegrauten Views grau bleiben.
+     * @param view TextView welcher ausgegraut werden soll
+     */
+    public void grayOut (View view){
             SharedPreferences.Editor editor = getSharedPreferences("notizblock",MODE_PRIVATE).edit();
 
             if (view.getTag() != "grayed") {
@@ -459,7 +477,7 @@ public class NotepadScreen extends AppCompatActivity {
                     editor.putBoolean("halleGray",true);
                     editor.apply();
                 }
-                else if(view.getId()==textViewKüche.getId()){
+                else if(view.getId()==textViewKueche.getId()){
                     editor.putBoolean("kücheGray",true);
                     editor.apply();
                 }
@@ -471,10 +489,19 @@ public class NotepadScreen extends AppCompatActivity {
             }
         }
 
-        public void lightEvent(SensorEvent event) {
+    /**
+     * Methode lightEvent wird aufgerufen wenn der Licht Sensor Veränderungen wahrnimmt.
+     * Es wird geprüft ob der cheated Wert kleiner eins ist und Schummelfunktion aktiviert ist.
+     * Außerdem wird geprüft ob der Lichtsensor abgedeckt ist indem man einen kleinen Lichtwert
+     * annimmt und erst dann wird die cheatFunction aufgerufen.
+     * @param event beinhaltet den Lichtwert zur Überprüfung ob Sensor abgedeckt wird
+     */
+    public void lightEvent(SensorEvent event) {
             SharedPreferences preferences = getSharedPreferences("com.example.cluedo_seii", MODE_PRIVATE);
             conType= SelectedConType.getConnectionType();
-            if (conType == connectionType.CLIENT || conType == connectionType.GLOBALCLIENT) {
+
+        float sensorValue;
+        if (conType == connectionType.CLIENT  || conType == connectionType.GLOBALCLIENT) {
                 client = NetworkClientKryo.getInstance();
                 if (client.getCheated() < 1 && preferences.getBoolean("cheatEnabled", false)) {
                     if (event.sensor.getType() == Sensor.TYPE_LIGHT) {
@@ -518,7 +545,7 @@ public class NotepadScreen extends AppCompatActivity {
 
 
         }
-
+        //swipeListener zur Navigation zum GameboardScreen
         @Override
         public boolean onTouchEvent (MotionEvent touchEvent){
             switch (touchEvent.getAction()) {
@@ -532,7 +559,6 @@ public class NotepadScreen extends AppCompatActivity {
                     float swipeLeft = x1 - x2;
 
                     if (swipeLeft > MIN_SWIPE_DISTANCE) {
-                        //startActivity(new Intent(NotepadScreen.this, GameboardScreen.class));
                         finish();
                         overridePendingTransition(R.anim.slide_left_in, R.anim.slide_left_out);
                     }
@@ -542,7 +568,6 @@ public class NotepadScreen extends AppCompatActivity {
         }
 
     //setListener zur Netzwerkintegration
-
     public void setListener() {
         if(conType== connectionType.HOST){
             server.setListener(new NetworkServerKryo.ChangeListener() {

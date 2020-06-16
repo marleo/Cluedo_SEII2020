@@ -106,7 +106,7 @@ public class NetworkServerKryo implements KryoNetComponent, NetworkServer {
         } else if (object instanceof GameDTO) {
             handleGameRequest(connection, (GameDTO) object);
         } else if(object instanceof CheatDTO) {
-            handleCheaterRequest(connection, (CheatDTO) object);
+            handleCheaterRequest((CheatDTO) object);
         }
         else if(object instanceof AccusationMessageDTO){
             handleAccusationMessageDTO(connection, (AccusationMessageDTO)object);
@@ -127,7 +127,7 @@ public class NetworkServerKryo implements KryoNetComponent, NetworkServer {
         sendMessageToClient(connectedDTO, connection);
     }
 
-    private void handleCheaterRequest(Connection connection, CheatDTO cheatDTO){
+    private void handleCheaterRequest(CheatDTO cheatDTO){
         Log.d("network-Server:","Received a cheater");
         cheater = new Player(cheatDTO.getCheater().getId(), cheatDTO.getCheater().getPlayerCharacter());
         broadcastMessage(cheatDTO);

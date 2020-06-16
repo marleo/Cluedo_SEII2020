@@ -21,21 +21,17 @@ import java.util.ArrayList;
 
 import com.example.cluedo_seii.network.kryonet.NetworkServerKryo;
 
+/**
+ * Die Klasse ExposeCheater öffnet die Activity activity_expose_cheater und dient dazu,
+ * jemanden der geschummelt hat zu verdächtigen. Ist die Verdächtigung richtig erhält der
+ * Verdächtiger eine weitere Schummelmöglickeit, falls nicht wird ihm eine Schummelmöglichkeit
+ * genommen.
+ */
+
 public class ExposeCheater extends AppCompatActivity implements AdapterView.OnItemSelectedListener, Serializable {
 
-    private Button accuseCheaterButton;
-    private Toast toast;
-    private Spinner cheaterSpinner;
-    private String selectedUsername;
     private Game game;
-    private ArrayList<String> userNames;
-    private String text;
     private Player selectedPlayer;
-    private NetworkServerKryo server;
-    private NetworkClientKryo client;
-    private GlobalNetworkHostKryo globalHost;
-    private connectionType conType;
-
 
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -43,15 +39,17 @@ public class ExposeCheater extends AppCompatActivity implements AdapterView.OnIt
         setContentView(R.layout.activity_expose_cheater);
         game = Game.getInstance();
 
-        userNames = new ArrayList<>();
+        ArrayList<String> userNames = new ArrayList<>();
 
+        //hinzufügen der usernames, der verbundenen Spieler, in die ArrayList userNames
         for (Player player : game.getPlayers()) {
             if (player.getUsername() != null) {
                 userNames.add(player.getUsername());
             }
         }
-        accuseCheaterButton = findViewById(R.id.accuseCheaterButton);
-        cheaterSpinner = findViewById(R.id.possibleCheater);
+        Button accuseCheaterButton = findViewById(R.id.accuseCheaterButton);
+        //instanzieren und initalisieren des Spinners
+        Spinner cheaterSpinner = findViewById(R.id.possibleCheater);
         cheaterSpinner.setOnItemSelectedListener(this);
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
                 android.R.layout.simple_spinner_item, userNames);
@@ -59,6 +57,7 @@ public class ExposeCheater extends AppCompatActivity implements AdapterView.OnIt
         cheaterSpinner.setAdapter(adapter);
 
         View.OnClickListener onButtonClickListener = new View.OnClickListener() {
+            //onClick startet accuseCheating() function
             @Override
             public void onClick(View v) {
                 accuseCheating();
@@ -69,12 +68,12 @@ public class ExposeCheater extends AppCompatActivity implements AdapterView.OnIt
 
     }
 
-
+    //speichert Player welcher im Spinner ausgewählt wurde
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         for (Player player : game.getPlayers()) {
             if (parent.getItemAtPosition(position).equals(player.getUsername())) {
-                selectedUsername = (String) parent.getItemAtPosition(position);
+                String selectedUsername = (String) parent.getItemAtPosition(position);
                 for (Player player2 : game.getPlayers()) {
                     if (selectedUsername == player2.getUsername()) {
                         selectedPlayer = player2;
@@ -91,11 +90,17 @@ public class ExposeCheater extends AppCompatActivity implements AdapterView.OnIt
 
     }
 
-
+    /**
+     * Prüft connectionType und dann ob die id des selectedPlayer gleich der des Players,
+     * der zuletzt geschummelt hat, ist. Zeigt Toast mit einer Nachricht ob die Anschuldigung
+     * richtig oder falsch war und ändert Wert der cheated Variable.
+     */
     public void accuseCheating() {
-        conType = SelectedConType.getConnectionType();
-        if(conType==connectionType.HOST){
-            server = NetworkServerKryo.getInstance();
+        connectionType conType = SelectedConType.getConnectionType();
+        Toast toast;
+        String text;
+        if(conType ==connectionType.HOST){
+            NetworkServerKryo server = NetworkServerKryo.getInstance();
             if(server.getCheater().getId()==selectedPlayer.getId()){
                 text = "Deine Anschuldigung ist richtig";
                 toast = Toast.makeText(getApplicationContext(), text, Toast.LENGTH_SHORT);
@@ -107,8 +112,9 @@ public class ExposeCheater extends AppCompatActivity implements AdapterView.OnIt
                 toast.show();
                 server.setCheated(1);
             }
+
         } else if(conType==connectionType.CLIENT || conType==connectionType.GLOBALCLIENT){
-            client = NetworkClientKryo.getInstance();
+            NetworkClientKryo client = NetworkClientKryo.getInstance();
             if(client.getCheater().getId()==selectedPlayer.getId()){
                 text = "Deine Anschuldigung ist richtig";
                 toast = Toast.makeText(getApplicationContext(), text, Toast.LENGTH_SHORT);
@@ -121,7 +127,7 @@ public class ExposeCheater extends AppCompatActivity implements AdapterView.OnIt
                 client.setCheated(1);
             }
         } else if (conType==connectionType.GLOBALHOST ) {
-            globalHost = GlobalNetworkHostKryo.getInstance();
+            GlobalNetworkHostKryo globalHost = GlobalNetworkHostKryo.getInstance();
             if(globalHost.getCheater().getId()==selectedPlayer.getId()){
                 text = "Deine Anschuldigung ist richtig";
                 toast = Toast.makeText(getApplicationContext(), text, Toast.LENGTH_SHORT);
